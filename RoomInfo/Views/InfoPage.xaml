@@ -4,10 +4,17 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:Helpers="using:RoomInfo.Helpers"
     Style="{StaticResource PageStyle}"
     xmlns:prismMvvm="using:Prism.Windows.Mvvm"
     prismMvvm:ViewModelLocator.AutoWireViewModel="True" 
     mc:Ignorable="d">
+
+    <Interactivity:Interaction.Behaviors>
+        <Helpers:VisualStateProperty VisualState="{Binding Occupancy}" />
+    </Interactivity:Interaction.Behaviors>
+    
     <Grid
         x:Name="ContentArea"
         Margin="{StaticResource MediumLeftRightMargin}">
