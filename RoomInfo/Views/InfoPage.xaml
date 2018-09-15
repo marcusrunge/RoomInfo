@@ -14,7 +14,7 @@
     <Interactivity:Interaction.Behaviors>
         <Helpers:VisualStateProperty VisualState="{Binding Occupancy}" />
     </Interactivity:Interaction.Behaviors>
-    
+
     <Grid
         x:Name="ContentArea"
         Margin="{StaticResource MediumLeftRightMargin}">
@@ -61,6 +61,17 @@
                             </Setter.Value>
                         </Setter>
                         <Setter Target="occupancySymbolTextBlock1.(TextBlock.Text)" Value="✓"/>
+                        <Setter Target="occupancySymbolTextBlock1.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF007900</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="occupancyTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF007900</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="occupancyTextBlock.(TextBlock.Text)" Value="FREI"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="BusyVisualState">
@@ -103,12 +114,27 @@
                         </Setter>
                         <Setter Target="occupancyTextBlock.(TextBlock.Text)" Value="BELEGT"/>
                         <Setter Target="occupancySymbolTextBlock1.(TextBlock.Text)" Value="✗"/>
+                        <Setter Target="occupancySymbolTextBlock1.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FFF2F29A</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="occupancySymbolTextBlock1.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF790000</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="occupancyTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF790000</Color>
+                            </Setter.Value>
+                        </Setter>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
         <Grid
-            Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
+            Background="#FF444444">
             <!--The SystemControlPageBackgroundChromeLowBrush background represents where you should place your content. 
                 Place your content here.-->
             <Grid.RowDefinitions>
@@ -124,11 +150,15 @@
                 </Grid.ColumnDefinitions>
                 <Image x:Name="CompanyLogo"/>
                 <TextBlock x:Name="CompanyName" Grid.Column="1"/>
-                <TextBlock x:Name="Clock" Grid.Column="2"/>
+                <StackPanel Grid.Column="2">
+                    <TextBlock x:Name="Clock" Text="{Binding Clock}" FontSize="72" HorizontalAlignment="Right" />
+                    <TextBlock x:Name="Date" Text="{Binding Date}" HorizontalAlignment="Right" FontSize="36"/>
+                </StackPanel>
+                
             </Grid>
             <StackPanel x:Name="StatusBar" Grid.Row="1" Background="#00000000" HorizontalAlignment="Stretch">
-                <TextBlock x:Name="occupancyTextBlock" FontSize="72" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000"/>
-                <TextBlock x:Name="occupancySymbolTextBlock1" FontSize="216" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontWeight="Bold" TextLineBounds="Tight" Margin="0,36,0,0" Foreground="#00000000"/>
+                <TextBlock x:Name="occupancyTextBlock" FontSize="72" HorizontalAlignment="Center" VerticalAlignment="Top" Text="{Binding Room}"/>
+                <TextBlock x:Name="occupancySymbolTextBlock" FontSize="216" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontWeight="Bold" TextLineBounds="Tight" Margin="0,36,0,0" Foreground="#00000000"/>
             </StackPanel>
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
@@ -136,7 +166,7 @@
                     <ColumnDefinition Width="4*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Belegung"/>
+                <TextBlock Text="Belegung" FontSize="48"/>
                 <ListView x:Name="Agenda" Grid.Column="1"/>
                 <Grid Grid.Column="2">
                     <Grid.RowDefinitions>
