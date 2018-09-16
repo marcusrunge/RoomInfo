@@ -31,6 +31,7 @@ namespace RoomInfo
             Container.RegisterType<IBackgroundTaskService, BackgroundTaskService>(new ContainerControlledLifetimeManager());
             Container.RegisterType<ILiveTileService, LiveTileService>(new ContainerControlledLifetimeManager());
             Container.RegisterInstance<IResourceLoader>(new ResourceLoaderAdapter(new ResourceLoader()));
+            Container.RegisterType<ISettingsService, SettingsService>();
         }
 
         protected override Task OnLaunchApplicationAsync(LaunchActivatedEventArgs args)

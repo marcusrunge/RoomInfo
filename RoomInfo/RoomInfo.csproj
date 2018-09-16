@@ -132,6 +132,7 @@
     <Compile Include="Services\ILiveTileService.cs" />
     <Compile Include="Services\LiveTileService.cs" />
     <Compile Include="Services\LiveTileService.Samples.cs" />
+    <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Services\ThemeSelectorService.cs" />
     <Compile Include="ViewModels\InfoViewModel.cs" />
     <Compile Include="ViewModels\PivotViewModel.cs" />
