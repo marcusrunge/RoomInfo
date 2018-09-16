@@ -27,14 +27,14 @@
                                 <SolidColorBrush Color="#FF00F200"/>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="textBlock.(TextBlock.Text)" Value="FREI"/>
-                        <Setter Target="textBlock1.(TextBlock.Text)" Value="🗸"/>
-                        <Setter Target="textBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
+                        <Setter Target="occupancyTextBlock.(TextBlock.Text)" Value="FREI"/>
+                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="🗸"/>
+                        <Setter Target="occupancyTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FF007900</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="textBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                        <Setter Target="occupancyTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FF007900</Color>
                             </Setter.Value>
@@ -55,13 +55,13 @@
                                 <HorizontalAlignment>Stretch</HorizontalAlignment>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="textBlock1.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FF007900</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="occupancySymbolTextBlock1.(TextBlock.Text)" Value="✓"/>
-                        <Setter Target="occupancySymbolTextBlock1.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="✓"/>
+                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FF007900</Color>
                             </Setter.Value>
@@ -87,12 +87,12 @@
                                 <Color>#FF797900</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="occupancySymbolTextBlock1.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FF797900</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="occupancySymbolTextBlock1.(TextBlock.Text)" Value="⧖"/>
+                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="⧖"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="OccupiedVisualState">
@@ -102,24 +102,24 @@
                                 <Color>#FFF20000</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="textBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                        <Setter Target="occupancyTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FF790000</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="textBlock1.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FF790000</Color>
                             </Setter.Value>
                         </Setter>
                         <Setter Target="occupancyTextBlock.(TextBlock.Text)" Value="BELEGT"/>
-                        <Setter Target="occupancySymbolTextBlock1.(TextBlock.Text)" Value="✗"/>
-                        <Setter Target="occupancySymbolTextBlock1.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
+                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="✗"/>
+                        <Setter Target="occupancySymbolTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FFF2F29A</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="occupancySymbolTextBlock1.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FF790000</Color>
                             </Setter.Value>
@@ -167,7 +167,16 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Belegung" FontSize="48"/>
-                <ListView x:Name="Agenda" Grid.Column="1"/>
+                <ListView x:Name="Agenda" Grid.Column="1" ItemsSource="{Binding AgendaItems}" >
+                    <ListView.ItemTemplate>
+                        <DataTemplate >
+                            <StackPanel>
+                                <TextBlock Text="Terminbeschreibung" FontSize="48"/>
+                                <TextBlock Text="Termin" FontSize="36"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
                 <Grid Grid.Column="2">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
