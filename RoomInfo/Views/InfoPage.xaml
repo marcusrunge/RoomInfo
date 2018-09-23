@@ -12,7 +12,7 @@
     mc:Ignorable="d">
 
     <Interactivity:Interaction.Behaviors>
-        <Helpers:VisualStateProperty VisualState="{Binding Occupancy}" />
+        <Helpers:VisualStateDependencyProperty VisualStateProperty="{x:Bind ViewModel.Occupancy}"/>
     </Interactivity:Interaction.Behaviors>
 
     <Grid
@@ -133,8 +133,7 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-        <Grid
-            Background="#FF444444">
+        <Grid    >
             <!--The SystemControlPageBackgroundChromeLowBrush background represents where you should place your content. 
                 Place your content here.-->
             <Grid.RowDefinitions>
