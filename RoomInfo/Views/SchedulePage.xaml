@@ -11,10 +11,123 @@
     <Grid
         x:Name="ContentArea"
         Margin="{StaticResource MediumLeftRightMargin}">
-        <Grid
-            Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
+        <ListView x:Name="calendarListView"
+            Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" ItemsSource="{Binding CalendarWeeks}">
+            <ListView.ItemTemplate>
+                <DataTemplate >
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <ListView x:Name="calendarDayOneListView" BorderThickness="1,1,0,0" BorderBrush="Gray">
+                            <ListView.ItemTemplate>
+                                <DataTemplate >
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Termin"/>
+                                        <TextBlock Grid.Column="1" Text="Terminbeschreibung"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <ListView x:Name="calendarDayTwoListView" Grid.Column="1" BorderThickness="1,1,0,0" BorderBrush="Gray">
+                            <ListView.ItemTemplate>
+                                <DataTemplate >
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Termin"/>
+                                        <TextBlock Grid.Column="1" Text="Terminbeschreibung"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <ListView x:Name="calendarDayThreeListView" Grid.Column="2" BorderThickness="1,1,0,0" BorderBrush="Gray">
+                            <ListView.ItemTemplate>
+                                <DataTemplate >
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Termin"/>
+                                        <TextBlock Grid.Column="1" Text="Terminbeschreibung"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <ListView x:Name="calendarDayFourListView" Grid.Column="3" BorderThickness="1,1,0,0" BorderBrush="Gray">
+                            <ListView.ItemTemplate>
+                                <DataTemplate >
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Termin"/>
+                                        <TextBlock Grid.Column="1" Text="Terminbeschreibung"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <ListView x:Name="calendarDayFiveListView" Grid.Column="4" BorderThickness="1,1,0,0" BorderBrush="Gray">
+                            <ListView.ItemTemplate>
+                                <DataTemplate >
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Termin"/>
+                                        <TextBlock Grid.Column="1" Text="Terminbeschreibung"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <ListView x:Name="calendarDaySixListView" Grid.Column="5" BorderThickness="1,1,0,0" BorderBrush="Gray">
+                            <ListView.ItemTemplate>
+                                <DataTemplate >
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Termin"/>
+                                        <TextBlock Grid.Column="1" Text="Terminbeschreibung"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <ListView x:Name="calendarDaySevenListView" Grid.Column="6" BorderThickness="1,1,1,0" BorderBrush="Gray">
+                            <ListView.ItemTemplate>
+                                <DataTemplate >
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Termin"/>
+                                        <TextBlock Grid.Column="1" Text="Terminbeschreibung"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
             <!--The SystemControlPageBackgroundChromeLowBrush background represents where you should place your content. 
                 Place your content here.-->
-        </Grid>
+        </ListView>
     </Grid>
 </Page>

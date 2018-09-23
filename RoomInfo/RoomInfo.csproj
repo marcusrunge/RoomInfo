@@ -126,6 +126,7 @@
     <Compile Include="Helpers\TaskExtensions.cs" />
     <Compile Include="Helpers\VisualStateDependencyProperty.cs" />
     <Compile Include="Models\AgendaItem.cs" />
+    <Compile Include="Models\CalendarWeek.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Constants\PageTokens.cs" />
     <Compile Include="Services\BackgroundTaskService.cs" />
