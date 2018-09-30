@@ -12,20 +12,46 @@
         x:Name="ContentArea"
         Margin="{StaticResource MediumLeftRightMargin}">
         <ListView x:Name="calendarListView"
-            Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" ItemsSource="{Binding CalendarWeeks}">
+            Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" ItemsSource="{Binding CalendarWeeks}" BorderThickness="0,0,0,1" BorderBrush="Gray">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                    <Setter Property="Padding" Value="0"/>
+                </Style>
+            </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate >
-                    <Grid>
+                    <Grid Height="{Binding ElementName=columnOne, Path=ActualWidth}" >
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
+                            <ColumnDefinition x:Name="columnOne" Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <ListView x:Name="calendarDayOneListView" BorderThickness="1,1,0,0" BorderBrush="Gray">
+                        <StackPanel BorderThickness="1,1,0,0" BorderBrush="Gray" >                            
+                            <TextBlock Text="Montag"/>
+                            <ListView x:Name="calendarDayOneListView" ItemsSource="{Binding WeekDayOne}" >                                
+                                <ListView.ItemTemplate>
+                                <DataTemplate >
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Termin"/>
+                                        <TextBlock Grid.Column="1" Text="Terminbeschreibung"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" BorderThickness="1,1,0,0" BorderBrush="Gray">
+                            <TextBlock Text="Dienstag"/>
+                            <ListView x:Name="calendarDayTwoListView" ItemsSource="{Binding WeekDayTwo}">
                             <ListView.ItemTemplate>
                                 <DataTemplate >
                                     <Grid>
@@ -39,7 +65,10 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
-                        <ListView x:Name="calendarDayTwoListView" Grid.Column="1" BorderThickness="1,1,0,0" BorderBrush="Gray">
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" BorderThickness="1,1,0,0" BorderBrush="Gray">
+                            <TextBlock Text="Mittwoch"/>
+                            <ListView x:Name="calendarDayThreeListView" ItemsSource="{Binding WeekDayThree}">
                             <ListView.ItemTemplate>
                                 <DataTemplate >
                                     <Grid>
@@ -53,7 +82,10 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
-                        <ListView x:Name="calendarDayThreeListView" Grid.Column="2" BorderThickness="1,1,0,0" BorderBrush="Gray">
+                        </StackPanel>
+                        <StackPanel Grid.Column="3" BorderThickness="1,1,0,0" BorderBrush="Gray">
+                            <TextBlock Text="Donnerstag"/>
+                            <ListView x:Name="calendarDayFourListView" ItemsSource="{Binding WeekDayFour}">
                             <ListView.ItemTemplate>
                                 <DataTemplate >
                                     <Grid>
@@ -67,7 +99,10 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
-                        <ListView x:Name="calendarDayFourListView" Grid.Column="3" BorderThickness="1,1,0,0" BorderBrush="Gray">
+                        </StackPanel>
+                        <StackPanel Grid.Column="4" BorderThickness="1,1,0,0" BorderBrush="Gray">
+                            <TextBlock Text="Freitag" />
+                            <ListView x:Name="calendarDayFiveListView" ItemsSource="{Binding WeekDayFive}">
                             <ListView.ItemTemplate>
                                 <DataTemplate >
                                     <Grid>
@@ -81,7 +116,10 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
-                        <ListView x:Name="calendarDayFiveListView" Grid.Column="4" BorderThickness="1,1,0,0" BorderBrush="Gray">
+                        </StackPanel>
+                        <StackPanel Grid.Column="5" BorderThickness="1,1,0,0" BorderBrush="Gray">
+                            <TextBlock Text="Samstag"/>
+                            <ListView x:Name="calendarDaySixListView" ItemsSource="{Binding WeekDaySix}">
                             <ListView.ItemTemplate>
                                 <DataTemplate >
                                     <Grid>
@@ -95,7 +133,10 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
-                        <ListView x:Name="calendarDaySixListView" Grid.Column="5" BorderThickness="1,1,0,0" BorderBrush="Gray">
+                        </StackPanel>
+                        <StackPanel Grid.Column="6" BorderThickness="1,1,1,0" BorderBrush="Gray">
+                            <TextBlock Text="Sonntag"/>
+                            <ListView x:Name="calendarDaySevenListView" ItemsSource="{Binding WeekDaySeven}">
                             <ListView.ItemTemplate>
                                 <DataTemplate >
                                     <Grid>
@@ -109,20 +150,7 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
-                        <ListView x:Name="calendarDaySevenListView" Grid.Column="6" BorderThickness="1,1,1,0" BorderBrush="Gray">
-                            <ListView.ItemTemplate>
-                                <DataTemplate >
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="Termin"/>
-                                        <TextBlock Grid.Column="1" Text="Terminbeschreibung"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                        </StackPanel>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
