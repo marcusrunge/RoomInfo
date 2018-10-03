@@ -55,8 +55,8 @@ namespace RoomInfo.ViewModels
         public async override void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
         {
             base.OnNavigatedTo(e, viewModelState);
-            //await _databaseService.AddAgendaItemAsync(new AgendaItem() { Title = "Test1" });
-            //await _databaseService.AddAgendaItemAsync(new AgendaItem() { Title = "Test2" });
+            //await _databaseService.AddAgendaItemAsync(new AgendaItem() { Title = "Test1", DateTime = "15:00" });
+            //await _databaseService.AddAgendaItemAsync(new AgendaItem() { Title = "Test2", DateTime = "16:00" });
             //var agendaItems = await _databaseService.GetAgendaItemsAsync();
         }
     }
