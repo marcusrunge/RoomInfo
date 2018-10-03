@@ -1,14 +1,8 @@
-﻿using Prism.Windows.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 
 namespace RoomInfo.Models
 {
-    public class CalendarWeek : ViewModelBase
+    public class CalendarWeek : DataModelBase
     {
         string _weekDayOneDate = default(string);
         public string WeekDayOneDate { get => _weekDayOneDate; set { SetProperty(ref _weekDayOneDate, value); } }

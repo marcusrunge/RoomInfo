@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Prism.Windows.Mvvm;
+using Prism.Windows.Navigation;
 using RoomInfo.Models;
 using RoomInfo.Services;
 
@@ -48,6 +50,14 @@ namespace RoomInfo.ViewModels
                 }
                 CalendarWeeks.Add(calendarWeek);
             }
+        }
+
+        public async override void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
+        {
+            base.OnNavigatedTo(e, viewModelState);
+            //await _databaseService.AddAgendaItemAsync(new AgendaItem() { Title = "Test1" });
+            //await _databaseService.AddAgendaItemAsync(new AgendaItem() { Title = "Test2" });
+            //var agendaItems = await _databaseService.GetAgendaItemsAsync();
         }
     }
 }
