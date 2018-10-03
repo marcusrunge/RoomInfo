@@ -10,6 +10,27 @@ namespace RoomInfo.Models
 {
     public class CalendarWeek : ViewModelBase
     {
+        string _weekDayOneDate = default(string);
+        public string WeekDayOneDate { get => _weekDayOneDate; set { SetProperty(ref _weekDayOneDate, value); } }
+
+        string _weekDayTwoDate = default(string);
+        public string WeekDayTwoDate { get => _weekDayTwoDate; set { SetProperty(ref _weekDayTwoDate, value); } }
+
+        string _weekDayThreeDate = default(string);
+        public string WeekDayThreeDate { get => _weekDayThreeDate; set { SetProperty(ref _weekDayThreeDate, value); } }
+
+        string _weekDayFourDate = default(string);
+        public string WeekDayFourDate { get => _weekDayFourDate; set { SetProperty(ref _weekDayFourDate, value); } }
+
+        string _weekDayFiveDate = default(string);
+        public string WeekDayFiveDate { get => _weekDayFiveDate; set { SetProperty(ref _weekDayFiveDate, value); } }
+
+        string _weekDaySixDate = default(string);
+        public string WeekDaySixDate { get => _weekDaySixDate; set { SetProperty(ref _weekDaySixDate, value); } }
+
+        string _weekDaySevenDate = default(string);
+        public string WeekDaySevenDate { get => _weekDaySevenDate; set { SetProperty(ref _weekDaySevenDate, value); } }
+
         ObservableCollection<AgendaItem> _weekDayOne = default(ObservableCollection<AgendaItem>);
         public ObservableCollection<AgendaItem> WeekDayOne { get => _weekDayOne; set { SetProperty(ref _weekDayOne, value); } }
 

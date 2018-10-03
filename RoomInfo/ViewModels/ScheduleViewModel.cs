@@ -19,14 +19,23 @@ namespace RoomInfo.ViewModels
             CalendarWeeks = new ObservableCollection<CalendarWeek>();
             for (int i = 0; i < 10; i++)
             {
-                var calendarWeek = new CalendarWeek();
-                calendarWeek.WeekDayOne = new ObservableCollection<AgendaItem>();
-                calendarWeek.WeekDayTwo = new ObservableCollection<AgendaItem>();
-                calendarWeek.WeekDayThree = new ObservableCollection<AgendaItem>();
-                calendarWeek.WeekDayFour = new ObservableCollection<AgendaItem>();
-                calendarWeek.WeekDayFive = new ObservableCollection<AgendaItem>();
-                calendarWeek.WeekDaySix = new ObservableCollection<AgendaItem>();
-                calendarWeek.WeekDaySeven = new ObservableCollection<AgendaItem>();
+                var calendarWeek = new CalendarWeek
+                {
+                    WeekDayOneDate = "01.01",
+                    WeekDayTwoDate = "02.01",
+                    WeekDayThreeDate = "03.01",
+                    WeekDayFourDate = "04.01",
+                    WeekDayFiveDate = "05.01",
+                    WeekDaySixDate = "06.01",
+                    WeekDaySevenDate = "07.01",
+                    WeekDayOne = new ObservableCollection<AgendaItem>(),
+                    WeekDayTwo = new ObservableCollection<AgendaItem>(),
+                    WeekDayThree = new ObservableCollection<AgendaItem>(),
+                    WeekDayFour = new ObservableCollection<AgendaItem>(),
+                    WeekDayFive = new ObservableCollection<AgendaItem>(),
+                    WeekDaySix = new ObservableCollection<AgendaItem>(),
+                    WeekDaySeven = new ObservableCollection<AgendaItem>()
+                };
                 for (int j = 0; j < 5; j++)
                 {
                     calendarWeek.WeekDayOne.Add(new AgendaItem());

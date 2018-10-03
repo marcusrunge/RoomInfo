@@ -11,8 +11,32 @@
     <Grid
         x:Name="ContentArea"
         Margin="{StaticResource MediumLeftRightMargin}">
-        <ListView x:Name="calendarListView"
-            Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" ItemsSource="{Binding CalendarWeeks}" BorderThickness="0,0,0,1" BorderBrush="Gray">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock Text="Januar 1970" FontSize="{ThemeResource TextStyleExtraLargeFontSize}"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Montag" FontSize="{ThemeResource TextStyleLargeFontSize}"/>
+            <TextBlock Grid.Column="1" Text="Dienstag" FontSize="{ThemeResource TextStyleLargeFontSize}"/>
+            <TextBlock Grid.Column="2" Text="Mittwoch" FontSize="{ThemeResource TextStyleLargeFontSize}"/>
+            <TextBlock Grid.Column="3" Text="Donnerstag" FontSize="{ThemeResource TextStyleLargeFontSize}"/>
+            <TextBlock Grid.Column="4" Text="Freitag" FontSize="{ThemeResource TextStyleLargeFontSize}"/>
+            <TextBlock Grid.Column="5" Text="Samstag" FontSize="{ThemeResource TextStyleLargeFontSize}"/>
+            <TextBlock Grid.Column="6" Text="Sonntag" FontSize="{ThemeResource TextStyleLargeFontSize}"/>
+        </Grid>
+        <ListView Grid.Row="2" x:Name="calendarListView"
+            Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" ItemsSource="{Binding CalendarWeeks}" BorderThickness="0,0,0,1" BorderBrush="Gray" HorizontalAlignment="Stretch" Margin="0,0,0,0" Grid.RowSpan="2" VerticalAlignment="Stretch">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -32,124 +56,124 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <StackPanel BorderThickness="1,1,0,0" BorderBrush="Gray" >                            
-                            <TextBlock Text="Montag"/>
-                            <ListView x:Name="calendarDayOneListView" ItemsSource="{Binding WeekDayOne}" >                                
+                        <StackPanel BorderThickness="1,1,0,0" BorderBrush="Gray" >
+                            <TextBlock Text="{Binding WeekDayOneDate}" FontSize="{ThemeResource TextStyleLargeFontSize}"/>
+                            <ListView x:Name="calendarDayOneListView" ItemsSource="{Binding WeekDayOne}" >
                                 <ListView.ItemTemplate>
-                                <DataTemplate >
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="Termin"/>
-                                        <TextBlock Grid.Column="1" Text="Terminbeschreibung"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                                    <DataTemplate >
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="04:00" />
+                                            <TextBlock Grid.Column="1" Text="Terminbeschreibung" Margin="3,0,0,0"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
                         </StackPanel>
                         <StackPanel Grid.Column="1" BorderThickness="1,1,0,0" BorderBrush="Gray">
-                            <TextBlock Text="Dienstag"/>
+                            <TextBlock Text="{Binding WeekDayTwoDate}" FontSize="{ThemeResource TextStyleLargeFontSize}"/>
                             <ListView x:Name="calendarDayTwoListView" ItemsSource="{Binding WeekDayTwo}">
-                            <ListView.ItemTemplate>
-                                <DataTemplate >
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="Termin"/>
-                                        <TextBlock Grid.Column="1" Text="Terminbeschreibung"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate >
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="05:00"/>
+                                            <TextBlock Grid.Column="1" Text="Terminbeschreibung" Margin="3,0,0,0"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
                         </StackPanel>
                         <StackPanel Grid.Column="2" BorderThickness="1,1,0,0" BorderBrush="Gray">
-                            <TextBlock Text="Mittwoch"/>
+                            <TextBlock Text="{Binding WeekDayThreeDate}" FontSize="{ThemeResource TextStyleLargeFontSize}"/>
                             <ListView x:Name="calendarDayThreeListView" ItemsSource="{Binding WeekDayThree}">
-                            <ListView.ItemTemplate>
-                                <DataTemplate >
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="Termin"/>
-                                        <TextBlock Grid.Column="1" Text="Terminbeschreibung"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate >
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="06:00"/>
+                                            <TextBlock Grid.Column="1" Text="Terminbeschreibung" Margin="3,0,0,0"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
                         </StackPanel>
                         <StackPanel Grid.Column="3" BorderThickness="1,1,0,0" BorderBrush="Gray">
-                            <TextBlock Text="Donnerstag"/>
+                            <TextBlock Text="{Binding WeekDayFourDate}" FontSize="{ThemeResource TextStyleLargeFontSize}"/>
                             <ListView x:Name="calendarDayFourListView" ItemsSource="{Binding WeekDayFour}">
-                            <ListView.ItemTemplate>
-                                <DataTemplate >
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="Termin"/>
-                                        <TextBlock Grid.Column="1" Text="Terminbeschreibung"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate >
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="07:00"/>
+                                            <TextBlock Grid.Column="1" Text="Terminbeschreibung" Margin="3,0,0,0"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
                         </StackPanel>
                         <StackPanel Grid.Column="4" BorderThickness="1,1,0,0" BorderBrush="Gray">
-                            <TextBlock Text="Freitag" />
+                            <TextBlock Text="{Binding WeekDayFiveDate}" FontSize="{ThemeResource TextStyleLargeFontSize}"/>
                             <ListView x:Name="calendarDayFiveListView" ItemsSource="{Binding WeekDayFive}">
-                            <ListView.ItemTemplate>
-                                <DataTemplate >
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="Termin"/>
-                                        <TextBlock Grid.Column="1" Text="Terminbeschreibung"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate >
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="08:00"/>
+                                            <TextBlock Grid.Column="1" Text="Terminbeschreibung" Margin="3,0,0,0"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
                         </StackPanel>
                         <StackPanel Grid.Column="5" BorderThickness="1,1,0,0" BorderBrush="Gray">
-                            <TextBlock Text="Samstag"/>
+                            <TextBlock Text="{Binding WeekDaySixDate}" FontSize="{ThemeResource TextStyleLargeFontSize}"/>
                             <ListView x:Name="calendarDaySixListView" ItemsSource="{Binding WeekDaySix}">
-                            <ListView.ItemTemplate>
-                                <DataTemplate >
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="Termin"/>
-                                        <TextBlock Grid.Column="1" Text="Terminbeschreibung"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate >
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="09:00"/>
+                                            <TextBlock Grid.Column="1" Text="Terminbeschreibung" Margin="3,0,0,0"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
                         </StackPanel>
                         <StackPanel Grid.Column="6" BorderThickness="1,1,1,0" BorderBrush="Gray">
-                            <TextBlock Text="Sonntag"/>
+                            <TextBlock Text="{Binding WeekDaySevenDate}" FontSize="{ThemeResource TextStyleLargeFontSize}"/>
                             <ListView x:Name="calendarDaySevenListView" ItemsSource="{Binding WeekDaySeven}">
-                            <ListView.ItemTemplate>
-                                <DataTemplate >
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="Termin"/>
-                                        <TextBlock Grid.Column="1" Text="Terminbeschreibung"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate >
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="10:00"/>
+                                            <TextBlock Grid.Column="1" Text="Terminbeschreibung" Margin="3,0,0,0"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
                         </StackPanel>
                     </Grid>
                 </DataTemplate>
