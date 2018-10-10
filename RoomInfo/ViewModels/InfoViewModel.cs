@@ -24,15 +24,20 @@ namespace RoomInfo.ViewModels
         string _room = default(string);
         public string Room { get => _room; set { SetProperty(ref _room, value); } }
 
+        int _selectedComboBoxIndex = default(int);
+        public int SelectedComboBoxIndex { get => _selectedComboBoxIndex; set { SetProperty(ref _selectedComboBoxIndex, value); } }
+
         ObservableCollection<AgendaItem> _agendaItems = default(ObservableCollection<AgendaItem>);
         public ObservableCollection<AgendaItem> AgendaItems { get => _agendaItems; set { SetProperty(ref _agendaItems, value); } }
 
         public InfoViewModel()
         {
             //Test
-            AgendaItems = new ObservableCollection<AgendaItem>();
-            AgendaItems.Add(new AgendaItem());
-            AgendaItems.Add(new AgendaItem());
+            AgendaItems = new ObservableCollection<AgendaItem>
+            {
+                new AgendaItem(),
+                new AgendaItem()
+            };
         }
 
         public override void OnNavigatedTo(NavigatedToEventArgs navigatedToEventArgs, Dictionary<string, object> viewModelState)
@@ -50,6 +55,7 @@ namespace RoomInfo.ViewModels
                 Date = DateTime.Now.ToString("D", cultureInfo);
             };
             Occupancy = OccupancyVisualState.FreeVisualState;
+            SelectedComboBoxIndex = 0;
             base.OnNavigatedTo(navigatedToEventArgs, viewModelState);
         }
     }
