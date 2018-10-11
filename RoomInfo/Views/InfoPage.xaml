@@ -132,6 +132,27 @@
                         </Setter>
                     </VisualState.Setters>
                 </VisualState>
+                <VisualState x:Name="AbsentVisualState">
+                    <VisualState.Setters>
+                        <Setter Target="StatusBar.(Panel.Background).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF797979</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="occupancyTextBlock.(TextBlock.Text)" Value="A B W E S E N D"/>
+                        <Setter Target="occupancyTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF3D3D3D</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF3D3D3D</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="∞"/>
+                    </VisualState.Setters>
+                </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
         <Grid    >
@@ -157,7 +178,7 @@
 
             </Grid>
             <StackPanel x:Name="StatusBar" Grid.Row="1" Background="#00000000" HorizontalAlignment="Stretch">
-                <TextBlock x:Name="occupancyTextBlock" FontSize="72" HorizontalAlignment="Center" VerticalAlignment="Top" Text="{Binding Room}"/>
+                <TextBlock x:Name="occupancyTextBlock" FontSize="72" HorizontalAlignment="Center" VerticalAlignment="Top" Text="{Binding Room}" Foreground="#00000000"/>
                 <TextBlock x:Name="occupancySymbolTextBlock" FontSize="216" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontWeight="Bold" TextLineBounds="Tight" Margin="0,36,0,0" Foreground="#00000000"/>
             </StackPanel>
             <Grid Grid.Row="2">
@@ -201,6 +222,13 @@
                             <Interactivity:Interaction.Behaviors>
                                 <Custom:EventTriggerBehavior EventName="Tapped">
                                     <Custom:GoToStateAction StateName="OccupiedVisualState"/>
+                                </Custom:EventTriggerBehavior>
+                            </Interactivity:Interaction.Behaviors>
+                        </ComboBoxItem>
+                        <ComboBoxItem Content="ABWESEND" FontSize="36">
+                            <Interactivity:Interaction.Behaviors>
+                                <Custom:EventTriggerBehavior EventName="Tapped">
+                                    <Custom:GoToStateAction StateName="AbsentVisualState"/>
                                 </Custom:EventTriggerBehavior>
                             </Interactivity:Interaction.Behaviors>
                         </ComboBoxItem>

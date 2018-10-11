@@ -9,7 +9,7 @@ using Windows.UI.Xaml;
 
 namespace RoomInfo.ViewModels
 {
-    public enum OccupancyVisualState { FreeVisualState, BusyVisualState, OccupiedVisualState }
+    public enum OccupancyVisualState { FreeVisualState, BusyVisualState, OccupiedVisualState, AbsentVisualState }
     public class InfoViewModel : ViewModelBase
     {
         OccupancyVisualState _occupancy = default(OccupancyVisualState);
