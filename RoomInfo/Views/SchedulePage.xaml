@@ -4,10 +4,27 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     Style="{StaticResource PageStyle}"
     xmlns:prismMvvm="using:Prism.Windows.Mvvm"
     prismMvvm:ViewModelLocator.AutoWireViewModel="True" 
     mc:Ignorable="d">
+    <Page.Resources>
+        <Flyout x:Name="reservationFlyout"  x:Key="ReservationFlyout">
+            <Grid Width="384" Height="512">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Button HorizontalAlignment="Right" Background="{x:Null}" Command="{Binding HideReservationFlyoutCommand}">
+                    <SymbolIcon Symbol="Cancel"/>                    
+                </Button>
+            </Grid>
+        </Flyout>
+    </Page.Resources>
     <Grid
         x:Name="ContentArea"
         Margin="{StaticResource MediumLeftRightMargin}">
@@ -15,8 +32,20 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+        </Grid.RowDefinitions>        
         <TextBlock Text="Januar 1970" FontSize="{ThemeResource TextStyleExtraLargeFontSize}"/>
+        <Button HorizontalAlignment="Right" Background="{x:Null}" Command="{Binding ShowReservationFlyoutCommand}" CommandParameter="{Binding ElementName=reservationFlyout}" Flyout="{StaticResource ReservationFlyout}">
+            <Button.Content>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Text="Neue Reservierung" FontSize="{ThemeResource TextStyleExtraLargeFontSize}" Margin="6,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Grid>
+            </Button.Content>            
+        </Button>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>

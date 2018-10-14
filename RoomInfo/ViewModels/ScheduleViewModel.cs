@@ -1,15 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
+using Prism.Commands;
 using Prism.Windows.Mvvm;
 using Prism.Windows.Navigation;
 using RoomInfo.Models;
 using RoomInfo.Services;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 
 namespace RoomInfo.ViewModels
 {
     public class ScheduleViewModel : ViewModelBase
     {
+        Flyout _flyout;
         IDatabaseService _databaseService;
 
         ObservableCollection<CalendarWeek> _calendarWeeks = default(ObservableCollection<CalendarWeek>);
@@ -59,5 +65,27 @@ namespace RoomInfo.ViewModels
             //await _databaseService.AddAgendaItemAsync(new AgendaItem() { Title = "Test2", DateTime = "16:00" });
             //var agendaItems = await _databaseService.GetAgendaItemsAsync();
         }
+
+        private ICommand _showReservationFlyoutCommand;
+        public ICommand ShowReservationFlyoutCommand => _showReservationFlyoutCommand ?? (_showReservationFlyoutCommand = new DelegateCommand<object>(async (param) =>
+            {
+                _flyout = (param as Flyout);
+            }));
+
+        private ICommand _hideReservationFlyoutCommand;
+        public ICommand HideReservationFlyoutCommand => _hideReservationFlyoutCommand ?? (_hideReservationFlyoutCommand = new DelegateCommand<object>((param) =>
+        {
+            _flyout.Hide();
+        }));
+
+        private ICommand _addReservationCommand;
+        public ICommand AddReservationCommand => _addReservationCommand ?? (_addReservationCommand = new DelegateCommand<object>((param) =>
+        {
+        }));
+
+        private ICommand _deleteReservationCommand;
+        public ICommand DeleteReservationCommand => _deleteReservationCommand ?? (_deleteReservationCommand = new DelegateCommand<object>((param) =>
+        {
+        }));
     }
 }

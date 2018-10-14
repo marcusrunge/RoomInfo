@@ -3,18 +3,18 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:Helpers="using:RoomInfo.Helpers"
     xmlns:prismMvvm="using:Prism.Windows.Mvvm"
-    xmlns:Custom="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     x:Class="RoomInfo.Views.InfoPage"
     Style="{StaticResource PageStyle}"
     prismMvvm:ViewModelLocator.AutoWireViewModel="True" 
     mc:Ignorable="d">
 
-    <Interactivity:Interaction.Behaviors>
+    <interactivity:Interaction.Behaviors>
         <Helpers:VisualStateDependencyProperty VisualStateProperty="{x:Bind Path=ViewModel.Occupancy}"/>
-    </Interactivity:Interaction.Behaviors>
+    </interactivity:Interaction.Behaviors>
 
     <Grid
         x:Name="ContentArea"
@@ -205,32 +205,32 @@
                     </Grid.RowDefinitions>
                     <ComboBox Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="36" SelectedIndex="{Binding SelectedComboBoxIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                         <ComboBoxItem Content="FREI" FontSize="36">
-                            <Interactivity:Interaction.Behaviors>
-                                <Custom:EventTriggerBehavior EventName="Tapped">
-                                    <Custom:GoToStateAction StateName="FreeVisualState"/>
-                                </Custom:EventTriggerBehavior>
-                            </Interactivity:Interaction.Behaviors>
+                            <interactivity:Interaction.Behaviors>
+                                <core:EventTriggerBehavior EventName="Tapped">
+                                    <core:GoToStateAction StateName="FreeVisualState"/>
+                                </core:EventTriggerBehavior>
+                            </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
                         <ComboBoxItem Content="BESCHÄFTIGT" FontSize="36">
-                            <Interactivity:Interaction.Behaviors>
-                                <Custom:EventTriggerBehavior EventName="Tapped">
-                                    <Custom:GoToStateAction StateName="BusyVisualState"/>
-                                </Custom:EventTriggerBehavior>
-                            </Interactivity:Interaction.Behaviors>
+                            <interactivity:Interaction.Behaviors>
+                                <core:EventTriggerBehavior EventName="Tapped">
+                                    <core:GoToStateAction StateName="BusyVisualState"/>
+                                </core:EventTriggerBehavior>
+                            </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
                         <ComboBoxItem Content="BELEGT" FontSize="36">
-                            <Interactivity:Interaction.Behaviors>
-                                <Custom:EventTriggerBehavior EventName="Tapped">
-                                    <Custom:GoToStateAction StateName="OccupiedVisualState"/>
-                                </Custom:EventTriggerBehavior>
-                            </Interactivity:Interaction.Behaviors>
+                            <interactivity:Interaction.Behaviors>
+                                <core:EventTriggerBehavior EventName="Tapped">
+                                    <core:GoToStateAction StateName="OccupiedVisualState"/>
+                                </core:EventTriggerBehavior>
+                            </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
                         <ComboBoxItem Content="ABWESEND" FontSize="36">
-                            <Interactivity:Interaction.Behaviors>
-                                <Custom:EventTriggerBehavior EventName="Tapped">
-                                    <Custom:GoToStateAction StateName="AbsentVisualState"/>
-                                </Custom:EventTriggerBehavior>
-                            </Interactivity:Interaction.Behaviors>
+                            <interactivity:Interaction.Behaviors>
+                                <core:EventTriggerBehavior EventName="Tapped">
+                                    <core:GoToStateAction StateName="AbsentVisualState"/>
+                                </core:EventTriggerBehavior>
+                            </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
                     </ComboBox>
                 </Grid>
