@@ -21,8 +21,29 @@ namespace RoomInfo.ViewModels
         ObservableCollection<CalendarWeek> _calendarWeeks = default(ObservableCollection<CalendarWeek>);
         public ObservableCollection<CalendarWeek> CalendarWeeks { get => _calendarWeeks; set { SetProperty(ref _calendarWeeks, value); } }
 
+        DateTimeOffset _startDate = default(DateTimeOffset);
+        public DateTimeOffset StartDate { get => _startDate; set { SetProperty(ref _startDate, value); } }
+
+        DateTimeOffset _endDate = default(DateTimeOffset);
+        public DateTimeOffset _EndDate { get => _endDate; set { SetProperty(ref _endDate, value); } }
+
+        TimeSpan _startTime = default(TimeSpan);
+        public TimeSpan StartTime { get => _startTime; set { SetProperty(ref _startTime, value); } }
+
+        TimeSpan _endTime = default(TimeSpan);
+        public TimeSpan _EndTime { get => _endTime; set { SetProperty(ref _endTime, value); } }
+
+        bool _isAllDayEvent = default(bool);
+        public bool IsAllDayEvent { get => _isAllDayEvent; set { SetProperty(ref _isAllDayEvent, value); } }
+
+        string _title = default(string);
+        public string Title { get => _title; set { SetProperty(ref _title, value); } }
+
+        string _description = default(string);
+        public string Description { get => _description; set { SetProperty(ref _description, value); } }
+
         public ScheduleViewModel(IDatabaseService databaseService)
-        {
+        {            
             _databaseService = databaseService;
             CalendarWeeks = new ObservableCollection<CalendarWeek>();
             for (int i = 0; i < 10; i++)
@@ -76,6 +97,7 @@ namespace RoomInfo.ViewModels
         public ICommand HideReservationFlyoutCommand => _hideReservationFlyoutCommand ?? (_hideReservationFlyoutCommand = new DelegateCommand<object>((param) =>
         {
             _flyout.Hide();
+            _flyout = null;
         }));
 
         private ICommand _addReservationCommand;

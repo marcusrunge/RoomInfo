@@ -11,17 +11,43 @@
     prismMvvm:ViewModelLocator.AutoWireViewModel="True" 
     mc:Ignorable="d">
     <Page.Resources>
-        <Flyout x:Name="reservationFlyout"  x:Key="ReservationFlyout">
-            <Grid Width="384" Height="512">
+        <Flyout x:Name="reservationFlyout"  x:Key="ReservationFlyout" Placement="Top">
+            <Flyout.FlyoutPresenterStyle>
+                <Style TargetType="FlyoutPresenter">
+                    <Setter Property="MaxWidth" Value="768"/>                    
+                </Style>
+            </Flyout.FlyoutPresenterStyle>
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Button HorizontalAlignment="Right" Background="{x:Null}" Command="{Binding HideReservationFlyoutCommand}">
+                <Button HorizontalAlignment="Right" Background="{x:Null}" Command="{Binding HideReservationFlyoutCommand}" Margin="0,0,0,6">
                     <SymbolIcon Symbol="Cancel"/>                    
                 </Button>
+                <TextBox Grid.Row="1" PlaceholderText="Name des Termins" Margin="0,6,0,6" />
+                <Grid Grid.Row="2" Margin="0,6,0,6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <DatePicker Margin="0,0,6,0"/>
+                    <TimePicker Grid.Column="1" Margin="6,0,6,0"/>
+                    <CheckBox Grid.Column="2" Content="Ganztägig" Margin="6,0,0,0"/>
+                </Grid>
+                <Grid Grid.Row="3" Margin="0,6,0,6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <DatePicker Margin="0,0,6,0"/>
+                    <TimePicker Grid.Column="1" Margin="6,0,0,0"/>
+                </Grid>                
+                <TextBox Grid.Row="4" Margin="0,6,0,6" Height="64" PlaceholderText="Beschreibung des Termins"  TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto" />
             </Grid>
         </Flyout>
     </Page.Resources>
