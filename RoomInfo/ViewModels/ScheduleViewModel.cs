@@ -25,13 +25,13 @@ namespace RoomInfo.ViewModels
         public DateTimeOffset StartDate { get => _startDate; set { SetProperty(ref _startDate, value); } }
 
         DateTimeOffset _endDate = default(DateTimeOffset);
-        public DateTimeOffset _EndDate { get => _endDate; set { SetProperty(ref _endDate, value); } }
+        public DateTimeOffset EndDate { get => _endDate; set { SetProperty(ref _endDate, value); } }
 
         TimeSpan _startTime = default(TimeSpan);
         public TimeSpan StartTime { get => _startTime; set { SetProperty(ref _startTime, value); } }
 
         TimeSpan _endTime = default(TimeSpan);
-        public TimeSpan _EndTime { get => _endTime; set { SetProperty(ref _endTime, value); } }
+        public TimeSpan EndTime { get => _endTime; set { SetProperty(ref _endTime, value); } }
 
         bool _isAllDayEvent = default(bool);
         public bool IsAllDayEvent { get => _isAllDayEvent; set { SetProperty(ref _isAllDayEvent, value); } }
@@ -82,15 +82,23 @@ namespace RoomInfo.ViewModels
         public async override void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
         {
             base.OnNavigatedTo(e, viewModelState);
-            //await _databaseService.AddAgendaItemAsync(new AgendaItem() { Title = "Test1", DateTime = "15:00" });
-            //await _databaseService.AddAgendaItemAsync(new AgendaItem() { Title = "Test2", DateTime = "16:00" });
-            //var agendaItems = await _databaseService.GetAgendaItemsAsync();
+            //await _databaseService.AddAgendaItemAsync(new AgendaItem() { Title = "Test1", StartDate= DateTimeOffset.MinValue, EndDate= DateTimeOffset.MaxValue, StartTime = TimeSpan.MinValue, EndTime = TimeSpan.MaxValue, Description="Beschreibung", IsAllDayEvent=false });
+            //await _databaseService.AddAgendaItemAsync(new AgendaItem() { Title = "Test2", StartDate = DateTimeOffset.MinValue, EndDate = DateTimeOffset.MaxValue, StartTime = TimeSpan.MinValue, EndTime = TimeSpan.MaxValue, Description = "Beschreibung", IsAllDayEvent = false });
+            var agendaItems = await _databaseService.GetAgendaItemsAsync();
         }
 
         private ICommand _showReservationFlyoutCommand;
         public ICommand ShowReservationFlyoutCommand => _showReservationFlyoutCommand ?? (_showReservationFlyoutCommand = new DelegateCommand<object>(async (param) =>
             {
                 _flyout = (param as Flyout);
+                var now = DateTime.Now;
+                StartDate = now;
+                StartTime = TimeSpan.FromTicks(now.Ticks);
+                EndDate = now;
+                EndTime = TimeSpan.FromTicks(now.Ticks);
+                Title = "";
+                Description = "";
+                IsAllDayEvent = false;
             }));
 
         private ICommand _hideReservationFlyoutCommand;

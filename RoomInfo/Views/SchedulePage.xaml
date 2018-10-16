@@ -35,19 +35,19 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <DatePicker Margin="0,0,6,0"/>
-                    <TimePicker Grid.Column="1" Margin="6,0,6,0"/>
-                    <CheckBox Grid.Column="2" Content="Ganztägig" Margin="6,0,0,0"/>
+                    <DatePicker Margin="0,0,6,0" Date="{Binding StartDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TimePicker Grid.Column="1" Margin="6,0,6,0" Time="{Binding StartTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ClockIdentifier="24HourClock"/>
+                    <CheckBox Grid.Column="2" Content="Ganztägig" Margin="6,0,0,0" IsChecked="{Binding IsAllDayEventIsAllDayEvent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </Grid>
                 <Grid Grid.Row="3" Margin="0,6,0,6">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <DatePicker Margin="0,0,6,0"/>
-                    <TimePicker Grid.Column="1" Margin="6,0,0,0"/>
-                </Grid>                
-                <TextBox Grid.Row="4" Margin="0,6,0,6" Height="64" PlaceholderText="Beschreibung des Termins"  TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                    <DatePicker Margin="0,0,6,0" Date="{Binding EndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TimePicker Grid.Column="1" Margin="6,0,0,0" Time="{Binding EndTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ClockIdentifier="24HourClock"/>
+                </Grid>
+                <TextBox Grid.Row="4" Margin="0,6,0,6" Height="64" PlaceholderText="Beschreibung des Termins"  TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
         </Flyout>
     </Page.Resources>
