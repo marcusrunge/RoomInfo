@@ -131,6 +131,7 @@
     <Compile Include="Models\AgendaItem.cs" />
     <Compile Include="Models\CalendarWeek.cs" />
     <Compile Include="Models\DataModelBase.cs" />
+    <Compile Include="Models\IncrementalLoadingCalendarWeeks.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Constants\PageTokens.cs" />
     <Compile Include="Services\BackgroundTaskService.cs" />

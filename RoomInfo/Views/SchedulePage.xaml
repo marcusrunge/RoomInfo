@@ -24,6 +24,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Button HorizontalAlignment="Right" Background="{x:Null}" Command="{Binding HideReservationFlyoutCommand}" Margin="0,0,0,6">
                     <SymbolIcon Symbol="Cancel"/>                    
@@ -48,6 +49,7 @@
                     <TimePicker Grid.Column="1" Margin="6,0,0,0" Time="{Binding EndTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ClockIdentifier="24HourClock"/>
                 </Grid>
                 <TextBox Grid.Row="4" Margin="0,6,0,6" Height="64" PlaceholderText="Beschreibung des Termins"  TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <Button Grid.Row="5" HorizontalAlignment="Right" Content="Speichern" Command="{Binding AddOrUpdateReservationCommand}"/>
             </Grid>
         </Flyout>
     </Page.Resources>
@@ -58,8 +60,8 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-        </Grid.RowDefinitions>        
-        <TextBlock Text="Januar 1970" FontSize="{ThemeResource TextStyleExtraLargeFontSize}"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="{Binding TopDate}" FontSize="{ThemeResource TextStyleExtraLargeFontSize}"/>
         <Button HorizontalAlignment="Right" Background="{x:Null}" Command="{Binding ShowReservationFlyoutCommand}" CommandParameter="{Binding ElementName=reservationFlyout}" Flyout="{StaticResource ReservationFlyout}">
             <Button.Content>
                 <Grid>

@@ -4,6 +4,9 @@ namespace RoomInfo.Models
 {
     public class CalendarWeek : DataModelBase
     {
+        public int Year { get; set; }
+        public int Week { get; set; }
+
         string _weekDayOneDate = default(string);
         public string WeekDayOneDate { get => _weekDayOneDate; set { SetProperty(ref _weekDayOneDate, value); } }
 
