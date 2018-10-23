@@ -45,12 +45,17 @@ namespace RoomInfo.ViewModels
         string _description = default(string);
         public string Description { get => _description; set { SetProperty(ref _description, value); } }
 
+        ObservableCollection<AgendaItem> _agendaItems = default(ObservableCollection<AgendaItem>);
+        public ObservableCollection<AgendaItem> AgendaItems { get => _agendaItems; set { SetProperty(ref _agendaItems, value); } }
+
         public ScheduleViewModel(IDatabaseService databaseService)
         {            
             _databaseService = databaseService;
             CalendarWeeks = new ObservableCollection<CalendarWeek>();
+            AgendaItems = new ObservableCollection<AgendaItem>();
             for (int i = 0; i < 10; i++)
             {
+                AgendaItems.Add(new AgendaItem() { Title = "i = " + i});
                 var calendarWeek = new CalendarWeek
                 {
                     WeekDayOneDate = "01.01",

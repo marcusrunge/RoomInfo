@@ -3,6 +3,7 @@
 using RoomInfo.ViewModels;
 
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 
 namespace RoomInfo.Views
 {

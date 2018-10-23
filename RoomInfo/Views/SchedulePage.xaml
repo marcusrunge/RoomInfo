@@ -58,7 +58,7 @@
         Margin="{StaticResource MediumLeftRightMargin}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <!--<RowDefinition Height="Auto" />-->
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <TextBlock Text="{Binding TopDate}" FontSize="{ThemeResource TextStyleExtraLargeFontSize}"/>
@@ -74,7 +74,33 @@
                 </Grid>
             </Button.Content>            
         </Button>
-        <Grid Grid.Row="1">
+        <CalendarView x:Name="calendarView" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalDayItemAlignment="Left" VerticalDayItemAlignment="Top" FirstDayOfWeek="Monday">
+            <CalendarView.CalendarViewDayItemStyle>
+                <Style TargetType="CalendarViewDayItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <ListView x:Name="listView" ItemsSource="{Binding AgendaItems}">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate >
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="06:00"/>
+                                                <TextBlock Grid.Column="1" Text="{Binding Title}" Margin="3,0,0,0"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </CalendarView.CalendarViewDayItemStyle>
+        </CalendarView>
+        <!--<Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -235,8 +261,8 @@
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
-            <!--The SystemControlPageBackgroundChromeLowBrush background represents where you should place your content. 
-                Place your content here.-->
-        </ListView>
+            --><!--The SystemControlPageBackgroundChromeLowBrush background represents where you should place your content. 
+                Place your content here.--><!--
+        </ListView>-->
     </Grid>
 </Page>
