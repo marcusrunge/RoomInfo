@@ -92,11 +92,11 @@ namespace RoomInfo.ViewModels
             base.OnNavigatedTo(e, viewModelState);
             //await _databaseService.AddAgendaItemAsync(new AgendaItem() { Title = "Test1", StartDate= DateTimeOffset.MinValue, EndDate= DateTimeOffset.MaxValue, StartTime = TimeSpan.MinValue, EndTime = TimeSpan.MaxValue, Description="Beschreibung", IsAllDayEvent=false });
             //await _databaseService.AddAgendaItemAsync(new AgendaItem() { Title = "Test2", StartDate = DateTimeOffset.MinValue, EndDate = DateTimeOffset.MaxValue, StartTime = TimeSpan.MinValue, EndTime = TimeSpan.MaxValue, Description = "Beschreibung", IsAllDayEvent = false });
-            var agendaItems = await _databaseService.GetAgendaItemsAsync();
-            if (agendaItems.Count == 0)
-            {
+            //var agendaItems = await _databaseService.GetAgendaItemsAsync();
+            //if (agendaItems.Count == 0)
+            //{
 
-            }
+            //}
         }
 
         private ICommand _showReservationFlyoutCommand;
