@@ -134,5 +134,10 @@ namespace RoomInfo.ViewModels
         public ICommand DeleteReservationCommand => _deleteReservationCommand ?? (_deleteReservationCommand = new DelegateCommand<object>((param) =>
         {
         }));
+
+        private ICommand _handleCalendarViewDayItemChangingCommand;
+        public ICommand HandleCalendarViewDayItemChangingCommand => _handleCalendarViewDayItemChangingCommand ?? (_handleCalendarViewDayItemChangingCommand = new DelegateCommand<object>((param) =>
+        {
+        }));
     }
 }

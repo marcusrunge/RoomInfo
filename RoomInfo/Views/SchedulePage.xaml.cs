@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using RoomInfo.Models;
 using RoomInfo.ViewModels;
-
+using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -23,9 +24,9 @@ namespace RoomInfo.Views
         }
 
         private void calendarView_CalendarViewDayItemChanging(CalendarView sender, CalendarViewDayItemChangingEventArgs args)
-        {
+        {            
             if (args.Phase == 0)
-            {
+            {                
                 args.Item.DataContext = agendaItems;
             }
         }
