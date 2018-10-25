@@ -8,9 +8,11 @@
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     Style="{StaticResource PageStyle}"
     xmlns:prismMvvm="using:Prism.Windows.Mvvm"
+    xmlns:Helpers="using:RoomInfo.Helpers"
     prismMvvm:ViewModelLocator.AutoWireViewModel="True" 
     mc:Ignorable="d" >
     <Page.Resources>
+        <Helpers:CalendarViewDayItemChangingEventArgsConverter x:Key="CalendarViewDayItemChangingEventArgsConverter"/>
         <Flyout x:Name="reservationFlyout"  x:Key="ReservationFlyout" Placement="Top">
             <Flyout.FlyoutPresenterStyle>
                 <Style TargetType="FlyoutPresenter">
@@ -74,10 +76,10 @@
                 </Grid>
             </Button.Content>
         </Button>
-        <CalendarView x:Name="calendarView" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalDayItemAlignment="Left" VerticalDayItemAlignment="Top" FirstDayOfWeek="Monday" CalendarViewDayItemChanging="calendarView_CalendarViewDayItemChanging" DayOfWeekFormat="{}{dayofweek.abbreviated}">
+        <CalendarView x:Name="calendarView" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalDayItemAlignment="Left" VerticalDayItemAlignment="Top" FirstDayOfWeek="Monday" DayOfWeekFormat="{}{dayofweek.abbreviated}">
             <interactivity:Interaction.Behaviors>
                 <core:EventTriggerBehavior EventName="CalendarViewDayItemChanging">
-                    <core:InvokeCommandAction Command="{Binding HandleCalendarViewDayItemChangingCommand}"/>
+                    <core:InvokeCommandAction Command="{Binding HandleCalendarViewDayItemChangingCommand}" InputConverter="{StaticResource CalendarViewDayItemChangingEventArgsConverter}" InputConverterParameter="{Binding ElementName=calendarView}"/>
                 </core:EventTriggerBehavior>
             </interactivity:Interaction.Behaviors>
             <CalendarView.CalendarViewDayItemStyle>

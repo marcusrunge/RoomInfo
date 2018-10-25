@@ -138,6 +138,12 @@ namespace RoomInfo.ViewModels
         private ICommand _handleCalendarViewDayItemChangingCommand;
         public ICommand HandleCalendarViewDayItemChangingCommand => _handleCalendarViewDayItemChangingCommand ?? (_handleCalendarViewDayItemChangingCommand = new DelegateCommand<object>((param) =>
         {
+            var frameworkElementCalendarViewDayItemChangingEventArgsTuple = param as CalendarViewDayItemChangingEventArgs;
+            if (frameworkElementCalendarViewDayItemChangingEventArgsTuple.Phase == 0)
+            {
+                frameworkElementCalendarViewDayItemChangingEventArgsTuple.Item.DataContext = AgendaItems;
+            }
+            //(frameworkElementCalendarViewDayItemChangingEventArgsTuple.Item2.Item.Parent as CalendarPanel).UpdateLayout();
         }));
     }
 }

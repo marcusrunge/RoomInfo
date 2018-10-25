@@ -22,13 +22,5 @@ namespace RoomInfo.Views
                 agendaItems.Add(new AgendaItem() { Title = "i = " + i });
             }
         }
-
-        private void calendarView_CalendarViewDayItemChanging(CalendarView sender, CalendarViewDayItemChangingEventArgs args)
-        {            
-            if (args.Phase == 0)
-            {                
-                args.Item.DataContext = agendaItems;
-            }
-        }
     }
 }
