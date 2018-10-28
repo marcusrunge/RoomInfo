@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Prism.Commands;
 using Prism.Windows.Mvvm;
@@ -43,7 +44,15 @@ namespace RoomInfo.ViewModels
         public TimeSpan EndTime { get => _endTime; set { SetProperty(ref _endTime, value); } }
 
         bool _isAllDayEvent = default(bool);
-        public bool IsAllDayEvent { get => _isAllDayEvent; set { SetProperty(ref _isAllDayEvent, value); } }
+        public bool IsAllDayEvent { get => _isAllDayEvent; set
+            {
+                SetProperty(ref _isAllDayEvent, value);
+                if (_isAllDayEvent)
+                {
+                    StartTime = TimeSpan.FromHours(0);
+                    EndTime = TimeSpan.FromHours(23).Add(TimeSpan.FromMinutes(59));
+                }
+            }}
 
         string _title = default(string);
         public string Title { get => _title; set { SetProperty(ref _title, value); } }
@@ -56,54 +65,13 @@ namespace RoomInfo.ViewModels
 
         public ScheduleViewModel(IDatabaseService databaseService)
         {
-            _databaseService = databaseService;
-            CalendarWeeks = new ObservableCollection<CalendarWeek>();
-            //AgendaItems = new ObservableCollection<AgendaItem>();
-            for (int i = 0; i < 10; i++)
-            {
-                //AgendaItems.Add(new AgendaItem() { Title = "i = " + i });
-                var calendarWeek = new CalendarWeek
-                {
-                    WeekDayOneDate = "01.01",
-                    WeekDayTwoDate = "02.01",
-                    WeekDayThreeDate = "03.01",
-                    WeekDayFourDate = "04.01",
-                    WeekDayFiveDate = "05.01",
-                    WeekDaySixDate = "06.01",
-                    WeekDaySevenDate = "07.01",
-                    WeekDayOne = new ObservableCollection<AgendaItem>(),
-                    WeekDayTwo = new ObservableCollection<AgendaItem>(),
-                    WeekDayThree = new ObservableCollection<AgendaItem>(),
-                    WeekDayFour = new ObservableCollection<AgendaItem>(),
-                    WeekDayFive = new ObservableCollection<AgendaItem>(),
-                    WeekDaySix = new ObservableCollection<AgendaItem>(),
-                    WeekDaySeven = new ObservableCollection<AgendaItem>()
-                };
-                for (int j = 0; j < 5; j++)
-                {
-                    calendarWeek.WeekDayOne.Add(new AgendaItem());
-                    calendarWeek.WeekDayTwo.Add(new AgendaItem());
-                    calendarWeek.WeekDayThree.Add(new AgendaItem());
-                    calendarWeek.WeekDayFour.Add(new AgendaItem());
-                    calendarWeek.WeekDayFive.Add(new AgendaItem());
-                    calendarWeek.WeekDaySix.Add(new AgendaItem());
-                    calendarWeek.WeekDaySeven.Add(new AgendaItem());
-                }
-                CalendarWeeks.Add(calendarWeek);
-            }
+            _databaseService = databaseService; 
         }
 
         public async override void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
         {
-            base.OnNavigatedTo(e, viewModelState);
-            //await _databaseService.AddAgendaItemAsync(new AgendaItem() { Title = "TestToday", StartDate = DateTime.Today.Date, EndDate = DateTimeOffset.MaxValue, StartTime = TimeSpan.MinValue, EndTime = TimeSpan.MaxValue, Description = "Beschreibung", IsAllDayEvent = false });
-            _agendaItems = await _databaseService.GetAgendaItemsAsync();
-            var calendarViewDayItems = calendarPanel.Children().OfType<CalendarViewDayItem>();
-            foreach (var calendarViewDayItem in calendarViewDayItems)
-            {
-                List<AgendaItem> dayAgendaItems = _agendaItems.Where((x) => x.StartDate.Date == calendarViewDayItem.Date.Date).Select((x) => x).ToList();
-                if (dayAgendaItems != null && dayAgendaItems.Count > 0) calendarViewDayItem.DataContext = dayAgendaItems;
-            }
+            base.OnNavigatedTo(e, viewModelState);            
+            await UpdateCalendarViewDayItems();
         }        
 
         private ICommand _showReservationFlyoutCommand;
@@ -111,9 +79,9 @@ namespace RoomInfo.ViewModels
             {
                 _flyout = (param as Flyout);
                 var now = DateTime.Now;
-                StartDate = now;
+                StartDate = now.Date;
                 StartTime = TimeSpan.FromTicks(now.Ticks);
-                EndDate = now;
+                EndDate = now.Date;
                 EndTime = TimeSpan.FromTicks(now.Ticks);
                 Title = "";
                 Description = "";
@@ -130,11 +98,12 @@ namespace RoomInfo.ViewModels
         private ICommand _addOrUpdateReservationCommand;
         public ICommand AddOrUpdateReservationCommand => _addOrUpdateReservationCommand ?? (_addOrUpdateReservationCommand = new DelegateCommand<object>(async (param) =>
         {
-            StartDate = StartDate.Add(StartTime - StartDate.TimeOfDay);
-            EndDate = EndDate.Add(EndTime - EndDate.TimeOfDay);
-            await _databaseService.AddAgendaItemAsync(new AgendaItem() { Title = Title, StartDate = StartDate, EndDate = EndDate, StartTime = StartTime, EndTime = EndTime, Description = Description, IsAllDayEvent = IsAllDayEvent });
+            StartDate = StartDate.Add(StartDate.TimeOfDay + StartTime);
+            EndDate = EndDate.Add(EndDate.TimeOfDay + EndTime);
+            await _databaseService.AddAgendaItemAsync(new AgendaItem() { Title = Title, Start = StartDate, End = EndDate, Description = Description, IsAllDayEvent = IsAllDayEvent });
             _flyout.Hide();
-            _flyout = null;
+            _flyout = null;            
+            await UpdateCalendarViewDayItems();
         }));
 
         private ICommand _deleteReservationCommand;
@@ -149,5 +118,16 @@ namespace RoomInfo.ViewModels
             var frameworkElementCalendarViewDayItemChangingEventArgs = param as CalendarViewDayItemChangingEventArgs;
             if(calendarPanel == null) calendarPanel = frameworkElementCalendarViewDayItemChangingEventArgs.Item.Parent as CalendarPanel;
         }));
+
+        private async Task UpdateCalendarViewDayItems()
+        {
+            _agendaItems = await _databaseService.GetAgendaItemsAsync();
+            var calendarViewDayItems = calendarPanel.Children().OfType<CalendarViewDayItem>();
+            foreach (var calendarViewDayItem in calendarViewDayItems)
+            {
+                List<AgendaItem> dayAgendaItems = _agendaItems.Where((x) => x.Start.Date == calendarViewDayItem.Date.Date).Select((x) => x).ToList();
+                if (dayAgendaItems != null && dayAgendaItems.Count > 0) calendarViewDayItem.DataContext = dayAgendaItems;
+            }
+        }
     }
 }
