@@ -104,12 +104,7 @@ namespace RoomInfo.ViewModels
             _flyout.Hide();
             _flyout = null;            
             await UpdateCalendarViewDayItems();
-        }));
-
-        private ICommand _deleteReservationCommand;
-        public ICommand DeleteReservationCommand => _deleteReservationCommand ?? (_deleteReservationCommand = new DelegateCommand<object>((param) =>
-        {
-        }));
+        }));        
 
         private ICommand _handleCalendarViewDayItemChangingCommand;
         public ICommand HandleCalendarViewDayItemChangingCommand => _handleCalendarViewDayItemChangingCommand ?? (_handleCalendarViewDayItemChangingCommand = new DelegateCommand<object>((param) =>

@@ -13,7 +13,7 @@
     mc:Ignorable="d" >
     <Page.Resources>
         <Helpers:CalendarViewDayItemChangingEventArgsConverter x:Key="CalendarViewDayItemChangingEventArgsConverter"/>
-        <Helpers:TimeFormatConverter x:Key="TimeFormatConverter" />
+        <Helpers:TimeFormatConverter x:Key="TimeFormatConverter" />        
         <Flyout x:Name="reservationFlyout"  x:Key="ReservationFlyout" Placement="Top">
             <Flyout.FlyoutPresenterStyle>
                 <Style TargetType="FlyoutPresenter">
@@ -90,11 +90,17 @@
                             <ControlTemplate>
                                 <ListView x:Name="listView" ItemsSource="{Binding}" Margin="0,30,0,0" VerticalAlignment="Stretch" Height="119">
                                     <ListView.ItemTemplate>
-                                        <DataTemplate >
-                                            <Grid>
+                                        <DataTemplate x:Name="agendaItemDataTemplate" >
+                                            <Grid RightTapped="Grid_RightTapped">
+                                                <FlyoutBase.AttachedFlyout>
+                                                    <MenuFlyout x:Name="agendaItemFlyout">
+                                                        <MenuFlyoutItem Text="Ändern" Command="{Binding UpdateReservationCommand}" CommandParameter="{Binding}"/>
+                                                        <MenuFlyoutItem Text="Löschen" Command="{Binding DeleteReservationCommand}" CommandParameter="{Binding}"/>
+                                                    </MenuFlyout>
+                                                </FlyoutBase.AttachedFlyout>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="1*"/>
                                                 </Grid.ColumnDefinitions>
                                                 <TextBlock Text="{Binding Start.TimeOfDay, Converter={StaticResource TimeFormatConverter}}"/>
                                                 <TextBlock Grid.Column="1" Text="{Binding Title}" Margin="3,0,0,0"/>

@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Prism.Commands;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Windows.Input;
 
 namespace RoomInfo.Models
 {
@@ -41,5 +43,16 @@ namespace RoomInfo.Models
 
         string _description = default(string);
         public string Description { get => _description; set { SetProperty(ref _description, value); } }
+
+        private ICommand _updateReservationCommand;
+        public ICommand UpdateReservationCommand => _updateReservationCommand ?? (_updateReservationCommand = new DelegateCommand<object>((param) =>
+        {            
+        }));
+
+
+        private ICommand _deleteReservationCommand;
+        public ICommand DeleteReservationCommand => _deleteReservationCommand ?? (_deleteReservationCommand = new DelegateCommand<object>((param) =>
+        {
+        }));
     }
 }
