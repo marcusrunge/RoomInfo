@@ -133,9 +133,8 @@ namespace RoomInfo.ViewModels
             var calendarViewDayItems = calendarPanel.Children().OfType<CalendarViewDayItem>();
             foreach (var calendarViewDayItem in calendarViewDayItems)
             {
-                var calendarViewDayItemListView = (ListView)calendarViewDayItem.Children().Where((x) => x.GetType() == typeof(ListView)).FirstOrDefault();                
                 List<AgendaItem> dayAgendaItems = _agendaItems.Where((x) => x.Start.Date == calendarViewDayItem.Date.Date).Select((x) => x).ToList();
-                if (dayAgendaItems != null && dayAgendaItems.Count > 0) calendarViewDayItem.DataContext = dayAgendaItems;                
+                calendarViewDayItem.DataContext = dayAgendaItems;                
             }
         }
     }
