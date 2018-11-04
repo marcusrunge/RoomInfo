@@ -32,12 +32,7 @@ namespace RoomInfo.ViewModels
 
         public InfoViewModel()
         {
-            //Test
-            AgendaItems = new ObservableCollection<AgendaItem>
-            {
-                new AgendaItem(),
-                new AgendaItem()
-            };
+            
         }
 
         public override void OnNavigatedTo(NavigatedToEventArgs navigatedToEventArgs, Dictionary<string, object> viewModelState)

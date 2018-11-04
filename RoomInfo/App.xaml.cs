@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using System.Threading.Tasks;
-
+using Microsoft.Practices.ServiceLocation;
 using Microsoft.Practices.Unity;
-
+using Prism.Events;
 using Prism.Mvvm;
 using Prism.Unity.Windows;
 using Prism.Windows.AppModel;
@@ -33,6 +33,9 @@ namespace RoomInfo
             Container.RegisterInstance<IResourceLoader>(new ResourceLoaderAdapter(new ResourceLoader()));
             Container.RegisterType<ISettingsService, SettingsService>();
             Container.RegisterType<IDatabaseService, DatabaseService>();
+            Container.RegisterType<IEventAggregator, EventAggregator>();
+            UnityServiceLocator unityServiceLocator = new UnityServiceLocator(Container);
+            ServiceLocator.SetLocatorProvider(() => unityServiceLocator); Container.RegisterType<IEventAggregator, EventAggregator>();            
         }
 
         protected override Task OnLaunchApplicationAsync(LaunchActivatedEventArgs args)

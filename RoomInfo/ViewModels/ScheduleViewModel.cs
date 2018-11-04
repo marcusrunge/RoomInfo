@@ -6,8 +6,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Windows.Mvvm;
 using Prism.Windows.Navigation;
+using RoomInfo.Events;
 using RoomInfo.Helpers;
 using RoomInfo.Models;
 using RoomInfo.Services;
@@ -24,12 +26,13 @@ namespace RoomInfo.ViewModels
         IDatabaseService _databaseService;
         List<AgendaItem> _agendaItems;
         CalendarPanel calendarPanel;
+        IEventAggregator _eventAggregator;
 
         string _topDate = default(string);
         public string TopDate { get => _topDate; set { SetProperty(ref _topDate, value); } }
 
-        ObservableCollection<CalendarWeek> _calendarWeeks = default(ObservableCollection<CalendarWeek>);
-        public ObservableCollection<CalendarWeek> CalendarWeeks { get => _calendarWeeks; set { SetProperty(ref _calendarWeeks, value); } }
+        //ObservableCollection<CalendarWeek> _calendarWeeks = default(ObservableCollection<CalendarWeek>);
+        //public ObservableCollection<CalendarWeek> CalendarWeeks { get => _calendarWeeks; set { SetProperty(ref _calendarWeeks, value); } }
 
         DateTimeOffset _startDate = default(DateTimeOffset);
         public DateTimeOffset StartDate { get => _startDate; set { SetProperty(ref _startDate, value); EndDate = StartDate; } }
@@ -63,15 +66,25 @@ namespace RoomInfo.ViewModels
         //ObservableCollection<AgendaItem> _agendaItems = default(ObservableCollection<AgendaItem>);
         //public ObservableCollection<AgendaItem> AgendaItems { get => _agendaItems; set { SetProperty(ref _agendaItems, value); } }
 
-        public ScheduleViewModel(IDatabaseService databaseService)
+        public ScheduleViewModel(IDatabaseService databaseService, IEventAggregator eventAggregator)
         {
-            _databaseService = databaseService; 
+            _databaseService = databaseService;
+            _eventAggregator = eventAggregator;
         }
 
         public async override void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
         {
             base.OnNavigatedTo(e, viewModelState);            
             await UpdateCalendarViewDayItems();
+            _eventAggregator.GetEvent<DeleteReservationEvent>().Subscribe(async (o) =>
+            {
+                await _databaseService.RemoveAgendaItemAsync(o as AgendaItem);
+                await UpdateCalendarViewDayItems();
+            });
+            _eventAggregator.GetEvent<UpdateReservationEvent>().Subscribe((o) =>
+            {
+
+            });
         }        
 
         private ICommand _showReservationFlyoutCommand;
@@ -80,9 +93,9 @@ namespace RoomInfo.ViewModels
                 _flyout = (param as Flyout);
                 var now = DateTime.Now;
                 StartDate = now.Date;
-                StartTime = TimeSpan.FromTicks(now.Ticks);
+                StartTime = TimeSpan.FromTicks(now.TimeOfDay.Ticks);
                 EndDate = now.Date;
-                EndTime = TimeSpan.FromTicks(now.Ticks);
+                EndTime = TimeSpan.FromTicks(now.TimeOfDay.Ticks);
                 Title = "";
                 Description = "";
                 IsAllDayEvent = false;
@@ -100,7 +113,7 @@ namespace RoomInfo.ViewModels
         {
             StartDate = StartDate.Add(StartDate.TimeOfDay + StartTime);
             EndDate = EndDate.Add(EndDate.TimeOfDay + EndTime);
-            await _databaseService.AddAgendaItemAsync(new AgendaItem() { Title = Title, Start = StartDate, End = EndDate, Description = Description, IsAllDayEvent = IsAllDayEvent });
+            await _databaseService.AddAgendaItemAsync(new AgendaItem(_eventAggregator) { Title = Title, Start = StartDate, End = EndDate, Description = Description, IsAllDayEvent = IsAllDayEvent });
             _flyout.Hide();
             _flyout = null;            
             await UpdateCalendarViewDayItems();
@@ -120,8 +133,9 @@ namespace RoomInfo.ViewModels
             var calendarViewDayItems = calendarPanel.Children().OfType<CalendarViewDayItem>();
             foreach (var calendarViewDayItem in calendarViewDayItems)
             {
+                var calendarViewDayItemListView = (ListView)calendarViewDayItem.Children().Where((x) => x.GetType() == typeof(ListView)).FirstOrDefault();                
                 List<AgendaItem> dayAgendaItems = _agendaItems.Where((x) => x.Start.Date == calendarViewDayItem.Date.Date).Select((x) => x).ToList();
-                if (dayAgendaItems != null && dayAgendaItems.Count > 0) calendarViewDayItem.DataContext = dayAgendaItems;
+                if (dayAgendaItems != null && dayAgendaItems.Count > 0) calendarViewDayItem.DataContext = dayAgendaItems;                
             }
         }
     }

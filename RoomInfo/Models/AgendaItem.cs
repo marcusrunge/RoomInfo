@@ -1,12 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Practices.ServiceLocation;
 using Prism.Commands;
+using Prism.Events;
+using RoomInfo.Events;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Windows.Input;
 
 namespace RoomInfo.Models
-{
+{     
     public class AgendaItemContext : DbContext
     {
         public DbSet<AgendaItem> AgendaItems { get; set; }
@@ -18,6 +21,16 @@ namespace RoomInfo.Models
 
     public class AgendaItem : DataModelBase
     {
+        IEventAggregator _eventAggregator;
+        public AgendaItem()
+        {
+            _eventAggregator = ServiceLocator.Current.GetInstance<IEventAggregator>();
+        }
+        public AgendaItem(IEventAggregator eventAggregator)
+        {
+            _eventAggregator = eventAggregator;
+        }
+
         int _id = default(int);
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -39,20 +52,22 @@ namespace RoomInfo.Models
         //public TimeSpan EndTime { get => _endTime; set { SetProperty(ref _endTime, value); } }
 
         bool _isAllDayEvent = default(bool);
-        public bool IsAllDayEvent { get => _isAllDayEvent; set { SetProperty(ref _isAllDayEvent, value); } }               
+        public bool IsAllDayEvent { get => _isAllDayEvent; set { SetProperty(ref _isAllDayEvent, value); } }
 
         string _description = default(string);
         public string Description { get => _description; set { SetProperty(ref _description, value); } }
 
         private ICommand _updateReservationCommand;
         public ICommand UpdateReservationCommand => _updateReservationCommand ?? (_updateReservationCommand = new DelegateCommand<object>((param) =>
-        {            
+        {
+            _eventAggregator.GetEvent<UpdateReservationEvent>().Publish(param);
         }));
 
 
         private ICommand _deleteReservationCommand;
         public ICommand DeleteReservationCommand => _deleteReservationCommand ?? (_deleteReservationCommand = new DelegateCommand<object>((param) =>
         {
+            _eventAggregator.GetEvent<DeleteReservationEvent>().Publish(param);
         }));
     }
 }
