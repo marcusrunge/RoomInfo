@@ -31,8 +31,8 @@ namespace RoomInfo.ViewModels
         string _topDate = default(string);
         public string TopDate { get => _topDate; set { SetProperty(ref _topDate, value); } }
 
-        //ObservableCollection<CalendarWeek> _calendarWeeks = default(ObservableCollection<CalendarWeek>);
-        //public ObservableCollection<CalendarWeek> CalendarWeeks { get => _calendarWeeks; set { SetProperty(ref _calendarWeeks, value); } }
+        int _id = default(int);
+        public int Id { get => _id; set { SetProperty(ref _id, value); } }
 
         DateTimeOffset _startDate = default(DateTimeOffset);
         public DateTimeOffset StartDate { get => _startDate; set { SetProperty(ref _startDate, value); EndDate = StartDate; } }
@@ -47,7 +47,9 @@ namespace RoomInfo.ViewModels
         public TimeSpan EndTime { get => _endTime; set { SetProperty(ref _endTime, value); } }
 
         bool _isAllDayEvent = default(bool);
-        public bool IsAllDayEvent { get => _isAllDayEvent; set
+        public bool IsAllDayEvent
+        {
+            get => _isAllDayEvent; set
             {
                 SetProperty(ref _isAllDayEvent, value);
                 if (_isAllDayEvent)
@@ -55,7 +57,8 @@ namespace RoomInfo.ViewModels
                     StartTime = TimeSpan.FromHours(0);
                     EndTime = TimeSpan.FromHours(23).Add(TimeSpan.FromMinutes(59));
                 }
-            }}
+            }
+        }
 
         string _title = default(string);
         public string Title { get => _title; set { SetProperty(ref _title, value); } }
@@ -74,7 +77,7 @@ namespace RoomInfo.ViewModels
 
         public async override void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
         {
-            base.OnNavigatedTo(e, viewModelState);            
+            base.OnNavigatedTo(e, viewModelState);
             await UpdateCalendarViewDayItems();
             _eventAggregator.GetEvent<DeleteReservationEvent>().Subscribe(async (o) =>
             {
@@ -83,9 +86,16 @@ namespace RoomInfo.ViewModels
             });
             _eventAggregator.GetEvent<UpdateReservationEvent>().Subscribe((o) =>
             {
-
+                Id = (o as AgendaItem).Id;
+                StartDate = (o as AgendaItem).Start.Date;
+                StartTime = (o as AgendaItem).Start.TimeOfDay;
+                EndDate = (o as AgendaItem).End.Date;
+                EndTime = (o as AgendaItem).End.TimeOfDay;
+                Title = (o as AgendaItem).Title;
+                Description = (o as AgendaItem).Description;
+                IsAllDayEvent = (o as AgendaItem).IsAllDayEvent;
             });
-        }        
+        }
 
         private ICommand _showReservationFlyoutCommand;
         public ICommand ShowReservationFlyoutCommand => _showReservationFlyoutCommand ?? (_showReservationFlyoutCommand = new DelegateCommand<object>(async (param) =>
@@ -113,18 +123,19 @@ namespace RoomInfo.ViewModels
         {
             StartDate = StartDate.Add(StartDate.TimeOfDay + StartTime);
             EndDate = EndDate.Add(EndDate.TimeOfDay + EndTime);
-            await _databaseService.AddAgendaItemAsync(new AgendaItem(_eventAggregator) { Title = Title, Start = StartDate, End = EndDate, Description = Description, IsAllDayEvent = IsAllDayEvent });
+            if (Id == 0) await _databaseService.AddAgendaItemAsync(new AgendaItem(_eventAggregator) { Title = Title, Start = StartDate, End = EndDate, Description = Description, IsAllDayEvent = IsAllDayEvent });
+            else await _databaseService.UpdateAgendaItemAsync(new AgendaItem(_eventAggregator) { Id = Id, Title = Title, Start = StartDate, End = EndDate, Description = Description, IsAllDayEvent = IsAllDayEvent });
+            Id = 0;
             _flyout.Hide();
-            _flyout = null;            
+            _flyout = null;
             await UpdateCalendarViewDayItems();
-        }));        
+        }));
 
         private ICommand _handleCalendarViewDayItemChangingCommand;
         public ICommand HandleCalendarViewDayItemChangingCommand => _handleCalendarViewDayItemChangingCommand ?? (_handleCalendarViewDayItemChangingCommand = new DelegateCommand<object>((param) =>
         {
-
             var frameworkElementCalendarViewDayItemChangingEventArgs = param as CalendarViewDayItemChangingEventArgs;
-            if(calendarPanel == null) calendarPanel = frameworkElementCalendarViewDayItemChangingEventArgs.Item.Parent as CalendarPanel;
+            if (calendarPanel == null) calendarPanel = frameworkElementCalendarViewDayItemChangingEventArgs.Item.Parent as CalendarPanel;
         }));
 
         private async Task UpdateCalendarViewDayItems()
@@ -134,7 +145,7 @@ namespace RoomInfo.ViewModels
             foreach (var calendarViewDayItem in calendarViewDayItems)
             {
                 List<AgendaItem> dayAgendaItems = _agendaItems.Where((x) => x.Start.Date == calendarViewDayItem.Date.Date).Select((x) => x).ToList();
-                calendarViewDayItem.DataContext = dayAgendaItems;                
+                calendarViewDayItem.DataContext = dayAgendaItems;
             }
         }
     }
