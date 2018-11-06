@@ -88,13 +88,13 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate>
-                                <ListView x:Name="listView" ItemsSource="{Binding}" Margin="0,30,0,0" VerticalAlignment="Stretch" Height="119">
+                                <ListView x:Name="listView" ItemsSource="{Binding}" Margin="0,30,0,0" VerticalAlignment="Stretch" Height="119" RightTapped="listView_RightTapped">
                                     <ListView.ItemTemplate>
                                         <DataTemplate x:Name="agendaItemDataTemplate" >
                                             <Grid RightTapped="Grid_RightTapped">
                                                 <FlyoutBase.AttachedFlyout>
                                                     <MenuFlyout x:Name="agendaItemFlyout">
-                                                        <MenuFlyoutItem Text="Ändern" Command="{Binding UpdateReservationCommand}" CommandParameter="{Binding}"/>
+                                                        <MenuFlyoutItem Text="Ändern" Command="{Binding UpdateReservationCommand}" CommandParameter="{Binding}" ContextFlyout="{StaticResource ReservationFlyout}" Click="MenuFlyoutItem_Click"/>
                                                         <MenuFlyoutItem Text="Löschen" Command="{Binding DeleteReservationCommand}" CommandParameter="{Binding}"/>
                                                     </MenuFlyout>
                                                 </FlyoutBase.AttachedFlyout>
