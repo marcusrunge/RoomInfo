@@ -42,5 +42,20 @@ namespace RoomInfo.Views
         {
             rightTappedListView = sender as ListView;
         }
+
+        private void Grid_Loading(FrameworkElement sender, object args)
+        {
+            sender.DataContext = DataContext;
+        }
+
+        private void hideReservationButton_Click(object sender, RoutedEventArgs e)
+        {
+            reservationFlyout.Hide();
+        }
+
+        private void saveReservationButton_Click(object sender, RoutedEventArgs e)
+        {
+            reservationFlyout.Hide();
+        }
     }
 }

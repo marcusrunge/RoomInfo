@@ -7,6 +7,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Windows.Input;
+using Windows.UI.Xaml.Controls;
 
 namespace RoomInfo.Models
 {     
@@ -59,8 +60,8 @@ namespace RoomInfo.Models
 
         private ICommand _updateReservationCommand;
         public ICommand UpdateReservationCommand => _updateReservationCommand ?? (_updateReservationCommand = new DelegateCommand<object>((param) =>
-        {
-            _eventAggregator.GetEvent<UpdateReservationEvent>().Publish(param);
+        {            
+            _eventAggregator.GetEvent<UpdateReservationEvent>().Publish(this);
         }));
 
 

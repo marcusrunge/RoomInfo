@@ -11,16 +11,17 @@
     xmlns:Helpers="using:RoomInfo.Helpers"
     prismMvvm:ViewModelLocator.AutoWireViewModel="True" 
     mc:Ignorable="d" >
+    
     <Page.Resources>
         <Helpers:CalendarViewDayItemChangingEventArgsConverter x:Key="CalendarViewDayItemChangingEventArgsConverter"/>
-        <Helpers:TimeFormatConverter x:Key="TimeFormatConverter" />        
-        <Flyout x:Name="reservationFlyout"  x:Key="ReservationFlyout" Placement="Top">
+        <Helpers:TimeFormatConverter x:Key="TimeFormatConverter" />
+        <Flyout x:Name="reservationFlyout"  x:Key="ReservationFlyout" Placement="Top">            
             <Flyout.FlyoutPresenterStyle>
                 <Style TargetType="FlyoutPresenter">
                     <Setter Property="MaxWidth" Value="768"/>
                 </Style>
-            </Flyout.FlyoutPresenterStyle>
-            <Grid>
+            </Flyout.FlyoutPresenterStyle>            
+            <Grid x:Name="flyoutGrid" Loading="Grid_Loading" >                
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition/>
@@ -29,7 +30,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Button HorizontalAlignment="Right" Background="{x:Null}" Command="{Binding HideReservationFlyoutCommand}" Margin="0,0,0,6">
+                <Button x:Name="hideReservationButton" HorizontalAlignment="Right" Background="{x:Null}" Margin="0,0,0,6" Click="hideReservationButton_Click">
                     <SymbolIcon Symbol="Cancel"/>
                 </Button>
                 <TextBox Grid.Row="1" PlaceholderText="Name des Termins" Margin="0,6,0,6" Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -52,7 +53,7 @@
                     <TimePicker Grid.Column="1" Margin="6,0,0,0" Time="{Binding EndTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ClockIdentifier="24HourClock"/>
                 </Grid>
                 <TextBox Grid.Row="4" Margin="0,6,0,6" Height="64" PlaceholderText="Beschreibung des Termins"  TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <Button Grid.Row="5" HorizontalAlignment="Right" Content="Speichern" Command="{Binding AddOrUpdateReservationCommand}"/>
+                <Button x:Name="saveReservationButton" Grid.Row="5" HorizontalAlignment="Right" Content="Speichern" Command="{Binding AddOrUpdateReservationCommand}" Click="saveReservationButton_Click"/>
             </Grid>
         </Flyout>
     </Page.Resources>
@@ -94,7 +95,7 @@
                                             <Grid RightTapped="Grid_RightTapped">
                                                 <FlyoutBase.AttachedFlyout>
                                                     <MenuFlyout x:Name="agendaItemFlyout">
-                                                        <MenuFlyoutItem Text="Ändern" Command="{Binding UpdateReservationCommand}" CommandParameter="{Binding}" ContextFlyout="{StaticResource ReservationFlyout}" Click="MenuFlyoutItem_Click"/>
+                                                        <MenuFlyoutItem Text="Ändern" Command="{Binding UpdateReservationCommand}" CommandParameter="{Binding ElementName=agendaItemFlyout}" ContextFlyout="{StaticResource ReservationFlyout}" Click="MenuFlyoutItem_Click"/>
                                                         <MenuFlyoutItem Text="Löschen" Command="{Binding DeleteReservationCommand}" CommandParameter="{Binding}"/>
                                                     </MenuFlyout>
                                                 </FlyoutBase.AttachedFlyout>

@@ -1,4 +1,5 @@
 ﻿using Prism.Events;
+using RoomInfo.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace RoomInfo.Events
     public class DeleteReservationEvent : PubSubEvent<object>
     {
     }
-    public class UpdateReservationEvent : PubSubEvent<object>
+    public class UpdateReservationEvent : PubSubEvent<AgendaItem>
     {
     }
 }
