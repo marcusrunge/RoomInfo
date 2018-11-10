@@ -43,7 +43,7 @@ namespace RoomInfo.Views
             rightTappedListView = sender as ListView;
         }
 
-        private void Grid_Loading(FrameworkElement sender, object args)
+        private void flyoutGrid_Loading(FrameworkElement sender, object args)
         {
             sender.DataContext = DataContext;
         }

@@ -65,9 +65,12 @@ namespace RoomInfo.ViewModels
         string _description = default(string);
         public string Description { get => _description; set { SetProperty(ref _description, value); } }
 
-        //ObservableCollection<AgendaItem> _agendaItems = default(ObservableCollection<AgendaItem>);
-        //public ObservableCollection<AgendaItem> AgendaItems { get => _agendaItems; set { SetProperty(ref _agendaItems, value); } }
+        bool _isFlyoutOpen = default(bool);
+        public bool IsFlyoutOpen { get => _isFlyoutOpen; set { SetProperty(ref _isFlyoutOpen, value); } }
 
+        FrameworkElement _flyoutParent = default(FrameworkElement);
+        public FrameworkElement FlyoutParent { get => _flyoutParent; set { SetProperty(ref _flyoutParent, value); } }
+        
         public ScheduleViewModel(IDatabaseService databaseService, IEventAggregator eventAggregator)
         {
             _databaseService = databaseService;

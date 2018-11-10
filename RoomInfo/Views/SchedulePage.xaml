@@ -20,8 +20,8 @@
                 <Style TargetType="FlyoutPresenter">
                     <Setter Property="MaxWidth" Value="768"/>
                 </Style>
-            </Flyout.FlyoutPresenterStyle>            
-            <Grid x:Name="flyoutGrid" Loading="Grid_Loading" >                
+            </Flyout.FlyoutPresenterStyle>
+            <Grid x:Name="flyoutGrid" Loading="flyoutGrid_Loading" >                
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition/>

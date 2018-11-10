@@ -127,6 +127,7 @@
     <Compile Include="Helpers\CalendarViewDayItemChangingEventArgsConverter.cs" />
     <Compile Include="Helpers\CalendarViewHelper.cs" />
     <Compile Include="Helpers\EnumToBooleanConverter.cs" />
+    <Compile Include="Helpers\FlyoutDependencyProperty.cs" />
     <Compile Include="Helpers\Json.cs" />
     <Compile Include="Helpers\SettingsStorageExtensions.cs" />
     <Compile Include="Helpers\TaskExtensions.cs" />
