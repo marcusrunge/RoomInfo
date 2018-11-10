@@ -88,6 +88,7 @@ namespace RoomInfo.Helpers
             if ((bool)e.NewValue)
             {
                 flyoutBase.Closed += flyout_Closed;
+                var p = GetParent(d);
                 flyoutBase.ShowAt(GetParent(d));
             }
             else

@@ -15,7 +15,7 @@
     <Page.Resources>
         <Helpers:CalendarViewDayItemChangingEventArgsConverter x:Key="CalendarViewDayItemChangingEventArgsConverter"/>
         <Helpers:TimeFormatConverter x:Key="TimeFormatConverter" />
-        <Flyout x:Name="reservationFlyout"  x:Key="ReservationFlyout" Placement="Top">            
+        <Flyout x:Name="reservationFlyout"  x:Key="ReservationFlyout" Placement="Top" Helpers:FlyoutDependencyProperty.IsOpen="{Binding IsFlyoutOpen, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Helpers:FlyoutDependencyProperty.Parent="{Binding FlyoutParent}">
             <Flyout.FlyoutPresenterStyle>
                 <Style TargetType="FlyoutPresenter">
                     <Setter Property="MaxWidth" Value="768"/>
@@ -30,7 +30,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Button x:Name="hideReservationButton" HorizontalAlignment="Right" Background="{x:Null}" Margin="0,0,0,6" Click="hideReservationButton_Click">
+                <Button x:Name="hideReservationButton" HorizontalAlignment="Right" Background="{x:Null}" Margin="0,0,0,6" Command="{Binding HideReservationCommand}" CommandParameter="{Binding ElementName=flyoutGrid}">
                     <SymbolIcon Symbol="Cancel"/>
                 </Button>
                 <TextBox Grid.Row="1" PlaceholderText="Name des Termins" Margin="0,6,0,6" Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -53,7 +53,7 @@
                     <TimePicker Grid.Column="1" Margin="6,0,0,0" Time="{Binding EndTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ClockIdentifier="24HourClock"/>
                 </Grid>
                 <TextBox Grid.Row="4" Margin="0,6,0,6" Height="64" PlaceholderText="Beschreibung des Termins"  TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <Button x:Name="saveReservationButton" Grid.Row="5" HorizontalAlignment="Right" Content="Speichern" Command="{Binding AddOrUpdateReservationCommand}" Click="saveReservationButton_Click"/>
+                <Button x:Name="saveReservationButton" Grid.Row="5" HorizontalAlignment="Right" Content="Speichern" Command="{Binding AddOrUpdateReservationCommand}" CommandParameter="{Binding ElementName=flyoutGrid}" />
             </Grid>
         </Flyout>
     </Page.Resources>
@@ -89,13 +89,13 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate>
-                                <ListView x:Name="listView" ItemsSource="{Binding}" Margin="0,30,0,0" VerticalAlignment="Stretch" Height="119" RightTapped="listView_RightTapped">
+                                <ListView x:Name="listView" ItemsSource="{Binding}" Margin="0,30,0,0" VerticalAlignment="Stretch" Height="119" >
                                     <ListView.ItemTemplate>
                                         <DataTemplate x:Name="agendaItemDataTemplate" >
                                             <Grid RightTapped="Grid_RightTapped">
                                                 <FlyoutBase.AttachedFlyout>
                                                     <MenuFlyout x:Name="agendaItemFlyout">
-                                                        <MenuFlyoutItem Text="Ändern" Command="{Binding UpdateReservationCommand}" CommandParameter="{Binding ElementName=agendaItemFlyout}" ContextFlyout="{StaticResource ReservationFlyout}" Click="MenuFlyoutItem_Click"/>
+                                                        <MenuFlyoutItem Text="Ändern" Command="{Binding UpdateReservationCommand}" CommandParameter="{Binding ElementName=agendaItemFlyout}" ContextFlyout="{StaticResource ReservationFlyout}" />
                                                         <MenuFlyoutItem Text="Löschen" Command="{Binding DeleteReservationCommand}" CommandParameter="{Binding}"/>
                                                     </MenuFlyout>
                                                 </FlyoutBase.AttachedFlyout>

@@ -96,6 +96,7 @@ namespace RoomInfo.ViewModels
                 Title = (x).Title;
                 Description = (x).Description;
                 IsAllDayEvent = (x).IsAllDayEvent;
+                IsFlyoutOpen = true;
             });
         }
 
@@ -113,19 +114,22 @@ namespace RoomInfo.ViewModels
             }));
 
         private ICommand _reservedCommand;
-        public ICommand ReservedCommand => _reservedCommand ?? (_reservedCommand = new DelegateCommand<object>((param) =>
+        public ICommand HideReservationCommand => _reservedCommand ?? (_reservedCommand = new DelegateCommand<object>((param) =>
         {
-            
+            (((param as Grid).Parent as FlyoutPresenter).Parent as Popup).IsOpen = false;
+            IsFlyoutOpen = false;
         }));
 
         private ICommand _addOrUpdateReservationCommand;
         public ICommand AddOrUpdateReservationCommand => _addOrUpdateReservationCommand ?? (_addOrUpdateReservationCommand = new DelegateCommand<object>(async (param) =>
-        {
+        {            
             StartDate = StartDate.Add(StartDate.TimeOfDay + StartTime);
             EndDate = EndDate.Add(EndDate.TimeOfDay + EndTime);
             if (Id == 0) await _databaseService.AddAgendaItemAsync(new AgendaItem(_eventAggregator) { Title = Title, Start = StartDate, End = EndDate, Description = Description, IsAllDayEvent = IsAllDayEvent });
             else await _databaseService.UpdateAgendaItemAsync(new AgendaItem(_eventAggregator) { Id = Id, Title = Title, Start = StartDate, End = EndDate, Description = Description, IsAllDayEvent = IsAllDayEvent });
             Id = 0;
+            (((param as Grid).Parent as FlyoutPresenter).Parent as Popup).IsOpen = false;
+            IsFlyoutOpen = false;
             await UpdateCalendarViewDayItems();
         }));
 
@@ -149,6 +153,10 @@ namespace RoomInfo.ViewModels
             {
                 List<AgendaItem> dayAgendaItems = _agendaItems.Where((x) => x.Start.Date == calendarViewDayItem.Date.Date).Select((x) => x).ToList();
                 calendarViewDayItem.DataContext = dayAgendaItems;
+                calendarViewDayItem.GotFocus += (s, e) =>
+                {
+                    FlyoutParent = s as FrameworkElement;
+                };
             }
         }
     }
