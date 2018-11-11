@@ -21,7 +21,7 @@ using Windows.UI.Xaml.Media;
 namespace RoomInfo.ViewModels
 {
     public class ScheduleViewModel : ViewModelBase
-    {        
+    {
         IDatabaseService _databaseService;
         List<AgendaItem> _agendaItems;
         CalendarPanel calendarPanel;
@@ -87,7 +87,7 @@ namespace RoomInfo.ViewModels
             _eventAggregator.GetEvent<DeleteReservationEvent>().Subscribe(async (o) =>
             {
                 await _databaseService.RemoveAgendaItemAsync(o as AgendaItem);
-                await UpdateCalendarViewDayItems();
+                await UpdateCalendarViewDayItems((o as AgendaItem).Start.Date);
             });
             _eventAggregator.GetEvent<UpdateReservationEvent>().Subscribe((x) =>
             {
@@ -106,7 +106,7 @@ namespace RoomInfo.ViewModels
 
         private ICommand _showReservationFlyoutCommand;
         public ICommand ShowReservationFlyoutCommand => _showReservationFlyoutCommand ?? (_showReservationFlyoutCommand = new DelegateCommand<object>(async (param) =>
-            {                
+            {
                 var now = DateTime.Now;
                 StartDate = now.Date;
                 StartTime = TimeSpan.FromTicks(now.TimeOfDay.Ticks);
@@ -118,8 +118,8 @@ namespace RoomInfo.ViewModels
                 SelectedComboBoxIndex = 2;
             }));
 
-        private ICommand _reservedCommand;
-        public ICommand HideReservationCommand => _reservedCommand ?? (_reservedCommand = new DelegateCommand<object>((param) =>
+        private ICommand _hideReservationCommand;
+        public ICommand HideReservationCommand => _hideReservationCommand ?? (_hideReservationCommand = new DelegateCommand<object>((param) =>
         {
             (((param as Grid).Parent as FlyoutPresenter).Parent as Popup).IsOpen = false;
             IsFlyoutOpen = false;
@@ -127,7 +127,7 @@ namespace RoomInfo.ViewModels
 
         private ICommand _addOrUpdateReservationCommand;
         public ICommand AddOrUpdateReservationCommand => _addOrUpdateReservationCommand ?? (_addOrUpdateReservationCommand = new DelegateCommand<object>(async (param) =>
-        {            
+        {
             StartDate = StartDate.Add(StartDate.TimeOfDay + StartTime);
             EndDate = EndDate.Add(EndDate.TimeOfDay + EndTime);
             if (Id == 0) await _databaseService.AddAgendaItemAsync(new AgendaItem(_eventAggregator) { Title = Title, Start = StartDate, End = EndDate, Description = Description, IsAllDayEvent = IsAllDayEvent, Occupancy = SelectedComboBoxIndex });
@@ -135,7 +135,7 @@ namespace RoomInfo.ViewModels
             Id = 0;
             (((param as Grid).Parent as FlyoutPresenter).Parent as Popup).IsOpen = false;
             IsFlyoutOpen = false;
-            await UpdateCalendarViewDayItems();
+            await UpdateCalendarViewDayItems(StartDate.Date);
         }));
 
         private ICommand _handleCalendarViewDayItemChangingCommand;
@@ -162,6 +162,24 @@ namespace RoomInfo.ViewModels
                 {
                     FlyoutParent = s as FrameworkElement;
                 };
+            }
+        }
+
+        private async Task UpdateCalendarViewDayItems(DateTime dateTime)
+        {
+            _agendaItems = await _databaseService.GetAgendaItemsAsync();
+            var calendarViewDayItems = calendarPanel.Children().OfType<CalendarViewDayItem>();
+            foreach (var calendarViewDayItem in calendarViewDayItems)
+            {
+                if (calendarViewDayItem.Date.DateTime.Date == dateTime.Date)
+                {
+                    List<AgendaItem> dayAgendaItems = _agendaItems.Where((x) => x.Start.Date == calendarViewDayItem.Date.Date).Select((x) => x).ToList();
+                    calendarViewDayItem.DataContext = dayAgendaItems;
+                    calendarViewDayItem.GotFocus += (s, e) =>
+                    {
+                        FlyoutParent = s as FrameworkElement;
+                    };
+                }
             }
         }
     }

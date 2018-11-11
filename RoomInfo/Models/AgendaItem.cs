@@ -7,6 +7,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Windows.Input;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace RoomInfo.Models
@@ -71,6 +72,14 @@ namespace RoomInfo.Models
         public ICommand DeleteReservationCommand => _deleteReservationCommand ?? (_deleteReservationCommand = new DelegateCommand<object>((param) =>
         {
             _eventAggregator.GetEvent<DeleteReservationEvent>().Publish(param);
+        }));
+
+        private ICommand _showAttachedFlyoutCommand;
+        public ICommand ShowAttachedFlyoutCommand => _showAttachedFlyoutCommand ?? (_showAttachedFlyoutCommand = new DelegateCommand<object>((param) =>
+        {
+            FrameworkElement frameworkElement = param as FrameworkElement;
+            var attachedFlyout = Flyout.GetAttachedFlyout(frameworkElement);
+            attachedFlyout.ShowAt(frameworkElement);
         }));
     }
 }

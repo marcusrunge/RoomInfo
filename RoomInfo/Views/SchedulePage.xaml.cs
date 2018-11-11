@@ -18,14 +18,7 @@ namespace RoomInfo.Views
         public SchedulePage()
         {
             InitializeComponent();            
-        }
-
-        private void Grid_RightTapped(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e)
-        {
-            FrameworkElement frameworkElement = sender as FrameworkElement;
-            var attachedFlyout = Flyout.GetAttachedFlyout(frameworkElement);
-            attachedFlyout.ShowAt(frameworkElement);
-        }        
+        }       
 
         private void flyoutGrid_Loading(FrameworkElement sender, object args)
         {

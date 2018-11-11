@@ -1,4 +1,4 @@
-﻿<Page
+﻿<Page x:Name="schedulePage"
     x:Class="RoomInfo.Views.SchedulePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -99,7 +99,12 @@
                                 <ListView x:Name="listView" ItemsSource="{Binding}" Margin="0,30,0,0" VerticalAlignment="Stretch" Height="119" >
                                     <ListView.ItemTemplate>
                                         <DataTemplate x:Name="agendaItemDataTemplate" >
-                                            <Grid RightTapped="Grid_RightTapped">
+                                            <Grid x:Name="dataTemplateGrid">
+                                                <interactivity:Interaction.Behaviors>
+                                                    <core:EventTriggerBehavior EventName="RightTapped">
+                                                        <core:InvokeCommandAction Command="{Binding ShowAttachedFlyoutCommand}" CommandParameter="{Binding ElementName=dataTemplateGrid}"/>
+                                                    </core:EventTriggerBehavior>
+                                                </interactivity:Interaction.Behaviors>
                                                 <FlyoutBase.AttachedFlyout>
                                                     <MenuFlyout x:Name="agendaItemFlyout">
                                                         <MenuFlyoutItem Text="Ändern" Command="{Binding UpdateReservationCommand}" CommandParameter="{Binding ElementName=agendaItemFlyout}" ContextFlyout="{StaticResource ReservationFlyout}" />
