@@ -10,7 +10,7 @@ using System.Windows.Input;
 using Windows.UI.Xaml.Controls;
 
 namespace RoomInfo.Models
-{     
+{    
     public class AgendaItemContext : DbContext
     {
         public DbSet<AgendaItem> AgendaItems { get; set; }
@@ -58,12 +58,14 @@ namespace RoomInfo.Models
         string _description = default(string);
         public string Description { get => _description; set { SetProperty(ref _description, value); } }
 
+        int _occupancy = default(int);
+        public int Occupancy { get => _occupancy; set { SetProperty(ref _occupancy, value); } }
+
         private ICommand _updateReservationCommand;
         public ICommand UpdateReservationCommand => _updateReservationCommand ?? (_updateReservationCommand = new DelegateCommand<object>((param) =>
         {            
             _eventAggregator.GetEvent<UpdateReservationEvent>().Publish(this);
         }));
-
 
         private ICommand _deleteReservationCommand;
         public ICommand DeleteReservationCommand => _deleteReservationCommand ?? (_deleteReservationCommand = new DelegateCommand<object>((param) =>

@@ -70,7 +70,10 @@ namespace RoomInfo.ViewModels
 
         FrameworkElement _flyoutParent = default(FrameworkElement);
         public FrameworkElement FlyoutParent { get => _flyoutParent; set { SetProperty(ref _flyoutParent, value); } }
-        
+
+        int _selectedComboBoxIndex = default(int);
+        public int SelectedComboBoxIndex { get => _selectedComboBoxIndex; set { SetProperty(ref _selectedComboBoxIndex, value); } }
+
         public ScheduleViewModel(IDatabaseService databaseService, IEventAggregator eventAggregator)
         {
             _databaseService = databaseService;
@@ -96,6 +99,7 @@ namespace RoomInfo.ViewModels
                 Title = (x).Title;
                 Description = (x).Description;
                 IsAllDayEvent = (x).IsAllDayEvent;
+                SelectedComboBoxIndex = (x).Occupancy;
                 IsFlyoutOpen = true;
             });
         }
@@ -111,6 +115,7 @@ namespace RoomInfo.ViewModels
                 Title = "";
                 Description = "";
                 IsAllDayEvent = false;
+                SelectedComboBoxIndex = 2;
             }));
 
         private ICommand _reservedCommand;
@@ -125,8 +130,8 @@ namespace RoomInfo.ViewModels
         {            
             StartDate = StartDate.Add(StartDate.TimeOfDay + StartTime);
             EndDate = EndDate.Add(EndDate.TimeOfDay + EndTime);
-            if (Id == 0) await _databaseService.AddAgendaItemAsync(new AgendaItem(_eventAggregator) { Title = Title, Start = StartDate, End = EndDate, Description = Description, IsAllDayEvent = IsAllDayEvent });
-            else await _databaseService.UpdateAgendaItemAsync(new AgendaItem(_eventAggregator) { Id = Id, Title = Title, Start = StartDate, End = EndDate, Description = Description, IsAllDayEvent = IsAllDayEvent });
+            if (Id == 0) await _databaseService.AddAgendaItemAsync(new AgendaItem(_eventAggregator) { Title = Title, Start = StartDate, End = EndDate, Description = Description, IsAllDayEvent = IsAllDayEvent, Occupancy = SelectedComboBoxIndex });
+            else await _databaseService.UpdateAgendaItemAsync(new AgendaItem(_eventAggregator) { Id = Id, Title = Title, Start = StartDate, End = EndDate, Description = Description, IsAllDayEvent = IsAllDayEvent, Occupancy = SelectedComboBoxIndex });
             Id = 0;
             (((param as Grid).Parent as FlyoutPresenter).Parent as Popup).IsOpen = false;
             IsFlyoutOpen = false;

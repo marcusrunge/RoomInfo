@@ -29,6 +29,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Button x:Name="hideReservationButton" HorizontalAlignment="Right" Background="{x:Null}" Margin="0,0,0,6" Command="{Binding HideReservationCommand}" CommandParameter="{Binding ElementName=flyoutGrid}">
                     <SymbolIcon Symbol="Cancel"/>
@@ -53,7 +54,13 @@
                     <TimePicker Grid.Column="1" Margin="6,0,0,0" Time="{Binding EndTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ClockIdentifier="24HourClock"/>
                 </Grid>
                 <TextBox Grid.Row="4" Margin="0,6,0,6" Height="64" PlaceholderText="Beschreibung des Termins"  TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <Button x:Name="saveReservationButton" Grid.Row="5" HorizontalAlignment="Right" Content="Speichern" Command="{Binding AddOrUpdateReservationCommand}" CommandParameter="{Binding ElementName=flyoutGrid}" />
+                <ComboBox Grid.Row="5" HorizontalAlignment="Stretch" VerticalAlignment="Center" SelectedIndex="{Binding SelectedComboBoxIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                    <ComboBoxItem Content="FREI" />
+                    <ComboBoxItem Content="BESCHÄFTIGT" />
+                    <ComboBoxItem Content="BELEGT" />
+                    <ComboBoxItem Content="ABWESEND" />
+                </ComboBox>
+                <Button x:Name="saveReservationButton" Grid.Row="6" HorizontalAlignment="Right" Content="Speichern" Command="{Binding AddOrUpdateReservationCommand}" CommandParameter="{Binding ElementName=flyoutGrid}" />
             </Grid>
         </Flyout>
     </Page.Resources>

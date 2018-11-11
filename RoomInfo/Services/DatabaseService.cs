@@ -19,7 +19,7 @@ namespace RoomInfo.Services
         public DatabaseService()
         {            
             _agendaItemContext = new AgendaItemContext();
-            _agendaItemContext.Database.ExecuteSqlCommand("CREATE TABLE IF NOT EXISTS AgendaItems (Id INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, Start NUMERIC , End NUMERIC , Description TEXT, IsAllDayEvent INTEGER)");
+            _agendaItemContext.Database.ExecuteSqlCommand("CREATE TABLE IF NOT EXISTS AgendaItems (Id INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, Start NUMERIC , End NUMERIC , Description TEXT, IsAllDayEvent INTEGER, Occupancy INTEGER)");
             _agendaItemContext.Database.Migrate();
         }
 
