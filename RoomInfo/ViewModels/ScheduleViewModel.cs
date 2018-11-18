@@ -123,6 +123,7 @@ namespace RoomInfo.ViewModels
         {
             (((param as Grid).Parent as FlyoutPresenter).Parent as Popup).IsOpen = false;
             IsFlyoutOpen = false;
+            Id = 0;
         }));
 
         private ICommand _addOrUpdateReservationCommand;
