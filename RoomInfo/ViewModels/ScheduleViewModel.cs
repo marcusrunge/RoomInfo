@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Windows.Mvvm;
@@ -26,6 +27,8 @@ namespace RoomInfo.ViewModels
         List<AgendaItem> _agendaItems;
         CalendarPanel calendarPanel;
         IEventAggregator _eventAggregator;
+        readonly IUnityContainer _unityContainer;
+        AgendaItem _agendaItem;
 
         string _topDate = default(string);
         public string TopDate { get => _topDate; set { SetProperty(ref _topDate, value); } }
@@ -74,10 +77,11 @@ namespace RoomInfo.ViewModels
         int _selectedComboBoxIndex = default(int);
         public int SelectedComboBoxIndex { get => _selectedComboBoxIndex; set { SetProperty(ref _selectedComboBoxIndex, value); } }
 
-        public ScheduleViewModel(IDatabaseService databaseService, IEventAggregator eventAggregator)
+        public ScheduleViewModel(IUnityContainer unityContainer)
         {
-            _databaseService = databaseService;
-            _eventAggregator = eventAggregator;
+            _unityContainer = unityContainer;
+            _databaseService = unityContainer.Resolve<IDatabaseService>();
+            _eventAggregator = unityContainer.Resolve<IEventAggregator>();
         }
 
         public async override void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
@@ -86,11 +90,16 @@ namespace RoomInfo.ViewModels
             await UpdateCalendarViewDayItems();
             _eventAggregator.GetEvent<DeleteReservationEvent>().Subscribe(async (o) =>
             {
-                await _databaseService.RemoveAgendaItemAsync(o as AgendaItem);
-                await UpdateCalendarViewDayItems((o as AgendaItem).Start.Date);
+                try
+                {
+                    await _databaseService.RemoveAgendaItemAsync(o as AgendaItem);
+                    await UpdateCalendarViewDayItems((o as AgendaItem).Start.Date);
+                }
+                catch { }
             });
             _eventAggregator.GetEvent<UpdateReservationEvent>().Subscribe((x) =>
             {
+                _agendaItem = x;
                 Id = (x).Id;
                 StartDate = (x).Start.Date;
                 StartTime = (x).Start.TimeOfDay;
@@ -129,14 +138,38 @@ namespace RoomInfo.ViewModels
         private ICommand _addOrUpdateReservationCommand;
         public ICommand AddOrUpdateReservationCommand => _addOrUpdateReservationCommand ?? (_addOrUpdateReservationCommand = new DelegateCommand<object>(async (param) =>
         {
-            StartDate = StartDate.Add(StartDate.TimeOfDay + StartTime);
-            EndDate = EndDate.Add(EndDate.TimeOfDay + EndTime);
-            if (Id == 0) await _databaseService.AddAgendaItemAsync(new AgendaItem(_eventAggregator) { Title = Title, Start = StartDate, End = EndDate, Description = Description, IsAllDayEvent = IsAllDayEvent, Occupancy = SelectedComboBoxIndex });
-            else await _databaseService.UpdateAgendaItemAsync(new AgendaItem(_eventAggregator) { Id = Id, Title = Title, Start = StartDate, End = EndDate, Description = Description, IsAllDayEvent = IsAllDayEvent, Occupancy = SelectedComboBoxIndex });
-            Id = 0;
-            (((param as Grid).Parent as FlyoutPresenter).Parent as Popup).IsOpen = false;
-            IsFlyoutOpen = false;
-            await UpdateCalendarViewDayItems(StartDate.Date);
+            try
+            {
+                bool hasDateChanged = false;
+                DateTime previousDate = DateTime.MinValue;
+                if (_agendaItem != null)
+                {
+                    hasDateChanged = _agendaItem.Start.Date != StartDate.Date ? true : false;
+                    previousDate = _agendaItem.Start.Date;
+                }
+
+                StartDate = StartDate.Add(StartDate.TimeOfDay + StartTime);
+                EndDate = EndDate.Date;
+                EndDate = EndDate.Add(EndDate.TimeOfDay + EndTime);
+                if (Id == 0) await _databaseService.AddAgendaItemAsync(new AgendaItem(_eventAggregator) { Title = Title, Start = StartDate, End = EndDate, Description = Description, IsAllDayEvent = IsAllDayEvent, Occupancy = SelectedComboBoxIndex });
+                else
+                {
+                    _agendaItem.Title = Title;
+                    _agendaItem.Start = StartDate;
+                    _agendaItem.End = EndDate;
+                    _agendaItem.Description = Description;
+                    _agendaItem.IsAllDayEvent = IsAllDayEvent;
+                    _agendaItem.Occupancy = SelectedComboBoxIndex;
+                    await _databaseService.UpdateAgendaItemAsync(_agendaItem);
+                }
+                Id = 0;
+                (((param as Grid).Parent as FlyoutPresenter).Parent as Popup).IsOpen = false;
+                IsFlyoutOpen = false;
+                await UpdateCalendarViewDayItems(StartDate.Date);
+                if (hasDateChanged) await UpdateCalendarViewDayItems(previousDate);
+            }
+            catch { }
+
         }));
 
         private ICommand _handleCalendarViewDayItemChangingCommand;

@@ -2,6 +2,7 @@
 using RoomInfo.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace RoomInfo.Services
@@ -12,6 +13,7 @@ namespace RoomInfo.Services
         Task RemoveAgendaItemAsync(AgendaItem agendaItem);
         Task UpdateAgendaItemAsync(AgendaItem agendaItem);
         Task<List<AgendaItem>> GetAgendaItemsAsync();
+        Task<List<AgendaItem>> GetAgendaItemsAsync(DateTime dateTime);
     }
     public class DatabaseService : IDatabaseService
     {
@@ -33,6 +35,15 @@ namespace RoomInfo.Services
         {
             return await _agendaItemContext.AgendaItems.ToListAsync();
         }
+
+        public async Task<List<AgendaItem>> GetAgendaItemsAsync(DateTime dateTime)
+        {
+            return await _agendaItemContext.AgendaItems
+                .Where((x) => x.Start.DateTime > dateTime)
+                .Select((x) => x)
+                .Take(3)
+                .ToListAsync();
+        }        
 
         public async Task RemoveAgendaItemAsync(AgendaItem agendaItem)
         {

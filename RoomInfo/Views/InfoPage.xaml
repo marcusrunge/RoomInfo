@@ -192,8 +192,8 @@
                     <ListView.ItemTemplate>
                         <DataTemplate >
                             <StackPanel>
-                                <TextBlock Text="Terminbeschreibung" FontSize="48"/>
-                                <TextBlock Text="Termin" FontSize="36"/>
+                                <TextBlock Text="{Binding Title}" FontSize="48"/>
+                                <TextBlock Text="{Binding Start}" FontSize="36"/>
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>

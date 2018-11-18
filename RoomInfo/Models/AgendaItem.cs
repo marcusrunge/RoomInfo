@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Practices.ServiceLocation;
+using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Events;
 using RoomInfo.Events;
@@ -11,19 +12,22 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace RoomInfo.Models
-{    
+{
     public class AgendaItemContext : DbContext
     {
         public DbSet<AgendaItem> AgendaItems { get; set; }
+        IUnityContainer _unityContainer;
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Data Source=AgendaItems.db");
+            _unityContainer = ServiceLocator.Current.GetInstance<IUnityContainer>();
         }
     }
 
     public class AgendaItem : DataModelBase
     {
         IEventAggregator _eventAggregator;
+        IUnityContainer _unityContainer;
         public AgendaItem()
         {
             _eventAggregator = ServiceLocator.Current.GetInstance<IEventAggregator>();
@@ -47,12 +51,6 @@ namespace RoomInfo.Models
         DateTimeOffset _end = default(DateTimeOffset);
         public DateTimeOffset End { get => _end; set { SetProperty(ref _end, value); } }
 
-        //TimeSpan _startTime = default(TimeSpan);
-        //public TimeSpan StartTime { get => _startTime; set { SetProperty(ref _startTime, value); } }
-
-        //TimeSpan _endTime = default(TimeSpan);
-        //public TimeSpan EndTime { get => _endTime; set { SetProperty(ref _endTime, value); } }
-
         bool _isAllDayEvent = default(bool);
         public bool IsAllDayEvent { get => _isAllDayEvent; set { SetProperty(ref _isAllDayEvent, value); } }
 
@@ -64,7 +62,7 @@ namespace RoomInfo.Models
 
         private ICommand _updateReservationCommand;
         public ICommand UpdateReservationCommand => _updateReservationCommand ?? (_updateReservationCommand = new DelegateCommand<object>((param) =>
-        {            
+        {
             _eventAggregator.GetEvent<UpdateReservationEvent>().Publish(this);
         }));
 

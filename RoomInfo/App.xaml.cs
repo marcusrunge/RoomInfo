@@ -33,9 +33,10 @@ namespace RoomInfo
             Container.RegisterInstance<IResourceLoader>(new ResourceLoaderAdapter(new ResourceLoader()));
             Container.RegisterType<ISettingsService, SettingsService>();
             Container.RegisterType<IDatabaseService, DatabaseService>();
-            Container.RegisterType<IEventAggregator, EventAggregator>();
+            Container.RegisterType<IEventAggregator, EventAggregator>(new ContainerControlledLifetimeManager()); 
             UnityServiceLocator unityServiceLocator = new UnityServiceLocator(Container);
-            ServiceLocator.SetLocatorProvider(() => unityServiceLocator); Container.RegisterType<IEventAggregator, EventAggregator>();            
+            ServiceLocator.SetLocatorProvider(() => unityServiceLocator);
+                     
         }
 
         protected override Task OnLaunchApplicationAsync(LaunchActivatedEventArgs args)
