@@ -151,7 +151,7 @@ namespace RoomInfo.ViewModels
                 StartDate = StartDate.Add(StartDate.TimeOfDay + StartTime);
                 EndDate = EndDate.Date;
                 EndDate = EndDate.Add(EndDate.TimeOfDay + EndTime);
-                if (Id == 0) await _databaseService.AddAgendaItemAsync(new AgendaItem(_eventAggregator) { Title = Title, Start = StartDate, End = EndDate, Description = Description, IsAllDayEvent = IsAllDayEvent, Occupancy = SelectedComboBoxIndex });
+                if (Id == 0) await _databaseService.AddAgendaItemAsync(new AgendaItem() { EventAggregator = _eventAggregator, Title = Title, Start = StartDate, End = EndDate, Description = Description, IsAllDayEvent = IsAllDayEvent, Occupancy = SelectedComboBoxIndex });
                 else
                 {
                     _agendaItem.Title = Title;
@@ -190,7 +190,11 @@ namespace RoomInfo.ViewModels
             var calendarViewDayItems = calendarPanel.Children().OfType<CalendarViewDayItem>();
             foreach (var calendarViewDayItem in calendarViewDayItems)
             {
-                List<AgendaItem> dayAgendaItems = _agendaItems.Where((x) => x.Start.Date == calendarViewDayItem.Date.Date).Select((x) => x).ToList();
+                List<AgendaItem> dayAgendaItems = _agendaItems.Where((x) => x.Start.Date == calendarViewDayItem.Date.Date).Select((x) =>
+                {
+                    x.EventAggregator = _eventAggregator;
+                    return x;
+                }).ToList();
                 calendarViewDayItem.DataContext = dayAgendaItems;
                 calendarViewDayItem.GotFocus += (s, e) =>
                 {
@@ -207,7 +211,11 @@ namespace RoomInfo.ViewModels
             {
                 if (calendarViewDayItem.Date.DateTime.Date == dateTime.Date)
                 {
-                    List<AgendaItem> dayAgendaItems = _agendaItems.Where((x) => x.Start.Date == calendarViewDayItem.Date.Date).Select((x) => x).ToList();
+                    List<AgendaItem> dayAgendaItems = _agendaItems.Where((x) => x.Start.Date == calendarViewDayItem.Date.Date).Select((x) =>
+                    {
+                        x.EventAggregator = _eventAggregator;
+                        return x;
+                    }).ToList();
                     calendarViewDayItem.DataContext = dayAgendaItems;
                     calendarViewDayItem.GotFocus += (s, e) =>
                     {

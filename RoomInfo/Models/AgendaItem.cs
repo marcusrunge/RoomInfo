@@ -16,26 +16,16 @@ namespace RoomInfo.Models
     public class AgendaItemContext : DbContext
     {
         public DbSet<AgendaItem> AgendaItems { get; set; }
-        IUnityContainer _unityContainer;
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Data Source=AgendaItems.db");
-            _unityContainer = ServiceLocator.Current.GetInstance<IUnityContainer>();
         }
     }
 
     public class AgendaItem : DataModelBase
     {
-        IEventAggregator _eventAggregator;
-        IUnityContainer _unityContainer;
-        public AgendaItem()
-        {
-            _eventAggregator = ServiceLocator.Current.GetInstance<IEventAggregator>();
-        }
-        public AgendaItem(IEventAggregator eventAggregator)
-        {
-            _eventAggregator = eventAggregator;
-        }
+        [NotMapped]
+        public IEventAggregator EventAggregator { get; set; }     
 
         int _id = default(int);
         [Key]
@@ -63,13 +53,13 @@ namespace RoomInfo.Models
         private ICommand _updateReservationCommand;
         public ICommand UpdateReservationCommand => _updateReservationCommand ?? (_updateReservationCommand = new DelegateCommand<object>((param) =>
         {
-            _eventAggregator.GetEvent<UpdateReservationEvent>().Publish(this);
+            EventAggregator.GetEvent<UpdateReservationEvent>().Publish(this);
         }));
 
         private ICommand _deleteReservationCommand;
         public ICommand DeleteReservationCommand => _deleteReservationCommand ?? (_deleteReservationCommand = new DelegateCommand<object>((param) =>
         {
-            _eventAggregator.GetEvent<DeleteReservationEvent>().Publish(param);
+            EventAggregator.GetEvent<DeleteReservationEvent>().Publish(param);
         }));
 
         private ICommand _showAttachedFlyoutCommand;
