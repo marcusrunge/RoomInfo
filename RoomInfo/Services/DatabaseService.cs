@@ -39,7 +39,7 @@ namespace RoomInfo.Services
         public async Task<List<AgendaItem>> GetAgendaItemsAsync(DateTime dateTime)
         {
             return await _agendaItemContext.AgendaItems
-                .Where((x) => x.Start.DateTime > dateTime)
+                .Where((x) => x.End.DateTime > dateTime)
                 .Select((x) => x)
                 .Take(3)
                 .ToListAsync();
