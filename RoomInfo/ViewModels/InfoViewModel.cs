@@ -8,6 +8,8 @@ using Prism.Windows.Mvvm;
 using Prism.Windows.Navigation;
 using RoomInfo.Models;
 using RoomInfo.Services;
+using Windows.System.Threading;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 
 namespace RoomInfo.ViewModels
@@ -42,6 +44,7 @@ namespace RoomInfo.ViewModels
 
         public async override void OnNavigatedTo(NavigatedToEventArgs navigatedToEventArgs, Dictionary<string, object> viewModelState)
         {
+            base.OnNavigatedTo(navigatedToEventArgs, viewModelState);
             CultureInfo cultureInfo = new CultureInfo("de-DE");
             Clock = DateTime.Now.ToString("t", cultureInfo) + " Uhr";
             Date = DateTime.Now.ToString("D", cultureInfo);
@@ -57,7 +60,13 @@ namespace RoomInfo.ViewModels
             Occupancy = OccupancyVisualState.FreeVisualState;
             SelectedComboBoxIndex = 0;
             await UpdateDayAgenda();
-            base.OnNavigatedTo(navigatedToEventArgs, viewModelState);
+            await Task.Run(() =>
+            {
+                while (AgendaItems.Count > 0)
+                {
+
+                }
+            });
         }
 
         private async Task UpdateDayAgenda()
@@ -69,6 +78,42 @@ namespace RoomInfo.ViewModels
             for (int i = 0; i < agendaItems.Count; i++)
             {
                 AgendaItems.Add(agendaItems[i]);
+            }
+            UpdateTimerTask();
+        }
+
+        private void UpdateTimerTask()
+        {
+            CoreDispatcher coreDispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
+            if (AgendaItems.Count > 0)
+            {
+                if (AgendaItems[0].Start < DateTime.Now && AgendaItems[0].End > DateTime.Now)
+                {
+                    Occupancy = (OccupancyVisualState)AgendaItems[0].Occupancy;
+                }
+                else
+                {
+                    TimeSpan startTimeSpan = AgendaItems[0].Start - DateTime.Now;
+                    ThreadPoolTimer startThreadPoolTimer = ThreadPoolTimer.CreateTimer(async (source) =>
+                    {
+                        await coreDispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+                        {
+                            Occupancy = (OccupancyVisualState)AgendaItems[0].Occupancy;
+                        });
+                    }, startTimeSpan);
+                }
+
+                TimeSpan endTimeSpan = AgendaItems[0].End - DateTime.Now;
+                ThreadPoolTimer endThreadPoolTimer = ThreadPoolTimer.CreateTimer(async (source) =>
+                {
+                    await coreDispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
+                    {
+                        Occupancy = OccupancyVisualState.FreeVisualState;
+                        AgendaItems.RemoveAt(0);
+                        await UpdateDayAgenda();
+                    });
+
+                }, endTimeSpan);
             }
         }
     }
