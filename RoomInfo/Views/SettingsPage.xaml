@@ -63,7 +63,7 @@
             <ComboBox HorizontalAlignment="Left" VerticalAlignment="Center" SelectedIndex="{Binding SelectedComboBoxIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="129">
                 <interactivity:Interaction.Behaviors>
                     <core:EventTriggerBehavior EventName="SelectionChanged">
-                        <core:InvokeCommandAction Command="{Binding SetStandardOccupancyCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=SelectedIndex}"/>
+                        <core:InvokeCommandAction Command="{Binding SetStandardOccupancyCommand}"/>
                     </core:EventTriggerBehavior>
                 </interactivity:Interaction.Behaviors>
                 <ComboBoxItem Content="FREI"/>
