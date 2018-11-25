@@ -33,6 +33,7 @@ namespace RoomInfo
             Container.RegisterInstance<IResourceLoader>(new ResourceLoaderAdapter(new ResourceLoader()));
             Container.RegisterType<ISettingsService, SettingsService>();
             Container.RegisterType<IDatabaseService, DatabaseService>();
+            Container.RegisterType<IApplicationDataService, ApplicationDataService>();
             Container.RegisterType<IEventAggregator, EventAggregator>(new ContainerControlledLifetimeManager()); 
             UnityServiceLocator unityServiceLocator = new UnityServiceLocator(Container);
             ServiceLocator.SetLocatorProvider(() => unityServiceLocator);

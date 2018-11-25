@@ -13,7 +13,7 @@
     mc:Ignorable="d">
 
     <interactivity:Interaction.Behaviors>
-        <Helpers:VisualStateDependencyProperty VisualStateProperty="{Binding Occupancy, UpdateSourceTrigger=PropertyChanged}"/>
+        <Helpers:VisualStateDependencyProperty VisualStateProperty="{Binding Occupancy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
     </interactivity:Interaction.Behaviors>
 
     <Grid

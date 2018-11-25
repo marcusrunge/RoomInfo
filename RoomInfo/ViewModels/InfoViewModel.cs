@@ -14,10 +14,11 @@ using Windows.UI.Xaml;
 
 namespace RoomInfo.ViewModels
 {
-    public enum OccupancyVisualState { FreeVisualState, BusyVisualState, OccupiedVisualState, AbsentVisualState }
+    public enum OccupancyVisualState { FreeVisualState, BusyVisualState, OccupiedVisualState, AbsentVisualState, UndefinedVisualState }
     public class InfoViewModel : ViewModelBase
     {
         IDatabaseService _databaseService;
+        IApplicationDataService _applicationDataService;
 
         OccupancyVisualState _occupancy = default(OccupancyVisualState);
         public OccupancyVisualState Occupancy { get => _occupancy; set { SetProperty(ref _occupancy, value); } }
@@ -40,6 +41,7 @@ namespace RoomInfo.ViewModels
         public InfoViewModel(IUnityContainer unityContainer)
         {
             _databaseService = unityContainer.Resolve<IDatabaseService>();
+            _applicationDataService = unityContainer.Resolve<IApplicationDataService>();
         }
 
         public async override void OnNavigatedTo(NavigatedToEventArgs navigatedToEventArgs, Dictionary<string, object> viewModelState)
@@ -57,9 +59,10 @@ namespace RoomInfo.ViewModels
                 Clock = DateTime.Now.ToString("t", cultureInfo) + " Uhr";
                 Date = DateTime.Now.ToString("D", cultureInfo);
             };
-            dispatcherTimer.Start();
-            Occupancy = OccupancyVisualState.AbsentVisualState;
-            SelectedComboBoxIndex = (int)OccupancyVisualState.AbsentVisualState;
+            dispatcherTimer.Start();            
+            SelectedComboBoxIndex = _applicationDataService.GetSetting<int>("StandardOccupancy");
+            Occupancy = OccupancyVisualState.UndefinedVisualState;
+            Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
             await UpdateDayAgenda();
         }
 
@@ -104,7 +107,8 @@ namespace RoomInfo.ViewModels
                 {
                     await coreDispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
                     {
-                        Occupancy = OccupancyVisualState.FreeVisualState;
+                        SelectedComboBoxIndex = _applicationDataService.GetSetting<int>("StandardOccupancy");
+                        Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
                         AgendaItems.RemoveAt(0);
                         await UpdateDayAgenda();
                     });

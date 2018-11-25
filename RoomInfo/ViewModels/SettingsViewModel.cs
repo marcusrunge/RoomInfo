@@ -17,6 +17,11 @@ namespace RoomInfo.ViewModels
     // TODO WTS: Add other settings as necessary. For help see https://github.com/Microsoft/WindowsTemplateStudio/blob/master/docs/pages/settings.md
     public class SettingsViewModel : ViewModelBase
     {
+        IApplicationDataService _applicationDataService;
+
+        int _selectedComboBoxIndex = default(int);
+        public int SelectedComboBoxIndex { get => _selectedComboBoxIndex; set { SetProperty(ref _selectedComboBoxIndex, value); } }
+
         private ElementTheme _elementTheme = ThemeSelectorService.Theme;
 
         public ElementTheme ElementTheme
@@ -33,6 +38,11 @@ namespace RoomInfo.ViewModels
             get { return _versionDescription; }
 
             set { SetProperty(ref _versionDescription, value); }
+        }
+
+        public SettingsViewModel(IApplicationDataService applicationDataService)
+        {
+            _applicationDataService = applicationDataService;
         }
 
         private ICommand _switchThemeCommand;
@@ -64,6 +74,7 @@ namespace RoomInfo.ViewModels
             base.OnNavigatedTo(e, viewModelState);
 
             VersionDescription = GetVersionDescription();
+            SelectedComboBoxIndex = _applicationDataService.GetSetting<int>("StandardOccupancy");
         }
 
         private string GetVersionDescription()
@@ -75,5 +86,11 @@ namespace RoomInfo.ViewModels
 
             return $"{appName} - {version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
         }
+
+        private ICommand _setStandardOccupancyCommand;
+        public ICommand SetStandardOccupancyCommand => _setStandardOccupancyCommand ?? (_setStandardOccupancyCommand = new DelegateCommand<object>((param) =>
+        {
+            _applicationDataService.SaveSetting("StandardOccupancy", SelectedComboBoxIndex);
+        }));
     }
 }

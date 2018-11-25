@@ -9,6 +9,8 @@
     prismMvvm:ViewModelLocator.AutoWireViewModel="True" 
     xmlns:helper="using:RoomInfo.Helpers"
     xmlns:xaml="using:Windows.UI.Xaml"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     mc:Ignorable="d">
     <Page.Resources>
         <helper:EnumToBooleanConverter x:Key="EnumToBooleanConverter" EnumType="ElementTheme" />
@@ -56,6 +58,19 @@
                     </RadioButton>
                 </StackPanel>
             </StackPanel>
+
+            <TextBlock Text="Standardbelegung außerhalb von Terminen:"/>
+            <ComboBox HorizontalAlignment="Left" VerticalAlignment="Center" SelectedIndex="{Binding SelectedComboBoxIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="129">
+                <interactivity:Interaction.Behaviors>
+                    <core:EventTriggerBehavior EventName="SelectionChanged">
+                        <core:InvokeCommandAction Command="{Binding SetStandardOccupancyCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=SelectedIndex}"/>
+                    </core:EventTriggerBehavior>
+                </interactivity:Interaction.Behaviors>
+                <ComboBoxItem Content="FREI"/>
+                <ComboBoxItem Content="BESCHÄFTIGT" />
+                <ComboBoxItem Content="BELEGT" />
+                <ComboBoxItem Content="ABWESEND" />
+            </ComboBox>
 
             <TextBlock
                     x:Uid="Settings_About"
