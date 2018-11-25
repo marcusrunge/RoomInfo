@@ -13,7 +13,7 @@
     mc:Ignorable="d">
 
     <interactivity:Interaction.Behaviors>
-        <Helpers:VisualStateDependencyProperty VisualStateProperty="{Binding Occupancy}"/>
+        <Helpers:VisualStateDependencyProperty VisualStateProperty="{Binding Occupancy, UpdateSourceTrigger=PropertyChanged}"/>
     </interactivity:Interaction.Behaviors>
 
     <Grid
@@ -172,8 +172,8 @@
                 <Image x:Name="CompanyLogo"/>
                 <TextBlock x:Name="CompanyName" Grid.Column="1"/>
                 <StackPanel Grid.Column="2">
-                    <TextBlock x:Name="Clock" Text="{Binding Clock}" FontSize="72" HorizontalAlignment="Right" />
-                    <TextBlock x:Name="Date" Text="{Binding Date}" HorizontalAlignment="Right" FontSize="36"/>
+                    <TextBlock x:Name="Clock" Text="{Binding Clock, UpdateSourceTrigger=PropertyChanged}" FontSize="72" HorizontalAlignment="Right" />
+                    <TextBlock x:Name="Date" Text="{Binding Date, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" FontSize="36"/>
                 </StackPanel>
 
             </Grid>

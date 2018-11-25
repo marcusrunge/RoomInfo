@@ -57,16 +57,10 @@ namespace RoomInfo.ViewModels
                 Clock = DateTime.Now.ToString("t", cultureInfo) + " Uhr";
                 Date = DateTime.Now.ToString("D", cultureInfo);
             };
-            Occupancy = OccupancyVisualState.FreeVisualState;
-            SelectedComboBoxIndex = 0;
+            dispatcherTimer.Start();
+            Occupancy = OccupancyVisualState.AbsentVisualState;
+            SelectedComboBoxIndex = (int)OccupancyVisualState.AbsentVisualState;
             await UpdateDayAgenda();
-            await Task.Run(() =>
-            {
-                while (AgendaItems.Count > 0)
-                {
-
-                }
-            });
         }
 
         private async Task UpdateDayAgenda()
@@ -83,13 +77,14 @@ namespace RoomInfo.ViewModels
         }
 
         private void UpdateTimerTask()
-        {
+        {            
             CoreDispatcher coreDispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
             if (AgendaItems.Count > 0)
             {
                 if (AgendaItems[0].Start < DateTime.Now && AgendaItems[0].End > DateTime.Now)
                 {
                     Occupancy = (OccupancyVisualState)AgendaItems[0].Occupancy;
+                    SelectedComboBoxIndex = AgendaItems[0].Occupancy;
                 }
                 else
                 {
@@ -99,6 +94,7 @@ namespace RoomInfo.ViewModels
                         await coreDispatcher.RunAsync(CoreDispatcherPriority.High, () =>
                         {
                             Occupancy = (OccupancyVisualState)AgendaItems[0].Occupancy;
+                            SelectedComboBoxIndex = AgendaItems[0].Occupancy;
                         });
                     }, startTimeSpan);
                 }
