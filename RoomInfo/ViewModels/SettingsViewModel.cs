@@ -23,22 +23,16 @@ namespace RoomInfo.ViewModels
         public int SelectedComboBoxIndex { get => _selectedComboBoxIndex; set { SetProperty(ref _selectedComboBoxIndex, value); } }
 
         private ElementTheme _elementTheme = ThemeSelectorService.Theme;
-
-        public ElementTheme ElementTheme
-        {
-            get { return _elementTheme; }
-
-            set { SetProperty(ref _elementTheme, value); }
-        }
+        public ElementTheme ElementTheme { get { return _elementTheme; } set => SetProperty(ref _elementTheme, value); }
 
         private string _versionDescription;
+        public string VersionDescription { get => _versionDescription; set { SetProperty(ref _versionDescription, value); } }
 
-        public string VersionDescription
-        {
-            get { return _versionDescription; }
+        string _roomDesignator = default(string);
+        public string RoomDesignator { get => _roomDesignator; set { SetProperty(ref _roomDesignator, value); _applicationDataService.SaveSetting("RoomDesignator", _roomDesignator); } }
 
-            set { SetProperty(ref _versionDescription, value); }
-        }
+        string _roomNumber = default(string);
+        public string RoomNumber { get => _roomNumber; set { SetProperty(ref _roomNumber, value); _applicationDataService.SaveSetting("RoomNumber", _roomNumber); } }
 
         public SettingsViewModel(IApplicationDataService applicationDataService)
         {
@@ -46,7 +40,6 @@ namespace RoomInfo.ViewModels
         }
 
         private ICommand _switchThemeCommand;
-
         public ICommand SwitchThemeCommand
         {
             get
@@ -75,6 +68,8 @@ namespace RoomInfo.ViewModels
 
             VersionDescription = GetVersionDescription();
             SelectedComboBoxIndex = _applicationDataService.GetSetting<int>("StandardOccupancy");
+            RoomDesignator = _applicationDataService.GetSetting<string>("RoomDesignator");
+            RoomNumber = _applicationDataService.GetSetting<string>("RoomNumber");
         }
 
         private string GetVersionDescription()

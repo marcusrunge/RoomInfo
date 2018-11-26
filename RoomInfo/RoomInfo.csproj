@@ -135,6 +135,7 @@
     <Compile Include="Helpers\VisualStateDependencyProperty.cs" />
     <Compile Include="Models\AgendaItem.cs" />
     <Compile Include="Models\DataModelBase.cs" />
+    <Compile Include="Models\RoomPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Constants\PageTokens.cs" />
     <Compile Include="Services\ApplicationDataService.cs" />
