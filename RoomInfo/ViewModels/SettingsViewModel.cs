@@ -10,6 +10,8 @@ using RoomInfo.Helpers;
 using RoomInfo.Services;
 
 using Windows.ApplicationModel;
+using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 
 namespace RoomInfo.ViewModels
@@ -33,6 +35,9 @@ namespace RoomInfo.ViewModels
 
         string _roomNumber = default(string);
         public string RoomNumber { get => _roomNumber; set { SetProperty(ref _roomNumber, value); _applicationDataService.SaveSetting("RoomNumber", _roomNumber); } }
+
+        string _enterpriseDesignator = default(string);
+        public string EnterpriseDesignator { get => _enterpriseDesignator; set { SetProperty(ref _enterpriseDesignator, value); _applicationDataService.SaveSetting("EnterpriseDesignator", _roomDesignator); } }
 
         public SettingsViewModel(IApplicationDataService applicationDataService)
         {
@@ -70,6 +75,7 @@ namespace RoomInfo.ViewModels
             SelectedComboBoxIndex = _applicationDataService.GetSetting<int>("StandardOccupancy");
             RoomDesignator = _applicationDataService.GetSetting<string>("RoomDesignator");
             RoomNumber = _applicationDataService.GetSetting<string>("RoomNumber");
+            EnterpriseDesignator = _applicationDataService.GetSetting<string>("EnterpriseDesignator");
         }
 
         private string GetVersionDescription()
@@ -86,6 +92,20 @@ namespace RoomInfo.ViewModels
         public ICommand SetStandardOccupancyCommand => _setStandardOccupancyCommand ?? (_setStandardOccupancyCommand = new DelegateCommand<object>((param) =>
         {
             _applicationDataService.SaveSetting("StandardOccupancy", SelectedComboBoxIndex);
+        }));
+
+        private ICommand _selectLogoCommand;
+        public ICommand SelectLogoCommand => _selectLogoCommand ?? (_selectLogoCommand = new DelegateCommand<object>(async (param) =>
+        {
+            FileOpenPicker openPicker = new FileOpenPicker
+            {
+                ViewMode = PickerViewMode.Thumbnail,
+                SuggestedStartLocation = PickerLocationId.PicturesLibrary
+            };
+            openPicker.FileTypeFilter.Add(".jpg");
+            openPicker.FileTypeFilter.Add(".jpeg");
+            openPicker.FileTypeFilter.Add(".png");
+            StorageFile file = await openPicker.PickSingleFileAsync();
         }));
     }
 }
