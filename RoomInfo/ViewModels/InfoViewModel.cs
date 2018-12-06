@@ -8,9 +8,12 @@ using Prism.Windows.Mvvm;
 using Prism.Windows.Navigation;
 using RoomInfo.Models;
 using RoomInfo.Services;
+using Windows.ApplicationModel;
+using Windows.Storage;
 using Windows.System.Threading;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media;
 
 namespace RoomInfo.ViewModels
 {
@@ -38,6 +41,9 @@ namespace RoomInfo.ViewModels
         ObservableCollection<AgendaItem> _agendaItems = default(ObservableCollection<AgendaItem>);
         public ObservableCollection<AgendaItem> AgendaItems { get => _agendaItems; set { SetProperty(ref _agendaItems, value); } }
 
+        Uri _companyLogo = default(Uri);
+        public Uri CompanyLogo { get => _companyLogo; set { SetProperty(ref _companyLogo, value); } }
+
         public InfoViewModel(IUnityContainer unityContainer)
         {
             _databaseService = unityContainer.Resolve<IDatabaseService>();
@@ -47,6 +53,9 @@ namespace RoomInfo.ViewModels
         public async override void OnNavigatedTo(NavigatedToEventArgs navigatedToEventArgs, Dictionary<string, object> viewModelState)
         {
             base.OnNavigatedTo(navigatedToEventArgs, viewModelState);
+            StorageFolder assets = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
+            string logoFileName = _applicationDataService.GetSetting<string>("LogoFileName");
+            CompanyLogo = new Uri(assets.Path + "/" + logoFileName);
             CultureInfo cultureInfo = new CultureInfo("de-DE");
             Clock = DateTime.Now.ToString("t", cultureInfo) + " Uhr";
             Date = DateTime.Now.ToString("D", cultureInfo);

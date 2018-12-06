@@ -169,7 +169,7 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Image x:Name="CompanyLogo"/>
+                <Image x:Name="CompanyLogo" Source="{Binding CompanyLogo}" HorizontalAlignment="Left"/>
                 <TextBlock x:Name="CompanyName" Grid.Column="1"/>
                 <StackPanel Grid.Column="2">
                     <TextBlock x:Name="Clock" Text="{Binding Clock, UpdateSourceTrigger=PropertyChanged}" FontSize="72" HorizontalAlignment="Right" />

@@ -106,6 +106,12 @@ namespace RoomInfo.ViewModels
             openPicker.FileTypeFilter.Add(".jpeg");
             openPicker.FileTypeFilter.Add(".png");
             StorageFile file = await openPicker.PickSingleFileAsync();
+            if(file != null)
+            {
+                StorageFolder assets = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
+                await file.CopyAsync(assets, file.Name, NameCollisionOption.ReplaceExisting);
+                _applicationDataService.SaveSetting("LogoFileName", file.Name);
+            }
         }));
     }
 }
