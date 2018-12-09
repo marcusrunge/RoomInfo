@@ -79,7 +79,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Raumbezeichnung:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <TextBox Grid.Column="1" PlaceholderText="Bezeichnung" Text="{Binding RoomDesignator, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="1" PlaceholderText="Bezeichnung" Text="{Binding RoomName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
                 <TextBlock Grid.Column="2" Text="Raumnummer:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                 <TextBox Grid.Column="3" PlaceholderText="Nummer" Text="{Binding RoomNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
             </Grid>
@@ -91,7 +91,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Unternehmensbezeichnung" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <TextBox Grid.Column="1" PlaceholderText="Bezeichnung" Text="{Binding EnterpriseDesignator, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="1" PlaceholderText="Bezeichnung" Text="{Binding CompanyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
                 <TextBlock Grid.Column="2" Text="Unternehmenslogo:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                 <Button Grid.Column="3" Content="Auswahl" Command="{Binding SelectLogoCommand}"/>
             </Grid>

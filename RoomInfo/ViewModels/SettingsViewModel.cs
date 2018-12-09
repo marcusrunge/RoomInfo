@@ -30,14 +30,14 @@ namespace RoomInfo.ViewModels
         private string _versionDescription;
         public string VersionDescription { get => _versionDescription; set { SetProperty(ref _versionDescription, value); } }
 
-        string _roomDesignator = default(string);
-        public string RoomDesignator { get => _roomDesignator; set { SetProperty(ref _roomDesignator, value); _applicationDataService.SaveSetting("RoomDesignator", _roomDesignator); } }
+        string _roomName = default(string);
+        public string RoomName { get => _roomName; set { SetProperty(ref _roomName, value); _applicationDataService.SaveSetting("RoomName", _roomName); } }
 
         string _roomNumber = default(string);
         public string RoomNumber { get => _roomNumber; set { SetProperty(ref _roomNumber, value); _applicationDataService.SaveSetting("RoomNumber", _roomNumber); } }
 
-        string _enterpriseDesignator = default(string);
-        public string EnterpriseDesignator { get => _enterpriseDesignator; set { SetProperty(ref _enterpriseDesignator, value); _applicationDataService.SaveSetting("EnterpriseDesignator", _roomDesignator); } }
+        string _companyName = default(string);
+        public string CompanyName { get => _companyName; set { SetProperty(ref _companyName, value); _applicationDataService.SaveSetting("CompanyName", _companyName); } }
 
         public SettingsViewModel(IApplicationDataService applicationDataService)
         {
@@ -73,9 +73,9 @@ namespace RoomInfo.ViewModels
 
             VersionDescription = GetVersionDescription();
             SelectedComboBoxIndex = _applicationDataService.GetSetting<int>("StandardOccupancy");
-            RoomDesignator = _applicationDataService.GetSetting<string>("RoomDesignator");
+            RoomName = _applicationDataService.GetSetting<string>("RoomName");
             RoomNumber = _applicationDataService.GetSetting<string>("RoomNumber");
-            EnterpriseDesignator = _applicationDataService.GetSetting<string>("EnterpriseDesignator");
+            CompanyName = _applicationDataService.GetSetting<string>("CompanyName");
         }
 
         private string GetVersionDescription()

@@ -73,6 +73,31 @@
                             </Setter.Value>
                         </Setter>
                         <Setter Target="occupancyTextBlock.(TextBlock.Text)" Value="F R E I"/>
+                        <Setter Target="roomNameTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF007900</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="roomNameTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF007900</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="roomNumberTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF007900</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="roomNumberTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF007900</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="occupancySymbolTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF007900</Color>
+                            </Setter.Value>
+                        </Setter>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="BusyVisualState">
@@ -94,6 +119,36 @@
                             </Setter.Value>
                         </Setter>
                         <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="⧖"/>
+                        <Setter Target="occupancySymbolTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF797900</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="roomNameTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF797900</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="roomNameTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF797900</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="roomNumberTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF797900</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="roomNumberTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF797900</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="occupancyTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF797900</Color>
+                            </Setter.Value>
+                        </Setter>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="OccupiedVisualState">
@@ -114,10 +169,10 @@
                             </Setter.Value>
                         </Setter>
                         <Setter Target="occupancyTextBlock.(TextBlock.Text)" Value="B E L E G T"/>
-                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="✗"/>
+                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="🗙"/>
                         <Setter Target="occupancySymbolTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
                             <Setter.Value>
-                                <Color>#FFF2F29A</Color>
+                                <Color>#FF790000</Color>
                             </Setter.Value>
                         </Setter>
                         <Setter Target="occupancySymbolTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
@@ -126,6 +181,31 @@
                             </Setter.Value>
                         </Setter>
                         <Setter Target="occupancyTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF790000</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="occupancyTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF790000</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="roomNumberTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF790000</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="roomNumberTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF790000</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="roomNameTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF790000</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="roomNameTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FF790000</Color>
                             </Setter.Value>
@@ -151,6 +231,36 @@
                             </Setter.Value>
                         </Setter>
                         <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="∞"/>
+                        <Setter Target="occupancySymbolTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF3D3D3D</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="roomNameTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF3D3D3D</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="roomNameTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF3D3D3D</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="roomNumberTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF3D3D3D</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="roomNumberTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF3D3D3D</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="occupancyTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF3D3D3D</Color>
+                            </Setter.Value>
+                        </Setter>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -160,26 +270,34 @@
                 Place your content here.-->
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
-                <RowDefinition Height="2*"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="3*"/>
             </Grid.RowDefinitions>
             <Grid>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Image x:Name="CompanyLogo" Source="{Binding CompanyLogo}" HorizontalAlignment="Left"/>
-                <TextBlock x:Name="CompanyName" Grid.Column="1"/>
+                <Image x:Name="CompanyLogo" Source="{Binding CompanyLogo}" HorizontalAlignment="Left" Margin="12,12,12,12"/>
+                <TextBlock x:Name="CompanyName" Grid.Column="1" Text="{Binding CompanyName}" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="72"/>
                 <StackPanel Grid.Column="2">
                     <TextBlock x:Name="Clock" Text="{Binding Clock, UpdateSourceTrigger=PropertyChanged}" FontSize="72" HorizontalAlignment="Right" />
                     <TextBlock x:Name="Date" Text="{Binding Date, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" FontSize="36"/>
                 </StackPanel>
 
             </Grid>
-            <StackPanel x:Name="StatusBar" Grid.Row="1" Background="#00000000" HorizontalAlignment="Stretch">
-                <TextBlock x:Name="occupancyTextBlock" FontSize="72" HorizontalAlignment="Center" VerticalAlignment="Top" Text="{Binding Room}" Foreground="#00000000"/>
-                <TextBlock x:Name="occupancySymbolTextBlock" FontSize="216" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontWeight="Bold" TextLineBounds="Tight" Margin="0,36,0,0" Foreground="#00000000"/>
+            <StackPanel x:Name="StatusBar" Grid.Row="1" Background="#00000000" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                <Grid HorizontalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="roomNameTextBlock"  Text="{Binding RoomName}" FontSize="72" FocusVisualPrimaryBrush="#00000000" Foreground="#00000000" Margin="0,0,36,0"/>
+                    <TextBlock x:Name="roomNumberTextBlock" Grid.Column="1" Text="{Binding RoomNumber}" FontSize="72" FocusVisualPrimaryBrush="#00000000" Foreground="#00000000" Margin="36,0,0,0"/>
+                </Grid>
+                <TextBlock x:Name="occupancyTextBlock" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Top" Text="{Binding Room}" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000"/>
+                <TextBlock x:Name="occupancySymbolTextBlock" FontSize="216" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" TextLineBounds="TrimToCapHeight" />
             </StackPanel>
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
@@ -187,7 +305,7 @@
                     <ColumnDefinition Width="4*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Belegung" FontSize="48"/>
+                <TextBlock Text="Belegung:" FontSize="48"/>
                 <ListView x:Name="Agenda" Grid.Column="1" ItemsSource="{Binding AgendaItems}" >
                     <ListView.ItemTemplate>
                         <DataTemplate >

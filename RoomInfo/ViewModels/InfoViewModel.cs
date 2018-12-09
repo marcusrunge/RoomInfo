@@ -44,6 +44,15 @@ namespace RoomInfo.ViewModels
         Uri _companyLogo = default(Uri);
         public Uri CompanyLogo { get => _companyLogo; set { SetProperty(ref _companyLogo, value); } }
 
+        string _companyName = default(string);
+        public string CompanyName { get => _companyName; set { SetProperty(ref _companyName, value); } }
+
+        string _roomName = default(string);
+        public string RoomName { get => _roomName; set { SetProperty(ref _roomName, value); } }
+
+        string _roomNumber = default(string);
+        public string RoomNumber { get => _roomNumber; set { SetProperty(ref _roomNumber, value); } }
+
         public InfoViewModel(IUnityContainer unityContainer)
         {
             _databaseService = unityContainer.Resolve<IDatabaseService>();
@@ -56,6 +65,9 @@ namespace RoomInfo.ViewModels
             StorageFolder assets = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
             string logoFileName = _applicationDataService.GetSetting<string>("LogoFileName");
             CompanyLogo = new Uri(assets.Path + "/" + logoFileName);
+            CompanyName = _applicationDataService.GetSetting<string>("CompanyName");
+            RoomName = _applicationDataService.GetSetting<string>("RoomName");
+            RoomNumber = _applicationDataService.GetSetting<string>("RoomNumber");
             CultureInfo cultureInfo = new CultureInfo("de-DE");
             Clock = DateTime.Now.ToString("t", cultureInfo) + " Uhr";
             Date = DateTime.Now.ToString("D", cultureInfo);
