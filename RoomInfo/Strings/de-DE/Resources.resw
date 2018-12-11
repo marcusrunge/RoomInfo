@@ -119,21 +119,53 @@
   </resheader>
   <data name="AppDescription" xml:space="preserve">
     <value>Rauminfo</value>
-    <comment>Anwendungsbeschreibung</comment>
   </data>
   <data name="AppDisplayName" xml:space="preserve">
     <value>Rauminfo</value>
-    <comment>Anwendungsanzeigename</comment>
   </data>
   <data name="ExceptionEnumToBooleanConverterParameterMustBeAnEnumName" xml:space="preserve">
     <value>Parameter muss eine Aufzählung sein!</value>
-    <comment>Parameter muss eine Aufzählung im Umwandler sein</comment>
   </data>
   <data name="ExceptionEnumToBooleanConverterValueMustBeAnEnum" xml:space="preserve">
     <value>Wert muss eine Aufzählung sein!</value>
-    <comment>Wert muss eine Aufzählung im Umwandler sein</comment>
   </data>
   <data name="ExceptionSettingsStorageExtensionsFileNameIsNullOrEmpty" xml:space="preserve">
-    <value />
+    <value>Dateiname ist NULL oder leer. Gültigen Dateinamen angeben!</value>
+  </data>
+  <data name="PivotItem_Info.Header" xml:space="preserve">
+    <value>Belegung</value>
+  </data>
+  <data name="PivotItem_Schedule.Header" xml:space="preserve">
+    <value>Kalender</value>
+  </data>
+  <data name="PivotItem_Settings.Header" xml:space="preserve">
+    <value>Einstellungen</value>
+  </data>
+  <data name="Settings_About.Text" xml:space="preserve">
+    <value>Über diese Anwendung</value>
+  </data>
+  <data name="Settings_AboutDescription.Text" xml:space="preserve">
+    <value>Anwendungsbeschreibung</value>
+  </data>
+  <data name="Settings_Personalization.Text" xml:space="preserve">
+    <value>Personalisierung</value>
+  </data>
+  <data name="Settings_PrivacyTermsLink.Content" xml:space="preserve">
+    <value>Datenschutzerklärung</value>
+  </data>
+  <data name="Settings_PrivacyTermsLink.NavigateUri" xml:space="preserve">
+    <value>https://YourPrivacyUrlGoesHere/</value>
+  </data>
+  <data name="Settings_Theme.Text" xml:space="preserve">
+    <value>Wähle Farbschema</value>
+  </data>
+  <data name="Settings_Theme_Dark.Content" xml:space="preserve">
+    <value>Dunkel</value>
+  </data>
+  <data name="Settings_Theme_Default.Content" xml:space="preserve">
+    <value>Windows Standard</value>
+  </data>
+  <data name="Settings_Theme_Light.Content" xml:space="preserve">
+    <value>Hell</value>
   </data>
 </root>
