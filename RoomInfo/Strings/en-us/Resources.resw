@@ -212,4 +212,13 @@
   <data name="Schedule_AgendaItemFlyoutEdit.Text" xml:space="preserve">
     <value>Edit</value>
   </data>
+  <data name="Info_OccupancyTextBlockAbsent.Text" xml:space="preserve">
+    <value>A B S E N T</value>
+  </data>
+  <data name="Info_OccupancyTextBlockBusy.Text" xml:space="preserve">
+    <value>B U S Y</value>
+  </data>
+  <data name="Info_OccupancyTextBlockOccupied.Text" xml:space="preserve">
+    <value>O C C U P I E D</value>
+  </data>
 </root>

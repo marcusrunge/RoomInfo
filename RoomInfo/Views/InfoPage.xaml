@@ -28,7 +28,7 @@
                                 <SolidColorBrush Color="#FF00F200"/>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="occupancyTextBlock.(TextBlock.Text)" Value="FREI"/>
+                        
                         <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="🗸"/>
                         <Setter Target="occupancyTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
                             <Setter.Value>
@@ -72,7 +72,7 @@
                                 <Color>#FF007900</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="occupancyTextBlock.(TextBlock.Text)" Value="F R E I"/>
+                        
                         <Setter Target="roomNameTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FF007900</Color>
@@ -98,6 +98,7 @@
                                 <Color>#FF007900</Color>
                             </Setter.Value>
                         </Setter>
+                        <Setter Target="occupancyTextBlock.(UIElement.Visibility)" Value="Visible"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="BusyVisualState">
@@ -107,8 +108,7 @@
                                 <SolidColorBrush Color="#FFF2F200"/>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="occupancyTextBlock.(TextBlock.Text)" Value="B E S C H Ä F T I G T"/>
-                        <Setter Target="occupancyTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                        <Setter Target="busyOccupancyTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FF797900</Color>
                             </Setter.Value>
@@ -144,11 +144,12 @@
                                 <Color>#FF797900</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="occupancyTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
+                        <Setter Target="busyOccupancyTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FF797900</Color>
                             </Setter.Value>
                         </Setter>
+                        <Setter Target="busyOccupancyTextBlock.(UIElement.Visibility)" Value="Visible"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="OccupiedVisualState">
@@ -168,7 +169,7 @@
                                 <Color>#FF790000</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="occupancyTextBlock.(TextBlock.Text)" Value="B E L E G T"/>
+                        
                         <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="🗙"/>
                         <Setter Target="occupancySymbolTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
                             <Setter.Value>
@@ -180,12 +181,12 @@
                                 <Color>#FF790000</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="occupancyTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                        <Setter Target="occupiedOccupancyTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FF790000</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="occupancyTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
+                        <Setter Target="occupiedOccupancyTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FF790000</Color>
                             </Setter.Value>
@@ -210,6 +211,7 @@
                                 <Color>#FF790000</Color>
                             </Setter.Value>
                         </Setter>
+                        <Setter Target="occupiedOccupancyTextBlock.(UIElement.Visibility)" Value="Visible"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="AbsentVisualState">
@@ -219,8 +221,8 @@
                                 <Color>#FF797979</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="occupancyTextBlock.(TextBlock.Text)" Value="A B W E S E N D"/>
-                        <Setter Target="occupancyTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
+
+                        <Setter Target="absentOccupancyTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FF3D3D3D</Color>
                             </Setter.Value>
@@ -261,6 +263,7 @@
                                 <Color>#FF3D3D3D</Color>
                             </Setter.Value>
                         </Setter>
+                        <Setter Target="absentOccupancyTextBlock.(UIElement.Visibility)" Value="Visible"/>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -296,7 +299,10 @@
                     <TextBlock x:Name="roomNameTextBlock"  Text="{Binding RoomName}" FontSize="72" FocusVisualPrimaryBrush="#00000000" Foreground="#00000000" Margin="0,0,36,0"/>
                     <TextBlock x:Name="roomNumberTextBlock" Grid.Column="1" Text="{Binding RoomNumber}" FontSize="72" FocusVisualPrimaryBrush="#00000000" Foreground="#00000000" Margin="36,0,0,0"/>
                 </Grid>
-                <TextBlock x:Name="occupancyTextBlock" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Top" Text="{Binding Room}" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000"/>
+                <TextBlock x:Name="occupancyTextBlock" x:Uid="Info_OccupancyTextBlockFree" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
+                <TextBlock x:Name="absentOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockAbsent" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
+                <TextBlock x:Name="occupiedOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockOccupied" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
+                <TextBlock x:Name="busyOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockBusy" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
                 <TextBlock x:Name="occupancySymbolTextBlock" FontSize="216" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" TextLineBounds="TrimToCapHeight" />
             </StackPanel>
             <Grid Grid.Row="2">

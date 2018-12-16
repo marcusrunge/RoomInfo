@@ -144,8 +144,17 @@
   <data name="Info_OccupancyOccupied.Content" xml:space="preserve">
     <value>BELEGT</value>
   </data>
-  <data name="Info_OccupancyTextBlockFree.Value" xml:space="preserve">
+  <data name="Info_OccupancyTextBlockAbsent.Text" xml:space="preserve">
+    <value>A B W E S E N D</value>
+  </data>
+  <data name="Info_OccupancyTextBlockBusy.Text" xml:space="preserve">
+    <value>B E S C H Ä F T I G T</value>
+  </data>
+  <data name="Info_OccupancyTextBlockFree.Text" xml:space="preserve">
     <value>F R E I</value>
+  </data>
+  <data name="Info_OccupancyTextBlockOccupied.Text" xml:space="preserve">
+    <value>B E L E G T</value>
   </data>
   <data name="Info_Schedule.Text" xml:space="preserve">
     <value>Belegung:</value>
