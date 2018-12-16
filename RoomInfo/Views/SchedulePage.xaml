@@ -55,10 +55,10 @@
                 </Grid>
                 <TextBox Grid.Row="4" Margin="0,6,0,6" Height="64" PlaceholderText="Beschreibung des Termins"  TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <ComboBox Grid.Row="5" HorizontalAlignment="Stretch" VerticalAlignment="Center" SelectedIndex="{Binding SelectedComboBoxIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
-                    <ComboBoxItem Content="FREI" />
-                    <ComboBoxItem Content="BESCHÄFTIGT" />
-                    <ComboBoxItem Content="BELEGT" />
-                    <ComboBoxItem Content="ABWESEND" />
+                    <ComboBoxItem x:Uid="Info_OccupancyFree" />
+                    <ComboBoxItem x:Uid="Info_OccupancyBusy" />
+                    <ComboBoxItem x:Uid="Info_OccupancyOccupied" />
+                    <ComboBoxItem x:Uid="Info_OccupancyAbsent" />
                 </ComboBox>
                 <Button x:Name="saveReservationButton" Grid.Row="6" HorizontalAlignment="Right" Content="Speichern" Command="{Binding AddOrUpdateReservationCommand}" CommandParameter="{Binding ElementName=flyoutGrid}" />
             </Grid>
@@ -81,7 +81,7 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="1" Text="Neue Reservierung" FontSize="{ThemeResource TextStyleExtraLargeFontSize}" Margin="6,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" x:Uid="Schedule_AddReservation" FontSize="{ThemeResource TextStyleExtraLargeFontSize}" Margin="6,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Grid>
             </Button.Content>
         </Button>
@@ -107,8 +107,8 @@
                                                 </interactivity:Interaction.Behaviors>
                                                 <FlyoutBase.AttachedFlyout>
                                                     <MenuFlyout x:Name="agendaItemFlyout">
-                                                        <MenuFlyoutItem Text="Ändern" Command="{Binding UpdateReservationCommand}" CommandParameter="{Binding ElementName=agendaItemFlyout}" ContextFlyout="{StaticResource ReservationFlyout}" />
-                                                        <MenuFlyoutItem Text="Löschen" Command="{Binding DeleteReservationCommand}" CommandParameter="{Binding}"/>
+                                                        <MenuFlyoutItem x:Uid="Schedule_AgendaItemFlyoutEdit" Command="{Binding UpdateReservationCommand}" CommandParameter="{Binding ElementName=agendaItemFlyout}" ContextFlyout="{StaticResource ReservationFlyout}" />
+                                                        <MenuFlyoutItem x:Uid="Schedule_AgendaItemFlyoutDelete" Command="{Binding DeleteReservationCommand}" CommandParameter="{Binding}"/>
                                                     </MenuFlyout>
                                                 </FlyoutBase.AttachedFlyout>
                                                 <Grid.ColumnDefinitions>

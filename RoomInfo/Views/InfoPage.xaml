@@ -305,7 +305,7 @@
                     <ColumnDefinition Width="4*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Belegung:" FontSize="48"/>
+                <TextBlock x:Uid="Info_Schedule" FontSize="48"/>
                 <ListView x:Name="Agenda" Grid.Column="1" ItemsSource="{Binding AgendaItems}" >
                     <ListView.ItemTemplate>
                         <DataTemplate >
@@ -322,28 +322,28 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <ComboBox Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" FontSize="36" SelectedIndex="{Binding SelectedComboBoxIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
-                        <ComboBoxItem Content="FREI" FontSize="36">
+                        <ComboBoxItem x:Uid="Info_OccupancyFree" FontSize="36">
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:GoToStateAction StateName="FreeVisualState"/>
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
-                        <ComboBoxItem Content="BESCHÄFTIGT" FontSize="36">
+                        <ComboBoxItem x:Uid="Info_OccupancyBusy" FontSize="36">
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:GoToStateAction StateName="BusyVisualState"/>
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
-                        <ComboBoxItem Content="BELEGT" FontSize="36">
+                        <ComboBoxItem x:Uid="Info_OccupancyOccupied" FontSize="36">
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:GoToStateAction StateName="OccupiedVisualState"/>
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
-                        <ComboBoxItem Content="ABWESEND" FontSize="36">
+                        <ComboBoxItem x:Uid="Info_OccupancyAbsent" FontSize="36">
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:GoToStateAction StateName="AbsentVisualState"/>
