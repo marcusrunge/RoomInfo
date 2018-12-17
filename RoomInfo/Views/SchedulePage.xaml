@@ -34,7 +34,7 @@
                 <Button x:Name="hideReservationButton" HorizontalAlignment="Right" Background="{x:Null}" Margin="0,0,0,6" Command="{Binding HideReservationCommand}" CommandParameter="{Binding ElementName=flyoutGrid}">
                     <SymbolIcon Symbol="Cancel"/>
                 </Button>
-                <TextBox Grid.Row="1" PlaceholderText="Name des Termins" Margin="0,6,0,6" Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox Grid.Row="1" x:Uid="Schedule_AppointmentName" Margin="0,6,0,6" Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <Grid Grid.Row="2" Margin="0,6,0,6">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -43,7 +43,7 @@
                     </Grid.ColumnDefinitions>
                     <DatePicker Margin="0,0,6,0" Date="{Binding StartDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <TimePicker Grid.Column="1" Margin="6,0,6,0" Time="{Binding StartTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ClockIdentifier="24HourClock"/>
-                    <CheckBox Grid.Column="2" Content="Ganztägig" Margin="6,0,0,0" IsChecked="{Binding IsAllDayEvent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <CheckBox Grid.Column="2" x:Uid="Schedule_AppointmentAllDay" Margin="6,0,0,0" IsChecked="{Binding IsAllDayEvent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </Grid>
                 <Grid Grid.Row="3" Margin="0,6,0,6">
                     <Grid.ColumnDefinitions>
@@ -53,14 +53,14 @@
                     <DatePicker Margin="0,0,6,0" Date="{Binding EndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <TimePicker Grid.Column="1" Margin="6,0,0,0" Time="{Binding EndTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ClockIdentifier="24HourClock"/>
                 </Grid>
-                <TextBox Grid.Row="4" Margin="0,6,0,6" Height="64" PlaceholderText="Beschreibung des Termins"  TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Grid.Row="4" Margin="0,6,0,6" Height="64" x:Uid="Schedule_AppointmentDescription"  TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <ComboBox Grid.Row="5" HorizontalAlignment="Stretch" VerticalAlignment="Center" SelectedIndex="{Binding SelectedComboBoxIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                     <ComboBoxItem x:Uid="Info_OccupancyFree" />
                     <ComboBoxItem x:Uid="Info_OccupancyBusy" />
                     <ComboBoxItem x:Uid="Info_OccupancyOccupied" />
                     <ComboBoxItem x:Uid="Info_OccupancyAbsent" />
                 </ComboBox>
-                <Button x:Name="saveReservationButton" Grid.Row="6" HorizontalAlignment="Right" Content="Speichern" Command="{Binding AddOrUpdateReservationCommand}" CommandParameter="{Binding ElementName=flyoutGrid}" />
+                <Button x:Name="saveReservationButton" Grid.Row="6" HorizontalAlignment="Right" x:Uid="Schedule_SaveReservationButton" Command="{Binding AddOrUpdateReservationCommand}" CommandParameter="{Binding ElementName=flyoutGrid}" />
             </Grid>
         </Flyout>
     </Page.Resources>

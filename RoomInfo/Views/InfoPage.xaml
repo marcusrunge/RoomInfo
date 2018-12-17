@@ -11,11 +11,13 @@
     Style="{StaticResource PageStyle}"
     prismMvvm:ViewModelLocator.AutoWireViewModel="True" 
     mc:Ignorable="d">
-
+    <Page.Resources>
+        <Helpers:TimeFormatConverter x:Key="TimeFormatConverter" />
+    </Page.Resources>
     <interactivity:Interaction.Behaviors>
         <Helpers:VisualStateDependencyProperty VisualStateProperty="{Binding Occupancy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
     </interactivity:Interaction.Behaviors>
-
+    
     <Grid
         x:Name="ContentArea"
         Margin="{StaticResource MediumLeftRightMargin}">
@@ -28,7 +30,6 @@
                                 <SolidColorBrush Color="#FF00F200"/>
                             </Setter.Value>
                         </Setter>
-                        
                         <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="🗸"/>
                         <Setter Target="occupancyTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
                             <Setter.Value>
@@ -72,7 +73,7 @@
                                 <Color>#FF007900</Color>
                             </Setter.Value>
                         </Setter>
-                        
+
                         <Setter Target="roomNameTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FF007900</Color>
@@ -169,7 +170,6 @@
                                 <Color>#FF790000</Color>
                             </Setter.Value>
                         </Setter>
-                        
                         <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="🗙"/>
                         <Setter Target="occupancySymbolTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
                             <Setter.Value>
@@ -221,7 +221,6 @@
                                 <Color>#FF797979</Color>
                             </Setter.Value>
                         </Setter>
-
                         <Setter Target="absentOccupancyTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FF3D3D3D</Color>
@@ -317,7 +316,11 @@
                         <DataTemplate >
                             <StackPanel>
                                 <TextBlock Text="{Binding Title}" FontSize="48"/>
-                                <TextBlock Text="{Binding Start}" FontSize="36"/>
+                                <TextBlock FontSize="36">
+                                    <Run Text="{Binding Start.TimeOfDay, Converter={StaticResource TimeFormatConverter}}" />
+                                    <Run Text=" - " />
+                                    <Run Text="{Binding End.TimeOfDay, Converter={StaticResource TimeFormatConverter}}" />
+                                </TextBlock>
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
@@ -332,6 +335,7 @@
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:GoToStateAction StateName="FreeVisualState"/>
+                                    <core:InvokeCommandAction Command="{Binding OverrideOccupancyCommand}"/>
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
@@ -339,6 +343,7 @@
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:GoToStateAction StateName="BusyVisualState"/>
+                                    <core:InvokeCommandAction Command="{Binding OverrideOccupancyCommand}"/>
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
@@ -346,6 +351,7 @@
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:GoToStateAction StateName="OccupiedVisualState"/>
+                                    <core:InvokeCommandAction Command="{Binding OverrideOccupancyCommand}"/>
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
@@ -353,6 +359,7 @@
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:GoToStateAction StateName="AbsentVisualState"/>
+                                    <core:InvokeCommandAction Command="{Binding OverrideOccupancyCommand}"/>
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>

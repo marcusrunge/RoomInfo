@@ -44,6 +44,9 @@ namespace RoomInfo.Models
         bool _isAllDayEvent = default(bool);
         public bool IsAllDayEvent { get => _isAllDayEvent; set { SetProperty(ref _isAllDayEvent, value); } }
 
+        bool _isOverridden = default(bool);
+        public bool IsOverridden { get => _isOverridden; set { SetProperty(ref _isOverridden, value); } }
+
         string _description = default(string);
         public string Description { get => _description; set { SetProperty(ref _description, value); } }
 

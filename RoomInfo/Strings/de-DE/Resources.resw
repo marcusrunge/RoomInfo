@@ -132,6 +132,9 @@
   <data name="ExceptionSettingsStorageExtensionsFileNameIsNullOrEmpty" xml:space="preserve">
     <value>Dateiname ist NULL oder leer. Gültigen Dateinamen angeben!</value>
   </data>
+  <data name="InfoViewModel_Clock" xml:space="preserve">
+    <value>Uhr</value>
+  </data>
   <data name="Info_OccupancyAbsent.Content" xml:space="preserve">
     <value>ABWESEND</value>
   </data>
@@ -174,14 +177,35 @@
   <data name="Schedule_AgendaItemFlyoutDelete.Text" xml:space="preserve">
     <value>Löschen</value>
   </data>
-  <data name="Schedule_AgendaItemFlyoutEditText" xml:space="preserve">
+  <data name="Schedule_AgendaItemFlyoutEdit.Text" xml:space="preserve">
     <value>Bearbeiten</value>
+  </data>
+  <data name="Schedule_AppointmentAllDay.Content" xml:space="preserve">
+    <value>Ganztägig</value>
+  </data>
+  <data name="Schedule_AppointmentDescription.PlaceholderText" xml:space="preserve">
+    <value>Beschreibung des Termins</value>
+  </data>
+  <data name="Schedule_AppointmentName.PlaceholderText" xml:space="preserve">
+    <value>Name des Termins</value>
+  </data>
+  <data name="Schedule_SaveReservationButton.Content" xml:space="preserve">
+    <value>Speichern</value>
   </data>
   <data name="Settings_About.Text" xml:space="preserve">
     <value>Über diese Anwendung</value>
   </data>
   <data name="Settings_AboutDescription.Text" xml:space="preserve">
     <value>Anwendungsbeschreibung</value>
+  </data>
+  <data name="Settings_CompanyLogo.Text" xml:space="preserve">
+    <value>Unternehmenslogo:</value>
+  </data>
+  <data name="Settings_CompanyName.Text" xml:space="preserve">
+    <value>Unternehmensbezeichnung:</value>
+  </data>
+  <data name="Settings_CompanyNamePlaceHolder.PlaceholderText" xml:space="preserve">
+    <value>Bezeichnung</value>
   </data>
   <data name="Settings_Personalization.Text" xml:space="preserve">
     <value>Personalisierung</value>
@@ -191,6 +215,24 @@
   </data>
   <data name="Settings_PrivacyTermsLink.NavigateUri" xml:space="preserve">
     <value>https://YourPrivacyUrlGoesHere/</value>
+  </data>
+  <data name="Settings_RoomName.Text" xml:space="preserve">
+    <value>Raumbezeichnung:</value>
+  </data>
+  <data name="Settings_RoomNamePlaceHolder.PlaceholderText" xml:space="preserve">
+    <value>Bezeichnung</value>
+  </data>
+  <data name="Settings_RoomNumber.Text" xml:space="preserve">
+    <value>Raumnummer:</value>
+  </data>
+  <data name="Settings_RoomNumberPlaceHolder.PlaceholderText" xml:space="preserve">
+    <value>Nummer</value>
+  </data>
+  <data name="Settings_SelectButton.Content" xml:space="preserve">
+    <value>Auswahl</value>
+  </data>
+  <data name="Settings_StandardOccupancy.Text" xml:space="preserve">
+    <value>Standardbelegung außerhalb von Terminen:</value>
   </data>
   <data name="Settings_Theme.Text" xml:space="preserve">
     <value>Wähle Farbschema</value>

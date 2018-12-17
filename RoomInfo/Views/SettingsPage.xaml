@@ -59,7 +59,7 @@
                 </StackPanel>
             </StackPanel>
 
-            <TextBlock Text="Standardbelegung außerhalb von Terminen:"/>
+            <TextBlock x:Uid="Settings_StandardOccupancy"/>
             <ComboBox HorizontalAlignment="Left" VerticalAlignment="Center" SelectedIndex="{Binding SelectedComboBoxIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="129">
                 <interactivity:Interaction.Behaviors>
                     <core:EventTriggerBehavior EventName="SelectionChanged">
@@ -78,10 +78,10 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Raumbezeichnung:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <TextBox Grid.Column="1" PlaceholderText="Bezeichnung" Text="{Binding RoomName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="2" Text="Raumnummer:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <TextBox Grid.Column="3" PlaceholderText="Nummer" Text="{Binding RoomNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
+                <TextBlock x:Uid="Settings_RoomName" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="1" x:Uid="Settings_RoomNamePlaceHolder" Text="{Binding RoomName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="2" x:Uid="Settings_RoomNumber" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="3" x:Uid="Settings_RoomNumberPlaceHolder" Text="{Binding RoomNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
             </Grid>
             <Grid HorizontalAlignment="Left">
                 <Grid.ColumnDefinitions>
@@ -90,10 +90,10 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Unternehmensbezeichnung" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <TextBox Grid.Column="1" PlaceholderText="Bezeichnung" Text="{Binding CompanyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="2" Text="Unternehmenslogo:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <Button Grid.Column="3" Content="Auswahl" Command="{Binding SelectLogoCommand}"/>
+                <TextBlock x:Uid="Settings_CompanyName" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="1" x:Uid="Settings_CompanyNamePlaceHolder" Text="{Binding CompanyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="2" x:Uid="Settings_CompanyLogo" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <Button Grid.Column="3" x:Uid="Settings_SelectButton" Command="{Binding SelectLogoCommand}"/>
             </Grid>
             <TextBlock
                     x:Uid="Settings_About"

@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Microsoft.Practices.Unity;
+using Prism.Commands;
 using Prism.Windows.Mvvm;
 using Prism.Windows.Navigation;
 using RoomInfo.Models;
 using RoomInfo.Services;
 using Windows.ApplicationModel;
+using Windows.ApplicationModel.Resources;
 using Windows.Storage;
 using Windows.System.Threading;
 using Windows.UI.Core;
@@ -22,6 +26,7 @@ namespace RoomInfo.ViewModels
     {
         IDatabaseService _databaseService;
         IApplicationDataService _applicationDataService;
+        AgendaItem _activeAgendaItem;
 
         OccupancyVisualState _occupancy = default(OccupancyVisualState);
         public OccupancyVisualState Occupancy { get => _occupancy; set { SetProperty(ref _occupancy, value); } }
@@ -62,14 +67,15 @@ namespace RoomInfo.ViewModels
         public async override void OnNavigatedTo(NavigatedToEventArgs navigatedToEventArgs, Dictionary<string, object> viewModelState)
         {
             base.OnNavigatedTo(navigatedToEventArgs, viewModelState);
+            var resourceLoader = ResourceLoader.GetForCurrentView();
             StorageFolder assets = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
             string logoFileName = _applicationDataService.GetSetting<string>("LogoFileName");
             CompanyLogo = new Uri(assets.Path + "/" + logoFileName);
             CompanyName = _applicationDataService.GetSetting<string>("CompanyName");
             RoomName = _applicationDataService.GetSetting<string>("RoomName");
             RoomNumber = _applicationDataService.GetSetting<string>("RoomNumber");
-            CultureInfo cultureInfo = new CultureInfo("de-DE");
-            Clock = DateTime.Now.ToString("t", cultureInfo) + " Uhr";
+            CultureInfo cultureInfo = CultureInfo.CurrentCulture;
+            Clock = DateTime.Now.ToString("t", cultureInfo) + " " + resourceLoader.GetString("InfoViewModel_Clock");
             Date = DateTime.Now.ToString("D", cultureInfo);
             DispatcherTimer dispatcherTimer = new DispatcherTimer
             {
@@ -77,7 +83,7 @@ namespace RoomInfo.ViewModels
             };
             dispatcherTimer.Tick += (s, e) =>
             {
-                Clock = DateTime.Now.ToString("t", cultureInfo) + " Uhr";
+                Clock = DateTime.Now.ToString("t", cultureInfo) + " " + resourceLoader.GetString("InfoViewModel_Clock");
                 Date = DateTime.Now.ToString("D", cultureInfo);
             };
             dispatcherTimer.Start();            
@@ -103,14 +109,15 @@ namespace RoomInfo.ViewModels
         private void UpdateTimerTask()
         {            
             CoreDispatcher coreDispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
-            if (AgendaItems.Count > 0)
+            if (AgendaItems.Count > 0 )
             {
-                if (AgendaItems[0].Start < DateTime.Now && AgendaItems[0].End > DateTime.Now)
+                if (AgendaItems[0].Start < DateTime.Now && AgendaItems[0].End > DateTime.Now && !AgendaItems[0].IsOverridden)
                 {
                     Occupancy = (OccupancyVisualState)AgendaItems[0].Occupancy;
                     SelectedComboBoxIndex = AgendaItems[0].Occupancy;
+                    _activeAgendaItem = AgendaItems[0];
                 }
-                else
+                else if(!AgendaItems[0].IsOverridden)
                 {
                     TimeSpan startTimeSpan = AgendaItems[0].Start - DateTime.Now;
                     ThreadPoolTimer startThreadPoolTimer = ThreadPoolTimer.CreateTimer(async (source) =>
@@ -119,6 +126,7 @@ namespace RoomInfo.ViewModels
                         {
                             Occupancy = (OccupancyVisualState)AgendaItems[0].Occupancy;
                             SelectedComboBoxIndex = AgendaItems[0].Occupancy;
+                            _activeAgendaItem = AgendaItems[0];
                         });
                     }, startTimeSpan);
                 }
@@ -131,11 +139,22 @@ namespace RoomInfo.ViewModels
                         SelectedComboBoxIndex = _applicationDataService.GetSetting<int>("StandardOccupancy");
                         Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
                         AgendaItems.RemoveAt(0);
+                        _activeAgendaItem = null;
                         await UpdateDayAgenda();
                     });
 
                 }, endTimeSpan);
             }
         }
+
+        private ICommand _overrideOccupancyCommand;
+        public ICommand OverrideOccupancyCommand => _overrideOccupancyCommand ?? (_overrideOccupancyCommand = new DelegateCommand<object>(async (param) =>
+        {
+            if (_activeAgendaItem != null)
+            {
+                _activeAgendaItem.IsOverridden = true;
+                await _databaseService.UpdateAgendaItemAsync(_activeAgendaItem);
+            }
+        }));
     }
 }
