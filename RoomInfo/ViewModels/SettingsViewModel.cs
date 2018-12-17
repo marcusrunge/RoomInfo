@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 using Prism.Commands;
@@ -39,6 +40,9 @@ namespace RoomInfo.ViewModels
         string _companyName = default(string);
         public string CompanyName { get => _companyName; set { SetProperty(ref _companyName, value); _applicationDataService.SaveSetting("CompanyName", _companyName); } }
 
+        Uri _companyLogo = default(Uri);
+        public Uri CompanyLogo { get => _companyLogo; set { SetProperty(ref _companyLogo, value); } }
+
         public SettingsViewModel(IApplicationDataService applicationDataService)
         {
             _applicationDataService = applicationDataService;
@@ -67,7 +71,7 @@ namespace RoomInfo.ViewModels
         {
         }
 
-        public override void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
+        public override async void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
         {
             base.OnNavigatedTo(e, viewModelState);
 
@@ -76,6 +80,7 @@ namespace RoomInfo.ViewModels
             RoomName = _applicationDataService.GetSetting<string>("RoomName");
             RoomNumber = _applicationDataService.GetSetting<string>("RoomNumber");
             CompanyName = _applicationDataService.GetSetting<string>("CompanyName");
+            await LoadCompanyLogo();
         }
 
         private string GetVersionDescription()
@@ -111,7 +116,26 @@ namespace RoomInfo.ViewModels
                 StorageFolder assets = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
                 await file.CopyAsync(assets, file.Name, NameCollisionOption.ReplaceExisting);
                 _applicationDataService.SaveSetting("LogoFileName", file.Name);
+                await LoadCompanyLogo();
             }
         }));
+
+        private ICommand _deleteLogoCommand;
+        public ICommand DeleteLogoCommand => _deleteLogoCommand ?? (_deleteLogoCommand = new DelegateCommand<object>(async (param) =>
+        {
+            StorageFolder assets = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
+            string logoFileName = _applicationDataService.GetSetting<string>("LogoFileName");
+            StorageFile storageFile = await assets.GetFileAsync(logoFileName);
+            await storageFile.DeleteAsync();
+            _applicationDataService.RemoveSetting("LogoFileName");
+            await LoadCompanyLogo();            
+        }));
+
+        private async Task LoadCompanyLogo()
+        {
+            StorageFolder assets = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
+            string logoFileName = _applicationDataService.GetSetting<string>("LogoFileName");
+            CompanyLogo = new Uri(assets.Path + "/" + logoFileName);
+        }
     }
 }

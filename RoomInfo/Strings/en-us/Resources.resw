@@ -263,4 +263,13 @@
   <data name="Settings_StandardOccupancy.Text" xml:space="preserve">
     <value>Standard-Occupancy outside appointments:</value>
   </data>
+  <data name="Settings_CompanySettings.Text" xml:space="preserve">
+    <value>Company Settings</value>
+  </data>
+  <data name="Settings_DeleteButton.Content" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Settings_RoomSettings.Text" xml:space="preserve">
+    <value>Room settings</value>
+  </data>
 </root>

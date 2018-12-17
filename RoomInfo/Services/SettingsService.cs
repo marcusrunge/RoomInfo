@@ -8,6 +8,7 @@ namespace RoomInfo.Services
     {
         T GetSetting<T>(string key, SettingStrategy settingStrategy);
         void SaveSetting(string key, object value, SettingStrategy settingStrategy);
+        void RemoveSetting(string key, SettingStrategy settingStrategy);
     }
 
     public class SettingsService : ISettingsService
@@ -65,6 +66,26 @@ namespace RoomInfo.Services
                 case SettingStrategy.Roaming:
                     _roamingSettings.Values[key] = value;
                     break;                
+                default:
+                    break;
+            }
+        }
+
+        /// <summary>    
+        /// Removes application settings
+        /// </summary>   
+        /// <param name="key">Settings Key</param>  
+        /// <param name="settingStrategy">Setting Strategy</param>
+        public void RemoveSetting(string key, SettingStrategy settingStrategy)
+        {
+            switch (settingStrategy)
+            {
+                case SettingStrategy.Local:
+                    _localSettings.Values.Remove(key);
+                    break;
+                case SettingStrategy.Roaming:
+                    _roamingSettings.Values.Remove(key);
+                    break;
                 default:
                     break;
             }

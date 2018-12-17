@@ -207,6 +207,12 @@
   <data name="Settings_CompanyNamePlaceHolder.PlaceholderText" xml:space="preserve">
     <value>Bezeichnung</value>
   </data>
+  <data name="Settings_CompanySettings.Text" xml:space="preserve">
+    <value>Unternehmenseinstellungen</value>
+  </data>
+  <data name="Settings_DeleteButton.Content" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
   <data name="Settings_Personalization.Text" xml:space="preserve">
     <value>Personalisierung</value>
   </data>
@@ -227,6 +233,9 @@
   </data>
   <data name="Settings_RoomNumberPlaceHolder.PlaceholderText" xml:space="preserve">
     <value>Nummer</value>
+  </data>
+  <data name="Settings_RoomSettings.Text" xml:space="preserve">
+    <value>Raumeinstellungen</value>
   </data>
   <data name="Settings_SelectButton.Content" xml:space="preserve">
     <value>Auswahl</value>
