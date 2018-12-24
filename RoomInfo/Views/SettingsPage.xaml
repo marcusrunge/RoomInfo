@@ -59,7 +59,7 @@
                 </StackPanel>
             </StackPanel>
             <StackPanel Margin="{StaticResource SettingsSubheaderMargin}">
-                <TextBlock x:Uid="Settings_StandardOccupancy" Style="{StaticResource SubtitleTextBlockStyle}" />            
+                <TextBlock x:Name="standardOccupancyTextBlock" x:Uid="Settings_StandardOccupancy" Style="{StaticResource SubtitleTextBlockStyle}" HorizontalAlignment="Left" />            
                 <ComboBox HorizontalAlignment="Left" VerticalAlignment="Center" SelectedIndex="{Binding SelectedComboBoxIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="129">
                     <interactivity:Interaction.Behaviors>
                         <core:EventTriggerBehavior EventName="SelectionChanged">
@@ -75,24 +75,24 @@
             <StackPanel Margin="{StaticResource SettingsSubheaderMargin}">
                 <TextBlock x:Uid="Settings_RoomSettings" Style="{StaticResource SubtitleTextBlockStyle}" />
                 <TextBlock x:Uid="Settings_RoomName" Style="{StaticResource BodyTextStyle}"/>
-                <TextBox Grid.Column="1" x:Uid="Settings_RoomNamePlaceHolder" Text="{Binding RoomName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+                <TextBox Grid.Column="1" x:Uid="Settings_RoomNamePlaceHolder" Text="{Binding RoomName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="{Binding Path=ActualWidth, ElementName=standardOccupancyTextBlock}" HorizontalAlignment="Left"/>
                 <TextBlock Grid.Column="2" x:Uid="Settings_RoomNumber" Style="{StaticResource BodyTextStyle}"/>
-                <TextBox Grid.Column="3" x:Uid="Settings_RoomNumberPlaceHolder" Text="{Binding RoomNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="3" x:Uid="Settings_RoomNumberPlaceHolder" Text="{Binding RoomNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="{Binding Path=ActualWidth, ElementName=standardOccupancyTextBlock}" HorizontalAlignment="Left"/>
             </StackPanel>
             <StackPanel Margin="{StaticResource SettingsSubheaderMargin}">
                 <TextBlock x:Uid="Settings_CompanySettings" Style="{StaticResource SubtitleTextBlockStyle}" />
                 <TextBlock x:Uid="Settings_CompanyName" Style="{StaticResource BodyTextStyle}"/>
-                <TextBox Grid.Column="1" x:Uid="Settings_CompanyNamePlaceHolder" Text="{Binding CompanyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="1" x:Uid="Settings_CompanyNamePlaceHolder" Text="{Binding CompanyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="{Binding Path=ActualWidth, ElementName=standardOccupancyTextBlock}" HorizontalAlignment="Left"/>
                 <TextBlock Grid.Column="2" x:Uid="Settings_CompanyLogo" Style="{StaticResource BodyTextStyle}"/>                
                 <StackPanel HorizontalAlignment="Left">
                     <Image x:Name="CompanyLogo" Source="{Binding CompanyLogo}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MaxWidth="128" MaxHeight="128" />
-                    <Grid HorizontalAlignment="Center">
+                    <Grid HorizontalAlignment="Center" Margin="0,4,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" x:Uid="Settings_SelectButton" Command="{Binding SelectLogoCommand}" />
-                        <Button Grid.Column="1" x:Uid="Settings_DeleteButton" Command="{Binding DeleteLogoCommand}" />
+                        <Button Grid.Column="0" x:Uid="Settings_SelectButton" Command="{Binding SelectLogoCommand}" Margin="0,0,2,0" />
+                        <Button Grid.Column="1" x:Uid="Settings_DeleteButton" Command="{Binding DeleteLogoCommand}" Margin="2,0,0,0" />
                     </Grid>                    
                 </StackPanel>
             </StackPanel>
