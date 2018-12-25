@@ -1,11 +1,11 @@
-﻿/*using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using ModelComponent;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RoomInfo.Services
+namespace DatabaseComponent
 {
     public interface IDatabaseService
     {
@@ -59,4 +59,4 @@ namespace RoomInfo.Services
             await _agendaItemContext.SaveChangesAsync();
         }
     }
-}*/
+}

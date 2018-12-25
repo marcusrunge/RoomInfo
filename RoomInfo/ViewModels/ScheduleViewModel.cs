@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.Unity;
+﻿using DatabaseComponent;
+using Microsoft.Practices.Unity;
 using ModelComponent;
 using Prism.Commands;
 using Prism.Events;

@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using DatabaseComponent;
 using Microsoft.Practices.Unity;
+using ModelComponent;
 using Prism.Commands;
 using Prism.Windows.Mvvm;
 using Prism.Windows.Navigation;
-using RoomInfo.Models;
 using RoomInfo.Services;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Resources;
@@ -20,8 +20,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 
 namespace RoomInfo.ViewModels
-{
-    public enum OccupancyVisualState { FreeVisualState, BusyVisualState, OccupiedVisualState, AbsentVisualState, UndefinedVisualState }
+{    
     public class InfoViewModel : ViewModelBase
     {
         IDatabaseService _databaseService;

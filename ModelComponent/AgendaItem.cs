@@ -2,8 +2,11 @@
 using Prism.Commands;
 using Prism.Events;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -19,7 +22,7 @@ namespace ModelComponent
         }
     }
 
-    public class AgendaItem : DataModelBase
+    public class AgendaItem : INotifyPropertyChanged
     {
         [NotMapped]
         public IEventAggregator EventAggregator { get; set; }     
@@ -69,5 +72,24 @@ namespace ModelComponent
             var attachedFlyout = Flyout.GetAttachedFlyout(frameworkElement);
             attachedFlyout.ShowAt(frameworkElement);
         }));
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(storage, value)) return false;
+            storage = value;
+            RaisePropertyChanged(propertyName);
+            return true;
+        }
+        protected bool SetProperty<T>(ref T storage, T value, Action onChanged, [CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(storage, value)) return false;
+            storage = value;
+            onChanged?.Invoke();
+            RaisePropertyChanged(propertyName);
+            return true;
+        }
+        void RaisePropertyChanged([CallerMemberName]string propertyName = null) => OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+        void OnPropertyChanged(PropertyChangedEventArgs args) => PropertyChanged?.Invoke(this, args);
     }
 }

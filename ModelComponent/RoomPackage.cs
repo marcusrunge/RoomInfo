@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ModelComponent
 {
-    public class RoomPackage
+    public sealed class RoomPackage
     {
         public string RoomDesignator { get; set; }
         public string RoomNumber { get; set; }        

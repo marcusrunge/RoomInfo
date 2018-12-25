@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelComponent", "ModelComp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunicationComponent", "CommunicationComponent\CommunicationComponent.csproj", "{A4F589EE-0B8A-4A08-9BDA-35162233421D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseComponent", "DatabaseComponent\DatabaseComponent.csproj", "{E8EFD8D0-283C-4941-B7C3-3EB5071E6515}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -129,6 +131,26 @@ Global
 		{A4F589EE-0B8A-4A08-9BDA-35162233421D}.Release|x64.Build.0 = Release|x64
 		{A4F589EE-0B8A-4A08-9BDA-35162233421D}.Release|x86.ActiveCfg = Release|x86
 		{A4F589EE-0B8A-4A08-9BDA-35162233421D}.Release|x86.Build.0 = Release|x86
+		{E8EFD8D0-283C-4941-B7C3-3EB5071E6515}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8EFD8D0-283C-4941-B7C3-3EB5071E6515}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8EFD8D0-283C-4941-B7C3-3EB5071E6515}.Debug|ARM.ActiveCfg = Debug|ARM
+		{E8EFD8D0-283C-4941-B7C3-3EB5071E6515}.Debug|ARM.Build.0 = Debug|ARM
+		{E8EFD8D0-283C-4941-B7C3-3EB5071E6515}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{E8EFD8D0-283C-4941-B7C3-3EB5071E6515}.Debug|ARM64.Build.0 = Debug|ARM64
+		{E8EFD8D0-283C-4941-B7C3-3EB5071E6515}.Debug|x64.ActiveCfg = Debug|x64
+		{E8EFD8D0-283C-4941-B7C3-3EB5071E6515}.Debug|x64.Build.0 = Debug|x64
+		{E8EFD8D0-283C-4941-B7C3-3EB5071E6515}.Debug|x86.ActiveCfg = Debug|x86
+		{E8EFD8D0-283C-4941-B7C3-3EB5071E6515}.Debug|x86.Build.0 = Debug|x86
+		{E8EFD8D0-283C-4941-B7C3-3EB5071E6515}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8EFD8D0-283C-4941-B7C3-3EB5071E6515}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8EFD8D0-283C-4941-B7C3-3EB5071E6515}.Release|ARM.ActiveCfg = Release|ARM
+		{E8EFD8D0-283C-4941-B7C3-3EB5071E6515}.Release|ARM.Build.0 = Release|ARM
+		{E8EFD8D0-283C-4941-B7C3-3EB5071E6515}.Release|ARM64.ActiveCfg = Release|ARM64
+		{E8EFD8D0-283C-4941-B7C3-3EB5071E6515}.Release|ARM64.Build.0 = Release|ARM64
+		{E8EFD8D0-283C-4941-B7C3-3EB5071E6515}.Release|x64.ActiveCfg = Release|x64
+		{E8EFD8D0-283C-4941-B7C3-3EB5071E6515}.Release|x64.Build.0 = Release|x64
+		{E8EFD8D0-283C-4941-B7C3-3EB5071E6515}.Release|x86.ActiveCfg = Release|x86
+		{E8EFD8D0-283C-4941-B7C3-3EB5071E6515}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
