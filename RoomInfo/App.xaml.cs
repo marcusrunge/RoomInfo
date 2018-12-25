@@ -32,7 +32,8 @@ namespace RoomInfo
             Container.RegisterType<ISettingsService, SettingsService>();
             Container.RegisterType<IDatabaseService, DatabaseService>();
             Container.RegisterType<IApplicationDataService, ApplicationDataService>();
-            Container.RegisterType<IEventAggregator, EventAggregator>(new ContainerControlledLifetimeManager()); 
+            Container.RegisterType<IEventAggregator, EventAggregator>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<IBackgroundTaskService, BackgroundTaskService>();
             UnityServiceLocator unityServiceLocator = new UnityServiceLocator(Container);
             ServiceLocator.SetLocatorProvider(() => unityServiceLocator);
                      
