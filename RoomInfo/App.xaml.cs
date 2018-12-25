@@ -27,9 +27,7 @@ namespace RoomInfo
         protected override void ConfigureContainer()
         {
             // register a singleton using Container.RegisterType<IInterface, Type>(new ContainerControlledLifetimeManager());
-            base.ConfigureContainer();
-            Container.RegisterType<IBackgroundTaskService, BackgroundTaskService>(new ContainerControlledLifetimeManager());
-            Container.RegisterType<ILiveTileService, LiveTileService>(new ContainerControlledLifetimeManager());
+            base.ConfigureContainer();            
             Container.RegisterInstance<IResourceLoader>(new ResourceLoaderAdapter(new ResourceLoader()));
             Container.RegisterType<ISettingsService, SettingsService>();
             Container.RegisterType<IDatabaseService, DatabaseService>();
@@ -49,8 +47,7 @@ namespace RoomInfo
         {
             Services.ThemeSelectorService.SetRequestedTheme();
             NavigationService.Navigate(page, launchParam);
-            Window.Current.Activate();
-            Container.Resolve<ILiveTileService>().SampleUpdate();
+            Window.Current.Activate();            
             await Task.CompletedTask;
         }
 
@@ -63,13 +60,10 @@ namespace RoomInfo
         {
             base.OnBackgroundActivated(args);
             CreateAndConfigureContainer();
-            Container.Resolve<IBackgroundTaskService>().Start(args.TaskInstance);
         }
 
         protected override async Task OnInitializeAsync(IActivatedEventArgs args)
-        {
-            await Container.Resolve<IBackgroundTaskService>().RegisterBackgroundTasksAsync();
-            await Container.Resolve<ILiveTileService>().EnableQueueAsync().ConfigureAwait(false);
+        {            
             await ThemeSelectorService.InitializeAsync().ConfigureAwait(false);
 
             // We are remapping the default ViewNamePage and ViewNamePageViewModel naming to ViewNamePage and ViewNameViewModel to

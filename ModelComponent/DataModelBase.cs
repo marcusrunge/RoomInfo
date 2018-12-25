@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace RoomInfo.Models
+namespace ModelComponent
 {
     public abstract class DataModelBase : INotifyPropertyChanged
     {

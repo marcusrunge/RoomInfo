@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Practices.ServiceLocation;
-using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Events;
-using RoomInfo.Events;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -11,7 +8,7 @@ using System.Windows.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace RoomInfo.Models
+namespace ModelComponent
 {
     public class AgendaItemContext : DbContext
     {

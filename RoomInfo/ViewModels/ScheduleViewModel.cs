@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Microsoft.Practices.Unity;
+﻿using Microsoft.Practices.Unity;
+using ModelComponent;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Windows.Mvvm;
 using Prism.Windows.Navigation;
-using RoomInfo.Events;
 using RoomInfo.Helpers;
-using RoomInfo.Models;
 using RoomInfo.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Media;
 
 namespace RoomInfo.ViewModels
 {
