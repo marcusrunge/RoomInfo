@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 using RoomInfo.ViewModels;
 
 using Windows.UI.Xaml.Controls;

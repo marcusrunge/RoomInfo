@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Threading.Tasks;
-using DatabaseComponent;
 using Microsoft.Practices.ServiceLocation;
 using Microsoft.Practices.Unity;
 using Prism.Events;
@@ -10,7 +9,7 @@ using Prism.Unity.Windows;
 using Prism.Windows.AppModel;
 
 using RoomInfo.Services;
-
+using ServiceLibrary;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;

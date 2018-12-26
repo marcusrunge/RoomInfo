@@ -1,12 +1,11 @@
-﻿using DatabaseComponent;
-using Microsoft.Practices.Unity;
-using ModelComponent;
+﻿using Microsoft.Practices.Unity;
+using ModelLibrary;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Windows.Mvvm;
 using Prism.Windows.Navigation;
 using RoomInfo.Helpers;
-using RoomInfo.Services;
+using ServiceLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;

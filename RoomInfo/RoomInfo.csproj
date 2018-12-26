@@ -99,9 +99,6 @@
     <SuppressPseudoWarning Condition="'$(Configuration)' == 'Debug'">true</SuppressPseudoWarning>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite">
-      <Version>2.2.0</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.3</Version>
     </PackageReference>
@@ -109,9 +106,6 @@
       <Version>2.0.0</Version>
     </PackageReference>
     <!-- Nuget package references -->
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.1</Version>
-    </PackageReference>
     <PackageReference Include="Prism.Unity">
       <Version>6.3.0</Version>
     </PackageReference>
@@ -135,7 +129,6 @@
     <Compile Include="Helpers\VisualStateDependencyProperty.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Constants\PageTokens.cs" />
-    <Compile Include="Services\ApplicationDataService.cs" />
     <Compile Include="Services\BackgroundTaskService.cs" />
     <Compile Include="Services\DatabaseService.cs" />
     <Compile Include="Services\SettingsService.cs" />
@@ -270,21 +263,13 @@
       <Project>{3221787a-1091-4ffb-b1ac-493503834be5}</Project>
       <Name>BackgroundComponent</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CommunicationComponent\CommunicationComponent.csproj">
-      <Project>{a4f589ee-0b8a-4a08-9bda-35162233421d}</Project>
-      <Name>CommunicationComponent</Name>
+    <ProjectReference Include="..\ModelLibrary\ModelLibrary.csproj">
+      <Project>{fe670702-d4c1-4a85-a2df-519989143161}</Project>
+      <Name>ModelLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DatabaseComponent\DatabaseComponent.csproj">
-      <Project>{e8efd8d0-283c-4941-b7c3-3eb5071e6515}</Project>
-      <Name>DatabaseComponent</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LiveTileUpdateComponent\LiveTileUpdateComponent.csproj">
-      <Project>{739302bc-9de8-4d9f-9389-a44a45e46ad4}</Project>
-      <Name>LiveTileUpdateComponent</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ModelComponent\ModelComponent.csproj">
-      <Project>{aaa55901-b2a0-4248-8346-c16f8d540b9d}</Project>
-      <Name>ModelComponent</Name>
+    <ProjectReference Include="..\ServiceLibrary\ServiceLibrary.csproj">
+      <Project>{37a0be41-d5bc-4be2-8055-7a63d1ba95a8}</Project>
+      <Name>ServiceLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

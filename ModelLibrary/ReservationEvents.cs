@@ -1,6 +1,6 @@
 ﻿using Prism.Events;
 
-namespace ModelComponent
+namespace ModelLibrary
 {
     public class DeleteReservationEvent : PubSubEvent<object>
     {

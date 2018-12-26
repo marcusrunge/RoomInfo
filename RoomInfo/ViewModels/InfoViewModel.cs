@@ -4,23 +4,22 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using DatabaseComponent;
 using Microsoft.Practices.Unity;
-using ModelComponent;
+using ModelLibrary;
 using Prism.Commands;
 using Prism.Windows.Mvvm;
 using Prism.Windows.Navigation;
 using RoomInfo.Services;
+using ServiceLibrary;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Resources;
 using Windows.Storage;
 using Windows.System.Threading;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Media;
 
 namespace RoomInfo.ViewModels
-{    
+{
     public class InfoViewModel : ViewModelBase
     {
         IDatabaseService _databaseService;

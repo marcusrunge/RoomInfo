@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ModelComponent;
+using ModelLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DatabaseComponent
+namespace ServiceLibrary
 {
     public interface IDatabaseService
     {

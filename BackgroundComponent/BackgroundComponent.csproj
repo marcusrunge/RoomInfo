@@ -130,13 +130,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CommunicationComponent\CommunicationComponent.csproj">
-      <Project>{a4f589ee-0b8a-4a08-9bda-35162233421d}</Project>
-      <Name>CommunicationComponent</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LiveTileUpdateComponent\LiveTileUpdateComponent.csproj">
-      <Project>{739302bc-9de8-4d9f-9389-a44a45e46ad4}</Project>
-      <Name>LiveTileUpdateComponent</Name>
+    <ProjectReference Include="..\ServiceLibrary\ServiceLibrary.csproj">
+      <Project>{37a0be41-d5bc-4be2-8055-7a63d1ba95a8}</Project>
+      <Name>ServiceLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

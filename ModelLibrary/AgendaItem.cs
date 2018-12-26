@@ -11,7 +11,7 @@ using System.Windows.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace ModelComponent
+namespace ModelLibrary
 {
     public class AgendaItemContext : DbContext
     {

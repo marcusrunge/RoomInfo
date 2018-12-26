@@ -1,6 +1,6 @@
 ﻿using Windows.Storage;
 
-namespace RoomInfo.Services
+namespace ServiceLibrary
 {
     public interface IApplicationDataService
     {
