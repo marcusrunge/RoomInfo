@@ -24,6 +24,7 @@ namespace RoomInfo.ViewModels
     {
         IDatabaseService _databaseService;
         IApplicationDataService _applicationDataService;
+        ILiveTileUpdateService _liveTileUpdateService;
         AgendaItem _activeAgendaItem;
 
         OccupancyVisualState _occupancy = default(OccupancyVisualState);
@@ -60,6 +61,7 @@ namespace RoomInfo.ViewModels
         {
             _databaseService = unityContainer.Resolve<IDatabaseService>();
             _applicationDataService = unityContainer.Resolve<IApplicationDataService>();
+            _liveTileUpdateService = unityContainer.Resolve<ILiveTileUpdateService>();
         }
 
         public async override void OnNavigatedTo(NavigatedToEventArgs navigatedToEventArgs, Dictionary<string, object> viewModelState)
@@ -84,8 +86,8 @@ namespace RoomInfo.ViewModels
                 Clock = DateTime.Now.ToString("t", cultureInfo) + " " + resourceLoader.GetString("InfoViewModel_Clock");
                 Date = DateTime.Now.ToString("D", cultureInfo);
             };
-            dispatcherTimer.Start();            
-            SelectedComboBoxIndex = _applicationDataService.GetSetting<int>("StandardOccupancy");
+            dispatcherTimer.Start();
+            SelectedComboBoxIndex = _applicationDataService.GetSetting<bool>("OccupancyOverridden") ? _applicationDataService.GetSetting<int>("OverriddenOccupancy") : _applicationDataService.GetSetting<int>("StandardOccupancy");
             Occupancy = OccupancyVisualState.UndefinedVisualState;
             Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
             await UpdateDayAgenda();
@@ -105,17 +107,18 @@ namespace RoomInfo.ViewModels
         }
 
         private void UpdateTimerTask()
-        {            
+        {
             CoreDispatcher coreDispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
-            if (AgendaItems.Count > 0 )
+            if (AgendaItems.Count > 0)
             {
                 if (AgendaItems[0].Start < DateTime.Now && AgendaItems[0].End > DateTime.Now && !AgendaItems[0].IsOverridden)
                 {
                     Occupancy = (OccupancyVisualState)AgendaItems[0].Occupancy;
+                    _applicationDataService.SaveSetting("OccupancyOverridden", false);
                     SelectedComboBoxIndex = AgendaItems[0].Occupancy;
                     _activeAgendaItem = AgendaItems[0];
                 }
-                else if(!AgendaItems[0].IsOverridden)
+                else if (!AgendaItems[0].IsOverridden)
                 {
                     TimeSpan startTimeSpan = AgendaItems[0].Start - DateTime.Now;
                     ThreadPoolTimer startThreadPoolTimer = ThreadPoolTimer.CreateTimer(async (source) =>
@@ -123,11 +126,13 @@ namespace RoomInfo.ViewModels
                         await coreDispatcher.RunAsync(CoreDispatcherPriority.High, () =>
                         {
                             Occupancy = (OccupancyVisualState)AgendaItems[0].Occupancy;
+                            _applicationDataService.SaveSetting("OccupancyOverridden", false);
                             SelectedComboBoxIndex = AgendaItems[0].Occupancy;
                             _activeAgendaItem = AgendaItems[0];
                         });
                     }, startTimeSpan);
                 }
+                _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(_activeAgendaItem));
 
                 TimeSpan endTimeSpan = AgendaItems[0].End - DateTime.Now;
                 ThreadPoolTimer endThreadPoolTimer = ThreadPoolTimer.CreateTimer(async (source) =>
@@ -139,6 +144,7 @@ namespace RoomInfo.ViewModels
                         AgendaItems.RemoveAt(0);
                         _activeAgendaItem = null;
                         await UpdateDayAgenda();
+                        _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
                     });
 
                 }, endTimeSpan);
@@ -148,11 +154,35 @@ namespace RoomInfo.ViewModels
         private ICommand _overrideOccupancyCommand;
         public ICommand OverrideOccupancyCommand => _overrideOccupancyCommand ?? (_overrideOccupancyCommand = new DelegateCommand<object>(async (param) =>
         {
+            _applicationDataService.SaveSetting("OverriddenOccupancy", SelectedComboBoxIndex);
+            _applicationDataService.SaveSetting("OccupancyOverridden", true);
             if (_activeAgendaItem != null)
             {
-                _activeAgendaItem.IsOverridden = true;
+                _activeAgendaItem.IsOverridden = true;                
                 await _databaseService.UpdateAgendaItemAsync(_activeAgendaItem);
             }
+            _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
+        }));
+
+        private ICommand _resetOccupancyCommand;
+        public ICommand ResetOccupancyCommand => _resetOccupancyCommand ?? (_resetOccupancyCommand = new DelegateCommand<object>(async (param) =>
+        {            
+            _applicationDataService.SaveSetting("OccupancyOverridden", false);
+            if (_activeAgendaItem != null)
+            {
+                _applicationDataService.SaveSetting("OverriddenOccupancy", (int)Occupancy);
+                _activeAgendaItem.IsOverridden = false;
+                SelectedComboBoxIndex = _activeAgendaItem.Occupancy;
+                await _databaseService.UpdateAgendaItemAsync(_activeAgendaItem);
+            }
+            else
+            {
+                SelectedComboBoxIndex = _applicationDataService.GetSetting<int>("StandardOccupancy");                
+                _applicationDataService.SaveSetting("OverriddenOccupancy", (int)Occupancy);                
+            }
+            Occupancy = OccupancyVisualState.UndefinedVisualState;
+            Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
+            _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
         }));
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Threading.Tasks;
+using BackgroundComponent;
 using Microsoft.Practices.ServiceLocation;
 using Microsoft.Practices.Unity;
 using Prism.Events;
@@ -11,6 +12,7 @@ using Prism.Windows.AppModel;
 using RoomInfo.Services;
 using ServiceLibrary;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Background;
 using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 
@@ -19,6 +21,8 @@ namespace RoomInfo
     [Windows.UI.Xaml.Data.Bindable]
     public sealed partial class App : PrismUnityApplication
     {
+        IBackgroundTaskService _backgroundTaskService;
+        ILiveTileUpdateService _liveTileUpdateService;
         public App()
         {
             InitializeComponent();
@@ -32,11 +36,13 @@ namespace RoomInfo
             Container.RegisterType<ISettingsService, SettingsService>();
             Container.RegisterType<IDatabaseService, DatabaseService>();
             Container.RegisterType<IApplicationDataService, ApplicationDataService>();
+            Container.RegisterType<ILiveTileUpdateService, LiveTileUpdateService>();
             Container.RegisterType<IEventAggregator, EventAggregator>(new ContainerControlledLifetimeManager());
             Container.RegisterType<IBackgroundTaskService, BackgroundTaskService>();
-            UnityServiceLocator unityServiceLocator = new UnityServiceLocator(Container);
-            ServiceLocator.SetLocatorProvider(() => unityServiceLocator);
-                     
+            Container.RegisterType<ITransmissionControlService, TransmissionControlService>();
+            Container.RegisterType<IUserDatagramService, UserDatagramService>();
+            _backgroundTaskService = Container.Resolve<IBackgroundTaskService>();
+            _liveTileUpdateService = Container.Resolve<ILiveTileUpdateService>();
         }
 
         protected override Task OnLaunchApplicationAsync(LaunchActivatedEventArgs args)
@@ -46,10 +52,12 @@ namespace RoomInfo
 
         private async Task LaunchApplicationAsync(string page, object launchParam)
         {
-            Services.ThemeSelectorService.SetRequestedTheme();
+            ThemeSelectorService.SetRequestedTheme();
             NavigationService.Navigate(page, launchParam);
-            Window.Current.Activate();            
-            await Task.CompletedTask;
+            Window.Current.Activate();
+            _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
+            await _backgroundTaskService.Register<LiveTileUpdateBackgroundTask>(new TimeTrigger(15, false));
+            //await Task.CompletedTask;
         }
 
         protected override Task OnActivateApplicationAsync(IActivatedEventArgs args)
@@ -75,6 +83,13 @@ namespace RoomInfo
                 return Type.GetType(viewModelTypeName);
             });
             await base.OnInitializeAsync(args);
+        }
+
+        protected override void ConfigureServiceLocator()
+        {
+            base.ConfigureServiceLocator();            
+            UnityServiceLocator unityServiceLocator = new UnityServiceLocator(Container);
+            ServiceLocator.SetLocatorProvider(() => unityServiceLocator);
         }
     }
 }

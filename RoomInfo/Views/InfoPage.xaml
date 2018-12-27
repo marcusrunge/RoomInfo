@@ -20,7 +20,7 @@
     
     <Grid
         x:Name="ContentArea"
-        Margin="{StaticResource MediumLeftRightMargin}">
+        Margin="{StaticResource MediumLeftRightBottomMargin}">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="OccupancyVisualStateGroup">
                 <VisualState x:Name="FreeVisualState">
@@ -310,8 +310,9 @@
                     <ColumnDefinition Width="4*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock x:Uid="Info_Schedule" FontSize="48"/>
-                <ListView x:Name="Agenda" Grid.Column="1" ItemsSource="{Binding AgendaItems}" >
+                <TextBlock x:Name="infoScheduleTextBlock" x:Uid="Info_Schedule" FontSize="48" VerticalAlignment="Top"/>
+                <Button Content="RESET" FontSize="48" VerticalAlignment="Bottom" Width="{Binding Path=ActualWidth,ElementName=infoScheduleTextBlock}" HorizontalAlignment="Center" Command="{Binding ResetOccupancyCommand}"/>
+                <ListView x:Name="Agenda" Grid.Column="1" ItemsSource="{Binding AgendaItems}" >                    
                     <ListView.ItemTemplate>
                         <DataTemplate >
                             <StackPanel>

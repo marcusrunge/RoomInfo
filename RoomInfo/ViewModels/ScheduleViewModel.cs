@@ -114,9 +114,9 @@ namespace RoomInfo.ViewModels
             {
                 var now = DateTime.Now;
                 StartDate = now.Date;
-                StartTime = TimeSpan.FromTicks(now.TimeOfDay.Ticks);
+                StartTime = TimeSpan.FromSeconds(now.TimeOfDay.TotalSeconds);
                 EndDate = now.Date;
-                EndTime = TimeSpan.FromTicks(now.TimeOfDay.Ticks);
+                EndTime = TimeSpan.FromSeconds(now.TimeOfDay.TotalSeconds);
                 Title = "";
                 Description = "";
                 IsAllDayEvent = false;
