@@ -23,9 +23,18 @@ namespace ModelLibrary
     }
 
     public class AgendaItem : INotifyPropertyChanged
-    {
+    {                
+        IEventAggregator _eventAggregator = default(IEventAggregator);
         [NotMapped]
-        public IEventAggregator EventAggregator { get; set; }     
+        public IEventAggregator EventAggregator
+        {
+            get => _eventAggregator;
+            set
+            {
+                SetProperty(ref _eventAggregator, value);
+                EventAggregator.GetEvent<UpdateWidthEvent>().Subscribe(w => Width = w);
+            }
+        }
 
         int _id = default(int);
         [Key]

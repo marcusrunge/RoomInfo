@@ -172,7 +172,7 @@ namespace RoomInfo.ViewModels
         public ICommand HandleCalendarViewDayItemChangingCommand => _handleCalendarViewDayItemChangingCommand ?? (_handleCalendarViewDayItemChangingCommand = new DelegateCommand<object>((param) =>
         {
             var frameworkElementCalendarViewDayItemChangingEventArgs = param as CalendarViewDayItemChangingEventArgs;
-            if (calendarPanel == null) calendarPanel = frameworkElementCalendarViewDayItemChangingEventArgs.Item.Parent as CalendarPanel;
+            if (calendarPanel == null) calendarPanel = frameworkElementCalendarViewDayItemChangingEventArgs.Item.Parent as CalendarPanel;            
         }));
 
         private ICommand _saveFlyoutCommand;
@@ -180,8 +180,16 @@ namespace RoomInfo.ViewModels
         {
         }));
 
+        private ICommand _updateWidthCommand;
+        public ICommand UpdateWidthCommand => _updateWidthCommand ?? (_updateWidthCommand = new DelegateCommand<object>((param) =>
+        {
+            if (param == null) return;
+            else _eventAggregator.GetEvent<UpdateWidthEvent>().Publish((double)param);            
+        }));
+
         private async Task UpdateCalendarViewDayItems()
         {
+            double width = 0;
             _agendaItems = await _databaseService.GetAgendaItemsAsync();
             var calendarViewDayItems = calendarPanel.Children().OfType<CalendarViewDayItem>();
             foreach (var calendarViewDayItem in calendarViewDayItems)
@@ -196,7 +204,9 @@ namespace RoomInfo.ViewModels
                 {
                     FlyoutParent = s as FrameworkElement;
                 };
+                width = calendarViewDayItem.ActualWidth;
             }
+            _eventAggregator.GetEvent<UpdateWidthEvent>().Publish(width);
         }
 
         private async Task UpdateCalendarViewDayItems(DateTime dateTime)

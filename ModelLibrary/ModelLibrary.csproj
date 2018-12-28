@@ -123,7 +123,7 @@
     <Compile Include="AgendaItem.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReservationEvents.cs" />
+    <Compile Include="Events.cs" />
     <Compile Include="RoomPackage.cs" />
     <EmbeddedResource Include="Properties\ModelLibrary.rd.xml" />
   </ItemGroup>

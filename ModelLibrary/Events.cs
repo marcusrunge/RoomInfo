@@ -8,4 +8,7 @@ namespace ModelLibrary
     public class UpdateReservationEvent : PubSubEvent<AgendaItem>
     {
     }
+    public class UpdateWidthEvent : PubSubEvent<double>
+    {
+    }
 }

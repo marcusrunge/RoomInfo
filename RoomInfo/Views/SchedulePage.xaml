@@ -96,10 +96,10 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate>
-                                <ListView x:Name="listView" ItemsSource="{Binding}" Margin="0,30,0,0" VerticalAlignment="Stretch" Height="119" >
+                                <ListView x:Name="listView" ItemsSource="{Binding}" Margin="0,30,0,0" VerticalAlignment="Stretch" Height="119" >                                    
                                     <ListView.ItemTemplate>
                                         <DataTemplate x:Name="agendaItemDataTemplate" >
-                                            <Grid x:Name="dataTemplateGrid">
+                                            <Grid x:Name="dataTemplateGrid" BorderBrush="LightGray" BorderThickness="0,0,0,1" Width="{Binding Width}">
                                                 <interactivity:Interaction.Behaviors>
                                                     <core:EventTriggerBehavior EventName="RightTapped">
                                                         <core:InvokeCommandAction Command="{Binding ShowAttachedFlyoutCommand}" CommandParameter="{Binding ElementName=dataTemplateGrid}"/>
