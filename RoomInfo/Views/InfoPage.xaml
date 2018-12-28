@@ -40,18 +40,7 @@
                             <Setter.Value>
                                 <Color>#FF007900</Color>
                             </Setter.Value>
-                        </Setter>
-                        <Setter Target="StatusBar.(FrameworkElement.VerticalAlignment)">
-                            <Setter.Value>
-                                <VerticalAlignment>Bottom</VerticalAlignment>
-                            </Setter.Value>
-                        </Setter>
-                        <Setter Target="StatusBar.(FrameworkElement.Height)" Value="333"/>
-                        <Setter Target="StatusBar.(FrameworkElement.Margin)">
-                            <Setter.Value>
-                                <Thickness>0,0,0,0</Thickness>
-                            </Setter.Value>
-                        </Setter>
+                        </Setter>                                               
                         <Setter Target="StatusBar.(FrameworkElement.HorizontalAlignment)">
                             <Setter.Value>
                                 <HorizontalAlignment>Stretch</HorizontalAlignment>
@@ -289,7 +278,11 @@
                 </StackPanel>
 
             </Grid>
-            <StackPanel x:Name="StatusBar" Grid.Row="1" Background="#00000000" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid x:Name="StatusBar" Grid.Row="1" Background="#00000000" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
                 <Grid HorizontalAlignment="Center">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -298,12 +291,12 @@
                     <TextBlock x:Name="roomNameTextBlock"  Text="{Binding RoomName}" FontSize="72" FocusVisualPrimaryBrush="#00000000" Foreground="#00000000" Margin="0,0,36,0"/>
                     <TextBlock x:Name="roomNumberTextBlock" Grid.Column="1" Text="{Binding RoomNumber}" FontSize="72" FocusVisualPrimaryBrush="#00000000" Foreground="#00000000" Margin="36,0,0,0"/>
                 </Grid>
-                <TextBlock x:Name="occupancyTextBlock" x:Uid="Info_OccupancyTextBlockFree" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
-                <TextBlock x:Name="absentOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockAbsent" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
-                <TextBlock x:Name="occupiedOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockOccupied" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
-                <TextBlock x:Name="busyOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockBusy" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
-                <TextBlock x:Name="occupancySymbolTextBlock" FontSize="216" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" TextLineBounds="TrimToCapHeight" />
-            </StackPanel>
+                <TextBlock Grid.Row="1" x:Name="occupancyTextBlock" x:Uid="Info_OccupancyTextBlockFree" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
+                <TextBlock Grid.Row="1" x:Name="absentOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockAbsent" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
+                <TextBlock Grid.Row="1" x:Name="occupiedOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockOccupied" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
+                <TextBlock Grid.Row="1" x:Name="busyOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockBusy" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
+                <TextBlock Grid.Row="1" x:Name="occupancySymbolTextBlock" FontSize="216" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" TextLineBounds="TrimToCapHeight" />
+            </Grid>
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
