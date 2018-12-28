@@ -57,6 +57,9 @@ namespace RoomInfo.ViewModels
         string _roomNumber = default(string);
         public string RoomNumber { get => _roomNumber; set { SetProperty(ref _roomNumber, value); } }
 
+        Visibility _resetButtonVisibility = default(Visibility);
+        public Visibility ResetButtonVisibility { get => _resetButtonVisibility; set { SetProperty(ref _resetButtonVisibility, value); } }
+
         public InfoViewModel(IUnityContainer unityContainer)
         {
             _databaseService = unityContainer.Resolve<IDatabaseService>();
@@ -88,6 +91,7 @@ namespace RoomInfo.ViewModels
             };
             dispatcherTimer.Start();
             SelectedComboBoxIndex = _applicationDataService.GetSetting<bool>("OccupancyOverridden") ? _applicationDataService.GetSetting<int>("OverriddenOccupancy") : _applicationDataService.GetSetting<int>("StandardOccupancy");
+            ResetButtonVisibility = _applicationDataService.GetSetting<bool>("OccupancyOverridden") ? Visibility.Visible : Visibility.Collapsed;
             Occupancy = OccupancyVisualState.UndefinedVisualState;
             Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
             await UpdateDayAgenda();
@@ -115,6 +119,7 @@ namespace RoomInfo.ViewModels
                 {
                     Occupancy = (OccupancyVisualState)AgendaItems[0].Occupancy;
                     _applicationDataService.SaveSetting("OccupancyOverridden", false);
+                    ResetButtonVisibility = Visibility.Collapsed;
                     SelectedComboBoxIndex = AgendaItems[0].Occupancy;
                     _activeAgendaItem = AgendaItems[0];
                 }
@@ -127,6 +132,7 @@ namespace RoomInfo.ViewModels
                         {
                             Occupancy = (OccupancyVisualState)AgendaItems[0].Occupancy;
                             _applicationDataService.SaveSetting("OccupancyOverridden", false);
+                            ResetButtonVisibility = Visibility.Collapsed;
                             SelectedComboBoxIndex = AgendaItems[0].Occupancy;
                             _activeAgendaItem = AgendaItems[0];
                         });
@@ -162,6 +168,7 @@ namespace RoomInfo.ViewModels
                 await _databaseService.UpdateAgendaItemAsync(_activeAgendaItem);
             }
             _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
+            ResetButtonVisibility = Visibility.Visible;
         }));
 
         private ICommand _resetOccupancyCommand;
@@ -183,6 +190,7 @@ namespace RoomInfo.ViewModels
             Occupancy = OccupancyVisualState.UndefinedVisualState;
             Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
             _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
+            ResetButtonVisibility = Visibility.Collapsed;
         }));
     }
 }

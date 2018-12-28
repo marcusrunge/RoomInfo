@@ -311,7 +311,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock x:Name="infoScheduleTextBlock" x:Uid="Info_Schedule" FontSize="48" VerticalAlignment="Top"/>
-                <Button Content="RESET" FontSize="48" VerticalAlignment="Bottom" Width="{Binding Path=ActualWidth,ElementName=infoScheduleTextBlock}" HorizontalAlignment="Center" Command="{Binding ResetOccupancyCommand}"/>
+                <Button Content="RESET" FontSize="48" VerticalAlignment="Bottom" Width="{Binding Path=ActualWidth,ElementName=infoScheduleTextBlock}" HorizontalAlignment="Center" Command="{Binding ResetOccupancyCommand}" Visibility="{Binding ResetButtonVisibility}"/>
                 <ListView x:Name="Agenda" Grid.Column="1" ItemsSource="{Binding AgendaItems}" >                    
                     <ListView.ItemTemplate>
                         <DataTemplate >
