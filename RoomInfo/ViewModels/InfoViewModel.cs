@@ -107,10 +107,10 @@ namespace RoomInfo.ViewModels
             {
                 AgendaItems.Add(agendaItems[i]);
             }
-            UpdateTimerTask();
+            await UpdateTimerTask();
         }
 
-        private void UpdateTimerTask()
+        private async Task UpdateTimerTask()
         {
             CoreDispatcher coreDispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
             if (AgendaItems.Count > 0)
@@ -138,7 +138,7 @@ namespace RoomInfo.ViewModels
                         });
                     }, startTimeSpan);
                 }
-                _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(_activeAgendaItem));
+                _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
 
                 TimeSpan endTimeSpan = AgendaItems[0].End - DateTime.Now;
                 ThreadPoolTimer endThreadPoolTimer = ThreadPoolTimer.CreateTimer(async (source) =>
@@ -164,7 +164,7 @@ namespace RoomInfo.ViewModels
             _applicationDataService.SaveSetting("OccupancyOverridden", true);
             if (_activeAgendaItem != null)
             {
-                _activeAgendaItem.IsOverridden = true;                
+                _activeAgendaItem.IsOverridden = true;
                 await _databaseService.UpdateAgendaItemAsync(_activeAgendaItem);
             }
             _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
@@ -173,7 +173,7 @@ namespace RoomInfo.ViewModels
 
         private ICommand _resetOccupancyCommand;
         public ICommand ResetOccupancyCommand => _resetOccupancyCommand ?? (_resetOccupancyCommand = new DelegateCommand<object>(async (param) =>
-        {            
+        {
             _applicationDataService.SaveSetting("OccupancyOverridden", false);
             if (_activeAgendaItem != null)
             {
@@ -184,13 +184,23 @@ namespace RoomInfo.ViewModels
             }
             else
             {
-                SelectedComboBoxIndex = _applicationDataService.GetSetting<int>("StandardOccupancy");                
-                _applicationDataService.SaveSetting("OverriddenOccupancy", (int)Occupancy);                
+                SelectedComboBoxIndex = _applicationDataService.GetSetting<int>("StandardOccupancy");
+                _applicationDataService.SaveSetting("OverriddenOccupancy", (int)Occupancy);
             }
             Occupancy = OccupancyVisualState.UndefinedVisualState;
             Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
             _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
             ResetButtonVisibility = Visibility.Collapsed;
+        }));
+
+        private ICommand _updateDataTemplateWidthCommand;
+        public ICommand UpdateDataTemplateWidthCommand => _updateDataTemplateWidthCommand ?? (_updateDataTemplateWidthCommand = new DelegateCommand<object>((param) =>
+        {
+            if (param == null) return;
+            for (int i = 0; i < AgendaItems.Count; i++)
+            {
+                AgendaItems[i].Width = (double)param;
+            }
         }));
     }
 }

@@ -53,6 +53,10 @@ namespace ModelLibrary
         int _occupancy = default(int);
         public int Occupancy { get => _occupancy; set { SetProperty(ref _occupancy, value); } }
 
+        double _width = default(double);
+        [NotMapped]
+        public double Width { get => _width; set { SetProperty(ref _width, value); } }
+
         private ICommand _updateReservationCommand;
         public ICommand UpdateReservationCommand => _updateReservationCommand ?? (_updateReservationCommand = new DelegateCommand<object>((param) =>
         {
