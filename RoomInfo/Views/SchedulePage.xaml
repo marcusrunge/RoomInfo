@@ -60,7 +60,7 @@
                     <ComboBoxItem x:Uid="Info_OccupancyOccupied" />
                     <ComboBoxItem x:Uid="Info_OccupancyAbsent" />
                 </ComboBox>
-                <Button x:Name="saveReservationButton" Grid.Row="6" HorizontalAlignment="Right" x:Uid="Schedule_SaveReservationButton" Command="{Binding AddOrUpdateReservationCommand}" CommandParameter="{Binding ElementName=flyoutGrid}" />
+                <Button x:Name="saveReservationButton" Grid.Row="6" HorizontalAlignment="Right" x:Uid="Schedule_SaveReservationButton" Command="{Binding AddOrUpdateReservationCommand}" CommandParameter="{Binding ElementName=flyoutGrid}" IsEnabled="{Binding IsReservationButtonEnabled}" />
             </Grid>
         </Flyout>
     </Page.Resources>

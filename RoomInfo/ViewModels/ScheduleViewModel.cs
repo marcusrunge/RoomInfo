@@ -26,6 +26,7 @@ namespace RoomInfo.ViewModels
         readonly IUnityContainer _unityContainer;
         AgendaItem _agendaItem;
         double _agendaItemWidth;
+        IDateTimeValidationService _dateTimeValidationService;
 
         string _topDate = default(string);
         public string TopDate { get => _topDate; set { SetProperty(ref _topDate, value); } }
@@ -40,10 +41,29 @@ namespace RoomInfo.ViewModels
         public DateTimeOffset EndDate { get => _endDate; set { SetProperty(ref _endDate, value); } }
 
         TimeSpan _startTime = default(TimeSpan);
-        public TimeSpan StartTime { get => _startTime; set { SetProperty(ref _startTime, value); EndTime = StartTime; } }
+        public TimeSpan StartTime
+        {
+            get => _startTime; set
+            {
+                SetProperty(ref _startTime, value);
+                EndTime = StartTime;
+                IsReservationButtonEnabled = _dateTimeValidationService.Validate(new AgendaItem() { Start = StartDate.Add(StartTime), End = EndDate.Add(EndTime) }, _agendaItems);
+            }
+        }
 
         TimeSpan _endTime = default(TimeSpan);
-        public TimeSpan EndTime { get => _endTime; set { SetProperty(ref _endTime, value); } }
+        public TimeSpan EndTime
+        {
+            get => _endTime;
+            set
+            {
+                SetProperty(ref _endTime, value);
+                IsReservationButtonEnabled = _dateTimeValidationService.Validate(new AgendaItem() { Start = StartDate.Add(StartTime), End = EndDate.Add(EndTime) }, _agendaItems);
+            }
+        }
+
+        bool _isReservationButtonEnabled = default(bool);
+        public bool IsReservationButtonEnabled { get => _isReservationButtonEnabled; set { SetProperty(ref _isReservationButtonEnabled, value); } }
 
         bool _isAllDayEvent = default(bool);
         public bool IsAllDayEvent
@@ -78,6 +98,7 @@ namespace RoomInfo.ViewModels
         {
             _unityContainer = unityContainer;
             _databaseService = unityContainer.Resolve<IDatabaseService>();
+            _dateTimeValidationService = unityContainer.Resolve<IDateTimeValidationService>();
             _eventAggregator = unityContainer.Resolve<IEventAggregator>();
         }
 
@@ -122,6 +143,7 @@ namespace RoomInfo.ViewModels
                 Description = "";
                 IsAllDayEvent = false;
                 SelectedComboBoxIndex = 2;
+                IsReservationButtonEnabled = false;
             }));
 
         private ICommand _hideReservationCommand;
@@ -148,6 +170,7 @@ namespace RoomInfo.ViewModels
                 StartDate = StartDate.Add(StartDate.TimeOfDay + StartTime);
                 EndDate = EndDate.Date;
                 EndDate = EndDate.Add(EndDate.TimeOfDay + EndTime);
+                if (!_dateTimeValidationService.Validate(new AgendaItem() { Start = StartDate, End = EndDate }, await _databaseService.GetAgendaItemsAsync())) return;
                 if (Id == 0) await _databaseService.AddAgendaItemAsync(new AgendaItem() { EventAggregator = _eventAggregator, Title = Title, Start = StartDate, End = EndDate, Description = Description, IsAllDayEvent = IsAllDayEvent, Occupancy = SelectedComboBoxIndex });
                 else
                 {
@@ -173,7 +196,7 @@ namespace RoomInfo.ViewModels
         public ICommand HandleCalendarViewDayItemChangingCommand => _handleCalendarViewDayItemChangingCommand ?? (_handleCalendarViewDayItemChangingCommand = new DelegateCommand<object>((param) =>
         {
             var frameworkElementCalendarViewDayItemChangingEventArgs = param as CalendarViewDayItemChangingEventArgs;
-            if (calendarPanel == null) calendarPanel = frameworkElementCalendarViewDayItemChangingEventArgs.Item.Parent as CalendarPanel;            
+            if (calendarPanel == null) calendarPanel = frameworkElementCalendarViewDayItemChangingEventArgs.Item.Parent as CalendarPanel;
         }));
 
         private ICommand _saveFlyoutCommand;
@@ -185,7 +208,7 @@ namespace RoomInfo.ViewModels
         public ICommand UpdateWidthCommand => _updateWidthCommand ?? (_updateWidthCommand = new DelegateCommand<object>((param) =>
         {
             if (param == null) return;
-            else _eventAggregator.GetEvent<UpdateWidthEvent>().Publish((double)param);            
+            else _eventAggregator.GetEvent<UpdateWidthEvent>().Publish((double)param);
         }));
 
         private async Task UpdateCalendarViewDayItems()

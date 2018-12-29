@@ -1,5 +1,4 @@
-﻿using Microsoft.Practices.ServiceLocation;
-using Microsoft.Toolkit.Uwp.Notifications;
+﻿using Microsoft.Toolkit.Uwp.Notifications;
 using ModelLibrary;
 using System;
 using System.Collections.Generic;

@@ -9,7 +9,6 @@ using ModelLibrary;
 using Prism.Commands;
 using Prism.Windows.Mvvm;
 using Prism.Windows.Navigation;
-using RoomInfo.Services;
 using ServiceLibrary;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Resources;

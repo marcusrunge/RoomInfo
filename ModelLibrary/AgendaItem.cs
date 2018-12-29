@@ -62,6 +62,7 @@ namespace ModelLibrary
         int _occupancy = default(int);
         public int Occupancy { get => _occupancy; set { SetProperty(ref _occupancy, value); } }
 
+        [NotMapped]
         double _width = default(double);
         [NotMapped]
         public double Width { get => _width; set { SetProperty(ref _width, value); } }

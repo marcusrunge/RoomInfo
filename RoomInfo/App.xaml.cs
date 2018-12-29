@@ -41,6 +41,7 @@ namespace RoomInfo
             Container.RegisterType<IBackgroundTaskService, BackgroundTaskService>();
             Container.RegisterType<ITransmissionControlService, TransmissionControlService>();
             Container.RegisterType<IUserDatagramService, UserDatagramService>();
+            Container.RegisterType<IDateTimeValidationService, DateTimeValidationService>();
             _backgroundTaskService = Container.Resolve<IBackgroundTaskService>();
             _liveTileUpdateService = Container.Resolve<ILiveTileUpdateService>();
         }
