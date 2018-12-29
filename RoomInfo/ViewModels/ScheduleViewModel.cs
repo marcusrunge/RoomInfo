@@ -25,6 +25,7 @@ namespace RoomInfo.ViewModels
         IEventAggregator _eventAggregator;
         readonly IUnityContainer _unityContainer;
         AgendaItem _agendaItem;
+        double _agendaItemWidth;
 
         string _topDate = default(string);
         public string TopDate { get => _topDate; set { SetProperty(ref _topDate, value); } }
@@ -189,7 +190,6 @@ namespace RoomInfo.ViewModels
 
         private async Task UpdateCalendarViewDayItems()
         {
-            double width = 0;
             _agendaItems = await _databaseService.GetAgendaItemsAsync();
             var calendarViewDayItems = calendarPanel.Children().OfType<CalendarViewDayItem>();
             foreach (var calendarViewDayItem in calendarViewDayItems)
@@ -204,9 +204,9 @@ namespace RoomInfo.ViewModels
                 {
                     FlyoutParent = s as FrameworkElement;
                 };
-                width = calendarViewDayItem.ActualWidth;
+                _agendaItemWidth = calendarViewDayItem.ActualWidth;
             }
-            _eventAggregator.GetEvent<UpdateWidthEvent>().Publish(width);
+            _eventAggregator.GetEvent<UpdateWidthEvent>().Publish(_agendaItemWidth);
         }
 
         private async Task UpdateCalendarViewDayItems(DateTime dateTime)
@@ -227,7 +227,9 @@ namespace RoomInfo.ViewModels
                     {
                         FlyoutParent = s as FrameworkElement;
                     };
+                    _agendaItemWidth = calendarViewDayItem.ActualWidth;
                 }
+                _eventAggregator.GetEvent<UpdateWidthEvent>().Publish(_agendaItemWidth);
             }
         }
     }

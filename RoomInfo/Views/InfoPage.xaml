@@ -297,7 +297,7 @@
                 <TextBlock Grid.Row="1" x:Name="busyOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockBusy" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
                 <TextBlock Grid.Row="1" x:Name="occupancySymbolTextBlock" FontSize="216" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" TextLineBounds="TrimToCapHeight" />
             </Grid>
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="2" Margin="0,12,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="4*"/>
@@ -305,7 +305,7 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock x:Name="infoScheduleTextBlock" x:Uid="Info_Schedule" FontSize="48" VerticalAlignment="Top"/>
                 <Button Content="RESET" FontSize="48" VerticalAlignment="Bottom" Width="{Binding Path=ActualWidth,ElementName=infoScheduleTextBlock}" HorizontalAlignment="Center" Command="{Binding ResetOccupancyCommand}" Visibility="{Binding ResetButtonVisibility}"/>
-                <ListView x:Name="Agenda" Grid.Column="1" ItemsSource="{Binding AgendaItems}" Margin="6,0,6,0" >
+                <ListView x:Name="Agenda" Grid.Column="1" ItemsSource="{Binding AgendaItems}">
                     <interactivity:Interaction.Behaviors>
                         <core:EventTriggerBehavior EventName="SizeChanged">
                             <core:InvokeCommandAction Command="{Binding UpdateDataTemplateWidthCommand}" CommandParameter="{Binding ElementName=Agenda, Path=ActualWidth}"/>

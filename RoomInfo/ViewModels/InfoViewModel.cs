@@ -26,6 +26,7 @@ namespace RoomInfo.ViewModels
         IApplicationDataService _applicationDataService;
         ILiveTileUpdateService _liveTileUpdateService;
         AgendaItem _activeAgendaItem;
+        double _agendaItemWidth;
 
         OccupancyVisualState _occupancy = default(OccupancyVisualState);
         public OccupancyVisualState Occupancy { get => _occupancy; set { SetProperty(ref _occupancy, value); } }
@@ -105,6 +106,7 @@ namespace RoomInfo.ViewModels
             var agendaItems = await _databaseService.GetAgendaItemsAsync(dateTimeNow);
             for (int i = 0; i < agendaItems.Count; i++)
             {
+                agendaItems[i].Width = _agendaItemWidth;
                 AgendaItems.Add(agendaItems[i]);
             }
             await UpdateTimerTask();
@@ -147,7 +149,7 @@ namespace RoomInfo.ViewModels
                     {
                         SelectedComboBoxIndex = _applicationDataService.GetSetting<int>("StandardOccupancy");
                         Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
-                        AgendaItems.RemoveAt(0);
+                        if (AgendaItems.Count > 0) AgendaItems.RemoveAt(0);
                         _activeAgendaItem = null;
                         await UpdateDayAgenda();
                         _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
@@ -197,9 +199,10 @@ namespace RoomInfo.ViewModels
         public ICommand UpdateDataTemplateWidthCommand => _updateDataTemplateWidthCommand ?? (_updateDataTemplateWidthCommand = new DelegateCommand<object>((param) =>
         {
             if (param == null) return;
+            _agendaItemWidth = (double)param;
             for (int i = 0; i < AgendaItems.Count; i++)
             {
-                AgendaItems[i].Width = (double)param;
+                AgendaItems[i].Width = _agendaItemWidth;
             }
         }));
     }
