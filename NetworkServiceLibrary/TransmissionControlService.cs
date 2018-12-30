@@ -119,6 +119,10 @@ namespace NetworkServiceLibrary
                     break;
                 case PayloadType.Schedule:
                     break;
+                case PayloadType.RequestOccupancy:
+                    break;
+                case PayloadType.RequestSchedule:
+                    break;
                 default:
                     break;
             }
