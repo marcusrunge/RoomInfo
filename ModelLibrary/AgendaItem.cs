@@ -62,6 +62,10 @@ namespace ModelLibrary
         int _occupancy = default(int);
         public int Occupancy { get => _occupancy; set { SetProperty(ref _occupancy, value); } }
 
+        public long TimeStamp { get; set; }
+
+        public bool IsDeleted { get; set; }
+
         [NotMapped]
         double _width = default(double);
         [NotMapped]

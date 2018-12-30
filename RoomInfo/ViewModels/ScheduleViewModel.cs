@@ -171,7 +171,7 @@ namespace RoomInfo.ViewModels
                 EndDate = EndDate.Date;
                 EndDate = EndDate.Add(EndDate.TimeOfDay + EndTime);
                 if (!_dateTimeValidationService.Validate(new AgendaItem() { Start = StartDate, End = EndDate }, await _databaseService.GetAgendaItemsAsync())) return;
-                if (Id == 0) await _databaseService.AddAgendaItemAsync(new AgendaItem() { EventAggregator = _eventAggregator, Title = Title, Start = StartDate, End = EndDate, Description = Description, IsAllDayEvent = IsAllDayEvent, Occupancy = SelectedComboBoxIndex });
+                if (Id == 0) await _databaseService.AddAgendaItemAsync(new AgendaItem() { EventAggregator = _eventAggregator, Title = Title, Start = StartDate, End = EndDate, Description = Description, IsAllDayEvent = IsAllDayEvent, Occupancy = SelectedComboBoxIndex, TimeStamp = DateTimeOffset.Now.ToUnixTimeMilliseconds() });
                 else
                 {
                     _agendaItem.Title = Title;
@@ -180,6 +180,7 @@ namespace RoomInfo.ViewModels
                     _agendaItem.Description = Description;
                     _agendaItem.IsAllDayEvent = IsAllDayEvent;
                     _agendaItem.Occupancy = SelectedComboBoxIndex;
+                    _agendaItem.TimeStamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                     await _databaseService.UpdateAgendaItemAsync(_agendaItem);
                 }
                 Id = 0;
