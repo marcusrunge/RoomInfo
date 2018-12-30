@@ -13,7 +13,10 @@ using ServiceLibrary;
 using Windows.ApplicationModel;
 using Windows.Storage;
 using Windows.Storage.Pickers;
+using Windows.System;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 
 namespace RoomInfo.ViewModels
 {
@@ -42,6 +45,12 @@ namespace RoomInfo.ViewModels
 
         Uri _companyLogo = default(Uri);
         public Uri CompanyLogo { get => _companyLogo; set { SetProperty(ref _companyLogo, value); } }
+                
+        string _tcpPort = default(string);
+        public string TcpPort { get => _tcpPort; set { SetProperty(ref _tcpPort, value); if (!string.IsNullOrEmpty(UdpPort)) _applicationDataService.SaveSetting("TcpPort", TcpPort); } }
+
+        string _udpPort = default(string);
+        public string UdpPort { get => _udpPort; set { SetProperty(ref _udpPort, value); if (!string.IsNullOrEmpty(UdpPort)) _applicationDataService.SaveSetting("UdpPort", UdpPort); } }
 
         public SettingsViewModel(IApplicationDataService applicationDataService)
         {
@@ -80,6 +89,10 @@ namespace RoomInfo.ViewModels
             RoomName = _applicationDataService.GetSetting<string>("RoomName");
             RoomNumber = _applicationDataService.GetSetting<string>("RoomNumber");
             CompanyName = _applicationDataService.GetSetting<string>("CompanyName");
+            TcpPort = _applicationDataService.GetSetting<string>("TcpPort");
+            UdpPort = _applicationDataService.GetSetting<string>("UdpPort");
+            if (string.IsNullOrEmpty(TcpPort)) TcpPort = "8273";
+            if (string.IsNullOrEmpty(UdpPort)) UdpPort = "8274";
             await LoadCompanyLogo();
         }
 
@@ -111,7 +124,7 @@ namespace RoomInfo.ViewModels
             openPicker.FileTypeFilter.Add(".jpeg");
             openPicker.FileTypeFilter.Add(".png");
             StorageFile file = await openPicker.PickSingleFileAsync();
-            if(file != null)
+            if (file != null)
             {
                 StorageFolder assets = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
                 await file.CopyAsync(assets, file.Name, NameCollisionOption.ReplaceExisting);
@@ -128,7 +141,7 @@ namespace RoomInfo.ViewModels
             StorageFile storageFile = await assets.GetFileAsync(logoFileName);
             await storageFile.DeleteAsync();
             _applicationDataService.RemoveSetting("LogoFileName");
-            await LoadCompanyLogo();            
+            await LoadCompanyLogo();
         }));
 
         private async Task LoadCompanyLogo()
@@ -136,6 +149,13 @@ namespace RoomInfo.ViewModels
             StorageFolder assets = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
             string logoFileName = _applicationDataService.GetSetting<string>("LogoFileName");
             CompanyLogo = new Uri(assets.Path + "/" + logoFileName);
+        }
+
+        public void KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            int virtualKey = (int)e.Key;
+            if ((virtualKey > 47 && virtualKey < 58) || (virtualKey > 95 && virtualKey < 106)) e.Handled = false;
+            else e.Handled = true;
         }
     }
 }

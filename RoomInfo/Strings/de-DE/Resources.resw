@@ -216,6 +216,9 @@
   <data name="Settings_Personalization.Text" xml:space="preserve">
     <value>Personalisierung</value>
   </data>
+  <data name="Settings_Ports.Text" xml:space="preserve">
+    <value>Port Auswahl</value>
+  </data>
   <data name="Settings_PrivacyTermsLink.Content" xml:space="preserve">
     <value>Datenschutzerklärung</value>
   </data>
@@ -243,6 +246,9 @@
   <data name="Settings_StandardOccupancy.Text" xml:space="preserve">
     <value>Standardbelegung außerhalb von Terminen:</value>
   </data>
+  <data name="Settings_TcpPort.Text" xml:space="preserve">
+    <value>TCP-Port:</value>
+  </data>
   <data name="Settings_Theme.Text" xml:space="preserve">
     <value>Wähle Farbschema</value>
   </data>
@@ -254,5 +260,8 @@
   </data>
   <data name="Settings_Theme_Light.Content" xml:space="preserve">
     <value>Hell</value>
+  </data>
+  <data name="Settings_UdpPort.Text" xml:space="preserve">
+    <value>UDP-Port:</value>
   </data>
 </root>

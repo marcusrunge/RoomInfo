@@ -272,4 +272,13 @@
   <data name="Settings_RoomSettings.Text" xml:space="preserve">
     <value>Room settings</value>
   </data>
+  <data name="Settings_Ports.Text" xml:space="preserve">
+    <value>Port selection</value>
+  </data>
+  <data name="Settings_TcpPort.Text" xml:space="preserve">
+    <value>TCP-Port:</value>
+  </data>
+  <data name="Settings_UdpPort.Text" xml:space="preserve">
+    <value>UDP-Port:</value>
+  </data>
 </root>

@@ -17,7 +17,8 @@
     </Page.Resources>
 
     <Grid Margin="{StaticResource MediumLeftRightMargin}">
-        <StackPanel
+        <ScrollViewer>
+            <StackPanel
             x:Name="ContentArea">
             <TextBlock
                 x:Uid="Settings_Personalization"
@@ -57,6 +58,13 @@
                         </RadioButton.CommandParameter>
                     </RadioButton>
                 </StackPanel>
+            </StackPanel>
+            <StackPanel Margin="{StaticResource SettingsSubheaderMargin}">
+                <TextBlock x:Uid="Settings_Ports" Style="{StaticResource SubtitleTextBlockStyle}" />
+                <TextBlock x:Uid="Settings_TcpPort" Style="{StaticResource BodyTextStyle}"/>
+                    <TextBox Text="{Binding TcpPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" KeyDown="{x:Bind ViewModel.KeyDown}" PlaceholderText="8273" InputScope="Digits" MaxLength="5" />
+                    <TextBlock x:Uid="Settings_UdpPort" Style="{StaticResource BodyTextStyle}"/>
+                    <TextBox Text="{Binding UdpPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" KeyDown="{x:Bind ViewModel.KeyDown}" PlaceholderText="8274" InputScope="Digits" MaxLength="5" />
             </StackPanel>
             <StackPanel Margin="{StaticResource SettingsSubheaderMargin}">
                 <TextBlock x:Name="standardOccupancyTextBlock" x:Uid="Settings_StandardOccupancy" Style="{StaticResource SubtitleTextBlockStyle}" HorizontalAlignment="Left" />            
@@ -113,5 +121,6 @@
                     Margin="{StaticResource EightTopMargin}" />
             </StackPanel>
         </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>
