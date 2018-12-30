@@ -1,6 +1,6 @@
 ﻿using Windows.Storage;
 
-namespace ServiceLibrary
+namespace ApplicationServiceLibrary
 {
     public interface IApplicationDataService
     {

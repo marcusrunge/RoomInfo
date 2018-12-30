@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ServiceLibrary
+namespace ApplicationServiceLibrary
 {
     public interface IDateTimeValidationService
     {

@@ -7,8 +7,8 @@
     <ProjectGuid>{37A0BE41-D5BC-4BE2-8055-7A63D1BA95A8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ServiceLibrary</RootNamespace>
-    <AssemblyName>ServiceLibrary</AssemblyName>
+    <RootNamespace>ApplicationServiceLibrary</RootNamespace>
+    <AssemblyName>ApplicationServiceLibrary</AssemblyName>
     <DefaultLanguage>de-DE</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.17763.0</TargetPlatformVersion>
@@ -126,8 +126,6 @@
     <Compile Include="DateTimeValidationService.cs" />
     <Compile Include="LiveTileUpdateService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TransmissionControlService.cs" />
-    <Compile Include="UserDatagramService.cs" />
     <EmbeddedResource Include="Properties\ServiceLibrary.rd.xml" />
   </ItemGroup>
   <ItemGroup>

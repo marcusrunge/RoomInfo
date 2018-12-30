@@ -1,8 +1,8 @@
 ﻿namespace ModelLibrary
 {
-    public sealed class RoomPackage
+    public sealed class Room
     {
-        public string RoomDesignator { get; set; }
+        public string RoomName { get; set; }
         public string RoomNumber { get; set; }        
     }
 }

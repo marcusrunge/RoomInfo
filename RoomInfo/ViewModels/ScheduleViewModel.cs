@@ -5,7 +5,7 @@ using Prism.Events;
 using Prism.Windows.Mvvm;
 using Prism.Windows.Navigation;
 using RoomInfo.Helpers;
-using ServiceLibrary;
+using ApplicationServiceLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;

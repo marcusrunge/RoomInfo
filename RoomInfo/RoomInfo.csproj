@@ -266,9 +266,13 @@
       <Project>{fe670702-d4c1-4a85-a2df-519989143161}</Project>
       <Name>ModelLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ServiceLibrary\ServiceLibrary.csproj">
+    <ProjectReference Include="..\NetworkServiceLibrary\NetworkServiceLibrary.csproj">
+      <Project>{f2aacacb-8a8c-4016-bf1e-77289c2a3905}</Project>
+      <Name>NetworkServiceLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ServiceLibrary\ApplicationServiceLibrary.csproj">
       <Project>{37a0be41-d5bc-4be2-8055-7a63d1ba95a8}</Project>
-      <Name>ServiceLibrary</Name>
+      <Name>ApplicationServiceLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

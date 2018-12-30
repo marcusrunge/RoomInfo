@@ -1,5 +1,5 @@
 ﻿using Microsoft.Practices.Unity;
-using ServiceLibrary;
+using ApplicationServiceLibrary;
 using Windows.ApplicationModel.Background;
 
 namespace BackgroundComponent

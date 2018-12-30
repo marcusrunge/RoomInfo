@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
 using Windows.UI.Notifications;
 
-namespace ServiceLibrary
+namespace ApplicationServiceLibrary
 {
     public interface ILiveTileUpdateService
     {

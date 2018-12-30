@@ -9,7 +9,7 @@ using Prism.Windows.Navigation;
 
 using RoomInfo.Helpers;
 using RoomInfo.Services;
-using ServiceLibrary;
+using ApplicationServiceLibrary;
 using Windows.ApplicationModel;
 using Windows.Storage;
 using Windows.Storage.Pickers;

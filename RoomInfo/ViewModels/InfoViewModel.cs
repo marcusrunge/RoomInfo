@@ -9,7 +9,7 @@ using ModelLibrary;
 using Prism.Commands;
 using Prism.Windows.Mvvm;
 using Prism.Windows.Navigation;
-using ServiceLibrary;
+using ApplicationServiceLibrary;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Resources;
 using Windows.Storage;
@@ -71,7 +71,7 @@ namespace RoomInfo.ViewModels
         {
             base.OnNavigatedTo(navigatedToEventArgs, viewModelState);
             var resourceLoader = ResourceLoader.GetForCurrentView();
-            StorageFolder assets = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
+            StorageFolder assets = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Assets");
             string logoFileName = _applicationDataService.GetSetting<string>("LogoFileName");
             CompanyLogo = new Uri(assets.Path + "/" + logoFileName);
             CompanyName = _applicationDataService.GetSetting<string>("CompanyName");

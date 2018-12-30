@@ -10,11 +10,12 @@ using Prism.Unity.Windows;
 using Prism.Windows.AppModel;
 
 using RoomInfo.Services;
-using ServiceLibrary;
+using ApplicationServiceLibrary;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Background;
 using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
+using NetworkServiceLibrary;
 
 namespace RoomInfo
 {

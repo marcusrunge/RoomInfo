@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
 
-namespace ServiceLibrary
+namespace ApplicationServiceLibrary
 {
     public interface IBackgroundTaskService
     {
