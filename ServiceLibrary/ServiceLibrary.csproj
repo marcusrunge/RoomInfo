@@ -121,6 +121,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ApplicationDataService.cs" />
+    <Compile Include="BackgroundTaskService.cs" />
     <Compile Include="DatabaseService.cs" />
     <Compile Include="DateTimeValidationService.cs" />
     <Compile Include="LiveTileUpdateService.cs" />

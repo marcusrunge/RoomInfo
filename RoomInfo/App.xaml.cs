@@ -23,6 +23,7 @@ namespace RoomInfo
     {
         IBackgroundTaskService _backgroundTaskService;
         ILiveTileUpdateService _liveTileUpdateService;
+        IUserDatagramService _userDatagramService;
         public App()
         {
             InitializeComponent();
@@ -44,6 +45,7 @@ namespace RoomInfo
             Container.RegisterType<IDateTimeValidationService, DateTimeValidationService>();
             _backgroundTaskService = Container.Resolve<IBackgroundTaskService>();
             _liveTileUpdateService = Container.Resolve<ILiveTileUpdateService>();
+            _userDatagramService = Container.Resolve<IUserDatagramService>();
         }
 
         protected override Task OnLaunchApplicationAsync(LaunchActivatedEventArgs args)
@@ -57,6 +59,7 @@ namespace RoomInfo
             NavigationService.Navigate(page, launchParam);
             Window.Current.Activate();
             _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
+            await _userDatagramService.StartListenerAsync();
             await _backgroundTaskService.Register<LiveTileUpdateBackgroundTask>(new TimeTrigger(15, false));
             //await Task.CompletedTask;
         }
