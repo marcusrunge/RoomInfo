@@ -63,13 +63,13 @@ namespace BackgroundComponent
                     case SocketActivityTriggerReason.ConnectionAccepted:
                         break;
                     case SocketActivityTriggerReason.KeepAliveTimerExpired:
+                        socketInformation.DatagramSocket.TransferOwnership("UserDatagramSocket");
                         break;
                     case SocketActivityTriggerReason.SocketClosed:
-                        DatagramSocket newDatagramSocket = new DatagramSocket();
-                        newDatagramSocket.EnableTransferOwnership(taskInstance.Task.TaskId, SocketActivityConnectedStandbyAction.DoNotWake);
-                        await newDatagramSocket.BindServiceNameAsync(_applicationDataService.GetSetting<string>("UdpPort"));
-                        await newDatagramSocket.CancelIOAsync();
-                        newDatagramSocket.TransferOwnership("UserDatagramSocket");
+                        datagramSocket = new DatagramSocket();
+                        datagramSocket.EnableTransferOwnership(taskInstance.Task.TaskId, SocketActivityConnectedStandbyAction.DoNotWake);
+                        await datagramSocket.CancelIOAsync();
+                        datagramSocket.TransferOwnership("UserDatagramSocket");
                         break;
                     default:
                         break;
@@ -79,11 +79,10 @@ namespace BackgroundComponent
             {
                 try
                 {
-                    DatagramSocket newDatagramSocket = new DatagramSocket();
-                    newDatagramSocket.EnableTransferOwnership(taskInstance.Task.TaskId, SocketActivityConnectedStandbyAction.DoNotWake);
-                    await newDatagramSocket.BindServiceNameAsync(_applicationDataService.GetSetting<string>("UdpPort"));
-                    await newDatagramSocket.CancelIOAsync();
-                    newDatagramSocket.TransferOwnership("UserDatagramSocket");
+                    var datagramSocket = new DatagramSocket();
+                    datagramSocket.EnableTransferOwnership(taskInstance.Task.TaskId, SocketActivityConnectedStandbyAction.DoNotWake);
+                    await datagramSocket.CancelIOAsync();
+                    datagramSocket.TransferOwnership("UserDatagramSocket");
                 }
                 catch { }
             }
