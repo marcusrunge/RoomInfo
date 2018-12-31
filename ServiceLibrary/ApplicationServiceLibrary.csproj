@@ -124,6 +124,7 @@
     <Compile Include="BackgroundTaskService.cs" />
     <Compile Include="DatabaseService.cs" />
     <Compile Include="DateTimeValidationService.cs" />
+    <Compile Include="IotService.cs" />
     <Compile Include="LiveTileUpdateService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\ServiceLibrary.rd.xml" />
@@ -150,6 +151,11 @@
       <Project>{fe670702-d4c1-4a85-a2df-519989143161}</Project>
       <Name>ModelLibrary</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="WindowsIoT, Version=10.0.17134.0">
+      <Name>Windows IoT Extensions for the UWP</Name>
+    </SDKReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

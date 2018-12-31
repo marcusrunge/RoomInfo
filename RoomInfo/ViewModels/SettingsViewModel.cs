@@ -22,6 +22,7 @@ namespace RoomInfo.ViewModels
     public class SettingsViewModel : ViewModelBase
     {
         IApplicationDataService _applicationDataService;
+        IIotService _iotService;
 
         int _selectedComboBoxIndex = default(int);
         public int SelectedComboBoxIndex { get => _selectedComboBoxIndex; set { SetProperty(ref _selectedComboBoxIndex, value); } }
@@ -50,9 +51,10 @@ namespace RoomInfo.ViewModels
         string _udpPort = default(string);
         public string UdpPort { get => _udpPort; set { SetProperty(ref _udpPort, value); if (!string.IsNullOrEmpty(UdpPort)) _applicationDataService.SaveSetting("UdpPort", UdpPort); } }
 
-        public SettingsViewModel(IApplicationDataService applicationDataService)
+        public SettingsViewModel(IApplicationDataService applicationDataService, IIotService iotService)
         {
             _applicationDataService = applicationDataService;
+            _iotService = iotService;
         }
 
         private ICommand _switchThemeCommand;
