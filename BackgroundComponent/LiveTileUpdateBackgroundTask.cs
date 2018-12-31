@@ -14,7 +14,6 @@ namespace BackgroundComponent
             _deferral = taskInstance.GetDeferral();
             _unityContainer = new UnityContainer();
             _unityContainer.RegisterType<IDatabaseService, DatabaseService>();
-            _unityContainer.RegisterType<IApplicationDataService, ApplicationDataService>();
             _unityContainer.RegisterType<ILiveTileUpdateService, LiveTileUpdateService>();
             _liveTileUpdateService = _unityContainer.Resolve<ILiveTileUpdateService>();
             _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));

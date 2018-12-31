@@ -13,9 +13,7 @@ using ApplicationServiceLibrary;
 using Windows.ApplicationModel;
 using Windows.Storage;
 using Windows.Storage.Pickers;
-using Windows.System;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 
 namespace RoomInfo.ViewModels
