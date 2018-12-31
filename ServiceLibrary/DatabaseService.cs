@@ -12,6 +12,7 @@ namespace ApplicationServiceLibrary
         Task AddAgendaItemAsync(AgendaItem agendaItem);
         Task RemoveAgendaItemAsync(AgendaItem agendaItem);
         Task UpdateAgendaItemAsync(AgendaItem agendaItem);
+        Task UpdateAgendaItemsAsync(List<AgendaItem> agendaItems);
         Task<List<AgendaItem>> GetAgendaItemsAsync();
         Task<List<AgendaItem>> GetAgendaItemsAsync(DateTime dateTime);
     }
@@ -55,6 +56,21 @@ namespace ApplicationServiceLibrary
         {
             _agendaItemContext.Update(agendaItem);
             await _agendaItemContext.SaveChangesAsync();
+        }
+
+        public Task UpdateAgendaItemsAsync(List<AgendaItem> agendaItems)
+        {
+            agendaItems.ForEach(async x => 
+            {
+                if (x.Id == 0) await AddAgendaItemAsync(x);
+                else if (x.IsDeleted) await RemoveAgendaItemAsync(x);
+                else
+                {
+                    var updatedAgendaItem = await _agendaItemContext.AgendaItems.Where(y => y.Id == x.Id && y.TimeStamp != x.TimeStamp).FirstOrDefaultAsync();
+                    if (updatedAgendaItem != null) await UpdateAgendaItemAsync(updatedAgendaItem);
+                }
+            });
+            return Task.CompletedTask;
         }
     }
 }

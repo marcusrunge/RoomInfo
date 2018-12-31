@@ -16,6 +16,7 @@ using Windows.Storage;
 using Windows.System.Threading;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
+using Prism.Events;
 
 namespace RoomInfo.ViewModels
 {
@@ -24,6 +25,7 @@ namespace RoomInfo.ViewModels
         IDatabaseService _databaseService;
         IApplicationDataService _applicationDataService;
         ILiveTileUpdateService _liveTileUpdateService;
+        IEventAggregator _eventAggregator;
         AgendaItem _activeAgendaItem;
         double _agendaItemWidth;
 
@@ -65,6 +67,7 @@ namespace RoomInfo.ViewModels
             _databaseService = unityContainer.Resolve<IDatabaseService>();
             _applicationDataService = unityContainer.Resolve<IApplicationDataService>();
             _liveTileUpdateService = unityContainer.Resolve<ILiveTileUpdateService>();
+            _eventAggregator = unityContainer.Resolve<IEventAggregator>();
         }
 
         public async override void OnNavigatedTo(NavigatedToEventArgs navigatedToEventArgs, Dictionary<string, object> viewModelState)
@@ -94,7 +97,28 @@ namespace RoomInfo.ViewModels
             ResetButtonVisibility = _applicationDataService.GetSetting<bool>("OccupancyOverridden") ? Visibility.Visible : Visibility.Collapsed;
             Occupancy = OccupancyVisualState.UndefinedVisualState;
             Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
+            _applicationDataService.SaveSetting("ActualOccupancy", (int)Occupancy);
             await UpdateDayAgenda();
+            _eventAggregator.GetEvent<RemoteOccupancyOverrideEvent>().Subscribe(async i =>
+            {
+                SelectedComboBoxIndex = i;
+                Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
+                await OverrideOccupancy();                
+            });
+        }
+
+        private async Task OverrideOccupancy()
+        {
+            _applicationDataService.SaveSetting("OverriddenOccupancy", SelectedComboBoxIndex);
+            _applicationDataService.SaveSetting("OccupancyOverridden", true);
+            if (_activeAgendaItem != null)
+            {
+                _activeAgendaItem.IsOverridden = true;
+                await _databaseService.UpdateAgendaItemAsync(_activeAgendaItem);
+            }
+            _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
+            ResetButtonVisibility = Visibility.Visible;
+            _applicationDataService.SaveSetting("ActualOccupancy", (int)Occupancy);
         }
 
         private async Task UpdateDayAgenda()
@@ -123,6 +147,7 @@ namespace RoomInfo.ViewModels
                     ResetButtonVisibility = Visibility.Collapsed;
                     SelectedComboBoxIndex = AgendaItems[0].Occupancy;
                     _activeAgendaItem = AgendaItems[0];
+                    _applicationDataService.SaveSetting("ActualOccupancy", (int)Occupancy);
                 }
                 else if (!AgendaItems[0].IsOverridden)
                 {
@@ -136,9 +161,11 @@ namespace RoomInfo.ViewModels
                             ResetButtonVisibility = Visibility.Collapsed;
                             SelectedComboBoxIndex = AgendaItems[0].Occupancy;
                             _activeAgendaItem = AgendaItems[0];
+                            _applicationDataService.SaveSetting("ActualOccupancy", (int)Occupancy);
                         });
                     }, startTimeSpan);
                 }
+
                 _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
 
                 TimeSpan endTimeSpan = AgendaItems[0].End - DateTime.Now;
@@ -152,6 +179,7 @@ namespace RoomInfo.ViewModels
                         _activeAgendaItem = null;
                         await UpdateDayAgenda();
                         _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
+                        _applicationDataService.SaveSetting("ActualOccupancy", (int)Occupancy);
                     });
 
                 }, endTimeSpan);
@@ -161,15 +189,7 @@ namespace RoomInfo.ViewModels
         private ICommand _overrideOccupancyCommand;
         public ICommand OverrideOccupancyCommand => _overrideOccupancyCommand ?? (_overrideOccupancyCommand = new DelegateCommand<object>(async (param) =>
         {
-            _applicationDataService.SaveSetting("OverriddenOccupancy", SelectedComboBoxIndex);
-            _applicationDataService.SaveSetting("OccupancyOverridden", true);
-            if (_activeAgendaItem != null)
-            {
-                _activeAgendaItem.IsOverridden = true;
-                await _databaseService.UpdateAgendaItemAsync(_activeAgendaItem);
-            }
-            _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
-            ResetButtonVisibility = Visibility.Visible;
+            await OverrideOccupancy();
         }));
 
         private ICommand _resetOccupancyCommand;
@@ -192,6 +212,7 @@ namespace RoomInfo.ViewModels
             Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
             _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
             ResetButtonVisibility = Visibility.Collapsed;
+            _applicationDataService.SaveSetting("ActualOccupancy", (int)Occupancy);
         }));
 
         private ICommand _updateDataTemplateWidthCommand;

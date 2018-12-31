@@ -129,6 +129,7 @@ namespace RoomInfo.ViewModels
                 SelectedComboBoxIndex = (x).Occupancy;
                 IsFlyoutOpen = true;
             });
+            _eventAggregator.GetEvent<RemoteAgendaItemsUpdatedEvent>().Subscribe(async () => await UpdateCalendarViewDayItems());
         }
 
         private ICommand _showReservationFlyoutCommand;

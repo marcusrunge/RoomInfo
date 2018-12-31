@@ -11,4 +11,10 @@ namespace ModelLibrary
     public class UpdateWidthEvent : PubSubEvent<double>
     {
     }
+    public class RemoteOccupancyOverrideEvent : PubSubEvent<int>
+    {
+    }
+    public class RemoteAgendaItemsUpdatedEvent : PubSubEvent
+    {
+    }
 }
