@@ -16,18 +16,17 @@ using Windows.ApplicationModel.Background;
 using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using NetworkServiceLibrary;
+using Windows.Globalization;
 
 namespace RoomInfo
 {
     [Windows.UI.Xaml.Data.Bindable]
     public sealed partial class App : PrismUnityApplication
-    {
-        IBackgroundTaskService _backgroundTaskService;
-        ILiveTileUpdateService _liveTileUpdateService;
-        IUserDatagramService _userDatagramService;
+    {        
         public App()
         {
             InitializeComponent();
+            //ApplicationLanguages.PrimaryLanguageOverride = "de-DE";
         }
 
         protected override void ConfigureContainer()
@@ -45,9 +44,7 @@ namespace RoomInfo
             Container.RegisterType<IUserDatagramService, UserDatagramService>();
             Container.RegisterType<IDateTimeValidationService, DateTimeValidationService>();
             Container.RegisterType<IIotService, IotService>();
-            _backgroundTaskService = Container.Resolve<IBackgroundTaskService>();
-            _liveTileUpdateService = Container.Resolve<ILiveTileUpdateService>();
-            _userDatagramService = Container.Resolve<IUserDatagramService>();
+            
         }
 
         protected override Task OnLaunchApplicationAsync(LaunchActivatedEventArgs args)
@@ -55,15 +52,12 @@ namespace RoomInfo
             return LaunchApplicationAsync(PageTokens.PivotPage, null);
         }
 
-        private async Task LaunchApplicationAsync(string page, object launchParam)
+        private Task LaunchApplicationAsync(string page, object launchParam)
         {
             ThemeSelectorService.SetRequestedTheme();
             NavigationService.Navigate(page, launchParam);
-            Window.Current.Activate();
-            _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
-            await _userDatagramService.StartListenerAsync();
-            await _backgroundTaskService.Register<LiveTileUpdateBackgroundTask>(new TimeTrigger(15, false));
-            //await Task.CompletedTask;
+            Window.Current.Activate();                        
+            return Task.CompletedTask;
         }
 
         protected override Task OnActivateApplicationAsync(IActivatedEventArgs args)
