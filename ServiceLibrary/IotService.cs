@@ -15,9 +15,8 @@ namespace ApplicationServiceLibrary
     public class IotService : IIotService
     {
         public bool IsIotDevice()
-        {            
-            //var b = ApiInformation.IsTypePresent(typeof(Windows.Devices.Gpio.GpioController).ToString());
-            return true;
+        {
+            return AnalyticsInfo.VersionInfo.DeviceFamily.Equals("Windows.IoT");
         }
     }
 }

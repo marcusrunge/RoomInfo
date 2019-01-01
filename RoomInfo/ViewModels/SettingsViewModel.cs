@@ -55,8 +55,8 @@ namespace RoomInfo.ViewModels
         Visibility _iotPanelVisibility = default(Visibility);
         public Visibility IotPanelVisibility { get => _iotPanelVisibility; set { SetProperty(ref _iotPanelVisibility, value); } }
 
-        string _deviceFamily = default(string);
-        public string DeviceFamily { get => _deviceFamily; set { SetProperty(ref _deviceFamily, value); } }
+        string _reservedProperty = default(string);
+        public string ReservedProperty { get => _reservedProperty; set { SetProperty(ref _reservedProperty, value); } }
 
         public SettingsViewModel(IApplicationDataService applicationDataService, IIotService iotService)
         {
@@ -101,8 +101,7 @@ namespace RoomInfo.ViewModels
             if (string.IsNullOrEmpty(TcpPort)) TcpPort = "8273";
             if (string.IsNullOrEmpty(UdpPort)) UdpPort = "8274";
             await LoadCompanyLogo();
-            IotPanelVisibility = _iotService.IsIotDevice() ? Visibility.Visible : Visibility.Collapsed;
-            DeviceFamily = AnalyticsInfo.VersionInfo.DeviceFamily;
+            IotPanelVisibility = _iotService.IsIotDevice() ? Visibility.Visible : Visibility.Collapsed;            
         }
 
         private string GetVersionDescription()
