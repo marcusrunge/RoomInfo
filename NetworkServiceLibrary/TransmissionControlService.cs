@@ -10,6 +10,8 @@ using ModelLibrary;
 using Newtonsoft.Json;
 using Prism.Events;
 using System.Collections.Generic;
+using Windows.Devices.I2c;
+using Windows.Devices.Enumeration;
 
 namespace NetworkServiceLibrary
 {
@@ -135,6 +137,21 @@ namespace NetworkServiceLibrary
                     package.Payload = agendaItems;
                     json = JsonConvert.SerializeObject(package);
                     await SendStringData(streamSocket, streamSocket.Information.RemoteHostName, streamSocket.Information.RemotePort, json);
+                    break;
+                case PayloadType.IotDim:
+                    string i2cDeviceSelector = I2cDevice.GetDeviceSelector();
+                    I2cConnectionSettings i2CConnectionSettings = new I2cConnectionSettings(0x45);
+                    IReadOnlyList<DeviceInformation> deviceInformationCollection = await DeviceInformation.FindAllAsync(i2cDeviceSelector);
+                    if (deviceInformationCollection.Count > 0)
+                    {
+                        var i2CDevice = await I2cDevice.FromIdAsync(deviceInformationCollection[0].Id, i2CConnectionSettings);
+                        byte brightness = (bool)package.Payload ? (byte)7 : (byte)255;
+                        try
+                        {
+                            i2CDevice?.Write(new byte[] { 0x86, brightness });
+                        }
+                        catch { }
+                    }
                     break;
                 default:
                     break;
