@@ -16,6 +16,7 @@ using Windows.System.Threading;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Prism.Events;
+using Windows.UI.Xaml.Controls;
 
 namespace RoomInfo.ViewModels
 {
@@ -60,6 +61,21 @@ namespace RoomInfo.ViewModels
 
         Visibility _resetButtonVisibility = default(Visibility);
         public Visibility ResetButtonVisibility { get => _resetButtonVisibility; set { SetProperty(ref _resetButtonVisibility, value); } }
+
+        double _mediumFontSize = default(double);
+        public double MediumFontSize { get => _mediumFontSize; set { SetProperty(ref _mediumFontSize, value); } }
+
+        double _mediumToLargeFontSize = default(double);
+        public double MediumToLargeFontSize { get => _mediumToLargeFontSize; set { SetProperty(ref _mediumToLargeFontSize, value); } }
+
+        double _largeFontSize = default(double);
+        public double LargeFontSize { get => _largeFontSize; set { SetProperty(ref _largeFontSize, value); } }
+
+        double _extraLargeFontSize = default(double);
+        public double ExtraLargeFontSize { get => _extraLargeFontSize; set { SetProperty(ref _extraLargeFontSize, value); } }
+
+        double _superLargeFontSize = default(double);
+        public double SuperLargeFontSize { get => _superLargeFontSize; set { SetProperty(ref _superLargeFontSize, value); } }
 
         public InfoViewModel(IUnityContainer unityContainer)
         {
@@ -222,6 +238,29 @@ namespace RoomInfo.ViewModels
             for (int i = 0; i < AgendaItems.Count; i++)
             {
                 AgendaItems[i].Width = _agendaItemWidth;
+            }
+        }));
+
+        private ICommand _updateFontSizeCommand;
+        public ICommand UpdateFontSizeCommand => _updateFontSizeCommand ?? (_updateFontSizeCommand = new DelegateCommand<object>((param) =>
+        {
+            if (param == null) return;
+            else
+            {
+                Grid grid = param as Grid;
+                if (AgendaItems != null)
+                {
+                    for (int i = 0; i < AgendaItems.Count; i++)
+                    {
+                        AgendaItems[i].MediumFontSize = 0;
+                        AgendaItems[i].LargeFontSize = 0;
+                    }
+                }
+                MediumFontSize = grid.ActualHeight / 26.66;
+                MediumToLargeFontSize = grid.ActualHeight / 20;
+                LargeFontSize = grid.ActualHeight / 17.77;
+                ExtraLargeFontSize = grid.ActualHeight / 13.33;
+                SuperLargeFontSize = grid.ActualHeight / 4.44;
             }
         }));
     }

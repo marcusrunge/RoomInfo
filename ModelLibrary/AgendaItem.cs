@@ -71,6 +71,16 @@ namespace ModelLibrary
         [NotMapped]
         public double Width { get => _width; set { SetProperty(ref _width, value); } }
 
+        [NotMapped]
+        double _mediumFontSize = default(double);
+        [NotMapped]
+        public double MediumFontSize { get => _mediumFontSize; set { SetProperty(ref _mediumFontSize, value); } }
+
+        [NotMapped]
+        double _largeFontSize = default(double);
+        [NotMapped]
+        public double LargeFontSize { get => _largeFontSize; set { SetProperty(ref _largeFontSize, value); } }
+
         private ICommand _updateReservationCommand;
         public ICommand UpdateReservationCommand => _updateReservationCommand ?? (_updateReservationCommand = new DelegateCommand<object>((param) =>
         {

@@ -18,9 +18,7 @@
         <Helpers:VisualStateDependencyProperty VisualStateProperty="{Binding Occupancy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
     </interactivity:Interaction.Behaviors>
 
-    <Grid
-        x:Name="ContentArea"
-         >
+    <Grid x:Name="ContentArea">        
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="OccupancyVisualStateGroup">
                 <VisualState x:Name="FreeVisualState">
@@ -277,6 +275,14 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
         <Grid x:Name="grid" Background="#00000000" Padding="{StaticResource MediumLeftRightBottomMargin}"   >
+            <interactivity:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="SizeChanged">
+                    <core:InvokeCommandAction Command="{Binding UpdateFontSizeCommand}" CommandParameter="{Binding ElementName=grid}"/>
+                </core:EventTriggerBehavior>
+                <core:EventTriggerBehavior EventName="Loaded">
+                    <core:InvokeCommandAction Command="{Binding UpdateFontSizeCommand}" CommandParameter="{Binding ElementName=grid}"/>
+                </core:EventTriggerBehavior>
+            </interactivity:Interaction.Behaviors>
             <!--The SystemControlPageBackgroundChromeLowBrush background represents where you should place your content. 
                 Place your content here.-->
             <Grid.RowDefinitions>
@@ -291,10 +297,10 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Image x:Name="CompanyLogo" Source="{Binding CompanyLogo}" HorizontalAlignment="Left" Margin="12,12,12,12"/>
-                <TextBlock x:Name="CompanyName" Grid.Column="1" Text="{Binding CompanyName}" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="72"/>
+                <TextBlock x:Name="CompanyName" Grid.Column="1" Text="{Binding CompanyName}" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="{Binding ExtraLargeFontSize}"/>
                 <StackPanel Grid.Column="2">
-                    <TextBlock x:Name="Clock" Text="{Binding Clock, UpdateSourceTrigger=PropertyChanged}" FontSize="72" HorizontalAlignment="Right" />
-                    <TextBlock x:Name="Date" Text="{Binding Date, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" FontSize="36"/>
+                    <TextBlock x:Name="Clock" Text="{Binding Clock, UpdateSourceTrigger=PropertyChanged}" FontSize="{Binding ExtraLargeFontSize}" HorizontalAlignment="Right" />
+                    <TextBlock x:Name="Date" Text="{Binding Date, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" FontSize="{Binding MediumFontSize}"/>
                 </StackPanel>
 
             </Grid>
@@ -308,14 +314,14 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock x:Name="roomNameTextBlock"  Text="{Binding RoomName}" FontSize="72" FocusVisualPrimaryBrush="#00000000" Foreground="#00000000" Margin="0,0,36,0"/>
-                    <TextBlock x:Name="roomNumberTextBlock" Grid.Column="1" Text="{Binding RoomNumber}" FontSize="72" FocusVisualPrimaryBrush="#00000000" Foreground="#00000000" Margin="36,0,0,0"/>
+                    <TextBlock x:Name="roomNameTextBlock"  Text="{Binding RoomName}" FontSize="{Binding ExtraLargeFontSize}" FocusVisualPrimaryBrush="#00000000" Foreground="#00000000" Margin="0,0,36,0"/>
+                    <TextBlock x:Name="roomNumberTextBlock" Grid.Column="1" Text="{Binding RoomNumber}" FontSize="{Binding ExtraLargeFontSize}" FocusVisualPrimaryBrush="#00000000" Foreground="#00000000" Margin="36,0,0,0"/>
                 </Grid>
-                <TextBlock Grid.Row="1" x:Name="occupancyTextBlock" x:Uid="Info_OccupancyTextBlockFree" FontSize="54" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
-                <TextBlock Grid.Row="1" x:Name="absentOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockAbsent" FontSize="54" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
-                <TextBlock Grid.Row="1" x:Name="occupiedOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockOccupied" FontSize="54" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
-                <TextBlock Grid.Row="1" x:Name="busyOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockBusy" FontSize="54" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
-                <TextBlock Grid.Row="1" x:Name="occupancySymbolTextBlock" FontSize="216" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" TextLineBounds="TrimToCapHeight" />
+                <TextBlock Grid.Row="1" x:Name="occupancyTextBlock" x:Uid="Info_OccupancyTextBlockFree" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
+                <TextBlock Grid.Row="1" x:Name="absentOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockAbsent" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
+                <TextBlock Grid.Row="1" x:Name="occupiedOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockOccupied" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
+                <TextBlock Grid.Row="1" x:Name="busyOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockBusy" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
+                <TextBlock Grid.Row="1" x:Name="occupancySymbolTextBlock" FontSize="{Binding SuperLargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" TextLineBounds="TrimToCapHeight" />
             </Grid>
             <Grid Grid.Row="2" Margin="0,12,0,0">
                 <Grid.ColumnDefinitions>
@@ -323,8 +329,8 @@
                     <ColumnDefinition Width="4*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock x:Name="infoScheduleTextBlock" x:Uid="Info_Schedule" FontSize="48" VerticalAlignment="Top"/>
-                <Button Content="RESET" FontSize="48" VerticalAlignment="Bottom" Width="{Binding Path=ActualWidth,ElementName=infoScheduleTextBlock}" HorizontalAlignment="Center" Command="{Binding ResetOccupancyCommand}" Visibility="{Binding ResetButtonVisibility}"/>
+                <TextBlock x:Name="infoScheduleTextBlock" x:Uid="Info_Schedule" FontSize="{Binding MediumToLargeFontSize}" VerticalAlignment="Top"/>
+                <Button Content="RESET" FontSize="{Binding MediumToLargeFontSize}" VerticalAlignment="Bottom" Width="{Binding Path=ActualWidth,ElementName=infoScheduleTextBlock}" HorizontalAlignment="Center" Command="{Binding ResetOccupancyCommand}" Visibility="{Binding ResetButtonVisibility}"/>
                 <ListView x:Name="Agenda" Grid.Column="1" ItemsSource="{Binding AgendaItems}">
                     <interactivity:Interaction.Behaviors>
                         <core:EventTriggerBehavior EventName="SizeChanged">
@@ -352,8 +358,8 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <ComboBox Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Top" FontSize="36" SelectedIndex="{Binding SelectedComboBoxIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
-                        <ComboBoxItem x:Uid="Info_OccupancyFree" FontSize="36">
+                    <ComboBox Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Top" FontSize="{Binding MediumFontSize}" SelectedIndex="{Binding SelectedComboBoxIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                        <ComboBoxItem x:Uid="Info_OccupancyFree" FontSize="{Binding MediumFontSize}">
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:GoToStateAction StateName="FreeVisualState"/>
@@ -361,7 +367,7 @@
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
-                        <ComboBoxItem x:Uid="Info_OccupancyBusy" FontSize="36">
+                        <ComboBoxItem x:Uid="Info_OccupancyBusy" FontSize="{Binding MediumFontSize}">
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:GoToStateAction StateName="BusyVisualState"/>
@@ -369,7 +375,7 @@
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
-                        <ComboBoxItem x:Uid="Info_OccupancyOccupied" FontSize="36">
+                        <ComboBoxItem x:Uid="Info_OccupancyOccupied" FontSize="{Binding MediumFontSize}">
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:GoToStateAction StateName="OccupiedVisualState"/>
@@ -377,7 +383,7 @@
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
-                        <ComboBoxItem x:Uid="Info_OccupancyAbsent" FontSize="36">
+                        <ComboBoxItem x:Uid="Info_OccupancyAbsent" FontSize="{Binding MediumFontSize}">
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:GoToStateAction StateName="AbsentVisualState"/>
