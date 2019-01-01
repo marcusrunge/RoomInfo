@@ -15,6 +15,7 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Input;
+using Windows.System.Profile;
 
 namespace RoomInfo.ViewModels
 {
@@ -50,6 +51,12 @@ namespace RoomInfo.ViewModels
 
         string _udpPort = default(string);
         public string UdpPort { get => _udpPort; set { SetProperty(ref _udpPort, value); if (!string.IsNullOrEmpty(UdpPort)) _applicationDataService.SaveSetting("UdpPort", UdpPort); } }
+
+        Visibility _iotPanelVisibility = default(Visibility);
+        public Visibility IotPanelVisibility { get => _iotPanelVisibility; set { SetProperty(ref _iotPanelVisibility, value); } }
+
+        string _deviceFamily = default(string);
+        public string DeviceFamily { get => _deviceFamily; set { SetProperty(ref _deviceFamily, value); } }
 
         public SettingsViewModel(IApplicationDataService applicationDataService, IIotService iotService)
         {
@@ -94,6 +101,8 @@ namespace RoomInfo.ViewModels
             if (string.IsNullOrEmpty(TcpPort)) TcpPort = "8273";
             if (string.IsNullOrEmpty(UdpPort)) UdpPort = "8274";
             await LoadCompanyLogo();
+            IotPanelVisibility = _iotService.IsIotDevice() ? Visibility.Visible : Visibility.Collapsed;
+            DeviceFamily = AnalyticsInfo.VersionInfo.DeviceFamily;
         }
 
         private string GetVersionDescription()

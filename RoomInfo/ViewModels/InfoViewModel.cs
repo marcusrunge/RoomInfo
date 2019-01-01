@@ -217,7 +217,7 @@ namespace RoomInfo.ViewModels
         private ICommand _updateDataTemplateWidthCommand;
         public ICommand UpdateDataTemplateWidthCommand => _updateDataTemplateWidthCommand ?? (_updateDataTemplateWidthCommand = new DelegateCommand<object>((param) =>
         {
-            if (param == null) return;
+            if (param == null || AgendaItems == null) return;
             _agendaItemWidth = (double)param;
             for (int i = 0; i < AgendaItems.Count; i++)
             {
