@@ -13,11 +13,11 @@
     mc:Ignorable="d">
 
     <Grid>
-        <Pivot x:Uid="PivotPage">
+        <Pivot x:Uid="PivotPage" >
             <i:Interaction.Behaviors>
                 <b:PivotNavigationBehavior />
             </i:Interaction.Behaviors>
-            <PivotItem x:Uid="PivotItem_Info">
+            <PivotItem x:Uid="PivotItem_Info" Margin="0,0,0,0">
                 <Frame>
                     <views:InfoPage/>
                 </Frame>

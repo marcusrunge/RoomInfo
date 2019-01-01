@@ -17,10 +17,10 @@
     <interactivity:Interaction.Behaviors>
         <Helpers:VisualStateDependencyProperty VisualStateProperty="{Binding Occupancy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
     </interactivity:Interaction.Behaviors>
-    
+
     <Grid
         x:Name="ContentArea"
-        Margin="{StaticResource MediumLeftRightBottomMargin}">
+         >
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="OccupancyVisualStateGroup">
                 <VisualState x:Name="FreeVisualState">
@@ -40,7 +40,7 @@
                             <Setter.Value>
                                 <Color>#FF007900</Color>
                             </Setter.Value>
-                        </Setter>                                               
+                        </Setter>
                         <Setter Target="StatusBar.(FrameworkElement.HorizontalAlignment)">
                             <Setter.Value>
                                 <HorizontalAlignment>Stretch</HorizontalAlignment>
@@ -89,6 +89,11 @@
                             </Setter.Value>
                         </Setter>
                         <Setter Target="occupancyTextBlock.(UIElement.Visibility)" Value="Visible"/>
+                        <Setter Target="grid.(Panel.Background)">
+                            <Setter.Value>
+                                <SolidColorBrush Color="#7F00F200"/>
+                            </Setter.Value>
+                        </Setter>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="BusyVisualState">
@@ -140,6 +145,11 @@
                             </Setter.Value>
                         </Setter>
                         <Setter Target="busyOccupancyTextBlock.(UIElement.Visibility)" Value="Visible"/>
+                        <Setter Target="grid.(Panel.Background).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#7FF2F200</Color>
+                            </Setter.Value>
+                        </Setter>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="OccupiedVisualState">
@@ -201,6 +211,11 @@
                             </Setter.Value>
                         </Setter>
                         <Setter Target="occupiedOccupancyTextBlock.(UIElement.Visibility)" Value="Visible"/>
+                        <Setter Target="grid.(Panel.Background).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#7FF20000</Color>
+                            </Setter.Value>
+                        </Setter>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="AbsentVisualState">
@@ -252,11 +267,16 @@
                             </Setter.Value>
                         </Setter>
                         <Setter Target="absentOccupancyTextBlock.(UIElement.Visibility)" Value="Visible"/>
+                        <Setter Target="grid.(Panel.Background).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#7F797979</Color>
+                            </Setter.Value>
+                        </Setter>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-        <Grid    >
+        <Grid x:Name="grid" Background="#00000000" Padding="{StaticResource MediumLeftRightBottomMargin}"   >
             <!--The SystemControlPageBackgroundChromeLowBrush background represents where you should place your content. 
                 Place your content here.-->
             <Grid.RowDefinitions>
