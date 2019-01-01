@@ -22,17 +22,17 @@ namespace RoomInfo
 {
     [Windows.UI.Xaml.Data.Bindable]
     public sealed partial class App : PrismUnityApplication
-    {        
+    {
+        IApplicationDataService _applicationDataService;
         public App()
         {
             InitializeComponent();
-            //ApplicationLanguages.PrimaryLanguageOverride = "de-DE";
         }
 
         protected override void ConfigureContainer()
         {
             // register a singleton using Container.RegisterType<IInterface, Type>(new ContainerControlledLifetimeManager());
-            base.ConfigureContainer();            
+            base.ConfigureContainer();
             Container.RegisterInstance<IResourceLoader>(new ResourceLoaderAdapter(new ResourceLoader()));
             Container.RegisterType<ISettingsService, SettingsService>();
             Container.RegisterType<IDatabaseService, DatabaseService>();
@@ -44,7 +44,6 @@ namespace RoomInfo
             Container.RegisterType<IUserDatagramService, UserDatagramService>();
             Container.RegisterType<IDateTimeValidationService, DateTimeValidationService>();
             Container.RegisterType<IIotService, IotService>();
-            
         }
 
         protected override Task OnLaunchApplicationAsync(LaunchActivatedEventArgs args)
@@ -54,10 +53,19 @@ namespace RoomInfo
 
         private Task LaunchApplicationAsync(string page, object launchParam)
         {
+            _applicationDataService = Container.Resolve<IApplicationDataService>();
             ThemeSelectorService.SetRequestedTheme();
+            SetSelectedLanguage();
             NavigationService.Navigate(page, launchParam);
-            Window.Current.Activate();                        
+            Window.Current.Activate();
             return Task.CompletedTask;
+        }
+
+        private void SetSelectedLanguage()
+        {
+            var language = _applicationDataService.GetSetting<string>("Language");
+            if (string.IsNullOrEmpty(language)) return;
+            else ApplicationLanguages.PrimaryLanguageOverride = language;            
         }
 
         protected override Task OnActivateApplicationAsync(IActivatedEventArgs args)
@@ -72,7 +80,7 @@ namespace RoomInfo
         }
 
         protected override async Task OnInitializeAsync(IActivatedEventArgs args)
-        {            
+        {
             await ThemeSelectorService.InitializeAsync().ConfigureAwait(false);
 
             // We are remapping the default ViewNamePage and ViewNamePageViewModel naming to ViewNamePage and ViewNameViewModel to
@@ -87,7 +95,7 @@ namespace RoomInfo
 
         protected override void ConfigureServiceLocator()
         {
-            base.ConfigureServiceLocator();            
+            base.ConfigureServiceLocator();
             UnityServiceLocator unityServiceLocator = new UnityServiceLocator(Container);
             ServiceLocator.SetLocatorProvider(() => unityServiceLocator);
         }

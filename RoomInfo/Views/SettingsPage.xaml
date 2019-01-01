@@ -14,6 +14,7 @@
     mc:Ignorable="d">
     <Page.Resources>
         <helper:EnumToBooleanConverter x:Key="EnumToBooleanConverter" EnumType="ElementTheme" />
+        <helper:LanguageEnumToBooleanConverter x:Key="LanguageEnumToBooleanConverter"/>
     </Page.Resources>
 
     <Grid Margin="{StaticResource MediumLeftRightMargin}">
@@ -57,7 +58,12 @@
                                 <xaml:ElementTheme>Default</xaml:ElementTheme>
                             </RadioButton.CommandParameter>
                         </RadioButton>
-                    </StackPanel>
+                    </StackPanel>                    
+                </StackPanel>
+                <StackPanel Margin="{StaticResource SettingsSubheaderMargin}">
+                    <TextBlock x:Uid="Settings_Language" Style="{StaticResource SubtitleTextBlockStyle}" />
+                    <RadioButton x:Uid="Settings_Language_English" GroupName="Language" Command="{Binding SwitchLanguageCommand}" CommandParameter="en-US" IsChecked="{Binding Language, Converter={StaticResource LanguageEnumToBooleanConverter}, ConverterParameter=en_US, Mode=OneWay}"/>
+                    <RadioButton x:Uid="Settings_Language_German" GroupName="Language" Command="{Binding SwitchLanguageCommand}" CommandParameter="de-DE" IsChecked="{Binding Language, Converter={StaticResource LanguageEnumToBooleanConverter}, ConverterParameter=de_DE, Mode=OneWay}"/>
                 </StackPanel>
                 <StackPanel Margin="{StaticResource SettingsSubheaderMargin}">
                     <TextBlock x:Uid="Settings_Ports" Style="{StaticResource SubtitleTextBlockStyle}" />

@@ -281,4 +281,13 @@
   <data name="Settings_UdpPort.Text" xml:space="preserve">
     <value>UDP-Port:</value>
   </data>
+  <data name="Settings_Language.Text" xml:space="preserve">
+    <value>Choose Language</value>
+  </data>
+  <data name="Settings_Language_English.Content" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Settings_Language_German.Content" xml:space="preserve">
+    <value>German</value>
+  </data>
 </root>

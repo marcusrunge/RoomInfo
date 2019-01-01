@@ -16,6 +16,9 @@ using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Input;
 using Windows.System.Profile;
+using ModelLibrary;
+using Windows.Globalization;
+using Windows.ApplicationModel.Core;
 
 namespace RoomInfo.ViewModels
 {
@@ -24,6 +27,7 @@ namespace RoomInfo.ViewModels
     {
         IApplicationDataService _applicationDataService;
         IIotService _iotService;
+        INavigationService _navigationService;
 
         int _selectedComboBoxIndex = default(int);
         public int SelectedComboBoxIndex { get => _selectedComboBoxIndex; set { SetProperty(ref _selectedComboBoxIndex, value); } }
@@ -58,10 +62,14 @@ namespace RoomInfo.ViewModels
         string _reservedProperty = default(string);
         public string ReservedProperty { get => _reservedProperty; set { SetProperty(ref _reservedProperty, value); } }
 
-        public SettingsViewModel(IApplicationDataService applicationDataService, IIotService iotService)
+        ModelLibrary.Language _language = default(ModelLibrary.Language);
+        public ModelLibrary.Language Language { get => _language; set { SetProperty(ref _language, value); } }
+
+        public SettingsViewModel(IApplicationDataService applicationDataService, IIotService iotService, INavigationService navigationService)
         {
             _applicationDataService = applicationDataService;
             _iotService = iotService;
+            _navigationService = navigationService;
         }
 
         private ICommand _switchThemeCommand;
@@ -83,9 +91,13 @@ namespace RoomInfo.ViewModels
             }
         }
 
-        public SettingsViewModel()
+        private ICommand _switchLanguageCommand;
+        public ICommand SwitchLanguageCommand => _switchLanguageCommand ?? (_switchLanguageCommand = new DelegateCommand<object>(async (param) =>
         {
-        }
+            _applicationDataService.SaveSetting("Language", (string)param);
+            ApplicationLanguages.PrimaryLanguageOverride = (string)param;
+            await CoreApplication.RequestRestartAsync("Language");
+        }));
 
         public override async void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
         {
@@ -101,13 +113,28 @@ namespace RoomInfo.ViewModels
             if (string.IsNullOrEmpty(TcpPort)) TcpPort = "8273";
             if (string.IsNullOrEmpty(UdpPort)) UdpPort = "8274";
             await LoadCompanyLogo();
-            IotPanelVisibility = _iotService.IsIotDevice() ? Visibility.Visible : Visibility.Collapsed;            
+            IotPanelVisibility = _iotService.IsIotDevice() ? Visibility.Visible : Visibility.Collapsed;
+            Language = LoadLanguage();
+        }
+
+        private ModelLibrary.Language LoadLanguage()
+        {
+            switch (_applicationDataService.GetSetting<string>("Language"))
+            {
+                case "de-DE":
+                    return ModelLibrary.Language.de_DE;
+                case "en-US":
+                    return ModelLibrary.Language.en_US;
+                default:
+                    if (Windows.Globalization.Language.CurrentInputMethodLanguageTag.Equals("de-DE") ) return ModelLibrary.Language.de_DE;
+                    else return ModelLibrary.Language.en_US;
+            }
         }
 
         private string GetVersionDescription()
         {
             var appName = "AppDisplayName".GetLocalized();
-            var package = Package.Current;
+            var package = Windows.ApplicationModel.Package.Current;
             var packageId = package.Id;
             var version = packageId.Version;
 
@@ -134,7 +161,7 @@ namespace RoomInfo.ViewModels
             StorageFile file = await openPicker.PickSingleFileAsync();
             if (file != null)
             {
-                StorageFolder assets = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
+                StorageFolder assets = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Assets");
                 await file.CopyAsync(assets, file.Name, NameCollisionOption.ReplaceExisting);
                 _applicationDataService.SaveSetting("LogoFileName", file.Name);
                 await LoadCompanyLogo();
@@ -144,7 +171,7 @@ namespace RoomInfo.ViewModels
         private ICommand _deleteLogoCommand;
         public ICommand DeleteLogoCommand => _deleteLogoCommand ?? (_deleteLogoCommand = new DelegateCommand<object>(async (param) =>
         {
-            StorageFolder assets = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
+            StorageFolder assets = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Assets");
             string logoFileName = _applicationDataService.GetSetting<string>("LogoFileName");
             StorageFile storageFile = await assets.GetFileAsync(logoFileName);
             await storageFile.DeleteAsync();
@@ -154,7 +181,7 @@ namespace RoomInfo.ViewModels
 
         private async Task LoadCompanyLogo()
         {
-            StorageFolder assets = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
+            StorageFolder assets = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Assets");
             string logoFileName = _applicationDataService.GetSetting<string>("LogoFileName");
             CompanyLogo = new Uri(assets.Path + "/" + logoFileName);
         }

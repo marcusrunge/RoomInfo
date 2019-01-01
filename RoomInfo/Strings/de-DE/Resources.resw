@@ -213,6 +213,15 @@
   <data name="Settings_DeleteButton.Content" xml:space="preserve">
     <value>Löschen</value>
   </data>
+  <data name="Settings_Language.Text" xml:space="preserve">
+    <value>Sprachauswahl</value>
+  </data>
+  <data name="Settings_Language_English.Content" xml:space="preserve">
+    <value>Englisch</value>
+  </data>
+  <data name="Settings_Language_German.Content" xml:space="preserve">
+    <value>Deutsch</value>
+  </data>
   <data name="Settings_Personalization.Text" xml:space="preserve">
     <value>Personalisierung</value>
   </data>
