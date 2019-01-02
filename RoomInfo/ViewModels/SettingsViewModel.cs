@@ -10,12 +10,9 @@ using Prism.Windows.Navigation;
 using RoomInfo.Helpers;
 using RoomInfo.Services;
 using ApplicationServiceLibrary;
-using Windows.ApplicationModel;
 using Windows.Storage;
-using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Input;
-using Windows.System.Profile;
 using ModelLibrary;
 using Windows.Globalization;
 using Windows.ApplicationModel.Core;
@@ -23,9 +20,12 @@ using System.Collections.ObjectModel;
 using Prism.Events;
 using System.Linq;
 using Windows.Storage.Search;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Input.Preview.Injection;
 using Windows.System;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
+using Windows.Storage.Streams;
 
 namespace RoomInfo.ViewModels
 {
@@ -129,14 +129,16 @@ namespace RoomInfo.ViewModels
             Language = LoadLanguage();
             _eventAggregator.GetEvent<FileItemSelectionChangedUpdatedEvent>().Subscribe(async i =>
             {
-                var fileUri = FileItems.Where(x => x.Id == i).Select(x => x.ImageSource).FirstOrDefault();
+                var fileUri = FileItems.Where(x => x.Id == i).Select(x => x.ImageUri).FirstOrDefault();
                 StorageFolder assets = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Assets");
                 StorageFile storageFile = await StorageFile.GetFileFromPathAsync(fileUri.LocalPath);
                 await storageFile.CopyAsync(assets, storageFile.Name, NameCollisionOption.ReplaceExisting);
                 _applicationDataService.SaveSetting("LogoFileName", storageFile.Name);                
                 await LoadCompanyLogo();
-                InjectedInputKeyboardInfo injectedInputKeyboardInfo = new InjectedInputKeyboardInfo();
-                injectedInputKeyboardInfo.VirtualKey = (ushort)VirtualKey.Escape;
+                InjectedInputKeyboardInfo injectedInputKeyboardInfo = new InjectedInputKeyboardInfo
+                {
+                    VirtualKey = (ushort)VirtualKey.Escape
+                };
                 InputInjector.TryCreate().InjectKeyboardInput(new List<InjectedInputKeyboardInfo> { injectedInputKeyboardInfo });
             });
         }
@@ -184,10 +186,17 @@ namespace RoomInfo.ViewModels
             foreach (var file in files)
             {
                 id++;
+                BitmapImage bitmapImage = new BitmapImage();
+                using (IRandomAccessStream fileStream = await file.OpenAsync(FileAccessMode.Read))
+                {
+                    bitmapImage.DecodePixelWidth = 56;
+                    await bitmapImage.SetSourceAsync(fileStream);
+                }
                 FileItems.Add(new FileItem()
                 {
                     FileName = file.DisplayName,
-                    ImageSource = new Uri(file.Path),
+                    ImageUri = new Uri(file.Path),
+                    ImageSource = bitmapImage,
                     Id = id
                 });
             }

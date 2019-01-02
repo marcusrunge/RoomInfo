@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Threading.Tasks;
-using BackgroundComponent;
 using Microsoft.Practices.ServiceLocation;
 using Microsoft.Practices.Unity;
 using Prism.Events;
@@ -12,7 +11,6 @@ using Prism.Windows.AppModel;
 using RoomInfo.Services;
 using ApplicationServiceLibrary;
 using Windows.ApplicationModel.Activation;
-using Windows.ApplicationModel.Background;
 using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using NetworkServiceLibrary;

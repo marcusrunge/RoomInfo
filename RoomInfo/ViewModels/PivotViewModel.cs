@@ -6,7 +6,6 @@ using NetworkServiceLibrary;
 using Prism.Windows.Mvvm;
 using Prism.Windows.Navigation;
 using System.Collections.Generic;
-using System.ComponentModel;
 using Windows.ApplicationModel.Background;
 
 namespace RoomInfo.ViewModels

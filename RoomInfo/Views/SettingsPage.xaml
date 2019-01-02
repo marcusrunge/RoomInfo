@@ -25,13 +25,13 @@
                 <ListView ItemsSource="{Binding FileItems}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Grid>
+                            <Grid x:Name="flyoutGrid" >                                
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>                                
                                 <RadioButton  IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Command="{Binding SelectCommand}" HorizontalAlignment="Left" Content="{Binding FileName}"/>
-                                <Image Grid.Column="1" Source="{Binding ImageSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="56" Height="56"/>
+                                <Image Grid.Column="1" Source="{Binding ImageSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="56" Height="56" Margin="12,0,0,0"/>
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>

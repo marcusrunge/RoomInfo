@@ -4,25 +4,27 @@ using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.UI.Xaml.Media;
 
 namespace ModelLibrary
 {
     public class FileItem : INotifyPropertyChanged
     {
-        IEventAggregator _eventAggregator;
+        IEventAggregator _eventAggregator;        
+
         string _fileName = default(string);
         public string FileName { get => _fileName; set { SetProperty(ref _fileName, value); } }
 
         bool _isSelected = default(bool);
         public bool IsSelected { get => _isSelected; set { SetProperty(ref _isSelected, value); } }
 
-        Uri _imageSource = default(Uri);
-        public Uri ImageSource { get => _imageSource; set { SetProperty(ref _imageSource, value); } }
+        Uri _imageUri = default(Uri);
+        public Uri ImageUri { get => _imageUri; set { SetProperty(ref _imageUri, value); } }
+
+        ImageSource _imageSource = default(ImageSource);
+        public ImageSource ImageSource { get => _imageSource; set { SetProperty(ref _imageSource, value); } }
 
         public int Id { get; set; }
 
