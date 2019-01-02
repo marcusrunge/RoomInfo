@@ -19,6 +19,13 @@ using Windows.System.Profile;
 using ModelLibrary;
 using Windows.Globalization;
 using Windows.ApplicationModel.Core;
+using System.Collections.ObjectModel;
+using Prism.Events;
+using System.Linq;
+using Windows.Storage.Search;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Input.Preview.Injection;
+using Windows.System;
 
 namespace RoomInfo.ViewModels
 {
@@ -26,6 +33,7 @@ namespace RoomInfo.ViewModels
     public class SettingsViewModel : ViewModelBase
     {
         IApplicationDataService _applicationDataService;
+        IEventAggregator _eventAggregator;
         IIotService _iotService;
         INavigationService _navigationService;
 
@@ -59,17 +67,21 @@ namespace RoomInfo.ViewModels
         Visibility _iotPanelVisibility = default(Visibility);
         public Visibility IotPanelVisibility { get => _iotPanelVisibility; set { SetProperty(ref _iotPanelVisibility, value); } }
 
+        ObservableCollection<FileItem> _fileItems = default(ObservableCollection<FileItem>);
+        public ObservableCollection<FileItem> FileItems { get => _fileItems; set { SetProperty(ref _fileItems, value); } }
+
         string _reservedProperty = default(string);
         public string ReservedProperty { get => _reservedProperty; set { SetProperty(ref _reservedProperty, value); } }
 
         ModelLibrary.Language _language = default(ModelLibrary.Language);
         public ModelLibrary.Language Language { get => _language; set { SetProperty(ref _language, value); } }
 
-        public SettingsViewModel(IApplicationDataService applicationDataService, IIotService iotService, INavigationService navigationService)
+        public SettingsViewModel(IApplicationDataService applicationDataService, IIotService iotService, INavigationService navigationService, IEventAggregator eventAggregator)
         {
             _applicationDataService = applicationDataService;
             _iotService = iotService;
             _navigationService = navigationService;
+            _eventAggregator = eventAggregator;
         }
 
         private ICommand _switchThemeCommand;
@@ -115,6 +127,18 @@ namespace RoomInfo.ViewModels
             await LoadCompanyLogo();
             IotPanelVisibility = _iotService.IsIotDevice() ? Visibility.Visible : Visibility.Collapsed;
             Language = LoadLanguage();
+            _eventAggregator.GetEvent<FileItemSelectionChangedUpdatedEvent>().Subscribe(async i =>
+            {
+                var fileUri = FileItems.Where(x => x.Id == i).Select(x => x.ImageSource).FirstOrDefault();
+                StorageFolder assets = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Assets");
+                StorageFile storageFile = await StorageFile.GetFileFromPathAsync(fileUri.LocalPath);
+                await storageFile.CopyAsync(assets, storageFile.Name, NameCollisionOption.ReplaceExisting);
+                _applicationDataService.SaveSetting("LogoFileName", storageFile.Name);                
+                await LoadCompanyLogo();
+                InjectedInputKeyboardInfo injectedInputKeyboardInfo = new InjectedInputKeyboardInfo();
+                injectedInputKeyboardInfo.VirtualKey = (ushort)VirtualKey.Escape;
+                InputInjector.TryCreate().InjectKeyboardInput(new List<InjectedInputKeyboardInfo> { injectedInputKeyboardInfo });
+            });
         }
 
         private ModelLibrary.Language LoadLanguage()
@@ -150,22 +174,39 @@ namespace RoomInfo.ViewModels
         private ICommand _selectLogoCommand;
         public ICommand SelectLogoCommand => _selectLogoCommand ?? (_selectLogoCommand = new DelegateCommand<object>(async (param) =>
         {
-            FileOpenPicker openPicker = new FileOpenPicker
+            FileItems = new ObservableCollection<FileItem>();
+            QueryOptions queryOption = new QueryOptions(CommonFileQuery.OrderByTitle, new string[] { ".jpg", ".jpeg", ".png" })
             {
-                ViewMode = PickerViewMode.Thumbnail,
-                SuggestedStartLocation = PickerLocationId.PicturesLibrary
+                FolderDepth = FolderDepth.Shallow
             };
-            openPicker.FileTypeFilter.Add(".jpg");
-            openPicker.FileTypeFilter.Add(".jpeg");
-            openPicker.FileTypeFilter.Add(".png");
-            StorageFile file = await openPicker.PickSingleFileAsync();
-            if (file != null)
+            var files = await KnownFolders.PicturesLibrary.CreateFileQueryWithOptions(queryOption).GetFilesAsync();
+            int id = 0;
+            foreach (var file in files)
             {
-                StorageFolder assets = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Assets");
-                await file.CopyAsync(assets, file.Name, NameCollisionOption.ReplaceExisting);
-                _applicationDataService.SaveSetting("LogoFileName", file.Name);
-                await LoadCompanyLogo();
+                id++;
+                FileItems.Add(new FileItem()
+                {
+                    FileName = file.DisplayName,
+                    ImageSource = new Uri(file.Path),
+                    Id = id
+                });
             }
+            //FileOpenPicker openPicker = new FileOpenPicker
+            //{
+            //    ViewMode = PickerViewMode.Thumbnail,
+            //    SuggestedStartLocation = PickerLocationId.PicturesLibrary
+            //};
+            //openPicker.FileTypeFilter.Add(".jpg");
+            //openPicker.FileTypeFilter.Add(".jpeg");
+            //openPicker.FileTypeFilter.Add(".png");
+            //StorageFile file = await openPicker.PickSingleFileAsync();
+            //if (file != null)
+            //{
+            //    StorageFolder assets = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Assets");
+            //    await file.CopyAsync(assets, file.Name, NameCollisionOption.ReplaceExisting);
+            //    _applicationDataService.SaveSetting("LogoFileName", file.Name);
+            //    await LoadCompanyLogo();
+            //}
         }));
 
         private ICommand _deleteLogoCommand;

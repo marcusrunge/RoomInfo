@@ -15,6 +15,29 @@
     <Page.Resources>
         <helper:EnumToBooleanConverter x:Key="EnumToBooleanConverter" EnumType="ElementTheme" />
         <helper:LanguageEnumToBooleanConverter x:Key="LanguageEnumToBooleanConverter"/>
+        <Flyout x:Name="fileSelectionFlyout">
+            <Flyout.FlyoutPresenterStyle>
+                <Style TargetType="FlyoutPresenter">
+                    <Setter Property="MaxWidth" Value="768"/>
+                </Style>
+            </Flyout.FlyoutPresenterStyle>
+            <Grid>
+                <ListView ItemsSource="{Binding FileItems}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>                                
+                                <RadioButton  IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Command="{Binding SelectCommand}" HorizontalAlignment="Left" Content="{Binding FileName}"/>
+                                <Image Grid.Column="1" Source="{Binding ImageSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="56" Height="56"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </Flyout>
     </Page.Resources>
 
     <Grid Margin="{StaticResource MediumLeftRightMargin}">
@@ -105,7 +128,7 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <Button Grid.Column="0" x:Uid="Settings_SelectButton" Command="{Binding SelectLogoCommand}" Margin="0,0,2,0" />
+                            <Button x:Name="selectLogoButton" Grid.Column="0" x:Uid="Settings_SelectButton" Command="{Binding SelectLogoCommand}" CommandParameter="{Binding ElementName=fileSelectionFlyout}" Margin="0,0,2,0" Flyout="{StaticResource fileSelectionFlyout}" />
                             <Button Grid.Column="1" x:Uid="Settings_DeleteButton" Command="{Binding DeleteLogoCommand}" Margin="2,0,0,0" />
                         </Grid>
                     </StackPanel>
@@ -114,7 +137,7 @@
                     <Border HorizontalAlignment="Left" BorderBrush="#7FFF0000" BorderThickness="0,0,3,3">
                         <TextBlock Text="IoT" Foreground="#7FFF0000" Style="{StaticResource SubtitleTextBlockStyle}" Padding="3,0,0,0"/>
                     </Border>
-                    <Button x:Name="WiFiConfigButton" x:Uid="Settings_IoT_WiFiButton" Style="{StaticResource RedTransparentButtonStyle}" Content="Config Wi-Fi" Command="{Binding ConfigWiFiCommand}" Margin="2,2,2,0"/>
+                    <Button x:Name="WiFiConfigButton" x:Uid="Settings_IoT_WiFiButton" Style="{StaticResource RedTransparentButtonStyle}" Content="Config Wi-Fi" Margin="2,2,2,0" HorizontalAlignment="Left" />
                     <Button x:Name="DeviceRestartButton" x:Uid="Settings_IoT_RestartButton" Style="{StaticResource RedTransparentButtonStyle}" Content="Device Restart" Width="{Binding ElementName=WiFiConfigButton, Path=ActualWidth}" Command="{Binding RestartCommand}" Margin="2,0,2,0"/>
                     <Button x:Name="DeviceShutdownButton" x:Uid="Settings_IoT_ShutdownButton" Style="{StaticResource RedTransparentButtonStyle}" Content="Device Shutdown" Width="{Binding ElementName=WiFiConfigButton, Path=ActualWidth}" Command="{Binding ShutdownCommand}" Margin="2,0,2,2"/>
                 </StackPanel>

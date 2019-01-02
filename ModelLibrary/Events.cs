@@ -17,4 +17,7 @@ namespace ModelLibrary
     public class RemoteAgendaItemsUpdatedEvent : PubSubEvent
     {
     }
+    public class FileItemSelectionChangedUpdatedEvent : PubSubEvent<int>
+    {
+    }
 }
