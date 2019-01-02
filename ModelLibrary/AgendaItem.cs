@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Prism.Commands;
 using Prism.Events;
 using System;
@@ -65,35 +66,41 @@ namespace ModelLibrary
         public long TimeStamp { get; set; }
 
         public bool IsDeleted { get; set; }
-
-        [NotMapped]
+                
         double _width = default(double);
+        [JsonIgnore]
         [NotMapped]
         public double Width { get => _width; set { SetProperty(ref _width, value); } }
-
-        [NotMapped]
+                
         double _mediumFontSize = default(double);
+        [JsonIgnore]
         [NotMapped]
         public double MediumFontSize { get => _mediumFontSize; set { SetProperty(ref _mediumFontSize, value); } }
 
-        [NotMapped]
         double _largeFontSize = default(double);
+        [JsonIgnore]
         [NotMapped]
         public double LargeFontSize { get => _largeFontSize; set { SetProperty(ref _largeFontSize, value); } }
 
         private ICommand _updateReservationCommand;
+        [JsonIgnore]
+        [NotMapped]
         public ICommand UpdateReservationCommand => _updateReservationCommand ?? (_updateReservationCommand = new DelegateCommand<object>((param) =>
         {
             EventAggregator.GetEvent<UpdateReservationEvent>().Publish(this);
         }));
 
         private ICommand _deleteReservationCommand;
+        [JsonIgnore]
+        [NotMapped]
         public ICommand DeleteReservationCommand => _deleteReservationCommand ?? (_deleteReservationCommand = new DelegateCommand<object>((param) =>
         {
             EventAggregator.GetEvent<DeleteReservationEvent>().Publish(param);
         }));
 
         private ICommand _showAttachedFlyoutCommand;
+        [JsonIgnore]
+        [NotMapped]
         public ICommand ShowAttachedFlyoutCommand => _showAttachedFlyoutCommand ?? (_showAttachedFlyoutCommand = new DelegateCommand<object>((param) =>
         {
             FrameworkElement frameworkElement = param as FrameworkElement;

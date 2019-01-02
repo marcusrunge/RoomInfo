@@ -314,14 +314,14 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock x:Name="roomNameTextBlock"  Text="{Binding RoomName}" FontSize="{Binding ExtraLargeFontSize}" FocusVisualPrimaryBrush="#00000000" Foreground="#00000000" Margin="0,0,36,0"/>
+                    <TextBlock x:Name="roomNameTextBlock"  Text="{Binding RoomName}" FontSize="{Binding ExtraLargeFontSize}" FocusVisualPrimaryBrush="#00000000" Foreground="#00000000" />
                     <TextBlock x:Name="roomNumberTextBlock" Grid.Column="1" Text="{Binding RoomNumber}" FontSize="{Binding ExtraLargeFontSize}" FocusVisualPrimaryBrush="#00000000" Foreground="#00000000" Margin="36,0,0,0"/>
                 </Grid>
                 <TextBlock Grid.Row="1" x:Name="occupancyTextBlock" x:Uid="Info_OccupancyTextBlockFree" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
                 <TextBlock Grid.Row="1" x:Name="absentOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockAbsent" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
                 <TextBlock Grid.Row="1" x:Name="occupiedOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockOccupied" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
                 <TextBlock Grid.Row="1" x:Name="busyOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockBusy" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
-                <TextBlock Grid.Row="1" x:Name="occupancySymbolTextBlock" FontSize="{Binding SuperLargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" TextLineBounds="TrimToCapHeight" />
+                <TextBlock Grid.Row="1" x:Name="occupancySymbolTextBlock" FontSize="{Binding SuperLargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" />
             </Grid>
             <Grid Grid.Row="2" Margin="0,12,0,0">
                 <Grid.ColumnDefinitions>
@@ -331,13 +331,13 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock x:Name="infoScheduleTextBlock" x:Uid="Info_Schedule" FontSize="{Binding MediumToLargeFontSize}" VerticalAlignment="Top"/>
                 <Button Content="RESET" FontSize="{Binding MediumToLargeFontSize}" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Command="{Binding ResetOccupancyCommand}" Visibility="{Binding ResetButtonVisibility}"/>
-                <ListView x:Name="Agenda" Grid.Column="1" ItemsSource="{Binding AgendaItems}">
+                <ListView x:Name="Agenda" Grid.Column="1" ItemsSource="{Binding AgendaItems}" LayoutUpdated="{x:Bind ViewModel.Agenda_LayoutUpdated}" >
                     <interactivity:Interaction.Behaviors>
                         <core:EventTriggerBehavior EventName="SizeChanged">
-                            <core:InvokeCommandAction Command="{Binding UpdateDataTemplateWidthCommand}" CommandParameter="{Binding ElementName=Agenda, Path=ActualWidth}"/>
+                            <core:InvokeCommandAction Command="{Binding UpdateDataTemplateWidthCommand}" CommandParameter="{Binding ElementName=Agenda}"/>
                         </core:EventTriggerBehavior>
                         <core:EventTriggerBehavior EventName="Loaded">
-                            <core:InvokeCommandAction Command="{Binding UpdateDataTemplateWidthCommand}" CommandParameter="{Binding ElementName=Agenda, Path=ActualWidth}"/>
+                            <core:InvokeCommandAction Command="{Binding UpdateDataTemplateWidthCommand}" CommandParameter="{Binding ElementName=Agenda}"/>
                         </core:EventTriggerBehavior>
                     </interactivity:Interaction.Behaviors>
                     <ListView.ItemTemplate>
@@ -346,12 +346,12 @@
                                 <TextBlock Text="{Binding Title}" FontSize="{Binding LargeFontSize}"/>
                                 <Grid HorizontalAlignment="Left">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="{Binding Start.TimeOfDay, Converter={StaticResource TimeFormatConverter}}" FontSize="{Binding MediumFontSize}"/>
-                                    <TextBlock Grid.Column="1" Text=" - " FontSize="{Binding MediumFontSize}"/>
+                                    <TextBlock Grid.Column="1" Text="–" FontSize="{Binding MediumFontSize}" HorizontalAlignment="Center" Margin="6,0,6,0"/>
                                     <TextBlock Grid.Column="2" Text="{Binding End.TimeOfDay, Converter={StaticResource TimeFormatConverter}}" FontSize="{Binding MediumFontSize}"/>
                                 </Grid>   
                             </StackPanel>

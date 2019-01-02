@@ -180,21 +180,21 @@ namespace RoomInfo.ViewModels
         }));
 
         private ICommand _configWiFiCommand;
-        public ICommand ConfigWiFiCommand => _configWiFiCommand ?? (_configWiFiCommand = new DelegateCommand<object>((param) =>
+        public ICommand ConfigWiFiCommand => _configWiFiCommand ?? (_configWiFiCommand = new DelegateCommand<object>(async (param) =>
         {
-            
+            await _iotService.ConfigWifi();
         }));
 
         private ICommand _restartCommand;
         public ICommand RestartCommand => _restartCommand ?? (_restartCommand = new DelegateCommand<object>((param) =>
         {
-
+            _iotService.Restart();
         }));
 
         private ICommand _shutdownCommand;
         public ICommand ShutdownCommand => _shutdownCommand ?? (_shutdownCommand = new DelegateCommand<object>((param) =>
         {
-
+            _iotService.Shutdown();
         }));
 
         private async Task LoadCompanyLogo()

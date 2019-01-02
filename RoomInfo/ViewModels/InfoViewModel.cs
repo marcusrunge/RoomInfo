@@ -144,9 +144,6 @@ namespace RoomInfo.ViewModels
             var agendaItems = await _databaseService.GetAgendaItemsAsync(dateTimeNow);
             for (int i = 0; i < agendaItems.Count; i++)
             {
-                agendaItems[i].Width = _agendaItemWidth;
-                //AgendaItems[i].MediumFontSize = MediumFontSize;
-                //AgendaItems[i].LargeFontSize = MediumToLargeFontSize;
                 AgendaItems.Add(agendaItems[i]);
             }
             await UpdateTimerTask();
@@ -235,12 +232,10 @@ namespace RoomInfo.ViewModels
         private ICommand _updateDataTemplateWidthCommand;
         public ICommand UpdateDataTemplateWidthCommand => _updateDataTemplateWidthCommand ?? (_updateDataTemplateWidthCommand = new DelegateCommand<object>((param) =>
         {
-            if (param == null || AgendaItems == null) return;
-            _agendaItemWidth = (double)param;
-            for (int i = 0; i < AgendaItems.Count; i++)
-            {
-                AgendaItems[i].Width = _agendaItemWidth;
-            }
+            if (param == null) return;
+            ListView listView = (ListView)param;
+            _agendaItemWidth = listView.ActualWidth;
+            
         }));
 
         private ICommand _updateFontSizeCommand;
@@ -255,15 +250,18 @@ namespace RoomInfo.ViewModels
                 LargeFontSize = grid.ActualHeight / 17.77;
                 ExtraLargeFontSize = grid.ActualHeight / 13.33;
                 SuperLargeFontSize = grid.ActualHeight / 4.44;
-                if (AgendaItems != null)
-                {
-                    for (int i = 0; i < AgendaItems.Count; i++)
-                    {
-                        AgendaItems[i].MediumFontSize = MediumFontSize;
-                        AgendaItems[i].LargeFontSize = MediumToLargeFontSize;
-                    }
-                }
             }
         }));
+
+        public void Agenda_LayoutUpdated(object sender, object e)
+        {
+            if (AgendaItems == null) return;
+            for (int i = 0; i < AgendaItems.Count; i++)
+            {
+                AgendaItems[i].Width = _agendaItemWidth;
+                AgendaItems[i].MediumFontSize = MediumFontSize;
+                AgendaItems[i].LargeFontSize = MediumToLargeFontSize;
+            }
+        }
     }
 }
