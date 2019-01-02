@@ -145,6 +145,8 @@ namespace RoomInfo.ViewModels
             for (int i = 0; i < agendaItems.Count; i++)
             {
                 agendaItems[i].Width = _agendaItemWidth;
+                //AgendaItems[i].MediumFontSize = MediumFontSize;
+                //AgendaItems[i].LargeFontSize = MediumToLargeFontSize;
                 AgendaItems.Add(agendaItems[i]);
             }
             await UpdateTimerTask();
@@ -248,19 +250,19 @@ namespace RoomInfo.ViewModels
             else
             {
                 Grid grid = param as Grid;
-                if (AgendaItems != null)
-                {
-                    for (int i = 0; i < AgendaItems.Count; i++)
-                    {
-                        AgendaItems[i].MediumFontSize = 0;
-                        AgendaItems[i].LargeFontSize = 0;
-                    }
-                }
                 MediumFontSize = grid.ActualHeight / 26.66;
                 MediumToLargeFontSize = grid.ActualHeight / 20;
                 LargeFontSize = grid.ActualHeight / 17.77;
                 ExtraLargeFontSize = grid.ActualHeight / 13.33;
                 SuperLargeFontSize = grid.ActualHeight / 4.44;
+                if (AgendaItems != null)
+                {
+                    for (int i = 0; i < AgendaItems.Count; i++)
+                    {
+                        AgendaItems[i].MediumFontSize = MediumFontSize;
+                        AgendaItems[i].LargeFontSize = MediumToLargeFontSize;
+                    }
+                }
             }
         }));
     }

@@ -330,7 +330,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock x:Name="infoScheduleTextBlock" x:Uid="Info_Schedule" FontSize="{Binding MediumToLargeFontSize}" VerticalAlignment="Top"/>
-                <Button Content="RESET" FontSize="{Binding MediumToLargeFontSize}" VerticalAlignment="Bottom" Width="{Binding Path=ActualWidth,ElementName=infoScheduleTextBlock}" HorizontalAlignment="Center" Command="{Binding ResetOccupancyCommand}" Visibility="{Binding ResetButtonVisibility}"/>
+                <Button Content="RESET" FontSize="{Binding MediumToLargeFontSize}" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Command="{Binding ResetOccupancyCommand}" Visibility="{Binding ResetButtonVisibility}"/>
                 <ListView x:Name="Agenda" Grid.Column="1" ItemsSource="{Binding AgendaItems}">
                     <interactivity:Interaction.Behaviors>
                         <core:EventTriggerBehavior EventName="SizeChanged">
@@ -342,13 +342,18 @@
                     </interactivity:Interaction.Behaviors>
                     <ListView.ItemTemplate>
                         <DataTemplate >
-                            <StackPanel x:Name="agendaItemStackPanel" BorderBrush="LightGray" BorderThickness="0,0,0,1" Width="{Binding Width}">
-                                <TextBlock Text="{Binding Title}" FontSize="48"/>
-                                <TextBlock FontSize="36">
-                                    <Run Text="{Binding Start.TimeOfDay, Converter={StaticResource TimeFormatConverter}}" />
-                                    <Run Text=" - " />
-                                    <Run Text="{Binding End.TimeOfDay, Converter={StaticResource TimeFormatConverter}}" />
-                                </TextBlock>
+                            <StackPanel x:Name="agendaItemStackPanel"  BorderThickness="0,0,0,1" Width="{Binding Width}" BorderBrush="{ThemeResource SystemControlForegroundBaseMediumBrush}">
+                                <TextBlock Text="{Binding Title}" FontSize="{Binding LargeFontSize}"/>
+                                <Grid HorizontalAlignment="Left">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Start.TimeOfDay, Converter={StaticResource TimeFormatConverter}}" FontSize="{Binding MediumFontSize}"/>
+                                    <TextBlock Grid.Column="1" Text=" - " FontSize="{Binding MediumFontSize}"/>
+                                    <TextBlock Grid.Column="2" Text="{Binding End.TimeOfDay, Converter={StaticResource TimeFormatConverter}}" FontSize="{Binding MediumFontSize}"/>
+                                </Grid>   
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
