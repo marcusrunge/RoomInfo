@@ -58,7 +58,7 @@
                                 <xaml:ElementTheme>Default</xaml:ElementTheme>
                             </RadioButton.CommandParameter>
                         </RadioButton>
-                    </StackPanel>                    
+                    </StackPanel>
                 </StackPanel>
                 <StackPanel Margin="{StaticResource SettingsSubheaderMargin}">
                     <TextBlock x:Uid="Settings_Language" Style="{StaticResource SubtitleTextBlockStyle}" />
@@ -110,8 +110,13 @@
                         </Grid>
                     </StackPanel>
                 </StackPanel>
-                <StackPanel Margin="{StaticResource EightTopMargin}" Width="384" Height="384" BorderThickness="3" HorizontalAlignment="Left" BorderBrush="Red" Visibility="{Binding IotPanelVisibility}">
-                    <TextBlock Text="{Binding DeviceFamily}"/>
+                <StackPanel Margin="{StaticResource EightTopMargin}" BorderThickness="3" HorizontalAlignment="Left" BorderBrush="#7FFF0000" Visibility="{Binding IotPanelVisibility}">
+                    <Border HorizontalAlignment="Left" BorderBrush="#7FFF0000" BorderThickness="0,0,3,3">
+                        <TextBlock Text="IoT" Foreground="#7FFF0000"/>
+                    </Border>
+                    <Button x:Name="WiFiConfigButton" x:Uid="Settings_IoT_WiFiButton" Style="{StaticResource RedTransparentButtonStyle}" Content="Config Wi-Fi" Command="{Binding ConfigWiFiCommand}"/>
+                    <Button x:Name="DeviceRestartButton" x:Uid="Settings_IoT_RestartButton" Style="{StaticResource RedTransparentButtonStyle}" Content="Device Restart" Width="{Binding ElementName=WiFiConfigButton, Path=ActualWidth}" Command="{Binding RestartCommand}"/>
+                    <Button x:Name="DeviceShutdownButton" x:Uid="Settings_IoT_ShutdownButton" Style="{StaticResource RedTransparentButtonStyle}" Content="Device Shutdown" Width="{Binding ElementName=WiFiConfigButton, Path=ActualWidth}" Command="{Binding ShutdownCommand}"/>
                 </StackPanel>
                 <TextBlock x:Uid="Settings_About" Style="{StaticResource SubtitleTextBlockStyle}"/>
                 <StackPanel Margin="{StaticResource EightTopMargin}">

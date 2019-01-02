@@ -179,6 +179,24 @@ namespace RoomInfo.ViewModels
             await LoadCompanyLogo();
         }));
 
+        private ICommand _configWiFiCommand;
+        public ICommand ConfigWiFiCommand => _configWiFiCommand ?? (_configWiFiCommand = new DelegateCommand<object>((param) =>
+        {
+            
+        }));
+
+        private ICommand _restartCommand;
+        public ICommand RestartCommand => _restartCommand ?? (_restartCommand = new DelegateCommand<object>((param) =>
+        {
+
+        }));
+
+        private ICommand _shutdownCommand;
+        public ICommand ShutdownCommand => _shutdownCommand ?? (_shutdownCommand = new DelegateCommand<object>((param) =>
+        {
+
+        }));
+
         private async Task LoadCompanyLogo()
         {
             StorageFolder assets = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Assets");

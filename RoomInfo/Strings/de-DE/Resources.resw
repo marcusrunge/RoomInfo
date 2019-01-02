@@ -213,6 +213,15 @@
   <data name="Settings_DeleteButton.Content" xml:space="preserve">
     <value>Löschen</value>
   </data>
+  <data name="Settings_IoT_RestartButton.Content" xml:space="preserve">
+    <value>Neustarten</value>
+  </data>
+  <data name="Settings_IoT_ShutdownButton.Content" xml:space="preserve">
+    <value>Herunterfahren</value>
+  </data>
+  <data name="Settings_IoT_WiFiButton.Content" xml:space="preserve">
+    <value>Wi-Fi Einstellen</value>
+  </data>
   <data name="Settings_Language.Text" xml:space="preserve">
     <value>Sprachauswahl</value>
   </data>

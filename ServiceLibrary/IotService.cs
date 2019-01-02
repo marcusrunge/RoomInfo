@@ -16,7 +16,8 @@ namespace ApplicationServiceLibrary
     {
         public bool IsIotDevice()
         {
-            return AnalyticsInfo.VersionInfo.DeviceFamily.Equals("Windows.IoT");
+            //return AnalyticsInfo.VersionInfo.DeviceFamily.Equals("Windows.IoT");
+            return true;
         }
     }
 }
