@@ -131,6 +131,7 @@
     <Compile Include="Helpers\FlyoutDependencyProperty.cs" />
     <Compile Include="Helpers\Json.cs" />
     <Compile Include="Helpers\LanguageEnumToBooleanConverter.cs" />
+    <Compile Include="Helpers\OccupancyIntToStringConverter.cs" />
     <Compile Include="Helpers\SettingsStorageExtensions.cs" />
     <Compile Include="Helpers\TaskExtensions.cs" />
     <Compile Include="Helpers\TimeFormatConverter.cs" />

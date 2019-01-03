@@ -144,8 +144,14 @@
   <data name="Info_OccupancyFree.Content" xml:space="preserve">
     <value>FREI</value>
   </data>
+  <data name="Info_OccupancyLocked.Content" xml:space="preserve">
+    <value>GESPERRT</value>
+  </data>
   <data name="Info_OccupancyOccupied.Content" xml:space="preserve">
     <value>BELEGT</value>
+  </data>
+  <data name="Info_OccupancyPresent.Content" xml:space="preserve">
+    <value>ANWESEND</value>
   </data>
   <data name="Info_OccupancyTextBlockAbsent.Text" xml:space="preserve">
     <value>A B W E S E N D</value>
@@ -156,8 +162,14 @@
   <data name="Info_OccupancyTextBlockFree.Text" xml:space="preserve">
     <value>F R E I</value>
   </data>
+  <data name="Info_OccupancyTextBlockLocked.Text" xml:space="preserve">
+    <value>G E S P E R R T</value>
+  </data>
   <data name="Info_OccupancyTextBlockOccupied.Text" xml:space="preserve">
     <value>B E L E G T</value>
+  </data>
+  <data name="Info_OccupancyTextBlockPresent.Text" xml:space="preserve">
+    <value>A N W E S E N D</value>
   </data>
   <data name="Info_Schedule.Text" xml:space="preserve">
     <value>Belegung:</value>
@@ -263,6 +275,30 @@
   </data>
   <data name="Settings_StandardOccupancy.Text" xml:space="preserve">
     <value>Standardbelegung außerhalb von Terminen:</value>
+  </data>
+  <data name="Settings_StandardWeek.Text" xml:space="preserve">
+    <value>Standardwoche</value>
+  </data>
+  <data name="Settings_StandardWeek_Friday.Text" xml:space="preserve">
+    <value>Freitag</value>
+  </data>
+  <data name="Settings_StandardWeek_Monday.Text" xml:space="preserve">
+    <value>Montag</value>
+  </data>
+  <data name="Settings_StandardWeek_Saturday.Text" xml:space="preserve">
+    <value>Samstag</value>
+  </data>
+  <data name="Settings_StandardWeek_Sunday.Text" xml:space="preserve">
+    <value>Sonntag</value>
+  </data>
+  <data name="Settings_StandardWeek_Thursday.Text" xml:space="preserve">
+    <value>Donnerstag</value>
+  </data>
+  <data name="Settings_StandardWeek_Tuesday.Text" xml:space="preserve">
+    <value>Dienstag</value>
+  </data>
+  <data name="Settings_StandardWeek_Wednesday.Text" xml:space="preserve">
+    <value>Mittwoch</value>
   </data>
   <data name="Settings_TcpPort.Text" xml:space="preserve">
     <value>TCP-Port:</value>

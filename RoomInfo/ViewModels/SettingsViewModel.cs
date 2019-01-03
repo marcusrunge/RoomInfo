@@ -22,8 +22,6 @@ using System.Linq;
 using Windows.Storage.Search;
 using Windows.UI.Input.Preview.Injection;
 using Windows.System;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.Storage.Streams;
 

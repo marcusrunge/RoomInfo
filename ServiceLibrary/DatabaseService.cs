@@ -23,7 +23,8 @@ namespace ApplicationServiceLibrary
         {            
             _agendaItemContext = new AgendaItemContext();
             _agendaItemContext.Database.ExecuteSqlCommand("CREATE TABLE IF NOT EXISTS AgendaItems (Id INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, Start NUMERIC , End NUMERIC , Description TEXT, IsAllDayEvent INTEGER, IsOverridden INTEGER, Occupancy INTEGER, TimeStamp NUMERIC, IsDeleted INTEGER)");
-           _agendaItemContext.Database.Migrate();
+            //_agendaItemContext.Database.ExecuteSqlCommand("CREATE TABLE IF NOT EXISTS StandardWeek (Id INTEGER PRIMARY KEY AUTOINCREMENT)");
+            _agendaItemContext.Database.Migrate();
         }
 
         public async Task AddAgendaItemAsync(AgendaItem agendaItem)

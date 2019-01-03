@@ -299,4 +299,40 @@
   <data name="Settings_IoT_WiFiButton.Content" xml:space="preserve">
     <value>Config Wi-Fi</value>
   </data>
+  <data name="Info_OccupancyLocked.Content" xml:space="preserve">
+    <value>LOCKED</value>
+  </data>
+  <data name="Info_OccupancyPresent.Content" xml:space="preserve">
+    <value>PRESENT</value>
+  </data>
+  <data name="Info_OccupancyTextBlockLocked.Text" xml:space="preserve">
+    <value>L O C K E D</value>
+  </data>
+  <data name="Info_OccupancyTextBlockPresent.Text" xml:space="preserve">
+    <value>P R E S E N T</value>
+  </data>
+  <data name="Settings_StandardWeek.Text" xml:space="preserve">
+    <value>Standardweek</value>
+  </data>
+  <data name="Settings_StandardWeek_Friday.Text" xml:space="preserve">
+    <value>Friday</value>
+  </data>
+  <data name="Settings_StandardWeek_Monday.Text" xml:space="preserve">
+    <value>Monday</value>
+  </data>
+  <data name="Settings_StandardWeek_Saturday.Text" xml:space="preserve">
+    <value>Saturday</value>
+  </data>
+  <data name="Settings_StandardWeek_Sunday.Text" xml:space="preserve">
+    <value>Sunday</value>
+  </data>
+  <data name="Settings_StandardWeek_Thursday.Text" xml:space="preserve">
+    <value>Thursday</value>
+  </data>
+  <data name="Settings_StandardWeek_Tuesday.Text" xml:space="preserve">
+    <value>Tuesday</value>
+  </data>
+  <data name="Settings_StandardWeek_Wednesday.Text" xml:space="preserve">
+    <value>Wednesday</value>
+  </data>
 </root>

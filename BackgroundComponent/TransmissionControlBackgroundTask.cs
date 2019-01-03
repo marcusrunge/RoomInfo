@@ -78,6 +78,10 @@ namespace BackgroundComponent
                                         json = JsonConvert.SerializeObject(package);
                                         await SendStringData(streamSocket, streamSocket.Information.RemoteHostName, streamSocket.Information.RemotePort, json);
                                         break;
+                                    case PayloadType.StandardWeek:
+                                        break;
+                                    case PayloadType.RequestStandardWeek:
+                                        break;
                                     default:
                                         streamSocket.TransferOwnership("StreamSocket");
                                         break;

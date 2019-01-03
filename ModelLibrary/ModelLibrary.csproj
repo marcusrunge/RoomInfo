@@ -127,6 +127,7 @@
     <Compile Include="Events.cs" />
     <Compile Include="Room.cs" />
     <Compile Include="Package.cs" />
+    <Compile Include="StandardWeek.cs" />
     <EmbeddedResource Include="Properties\ModelLibrary.rd.xml" />
   </ItemGroup>
   <ItemGroup>

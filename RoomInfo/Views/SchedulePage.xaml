@@ -56,9 +56,11 @@
                 <TextBox Grid.Row="4" Margin="0,6,0,6" Height="64" x:Uid="Schedule_AppointmentDescription"  TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <ComboBox Grid.Row="5" HorizontalAlignment="Stretch" VerticalAlignment="Center" SelectedIndex="{Binding SelectedComboBoxIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                     <ComboBoxItem x:Uid="Info_OccupancyFree" />
+                    <ComboBoxItem x:Uid="Info_OccupancyPresent" />
+                    <ComboBoxItem x:Uid="Info_OccupancyAbsent" />
                     <ComboBoxItem x:Uid="Info_OccupancyBusy" />
                     <ComboBoxItem x:Uid="Info_OccupancyOccupied" />
-                    <ComboBoxItem x:Uid="Info_OccupancyAbsent" />
+                    <ComboBoxItem x:Uid="Info_OccupancyLocked" />
                 </ComboBox>
                 <Button x:Name="saveReservationButton" Grid.Row="6" HorizontalAlignment="Right" x:Uid="Schedule_SaveReservationButton" Command="{Binding AddOrUpdateReservationCommand}" CommandParameter="{Binding ElementName=flyoutGrid}" IsEnabled="{Binding IsReservationButtonEnabled}" />
             </Grid>
@@ -115,7 +117,7 @@
                                                     <ColumnDefinition Width="1*"/>
                                                 </Grid.ColumnDefinitions>
                                                 <TextBlock Text="{Binding Start.TimeOfDay, Converter={StaticResource TimeFormatConverter}}"/>
-                                                <TextBlock Grid.Column="1" Text="{Binding Title}" Margin="3,0,0,0"/>
+                                                <TextBlock Grid.Column="1" Text="{Binding Title}" Margin="3,0,0,0" TextWrapping="Wrap"/>
                                             </Grid>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>

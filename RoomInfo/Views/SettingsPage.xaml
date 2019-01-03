@@ -103,10 +103,12 @@
                                 <core:InvokeCommandAction Command="{Binding SetStandardOccupancyCommand}"/>
                             </core:EventTriggerBehavior>
                         </interactivity:Interaction.Behaviors>
-                        <ComboBoxItem Content="FREI"/>
-                        <ComboBoxItem Content="BESCHÄFTIGT" />
-                        <ComboBoxItem Content="BELEGT" />
-                        <ComboBoxItem Content="ABWESEND" />
+                        <ComboBoxItem x:Uid="Info_OccupancyFree" />
+                        <ComboBoxItem x:Uid="Info_OccupancyPresent" />
+                        <ComboBoxItem x:Uid="Info_OccupancyAbsent" />
+                        <ComboBoxItem x:Uid="Info_OccupancyBusy" />
+                        <ComboBoxItem x:Uid="Info_OccupancyOccupied" />
+                        <ComboBoxItem x:Uid="Info_OccupancyLocked" />
                     </ComboBox>
                 </StackPanel>
                 <StackPanel Margin="{StaticResource SettingsSubheaderMargin}">

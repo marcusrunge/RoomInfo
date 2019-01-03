@@ -52,17 +52,26 @@ namespace ApplicationServiceLibrary
                     occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockFree/Text");
                     break;
                 case 1:
-                    occupancyIcon = "⧖";
-                    occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockBusy/Text");
+                    occupancyIcon = "웃";
+                    occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockPresent/Text");
                     break;
                 case 2:
-                    occupancyIcon = "🗙";
-                    occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockOccupied/Text");
-                    break;
-                case 3:
                     occupancyIcon = "∞";
                     occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockAbsent/Text");
                     break;
+                case 3:
+                    occupancyIcon = "⧖";
+                    occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockBusy/Text");
+                    break;                
+                case 4:
+                    occupancyIcon = "🗙";
+                    occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockOccupied/Text");
+                    break;
+                case 5:
+                    occupancyIcon = "⚷";
+                    occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockLocked/Text");
+                    break;
+
                 default:
                     break;
             }

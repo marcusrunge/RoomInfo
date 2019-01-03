@@ -153,6 +153,10 @@ namespace NetworkServiceLibrary
                         catch { }
                     }
                     break;
+                case PayloadType.StandardWeek:
+                    break;
+                case PayloadType.RequestStandardWeek:
+                    break;
                 default:
                     break;
             }
