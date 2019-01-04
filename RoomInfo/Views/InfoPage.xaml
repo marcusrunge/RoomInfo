@@ -395,6 +395,12 @@
                 <core:EventTriggerBehavior EventName="Loaded">
                     <core:InvokeCommandAction Command="{Binding UpdateFontSizeCommand}" CommandParameter="{Binding ElementName=grid}"/>
                 </core:EventTriggerBehavior>
+                <core:EventTriggerBehavior EventName="PointerPressed">
+                    <core:InvokeCommandAction Command="{x:Bind ViewModel.OnPointerPressedCommand, Mode=OneWay}"/>
+                </core:EventTriggerBehavior>
+                <core:EventTriggerBehavior EventName="PointerReleased">
+                    <core:InvokeCommandAction Command="{x:Bind ViewModel.OnPointerReleasedCommand, Mode=OneWay}"/>
+                </core:EventTriggerBehavior>
             </interactivity:Interaction.Behaviors>
             <!--The SystemControlPageBackgroundChromeLowBrush background represents where you should place your content. 
                 Place your content here.-->

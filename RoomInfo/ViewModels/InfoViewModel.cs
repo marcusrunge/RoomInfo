@@ -17,6 +17,7 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Prism.Events;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 
 namespace RoomInfo.ViewModels
 {
@@ -26,8 +27,10 @@ namespace RoomInfo.ViewModels
         IApplicationDataService _applicationDataService;
         ILiveTileUpdateService _liveTileUpdateService;
         IEventAggregator _eventAggregator;
+        IIotService _iotService;
         AgendaItem _activeAgendaItem;
-        double _agendaItemWidth;
+        UIElement _uIElement;
+        double _agendaItemWidth, _onPointerPressedY, _onPointerReleasedY;
 
         OccupancyVisualState _occupancy = default(OccupancyVisualState);
         public OccupancyVisualState Occupancy { get => _occupancy; set { SetProperty(ref _occupancy, value); } }
@@ -83,6 +86,7 @@ namespace RoomInfo.ViewModels
             _applicationDataService = unityContainer.Resolve<IApplicationDataService>();
             _liveTileUpdateService = unityContainer.Resolve<ILiveTileUpdateService>();
             _eventAggregator = unityContainer.Resolve<IEventAggregator>();
+            _iotService = unityContainer.Resolve<IIotService>();
         }
 
         public async override void OnNavigatedTo(NavigatedToEventArgs navigatedToEventArgs, Dictionary<string, object> viewModelState)
@@ -263,5 +267,21 @@ namespace RoomInfo.ViewModels
                 AgendaItems[i].LargeFontSize = MediumToLargeFontSize;
             }
         }
+
+        private ICommand _onPointerPressedCommand;
+        public ICommand OnPointerPressedCommand => _onPointerPressedCommand ?? (_onPointerPressedCommand = new DelegateCommand<PointerRoutedEventArgs>(async (param) =>
+        {
+            _uIElement = param.OriginalSource as UIElement;
+            _onPointerPressedY = param.GetCurrentPoint(_uIElement).Position.Y;
+        }));
+
+        private ICommand _onPointerReleasedCommand;
+        public ICommand OnPointerReleasedCommand => _onPointerReleasedCommand ?? (_onPointerReleasedCommand = new DelegateCommand<PointerRoutedEventArgs>(async (param) =>
+        {
+            _onPointerReleasedY = param.GetCurrentPoint(_uIElement).Position.Y;
+            double deltaY = _onPointerReleasedY - _onPointerPressedY;
+            if (deltaY > 0 && deltaY > 10) await _iotService.Dim(false);
+            if (deltaY < 0 && deltaY < -10) await _iotService.Dim(true);
+        }));
     }
 }

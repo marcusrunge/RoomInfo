@@ -44,6 +44,8 @@
     <Capability Name="privateNetworkClientServer" />
     <uap:Capability Name="picturesLibrary" />
     <rescap:Capability Name="inputInjectionBrokered" />
+    <iot:Capability Name="lowLevelDevices" />
+    <iot:Capability Name="systemManagement" />
   </Capabilities>
   <genTemplate:Metadata>
     <genTemplate:Item Name="generator" Value="Windows Template Studio" />

@@ -27,13 +27,15 @@ namespace NetworkServiceLibrary
         IApplicationDataService _applicationDataService;
         IBackgroundTaskService _backgroundTaskService;
         IDatabaseService _databaseService;
+        IIotService _iotService;
         StreamSocketListener _streamSocketListener;
-        public TransmissionControlService(IApplicationDataService applicationDataService, IBackgroundTaskService backgroundTaskService, IEventAggregator eventAggregator, IDatabaseService databaseService)
+        public TransmissionControlService(IApplicationDataService applicationDataService, IBackgroundTaskService backgroundTaskService, IEventAggregator eventAggregator, IDatabaseService databaseService, IIotService iotService)
         {
             _applicationDataService = applicationDataService;
             _backgroundTaskService = backgroundTaskService;
             _eventAggregator = eventAggregator;
             _databaseService = databaseService;
+            _iotService = iotService;
         }
 
         public async Task SendStringData(HostName hostName, string port, string data)
@@ -139,19 +141,7 @@ namespace NetworkServiceLibrary
                     await SendStringData(streamSocket, streamSocket.Information.RemoteHostName, streamSocket.Information.RemotePort, json);
                     break;
                 case PayloadType.IotDim:
-                    string i2cDeviceSelector = I2cDevice.GetDeviceSelector();
-                    I2cConnectionSettings i2CConnectionSettings = new I2cConnectionSettings(0x45);
-                    IReadOnlyList<DeviceInformation> deviceInformationCollection = await DeviceInformation.FindAllAsync(i2cDeviceSelector);
-                    if (deviceInformationCollection.Count > 0)
-                    {
-                        var i2CDevice = await I2cDevice.FromIdAsync(deviceInformationCollection[0].Id, i2CConnectionSettings);
-                        byte brightness = (bool)package.Payload ? (byte)7 : (byte)255;
-                        try
-                        {
-                            i2CDevice?.Write(new byte[] { 0x86, brightness });
-                        }
-                        catch { }
-                    }
+                    await _iotService.Dim((bool)package.Payload);
                     break;
                 case PayloadType.StandardWeek:
                     break;
