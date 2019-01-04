@@ -29,8 +29,8 @@ namespace RoomInfo.ViewModels
         IEventAggregator _eventAggregator;
         IIotService _iotService;
         AgendaItem _activeAgendaItem;
-        UIElement _uIElement;
-        double _agendaItemWidth, _onPointerPressedY, _onPointerReleasedY;
+        double _agendaItemWidth;
+        ResourceLoader _resourceLoader;
 
         OccupancyVisualState _occupancy = default(OccupancyVisualState);
         public OccupancyVisualState Occupancy { get => _occupancy; set { SetProperty(ref _occupancy, value); } }
@@ -80,6 +80,9 @@ namespace RoomInfo.ViewModels
         double _superLargeFontSize = default(double);
         public double SuperLargeFontSize { get => _superLargeFontSize; set { SetProperty(ref _superLargeFontSize, value); } }
 
+        Visibility _brightnessAdjustmentVisibility = default(Visibility);
+        public Visibility BrightnessAdjustmentVisibility { get => _brightnessAdjustmentVisibility; set { SetProperty(ref _brightnessAdjustmentVisibility, value); } }
+
         public InfoViewModel(IUnityContainer unityContainer)
         {
             _databaseService = unityContainer.Resolve<IDatabaseService>();
@@ -92,7 +95,7 @@ namespace RoomInfo.ViewModels
         public async override void OnNavigatedTo(NavigatedToEventArgs navigatedToEventArgs, Dictionary<string, object> viewModelState)
         {
             base.OnNavigatedTo(navigatedToEventArgs, viewModelState);
-            var resourceLoader = ResourceLoader.GetForCurrentView();
+            _resourceLoader = ResourceLoader.GetForCurrentView();
             StorageFolder assets = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Assets");
             string logoFileName = _applicationDataService.GetSetting<string>("LogoFileName");
             CompanyLogo = new Uri(assets.Path + "/" + logoFileName);
@@ -100,7 +103,7 @@ namespace RoomInfo.ViewModels
             RoomName = _applicationDataService.GetSetting<string>("RoomName");
             RoomNumber = _applicationDataService.GetSetting<string>("RoomNumber");
             CultureInfo cultureInfo = CultureInfo.CurrentCulture;
-            Clock = DateTime.Now.ToString("t", cultureInfo) + " " + resourceLoader.GetString("InfoViewModel_Clock");
+            Clock = DateTime.Now.ToString("t", cultureInfo) + " " + _resourceLoader.GetString("InfoViewModel_Clock");
             Date = DateTime.Now.ToString("D", cultureInfo);
             DispatcherTimer dispatcherTimer = new DispatcherTimer
             {
@@ -108,7 +111,7 @@ namespace RoomInfo.ViewModels
             };
             dispatcherTimer.Tick += (s, e) =>
             {
-                Clock = DateTime.Now.ToString("t", cultureInfo) + " " + resourceLoader.GetString("InfoViewModel_Clock");
+                Clock = DateTime.Now.ToString("t", cultureInfo) + " " + _resourceLoader.GetString("InfoViewModel_Clock");
                 Date = DateTime.Now.ToString("D", cultureInfo);
             };
             dispatcherTimer.Start();
@@ -122,8 +125,9 @@ namespace RoomInfo.ViewModels
             {
                 SelectedComboBoxIndex = i;
                 Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
-                await OverrideOccupancy();                
+                await OverrideOccupancy();
             });
+            BrightnessAdjustmentVisibility = _iotService.IsIotDevice() ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private async Task OverrideOccupancy()
@@ -239,7 +243,7 @@ namespace RoomInfo.ViewModels
             if (param == null) return;
             ListView listView = (ListView)param;
             _agendaItemWidth = listView.ActualWidth;
-            
+
         }));
 
         private ICommand _updateFontSizeCommand;
@@ -268,20 +272,32 @@ namespace RoomInfo.ViewModels
             }
         }
 
-        private ICommand _onPointerPressedCommand;
-        public ICommand OnPointerPressedCommand => _onPointerPressedCommand ?? (_onPointerPressedCommand = new DelegateCommand<PointerRoutedEventArgs>(async (param) =>
+        //private ICommand _onPointerPressedCommand;
+        //public ICommand OnPointerPressedCommand => _onPointerPressedCommand ?? (_onPointerPressedCommand = new DelegateCommand<PointerRoutedEventArgs>(async (param) =>
+        //{
+        //    _uIElement = param.OriginalSource as UIElement;
+        //    _onPointerPressedY = param.GetCurrentPoint(_uIElement).Position.Y;
+        //}));
+
+        //private ICommand _onPointerReleasedCommand;
+        //public ICommand OnPointerReleasedCommand => _onPointerReleasedCommand ?? (_onPointerReleasedCommand = new DelegateCommand<PointerRoutedEventArgs>(async (param) =>
+        //{
+        //    _onPointerReleasedY = param.GetCurrentPoint(_uIElement).Position.Y;
+        //    double deltaY = _onPointerReleasedY - _onPointerPressedY;
+        //    if (deltaY > 0 && deltaY > 10) await _iotService.Dim(false);
+        //    if (deltaY < 0 && deltaY < -10) await _iotService.Dim(true);
+        //}));
+
+        private ICommand _dimCommand;
+        public ICommand DimCommand => _dimCommand ?? (_dimCommand = new DelegateCommand<object>(async (param) =>
         {
-            _uIElement = param.OriginalSource as UIElement;
-            _onPointerPressedY = param.GetCurrentPoint(_uIElement).Position.Y;
+            await _iotService.Dim(true);            
         }));
 
-        private ICommand _onPointerReleasedCommand;
-        public ICommand OnPointerReleasedCommand => _onPointerReleasedCommand ?? (_onPointerReleasedCommand = new DelegateCommand<PointerRoutedEventArgs>(async (param) =>
-        {
-            _onPointerReleasedY = param.GetCurrentPoint(_uIElement).Position.Y;
-            double deltaY = _onPointerReleasedY - _onPointerPressedY;
-            if (deltaY > 0 && deltaY > 10) await _iotService.Dim(false);
-            if (deltaY < 0 && deltaY < -10) await _iotService.Dim(true);
+        private ICommand _brightCommand;
+        public ICommand BrightCommand => _brightCommand ?? (_brightCommand = new DelegateCommand<object>(async (param) =>
+        {            
+                await _iotService.Dim(false);                
         }));
     }
 }

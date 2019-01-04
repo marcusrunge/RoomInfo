@@ -395,12 +395,12 @@
                 <core:EventTriggerBehavior EventName="Loaded">
                     <core:InvokeCommandAction Command="{Binding UpdateFontSizeCommand}" CommandParameter="{Binding ElementName=grid}"/>
                 </core:EventTriggerBehavior>
-                <core:EventTriggerBehavior EventName="PointerPressed">
+                <!--<core:EventTriggerBehavior EventName="PointerPressed">
                     <core:InvokeCommandAction Command="{x:Bind ViewModel.OnPointerPressedCommand, Mode=OneWay}"/>
                 </core:EventTriggerBehavior>
                 <core:EventTriggerBehavior EventName="PointerReleased">
                     <core:InvokeCommandAction Command="{x:Bind ViewModel.OnPointerReleasedCommand, Mode=OneWay}"/>
-                </core:EventTriggerBehavior>
+                </core:EventTriggerBehavior>-->
             </interactivity:Interaction.Behaviors>
             <!--The SystemControlPageBackgroundChromeLowBrush background represents where you should place your content. 
                 Place your content here.-->
@@ -451,7 +451,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock x:Name="infoScheduleTextBlock" x:Uid="Info_Schedule" FontSize="{Binding MediumToLargeFontSize}" VerticalAlignment="Top"/>
-                <Button Content="RESET" FontSize="{Binding MediumToLargeFontSize}" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Command="{Binding ResetOccupancyCommand}" Visibility="{Binding ResetButtonVisibility}"/>
+                <Button VerticalAlignment="Bottom" Content="RESET" FontSize="{Binding MediumToLargeFontSize}" HorizontalAlignment="Stretch" Command="{Binding ResetOccupancyCommand}" Visibility="{Binding ResetButtonVisibility}"/>
                 <ListView x:Name="Agenda" Grid.Column="1" ItemsSource="{Binding AgendaItems}" LayoutUpdated="{x:Bind ViewModel.Agenda_LayoutUpdated}" >
                     <interactivity:Interaction.Behaviors>
                         <core:EventTriggerBehavior EventName="SizeChanged">
@@ -536,6 +536,14 @@
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
                     </ComboBox>
+                    <Grid Grid.Row="1" VerticalAlignment="Bottom" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Button HorizontalAlignment="Stretch" Grid.Column="1" x:Name="dimButton" Content="☾" FontSize="{Binding MediumToLargeFontSize}" Command="{Binding DimCommand}" Margin="6,0,6,0" Visibility="{Binding BrightnessAdjustmentVisibility}"/>
+                        <Button HorizontalAlignment="Stretch"  x:Name="brightButton" Content="☼"  FontSize="{Binding MediumToLargeFontSize}" Command="{Binding BrightCommand}" Margin="6,0,6,0" Visibility="{Binding BrightnessAdjustmentVisibility}"/>
+                    </Grid>                    
                 </Grid>
             </Grid>
         </Grid>

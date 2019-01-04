@@ -7,6 +7,7 @@ namespace ApplicationServiceLibrary
         T GetSetting<T>(string key);
         void SaveSetting(string key, object value);
         void RemoveSetting(string key);
+        bool HasSetting(string key);
     }
     public class ApplicationDataService : IApplicationDataService
     {
@@ -44,5 +45,15 @@ namespace ApplicationServiceLibrary
         /// <param name="key">Settings Key</param>  
         /// <param name="settingStrategy">Setting Strategy</param>
         public void RemoveSetting(string key) => _localSettings.Values.Remove(key);
+
+        /// <summary>    
+        /// Checks whether setting already exists or not
+        /// </summary>   
+        /// <param name="key">Settings Key</param>  
+        /// <returns>Boolean whether setting exists</returns>
+        public bool HasSetting(string key)
+        {
+            return _localSettings.Values.ContainsKey(key);
+        }
     }
 }

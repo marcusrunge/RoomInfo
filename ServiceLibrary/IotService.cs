@@ -32,6 +32,7 @@ namespace ApplicationServiceLibrary
                 try
                 {
                     i2CDevice?.Write(new byte[] { 0x86, brightness });
+                    i2CDevice.Dispose();
                 }
                 catch { }
             }
