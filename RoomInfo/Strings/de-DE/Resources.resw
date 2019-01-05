@@ -318,4 +318,13 @@
   <data name="Settings_UdpPort.Text" xml:space="preserve">
     <value>UDP-Port:</value>
   </data>
+  <data name="WiFiUserControl_ConnectButton.Content" xml:space="preserve">
+    <value>Verbinden</value>
+  </data>
+  <data name="WiFiUserControl_DisconnectButton.Content" xml:space="preserve">
+    <value>Trennen</value>
+  </data>
+  <data name="WiFiUserControl_ReconnectCheckBox.Content" xml:space="preserve">
+    <value>Wiederverbinden</value>
+  </data>
 </root>

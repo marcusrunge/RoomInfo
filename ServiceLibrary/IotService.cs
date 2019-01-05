@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
 using Windows.Devices.I2c;
 using Windows.System;
-using Windows.System.Profile;
 
 namespace ApplicationServiceLibrary
 {

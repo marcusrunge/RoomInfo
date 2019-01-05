@@ -20,4 +20,10 @@ namespace ModelLibrary
     public class FileItemSelectionChangedUpdatedEvent : PubSubEvent<int>
     {
     }
+    public class WiFiNetworkSelectionChangedUpdatedEvent : PubSubEvent<int>
+    {
+    }
+    public class WiFiNetworkConnectionChangedUpdatedEvent : PubSubEvent<int>
+    {
+    }
 }

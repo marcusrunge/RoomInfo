@@ -335,4 +335,13 @@
   <data name="Settings_StandardWeek_Wednesday.Text" xml:space="preserve">
     <value>Wednesday</value>
   </data>
+  <data name="WiFiUserControl_ConnectButton.Content" xml:space="preserve">
+    <value>Connect</value>
+  </data>
+  <data name="WiFiUserControl_ReconnectCheckBox.Content" xml:space="preserve">
+    <value>Re-Connect</value>
+  </data>
+  <data name="WiFiUserControl_DisconnectButton.Content" xml:space="preserve">
+    <value>Disconnect</value>
+  </data>
 </root>

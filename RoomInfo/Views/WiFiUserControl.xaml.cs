@@ -3,22 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
 using Windows.Devices.WiFi;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 
 // Die Elementvorlage "Benutzersteuerelement" wird unter https://go.microsoft.com/fwlink/?LinkId=234236 dokumentiert.
 
@@ -26,51 +17,41 @@ namespace RoomInfo.Views
 {
     public sealed partial class WiFiUserControl : UserControl, INotifyPropertyChanged
     {
-        public WiFiAdapter WiFiAdapter { get; private set; }
+        WiFiAdapter _wiFiAdapter;
         ObservableCollection<WiFiNetwork> _wiFiNetworks = default(ObservableCollection<WiFiNetwork>);
         public ObservableCollection<WiFiNetwork> WiFiNetworks { get => _wiFiNetworks; set { SetProperty(ref _wiFiNetworks, value); } }
 
         public WiFiUserControl()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             WiFiNetworks = new ObservableCollection<WiFiNetwork>();
         }
 
         private void ShowNetworks()
         {
-            foreach (var wiFiAvailableNetwork in WiFiAdapter.NetworkReport.AvailableNetworks)
+            if (_wiFiAdapter != null)
             {
-                WiFiNetworks.Add(new WiFiNetwork() { NetworkName = wiFiAvailableNetwork.Ssid });
+                foreach (var wiFiAvailableNetwork in _wiFiAdapter.NetworkReport.AvailableNetworks)
+                {
+                    var wiFiAvailableNetworkQuery = WiFiNetworks.Where(x => x.NetworkName.Equals(wiFiAvailableNetwork.Ssid)).Select(x => x).FirstOrDefault();
+                    if (wiFiAvailableNetworkQuery == null) WiFiNetworks.Add(new WiFiNetwork(_wiFiAdapter, wiFiAvailableNetwork) { HashCode = wiFiAvailableNetwork.GetHashCode(), NetworkName = wiFiAvailableNetwork.Ssid  });
+                }
             }
         }
 
         private async Task InitializeFirstAdapter()
         {
             var access = await WiFiAdapter.RequestAccessAsync();
-            if (access != WiFiAccessStatus.Allowed)
-            {
-                throw new Exception("WiFiAccessStatus not allowed");
-            }
-            else
+            if (access == WiFiAccessStatus.Allowed)
             {
                 var wifiAdapterResults = await DeviceInformation.FindAllAsync(WiFiAdapter.GetDeviceSelector());
-                if (wifiAdapterResults.Count >= 1)
-                {
-                    this.WiFiAdapter = await WiFiAdapter.FromIdAsync(wifiAdapterResults[0].Id);
-                }
-                else
-                {
-                    throw new Exception("WiFi Adapter not found.");
-                }
+                if (wifiAdapterResults.Count >= 1) _wiFiAdapter = await WiFiAdapter.FromIdAsync(wifiAdapterResults[0].Id);                
             }
         }
 
         private async Task ScanForNetworks()
         {
-            if (this.WiFiAdapter != null)
-            {
-                await this.WiFiAdapter.ScanAsync();
-            }
+            if (_wiFiAdapter != null)await _wiFiAdapter.ScanAsync();            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -101,7 +82,7 @@ namespace RoomInfo.Views
             await InitializeFirstAdapter();
             await ScanForNetworks();
             ShowNetworks();
-            WiFiAdapter.AvailableNetworksChanged += (s, e) => ShowNetworks();
+            if (_wiFiAdapter != null) _wiFiAdapter.AvailableNetworksChanged += (s, e) => ShowNetworks();
         }
     }
 }

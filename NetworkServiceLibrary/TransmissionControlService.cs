@@ -10,8 +10,6 @@ using ModelLibrary;
 using Newtonsoft.Json;
 using Prism.Events;
 using System.Collections.Generic;
-using Windows.Devices.I2c;
-using Windows.Devices.Enumeration;
 
 namespace NetworkServiceLibrary
 {
