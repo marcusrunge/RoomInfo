@@ -36,15 +36,6 @@ namespace RoomInfo.Views
             WiFiNetworks = new ObservableCollection<WiFiNetwork>();
         }
 
-        protected async override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-            await InitializeFirstAdapter();
-            await ScanForNetworks();
-            ShowNetworks();
-            WiFiAdapter.AvailableNetworksChanged += (s, e) => ShowNetworks();
-        }
-
         private void ShowNetworks()
         {
             foreach (var wiFiAvailableNetwork in WiFiAdapter.NetworkReport.AvailableNetworks)
@@ -104,5 +95,13 @@ namespace RoomInfo.Views
         }
         void RaisePropertyChanged([CallerMemberName]string propertyName = null) => OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
         void OnPropertyChanged(PropertyChangedEventArgs args) => PropertyChanged?.Invoke(this, args);
+
+        private async void UserControl_Loaded(object sender, RoutedEventArgs routedEventArgs)
+        {
+            await InitializeFirstAdapter();
+            await ScanForNetworks();
+            ShowNetworks();
+            WiFiAdapter.AvailableNetworksChanged += (s, e) => ShowNetworks();
+        }
     }
 }
