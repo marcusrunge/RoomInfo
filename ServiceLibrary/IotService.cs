@@ -13,12 +13,14 @@ namespace ApplicationServiceLibrary
         bool IsIotDevice();
         void Shutdown();
         void Restart();
-        Task ConfigWifi();
         Task Dim(bool dim);
     }
     public class IotService : IIotService
     {
-        public async Task ConfigWifi() => await Launcher.LaunchUriAsync(new Uri("ms-settings:network-wifi"));
+        public Task ConfigWifi()
+        {
+            throw new NotImplementedException();
+        }
 
         public async Task Dim(bool dim)
         {
@@ -38,7 +40,9 @@ namespace ApplicationServiceLibrary
             }
         }
 
-        public bool IsIotDevice() => AnalyticsInfo.VersionInfo.DeviceFamily.Equals("Windows.IoT");
+        public bool IsIotDevice() => 
+            true;
+            //AnalyticsInfo.VersionInfo.DeviceFamily.Equals("Windows.IoT");
 
         public void Restart() => ShutdownManager.BeginShutdown(ShutdownKind.Restart, TimeSpan.FromSeconds(0));
 

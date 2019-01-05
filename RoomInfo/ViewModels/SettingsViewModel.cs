@@ -24,6 +24,9 @@ using Windows.UI.Input.Preview.Injection;
 using Windows.System;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.Storage.Streams;
+using Windows.UI.ViewManagement;
+using Windows.UI.Xaml.Controls;
+using RoomInfo.Views;
 
 namespace RoomInfo.ViewModels
 {
@@ -230,7 +233,9 @@ namespace RoomInfo.ViewModels
         private ICommand _configWiFiCommand;
         public ICommand ConfigWiFiCommand => _configWiFiCommand ?? (_configWiFiCommand = new DelegateCommand<object>(async (param) =>
         {
-            await _iotService.ConfigWifi();
+            var currentWindow = Window.Current;
+            currentWindow.Content = new WiFiUserControl();
+            currentWindow.Activate();
         }));
 
         private ICommand _restartCommand;

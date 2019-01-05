@@ -46,6 +46,7 @@
     <rescap:Capability Name="inputInjectionBrokered" />
     <iot:Capability Name="lowLevelDevices" />
     <iot:Capability Name="systemManagement" />
+    <DeviceCapability Name="wiFiControl"/>
   </Capabilities>
   <genTemplate:Metadata>
     <genTemplate:Item Name="generator" Value="Windows Template Studio" />

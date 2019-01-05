@@ -11,6 +11,7 @@
     xmlns:xaml="using:Windows.UI.Xaml"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:userControl="using:RoomInfo.Views"
     mc:Ignorable="d">
     <Page.Resources>
         <helper:EnumToBooleanConverter x:Key="EnumToBooleanConverter" EnumType="ElementTheme" />
@@ -43,7 +44,7 @@
     <Grid Margin="{StaticResource MediumLeftRightMargin}">
         <ScrollViewer>
             <StackPanel
-            x:Name="ContentArea">
+            x:Name="ContentArea">                
                 <TextBlock
                 x:Uid="Settings_Personalization"
                 Style="{StaticResource SubtitleTextBlockStyle}" />
@@ -139,7 +140,13 @@
                     <Border HorizontalAlignment="Left" BorderBrush="#7FFF0000" BorderThickness="0,0,3,3">
                         <TextBlock Text="IoT" Foreground="#7FFF0000" Style="{StaticResource SubtitleTextBlockStyle}" Padding="3,0,0,0"/>
                     </Border>
-                    <Button x:Name="WiFiConfigButton" x:Uid="Settings_IoT_WiFiButton" Style="{StaticResource RedTransparentButtonStyle}" Content="Config Wi-Fi" Margin="2,2,2,0" HorizontalAlignment="Left" />
+                    <Button x:Name="WiFiConfigButton" x:Uid="Settings_IoT_WiFiButton" Style="{StaticResource RedTransparentButtonStyle}" Content="Config Wi-Fi" Margin="2,2,2,0" HorizontalAlignment="Left" >
+                        <Button.Flyout>
+                            <Flyout>
+                                <userControl:WiFiUserControl />
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
                     <Button x:Name="DeviceRestartButton" x:Uid="Settings_IoT_RestartButton" Style="{StaticResource RedTransparentButtonStyle}" Content="Device Restart" Width="{Binding ElementName=WiFiConfigButton, Path=ActualWidth}" Command="{Binding RestartCommand}" Margin="2,0,2,0"/>
                     <Button x:Name="DeviceShutdownButton" x:Uid="Settings_IoT_ShutdownButton" Style="{StaticResource RedTransparentButtonStyle}" Content="Device Shutdown" Width="{Binding ElementName=WiFiConfigButton, Path=ActualWidth}" Command="{Binding ShutdownCommand}" Margin="2,0,2,2"/>
                 </StackPanel>
