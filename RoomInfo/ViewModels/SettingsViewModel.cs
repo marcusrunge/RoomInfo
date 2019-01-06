@@ -248,6 +248,12 @@ namespace RoomInfo.ViewModels
             _iotService.Shutdown();
         }));
 
+        //private ICommand _reservedCommand;
+        //public ICommand ReservedCommand => _reservedCommand ?? (_reservedCommand = new DelegateCommand<object>((param) =>
+        //{
+            
+        //}));
+
         private async Task LoadCompanyLogo()
         {
             StorageFolder assets = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Assets");
@@ -260,6 +266,11 @@ namespace RoomInfo.ViewModels
             int virtualKey = (int)e.Key;
             if ((virtualKey > 47 && virtualKey < 58) || (virtualKey > 95 && virtualKey < 106)) e.Handled = false;
             else e.Handled = true;
+        }
+
+        public void Flyout_Closing(Windows.UI.Xaml.Controls.Primitives.FlyoutBase sender, Windows.UI.Xaml.Controls.Primitives.FlyoutBaseClosingEventArgs args)
+        {
+            _eventAggregator.GetEvent<CollapseLowerGridEvent>().Publish();
         }
     }
 }

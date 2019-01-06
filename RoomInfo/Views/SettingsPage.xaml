@@ -142,7 +142,7 @@
                     </Border>
                     <Button x:Name="WiFiConfigButton" x:Uid="Settings_IoT_WiFiButton" Style="{StaticResource RedTransparentButtonStyle}" Content="Config Wi-Fi" Margin="2,2,2,0" HorizontalAlignment="Left" >
                         <Button.Flyout>
-                            <Flyout>
+                            <Flyout Closing="{x:Bind ViewModel.Flyout_Closing}">                                
                                 <userControl:WiFiUserControl />
                             </Flyout>
                         </Button.Flyout>

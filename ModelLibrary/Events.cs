@@ -26,4 +26,7 @@ namespace ModelLibrary
     public class WiFiNetworkConnectionChangedUpdatedEvent : PubSubEvent<int>
     {
     }
+    public class CollapseLowerGridEvent : PubSubEvent
+    {
+    }
 }

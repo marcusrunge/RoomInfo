@@ -61,8 +61,8 @@ namespace ModelLibrary
             });
             Task.Run(async () =>
             {
-                await _coreDispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
-                {
+                //await _coreDispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                //{
                     var connectedProfile = await _wiFiAdapter.NetworkAdapter.GetConnectedProfileAsync();
                     if (connectedProfile != null && connectedProfile.WlanConnectionProfileDetails.GetConnectedSsid() == _wiFiAvailableNetwork.Ssid)
                     {
@@ -70,9 +70,10 @@ namespace ModelLibrary
                         ConnectButtonContent = _resourceLoader.GetString("WiFiUserControl_DisconnectButton/Content");
                     }
                     else ConnectButtonContent = _resourceLoader.GetString("WiFiUserControl_ConnectButton/Content");
-                });
+                //});
             }).Wait();
             NetworkInformation.NetworkStatusChanged += NetworkInformation_NetworkStatusChanged;
+            _eventAggregator.GetEvent<CollapseLowerGridEvent>().Subscribe(() => LowerGridVisibility = Visibility.Collapsed);
         }
 
         private async void NetworkInformation_NetworkStatusChanged(object sender)
