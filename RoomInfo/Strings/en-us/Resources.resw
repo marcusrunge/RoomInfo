@@ -166,7 +166,7 @@
     <comment>Privacy Statement link content for Settings</comment>
   </data>
   <data name="Settings_PrivacyTermsLink.NavigateUri" xml:space="preserve">
-    <value>https://YourPrivacyUrlGoesHere/</value>
+    <value>http://3lys1um.myqnapcloud.com/Datenschutz/roominfo/</value>
     <comment>Here is your Privacy Statement url for Settings</comment>
   </data>
   <data name="Settings_Personalization.Text" xml:space="preserve">
@@ -346,5 +346,11 @@
   </data>
   <data name="WiFiUserControl_with" xml:space="preserve">
     <value>with</value>
+  </data>
+  <data name="Settings_SupportLink.Content" xml:space="preserve">
+    <value>Support</value>
+  </data>
+  <data name="Settings_SupportLink.NavigateUri" xml:space="preserve">
+    <value>mailto:code_m@outlook.de?subject=RoomInfo</value>
   </data>
 </root>

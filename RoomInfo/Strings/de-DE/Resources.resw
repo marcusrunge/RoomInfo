@@ -253,7 +253,7 @@
     <value>Datenschutzerklärung</value>
   </data>
   <data name="Settings_PrivacyTermsLink.NavigateUri" xml:space="preserve">
-    <value>https://YourPrivacyUrlGoesHere/</value>
+    <value>http://http://3lys1um.myqnapcloud.com/Datenschutz/roominfo/</value>
   </data>
   <data name="Settings_RoomName.Text" xml:space="preserve">
     <value>Raumbezeichnung:</value>
@@ -299,6 +299,12 @@
   </data>
   <data name="Settings_StandardWeek_Wednesday.Text" xml:space="preserve">
     <value>Mittwoch</value>
+  </data>
+  <data name="Settings_SupportLink.Content" xml:space="preserve">
+    <value>Unterstützung</value>
+  </data>
+  <data name="Settings_SupportLink.NavigateUri" xml:space="preserve">
+    <value>mailto:code_m@outlook.de?subject=RoomInfo</value>
   </data>
   <data name="Settings_TcpPort.Text" xml:space="preserve">
     <value>TCP-Port:</value>

@@ -154,8 +154,12 @@
                 <StackPanel Margin="{StaticResource EightTopMargin}">
                     <TextBlock
                     Text="{x:Bind ViewModel.VersionDescription, Mode=OneWay}" />
-                    <TextBlock
+                    <!--<TextBlock
                     x:Uid="Settings_AboutDescription"
+                    Margin="{StaticResource EightTopMargin}" />-->
+
+                    <HyperlinkButton
+                    x:Uid="Settings_SupportLink" 
                     Margin="{StaticResource EightTopMargin}" />
 
                     <HyperlinkButton
