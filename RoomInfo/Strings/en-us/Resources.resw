@@ -166,7 +166,7 @@
     <comment>Privacy Statement link content for Settings</comment>
   </data>
   <data name="Settings_PrivacyTermsLink.NavigateUri" xml:space="preserve">
-    <value>http://3lys1um.myqnapcloud.com/Datenschutz/roominfo/</value>
+    <value>http://3lys1um.myqnapcloud.com/Datenschutz/roominfo/en/</value>
     <comment>Here is your Privacy Statement url for Settings</comment>
   </data>
   <data name="Settings_Personalization.Text" xml:space="preserve">

@@ -390,10 +390,10 @@
         <Grid x:Name="grid" Background="#00000000" Padding="{StaticResource MediumLeftRightBottomMargin}"   >
             <interactivity:Interaction.Behaviors>
                 <core:EventTriggerBehavior EventName="SizeChanged">
-                    <core:InvokeCommandAction Command="{Binding UpdateFontSizeCommand}" CommandParameter="{Binding ElementName=grid}"/>
+                    <core:InvokeCommandAction Command="{x:Bind ViewModel.UpdateFontSizeCommand}" CommandParameter="{Binding ElementName=grid}"/>
                 </core:EventTriggerBehavior>
                 <core:EventTriggerBehavior EventName="Loaded">
-                    <core:InvokeCommandAction Command="{Binding UpdateFontSizeCommand}" CommandParameter="{Binding ElementName=grid}"/>
+                    <core:InvokeCommandAction Command="{x:Bind ViewModel.UpdateFontSizeCommand}" CommandParameter="{Binding ElementName=grid}"/>
                 </core:EventTriggerBehavior>
                 <!--<core:EventTriggerBehavior EventName="PointerPressed">
                     <core:InvokeCommandAction Command="{x:Bind ViewModel.OnPointerPressedCommand, Mode=OneWay}"/>
@@ -416,10 +416,10 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Image x:Name="CompanyLogo" Source="{Binding CompanyLogo}" HorizontalAlignment="Left" Margin="12,12,12,12"/>
-                <TextBlock x:Name="CompanyName" Grid.Column="1" Text="{Binding CompanyName}" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="{Binding ExtraLargeFontSize}"/>
+                <TextBlock x:Name="CompanyName" Grid.Column="1" Text="{x:Bind ViewModel.CompanyName, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="{Binding ExtraLargeFontSize}"/>
                 <StackPanel Grid.Column="2">
                     <TextBlock x:Name="Clock" Text="{Binding Clock, UpdateSourceTrigger=PropertyChanged}" FontSize="{Binding ExtraLargeFontSize}" HorizontalAlignment="Right" />
-                    <TextBlock x:Name="Date" Text="{Binding Date, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" FontSize="{Binding MediumFontSize}"/>
+                    <TextBlock x:Name="Date" Text="{Binding ViewModel.Date, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" FontSize="{Binding MediumFontSize}"/>
                 </StackPanel>
 
             </Grid>
@@ -433,8 +433,8 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock x:Name="roomNameTextBlock"  Text="{Binding RoomName}" FontSize="{Binding ExtraLargeFontSize}" FocusVisualPrimaryBrush="#00000000" Foreground="#00000000" />
-                    <TextBlock x:Name="roomNumberTextBlock" Grid.Column="1" Text="{Binding RoomNumber}" FontSize="{Binding ExtraLargeFontSize}" FocusVisualPrimaryBrush="#00000000" Foreground="#00000000" Margin="36,0,0,0"/>
+                    <TextBlock x:Name="roomNameTextBlock"  Text="{x:Bind ViewModel.RoomName, Mode=OneWay}" FontSize="{Binding ExtraLargeFontSize}" FocusVisualPrimaryBrush="#00000000" Foreground="#00000000" />
+                    <TextBlock x:Name="roomNumberTextBlock" Grid.Column="1" Text="{x:Bind ViewModel.RoomNumber, Mode=OneWay}" FontSize="{Binding ExtraLargeFontSize}" FocusVisualPrimaryBrush="#00000000" Foreground="#00000000" Margin="36,0,0,0"/>
                 </Grid>
                 <TextBlock Grid.Row="1" x:Name="occupancyTextBlock" x:Uid="Info_OccupancyTextBlockFree" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
                 <TextBlock Grid.Row="1" x:Name="presentOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockPresent" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
@@ -451,14 +451,14 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock x:Name="infoScheduleTextBlock" x:Uid="Info_Schedule" FontSize="{Binding MediumToLargeFontSize}" VerticalAlignment="Top"/>
-                <Button VerticalAlignment="Bottom" Content="RESET" FontSize="{Binding MediumToLargeFontSize}" HorizontalAlignment="Stretch" Command="{Binding ResetOccupancyCommand}" Visibility="{Binding ResetButtonVisibility}"/>
+                <Button VerticalAlignment="Bottom" Content="RESET" FontSize="{Binding MediumToLargeFontSize}" HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.ResetOccupancyCommand}" Visibility="{x:Bind ViewModel.ResetButtonVisibility, Mode=OneWay}"/>
                 <ListView x:Name="Agenda" Grid.Column="1" ItemsSource="{Binding AgendaItems}" LayoutUpdated="{x:Bind ViewModel.Agenda_LayoutUpdated}" >
                     <interactivity:Interaction.Behaviors>
                         <core:EventTriggerBehavior EventName="SizeChanged">
-                            <core:InvokeCommandAction Command="{Binding UpdateDataTemplateWidthCommand}" CommandParameter="{Binding ElementName=Agenda}"/>
+                            <core:InvokeCommandAction Command="{x:Bind ViewModel.UpdateDataTemplateWidthCommand}" CommandParameter="{Binding ElementName=Agenda}"/>
                         </core:EventTriggerBehavior>
                         <core:EventTriggerBehavior EventName="Loaded">
-                            <core:InvokeCommandAction Command="{Binding UpdateDataTemplateWidthCommand}" CommandParameter="{Binding ElementName=Agenda}"/>
+                            <core:InvokeCommandAction Command="{x:Bind ViewModel.UpdateDataTemplateWidthCommand}" CommandParameter="{Binding ElementName=Agenda}"/>
                         </core:EventTriggerBehavior>
                     </interactivity:Interaction.Behaviors>
                     <ListView.ItemTemplate>
@@ -491,7 +491,7 @@
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:GoToStateAction StateName="FreeVisualState"/>
-                                    <core:InvokeCommandAction Command="{Binding OverrideOccupancyCommand}"/>
+                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.OverrideOccupancyCommand}"/>
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
@@ -499,7 +499,7 @@
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:GoToStateAction StateName="PresentVisualState"/>
-                                    <core:InvokeCommandAction Command="{Binding OverrideOccupancyCommand}"/>
+                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.OverrideOccupancyCommand}"/>
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
@@ -507,7 +507,7 @@
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:GoToStateAction StateName="AbsentVisualState"/>
-                                    <core:InvokeCommandAction Command="{Binding OverrideOccupancyCommand}"/>
+                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.OverrideOccupancyCommand}"/>
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
@@ -515,7 +515,7 @@
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:GoToStateAction StateName="BusyVisualState"/>
-                                    <core:InvokeCommandAction Command="{Binding OverrideOccupancyCommand}"/>
+                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.OverrideOccupancyCommand}"/>
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
@@ -523,7 +523,7 @@
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:GoToStateAction StateName="OccupiedVisualState"/>
-                                    <core:InvokeCommandAction Command="{Binding OverrideOccupancyCommand}"/>
+                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.OverrideOccupancyCommand}"/>
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
@@ -531,7 +531,7 @@
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:GoToStateAction StateName="LockedVisualState"/>
-                                    <core:InvokeCommandAction Command="{Binding OverrideOccupancyCommand}"/>
+                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.OverrideOccupancyCommand}"/>
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>

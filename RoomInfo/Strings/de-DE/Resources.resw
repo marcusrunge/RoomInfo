@@ -253,7 +253,7 @@
     <value>Datenschutzerklärung</value>
   </data>
   <data name="Settings_PrivacyTermsLink.NavigateUri" xml:space="preserve">
-    <value>http://http://3lys1um.myqnapcloud.com/Datenschutz/roominfo/</value>
+    <value>http://http://3lys1um.myqnapcloud.com/Datenschutz/roominfo/de/</value>
   </data>
   <data name="Settings_RoomName.Text" xml:space="preserve">
     <value>Raumbezeichnung:</value>
