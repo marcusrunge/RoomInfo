@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
 using Windows.Devices.I2c;
 using Windows.System;
+using Windows.System.Profile;
 
 namespace ApplicationServiceLibrary
 {
@@ -39,9 +40,7 @@ namespace ApplicationServiceLibrary
             }
         }
 
-        public bool IsIotDevice() => 
-            true;
-            //AnalyticsInfo.VersionInfo.DeviceFamily.Equals("Windows.IoT");
+        public bool IsIotDevice() => AnalyticsInfo.VersionInfo.DeviceFamily.Equals("Windows.IoT");
 
         public void Restart() => ShutdownManager.BeginShutdown(ShutdownKind.Restart, TimeSpan.FromSeconds(0));
 
