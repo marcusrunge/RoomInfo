@@ -59,7 +59,7 @@
                         x:Uid="Settings_Theme_Light" 
                         GroupName="AppTheme" 
                         IsChecked="{Binding ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Light, Mode=OneWay}"
-                        Command="{Binding SwitchThemeCommand}">
+                        Command="{x:Bind ViewModel.SwitchThemeCommand}">
                             <RadioButton.CommandParameter>
                                 <xaml:ElementTheme>Light</xaml:ElementTheme>
                             </RadioButton.CommandParameter>
@@ -68,7 +68,7 @@
                         x:Uid="Settings_Theme_Dark" 
                         GroupName="AppTheme"
                         IsChecked="{Binding ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark, Mode=OneWay}"
-                        Command="{Binding SwitchThemeCommand}">
+                        Command="{x:Bind ViewModel.SwitchThemeCommand}">
                             <RadioButton.CommandParameter>
                                 <xaml:ElementTheme>Dark</xaml:ElementTheme>
                             </RadioButton.CommandParameter>
@@ -77,7 +77,7 @@
                         x:Uid="Settings_Theme_Default"
                         GroupName="AppTheme"
                         IsChecked="{Binding ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Default, Mode=OneWay}"
-                        Command="{Binding SwitchThemeCommand}">
+                        Command="{x:Bind ViewModel.SwitchThemeCommand}">
                             <RadioButton.CommandParameter>
                                 <xaml:ElementTheme>Default</xaml:ElementTheme>
                             </RadioButton.CommandParameter>
@@ -86,8 +86,8 @@
                 </StackPanel>
                 <StackPanel Margin="{StaticResource SettingsSubheaderMargin}">
                     <TextBlock x:Uid="Settings_Language" Style="{StaticResource SubtitleTextBlockStyle}" />
-                    <RadioButton x:Uid="Settings_Language_English" GroupName="Language" Command="{Binding SwitchLanguageCommand}" CommandParameter="en-US" IsChecked="{Binding Language, Converter={StaticResource LanguageEnumToBooleanConverter}, ConverterParameter=en_US, Mode=OneWay}"/>
-                    <RadioButton x:Uid="Settings_Language_German" GroupName="Language" Command="{Binding SwitchLanguageCommand}" CommandParameter="de-DE" IsChecked="{Binding Language, Converter={StaticResource LanguageEnumToBooleanConverter}, ConverterParameter=de_DE, Mode=OneWay}"/>
+                    <RadioButton x:Uid="Settings_Language_English" GroupName="Language" Command="{x:Bind ViewModel.SwitchLanguageCommand}" CommandParameter="en-US" IsChecked="{Binding Language, Converter={StaticResource LanguageEnumToBooleanConverter}, ConverterParameter=en_US, Mode=OneWay}"/>
+                    <RadioButton x:Uid="Settings_Language_German" GroupName="Language" Command="{x:Bind ViewModel.SwitchLanguageCommand}" CommandParameter="de-DE" IsChecked="{Binding Language, Converter={StaticResource LanguageEnumToBooleanConverter}, ConverterParameter=de_DE, Mode=OneWay}"/>
                 </StackPanel>
                 <StackPanel Margin="{StaticResource SettingsSubheaderMargin}">
                     <TextBlock x:Uid="Settings_Ports" Style="{StaticResource SubtitleTextBlockStyle}" />
@@ -101,7 +101,7 @@
                     <ComboBox HorizontalAlignment="Left" VerticalAlignment="Center" SelectedIndex="{Binding SelectedComboBoxIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="129">
                         <interactivity:Interaction.Behaviors>
                             <core:EventTriggerBehavior EventName="SelectionChanged">
-                                <core:InvokeCommandAction Command="{Binding SetStandardOccupancyCommand}"/>
+                                <core:InvokeCommandAction Command="{x:Bind ViewModel.SetStandardOccupancyCommand}"/>
                             </core:EventTriggerBehavior>
                         </interactivity:Interaction.Behaviors>
                         <ComboBoxItem x:Uid="Info_OccupancyFree" />
@@ -132,7 +132,7 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Button x:Name="selectLogoButton" Grid.Column="0" x:Uid="Settings_SelectButton" Command="{Binding SelectLogoCommand}" CommandParameter="{Binding ElementName=fileSelectionFlyout}" Margin="0,0,2,0" Flyout="{StaticResource fileSelectionFlyout}" />
-                            <Button Grid.Column="1" x:Uid="Settings_DeleteButton" Command="{Binding DeleteLogoCommand}" Margin="2,0,0,0" />
+                            <Button Grid.Column="1" x:Uid="Settings_DeleteButton" Command="{x:Bind ViewModel.DeleteLogoCommand}" Margin="2,0,0,0" />
                         </Grid>
                     </StackPanel>
                 </StackPanel>
@@ -147,8 +147,8 @@
                             </Flyout>
                         </Button.Flyout>
                     </Button>
-                    <Button x:Name="DeviceRestartButton" x:Uid="Settings_IoT_RestartButton" Style="{StaticResource RedTransparentButtonStyle}" Content="Device Restart" Width="{Binding ElementName=WiFiConfigButton, Path=ActualWidth}" Command="{Binding RestartCommand}" Margin="2,0,2,0"/>
-                    <Button x:Name="DeviceShutdownButton" x:Uid="Settings_IoT_ShutdownButton" Style="{StaticResource RedTransparentButtonStyle}" Content="Device Shutdown" Width="{Binding ElementName=WiFiConfigButton, Path=ActualWidth}" Command="{Binding ShutdownCommand}" Margin="2,0,2,2"/>
+                    <Button x:Name="DeviceRestartButton" x:Uid="Settings_IoT_RestartButton" Style="{StaticResource RedTransparentButtonStyle}" Content="Device Restart" Width="{Binding ElementName=WiFiConfigButton, Path=ActualWidth}" Command="{x:Bind ViewModel.RestartCommand}" Margin="2,0,2,0"/>
+                    <Button x:Name="DeviceShutdownButton" x:Uid="Settings_IoT_ShutdownButton" Style="{StaticResource RedTransparentButtonStyle}" Content="Device Shutdown" Width="{Binding ElementName=WiFiConfigButton, Path=ActualWidth}" Command="{x:Bind ViewModel.ShutdownCommand}" Margin="2,0,2,2"/>
                 </StackPanel>
                 <TextBlock x:Uid="Settings_About" Style="{StaticResource SubtitleTextBlockStyle}"/>
                 <StackPanel Margin="{StaticResource EightTopMargin}">
