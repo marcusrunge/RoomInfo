@@ -15,6 +15,7 @@ using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using NetworkServiceLibrary;
 using Windows.Globalization;
+using Microsoft.HockeyApp;
 
 namespace RoomInfo
 {
@@ -25,6 +26,7 @@ namespace RoomInfo
         public App()
         {
             InitializeComponent();
+            HockeyClient.Current.Configure("5bccdd1ce267413199ecaaeebbf88295");
         }
 
         protected override void ConfigureContainer()
