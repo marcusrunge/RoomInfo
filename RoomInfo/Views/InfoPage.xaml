@@ -419,7 +419,7 @@
                 <TextBlock x:Name="CompanyName" Grid.Column="1" Text="{x:Bind ViewModel.CompanyName, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="{Binding ExtraLargeFontSize}"/>
                 <StackPanel Grid.Column="2">
                     <TextBlock x:Name="Clock" Text="{Binding Clock, UpdateSourceTrigger=PropertyChanged}" FontSize="{Binding ExtraLargeFontSize}" HorizontalAlignment="Right" />
-                    <TextBlock x:Name="Date" Text="{Binding ViewModel.Date, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" FontSize="{Binding MediumFontSize}"/>
+                    <TextBlock x:Name="Date" Text="{Binding Date, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" FontSize="{Binding MediumFontSize}"/>
                 </StackPanel>
 
             </Grid>
