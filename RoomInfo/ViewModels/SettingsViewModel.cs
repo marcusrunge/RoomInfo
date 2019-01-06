@@ -20,8 +20,6 @@ using System.Collections.ObjectModel;
 using Prism.Events;
 using System.Linq;
 using Windows.Storage.Search;
-using Windows.UI.Input.Preview.Injection;
-using Windows.System;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.Storage.Streams;
 using RoomInfo.Views;
@@ -134,11 +132,11 @@ namespace RoomInfo.ViewModels
                 await storageFile.CopyAsync(assets, storageFile.Name, NameCollisionOption.ReplaceExisting);
                 _applicationDataService.SaveSetting("LogoFileName", storageFile.Name);                
                 await LoadCompanyLogo();
-                InjectedInputKeyboardInfo injectedInputKeyboardInfo = new InjectedInputKeyboardInfo
-                {
-                    VirtualKey = (ushort)VirtualKey.Escape
-                };
-                InputInjector.TryCreate().InjectKeyboardInput(new List<InjectedInputKeyboardInfo> { injectedInputKeyboardInfo });
+                //InjectedInputKeyboardInfo injectedInputKeyboardInfo = new InjectedInputKeyboardInfo
+                //{
+                //    VirtualKey = (ushort)VirtualKey.Escape
+                //};
+                //InputInjector.TryCreate().InjectKeyboardInput(new List<InjectedInputKeyboardInfo> { injectedInputKeyboardInfo });
             });
         }
 
