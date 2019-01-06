@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
 using Windows.Devices.WiFi;
+using Windows.Networking.Connectivity;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -30,7 +31,7 @@ namespace RoomInfo.Views
         private void ShowNetworks()
         {
             if (_wiFiAdapter != null)
-            {
+            {                
                 foreach (var wiFiAvailableNetwork in _wiFiAdapter.NetworkReport.AvailableNetworks)
                 {
                     var wiFiAvailableNetworkQuery = WiFiNetworks.Where(x => x.NetworkName.Equals(wiFiAvailableNetwork.Ssid)).Select(x => x).FirstOrDefault();

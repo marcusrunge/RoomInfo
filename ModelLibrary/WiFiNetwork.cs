@@ -3,7 +3,6 @@ using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using System;
-using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.ApplicationModel.Resources;
@@ -21,6 +20,10 @@ namespace ModelLibrary
         bool _isConnected;
         int _hashCode = default(int);
         CoreDispatcher _coreDispatcher;
+        ResourceLoader _resourceLoader;
+        WiFiAvailableNetwork _wiFiAvailableNetwork;
+        WiFiAdapter _wiFiAdapter;
+
         public int HashCode { get => _hashCode; set { SetProperty(ref _hashCode, value); } }
 
         string _networkName = default(string);
@@ -34,13 +37,12 @@ namespace ModelLibrary
 
         Visibility _lowerGridVisibility = default(Visibility);
         public Visibility LowerGridVisibility { get => _lowerGridVisibility; set { SetProperty(ref _lowerGridVisibility, value); } }
-
-        ResourceLoader _resourceLoader;
+        
         string _connectButtonContent = default(string);
         public string ConnectButtonContent { get => _connectButtonContent; set { SetProperty(ref _connectButtonContent, value); } }
 
-        WiFiAvailableNetwork _wiFiAvailableNetwork;
-        WiFiAdapter _wiFiAdapter;
+        string _networkStrength = default(string);
+        public string NetworkStrength { get => _networkStrength; set { SetProperty(ref _networkStrength, value); } }
 
         public WiFiNetwork(WiFiAdapter wiFiAdapter, WiFiAvailableNetwork wiFiAvailableNetwork)
         {
@@ -72,22 +74,21 @@ namespace ModelLibrary
                     else ConnectButtonContent = _resourceLoader.GetString("WiFiUserControl_ConnectButton/Content");
                 //});
             }).Wait();
-            NetworkInformation.NetworkStatusChanged += NetworkInformation_NetworkStatusChanged;
-            _eventAggregator.GetEvent<CollapseLowerGridEvent>().Subscribe(() => LowerGridVisibility = Visibility.Collapsed);
-        }
-
-        private async void NetworkInformation_NetworkStatusChanged(object sender)
-        {
-            await _coreDispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+            NetworkInformation.NetworkStatusChanged += async (s)=> 
             {
-                var connectedProfile = await _wiFiAdapter.NetworkAdapter.GetConnectedProfileAsync();
-                if (connectedProfile != null && connectedProfile.WlanConnectionProfileDetails.GetConnectedSsid() == _wiFiAvailableNetwork.Ssid)
+                await _coreDispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                 {
-                    _isConnected = true;
-                    ConnectButtonContent = _resourceLoader.GetString("WiFiUserControl_DisconnectButton/Content");
-                }
-                else ConnectButtonContent = _resourceLoader.GetString("WiFiUserControl_ConnectButton/Content");
-            });
+                    var connectedProfile = await _wiFiAdapter.NetworkAdapter.GetConnectedProfileAsync();
+                    if (connectedProfile != null && connectedProfile.WlanConnectionProfileDetails.GetConnectedSsid() == _wiFiAvailableNetwork.Ssid)
+                    {
+                        _isConnected = true;
+                        ConnectButtonContent = _resourceLoader.GetString("WiFiUserControl_DisconnectButton/Content");
+                    }
+                    else ConnectButtonContent = _resourceLoader.GetString("WiFiUserControl_ConnectButton/Content");
+                });
+            };
+            _eventAggregator.GetEvent<CollapseLowerGridEvent>().Subscribe(() => LowerGridVisibility = Visibility.Collapsed);
+            NetworkStrength = string.Format(" {0} {1}dBm", _resourceLoader.GetString("WiFiUserControl_with"), _wiFiAvailableNetwork.NetworkRssiInDecibelMilliwatts); 
         }
 
         private ICommand _cycleVisibilityCommand;

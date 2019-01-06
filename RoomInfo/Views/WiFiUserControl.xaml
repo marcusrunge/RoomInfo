@@ -28,13 +28,13 @@
                         </interactivity:Interaction.Behaviors>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
                                 <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="{Binding NetworkName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            
+                            <TextBlock Grid.Column="1" Text="{Binding NetworkStrength}"/>
                         </Grid>                        
-                        <Grid Grid.Row="1" Visibility="{Binding LowerGridVisibility}">
+                        <Grid Grid.Row="1" Visibility="{Binding LowerGridVisibility}" Margin="0,0,0,12">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="Auto"/>

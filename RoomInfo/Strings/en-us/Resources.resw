@@ -344,4 +344,7 @@
   <data name="WiFiUserControl_DisconnectButton.Content" xml:space="preserve">
     <value>Disconnect</value>
   </data>
+  <data name="WiFiUserControl_with" xml:space="preserve">
+    <value>with</value>
+  </data>
 </root>

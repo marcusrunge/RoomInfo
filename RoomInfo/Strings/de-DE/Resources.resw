@@ -327,4 +327,7 @@
   <data name="WiFiUserControl_ReconnectCheckBox.Content" xml:space="preserve">
     <value>Wiederverbinden</value>
   </data>
+  <data name="WiFiUserControl_with" xml:space="preserve">
+    <value>mit</value>
+  </data>
 </root>
