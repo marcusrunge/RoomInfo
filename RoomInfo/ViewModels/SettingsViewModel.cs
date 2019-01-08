@@ -220,10 +220,13 @@ namespace RoomInfo.ViewModels
         {
             StorageFolder assets = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Assets");
             string logoFileName = _applicationDataService.GetSetting<string>("LogoFileName");
-            StorageFile storageFile = await assets.GetFileAsync(logoFileName);
-            await storageFile.DeleteAsync();
-            _applicationDataService.RemoveSetting("LogoFileName");
-            await LoadCompanyLogo();
+            if (!string.IsNullOrEmpty(logoFileName))
+            {
+                StorageFile storageFile = await assets.GetFileAsync(logoFileName);
+                await storageFile.DeleteAsync();
+                _applicationDataService.RemoveSetting("LogoFileName");
+                await LoadCompanyLogo();
+            }
         }));
 
         private ICommand _configWiFiCommand;

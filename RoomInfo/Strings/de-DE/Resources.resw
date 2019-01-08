@@ -213,6 +213,9 @@
   <data name="Settings_CompanyLogo.Text" xml:space="preserve">
     <value>Unternehmenslogo:</value>
   </data>
+  <data name="Settings_CompanyLogoInfo.Text" xml:space="preserve">
+    <value>(Anm.: Das Logo muss sich im Standard-Bilderverzeichnis befinden)</value>
+  </data>
   <data name="Settings_CompanyName.Text" xml:space="preserve">
     <value>Unternehmensbezeichnung:</value>
   </data>
