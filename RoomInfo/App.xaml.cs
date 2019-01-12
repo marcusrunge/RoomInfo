@@ -54,6 +54,7 @@ namespace RoomInfo
         private Task LaunchApplicationAsync(string page, object launchParam)
         {
             _applicationDataService = Container.Resolve<IApplicationDataService>();
+            if (string.IsNullOrEmpty(_applicationDataService.GetSetting<string>("Guid"))) _applicationDataService.SaveSetting("Guid", Guid.NewGuid().ToString());
             ThemeSelectorService.SetRequestedTheme();
             SetSelectedLanguage();
             NavigationService.Navigate(page, launchParam);

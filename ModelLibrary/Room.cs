@@ -1,7 +1,10 @@
-﻿namespace ModelLibrary
+﻿using System;
+
+namespace ModelLibrary
 {
-    public sealed class Room
+    public class Room
     {
+        public string RoomGuid { get; set; }
         public string RoomName { get; set; }
         public string RoomNumber { get; set; }        
     }

@@ -36,7 +36,7 @@ namespace NetworkServiceLibrary
             await datagramSocket.BindServiceNameAsync(_applicationDataService.GetSetting<string>("UdpPort"));
             datagramSocket.MessageReceived += async (s, e) =>
               {
-                  var roomPackage = new Room() { RoomName = _applicationDataService.GetSetting<string>("RoomName"), RoomNumber = _applicationDataService.GetSetting<string>("RoomNumber") };                  
+                  var roomPackage = new Room() { RoomGuid = _applicationDataService.GetSetting<string>("Guid"), RoomName = _applicationDataService.GetSetting<string>("RoomName"), RoomNumber = _applicationDataService.GetSetting<string>("RoomNumber") };                  
                   var json = JsonConvert.SerializeObject(roomPackage);
                   await _transmissionControlService.SendStringData(e.RemoteAddress, _applicationDataService.GetSetting<string>("TcpPort"), json);
               };
