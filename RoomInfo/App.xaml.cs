@@ -23,6 +23,8 @@ namespace RoomInfo
     public sealed partial class App : PrismUnityApplication
     {
         IApplicationDataService _applicationDataService;
+        IUserDatagramService _userDatagramService;
+        ITransmissionControlService _transmissionControlService;
         public App()
         {
             InitializeComponent();
@@ -54,6 +56,8 @@ namespace RoomInfo
         private Task LaunchApplicationAsync(string page, object launchParam)
         {
             _applicationDataService = Container.Resolve<IApplicationDataService>();
+            _userDatagramService = Container.Resolve<IUserDatagramService>();
+            _transmissionControlService = Container.Resolve<ITransmissionControlService>();
             if (string.IsNullOrEmpty(_applicationDataService.GetSetting<string>("Guid"))) _applicationDataService.SaveSetting("Guid", Guid.NewGuid().ToString());
             ThemeSelectorService.SetRequestedTheme();
             SetSelectedLanguage();
@@ -99,6 +103,13 @@ namespace RoomInfo
             base.ConfigureServiceLocator();
             UnityServiceLocator unityServiceLocator = new UnityServiceLocator(Container);
             ServiceLocator.SetLocatorProvider(() => unityServiceLocator);
+        }
+
+        protected override async Task OnSuspendingApplicationAsync()
+        {
+            await _userDatagramService.TransferOwnership();
+            await _transmissionControlService.TransferOwnership();
+            await base.OnSuspendingApplicationAsync();
         }
     }
 }

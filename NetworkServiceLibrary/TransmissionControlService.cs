@@ -10,6 +10,7 @@ using ModelLibrary;
 using Newtonsoft.Json;
 using Prism.Events;
 using System.Collections.Generic;
+using Windows.Storage.Streams;
 
 namespace NetworkServiceLibrary
 {
@@ -17,8 +18,9 @@ namespace NetworkServiceLibrary
     {
         Task StartListenerAsync();
         void StopListener();
+        Task TransferOwnership();
         Task SendStringData(HostName hostName, string port, string data);
-        Task SendStringData(StreamSocket streamSocket, HostName hostName, string port, string data);
+        Task SendStringData(StreamSocket streamSocket, string data);
     }
     public class TransmissionControlService : ITransmissionControlService
     {
@@ -28,6 +30,8 @@ namespace NetworkServiceLibrary
         IDatabaseService _databaseService;
         IIotService _iotService;
         StreamSocketListener _streamSocketListener;
+        private int _transferOwnershipCount;
+
         public TransmissionControlService(IApplicationDataService applicationDataService, IBackgroundTaskService backgroundTaskService, IEventAggregator eventAggregator, IDatabaseService databaseService, IIotService iotService)
         {
             _applicationDataService = applicationDataService;
@@ -50,13 +54,8 @@ namespace NetworkServiceLibrary
                         {
                             await streamWriter.WriteLineAsync(data);
                             await streamWriter.FlushAsync();
-                            streamWriter.Close();
-                            streamWriter.Dispose();
                         }
-                        outputStream.Close();
-                        outputStream.Dispose();
                     }
-                    await streamSocket.CancelIOAsync();
                     streamSocket.Dispose();
                 }
             }
@@ -66,27 +65,18 @@ namespace NetworkServiceLibrary
             }
         }
 
-        public async Task SendStringData(StreamSocket streamSocket, HostName hostName, string port, string data)
+        public async Task SendStringData(StreamSocket streamSocket, string data)
         {
             try
             {
-                using (streamSocket)
+                using (Stream outputStream = streamSocket.OutputStream.AsStreamForWrite())
                 {
-                    await streamSocket.ConnectAsync(hostName, port);
-                    using (Stream outputStream = streamSocket.OutputStream.AsStreamForWrite())
+                    using (var streamWriter = new StreamWriter(outputStream))
                     {
-                        using (var streamWriter = new StreamWriter(outputStream))
-                        {
-                            await streamWriter.WriteLineAsync(data);
-                            await streamWriter.FlushAsync();
-                            streamWriter.Close();
-                            streamWriter.Dispose();
-                        }
-                        outputStream.Close();
-                        outputStream.Dispose();
+                        await streamWriter.WriteLineAsync(data);
+                        await streamWriter.FlushAsync();
                     }
                 }
-                await streamSocket.CancelIOAsync();
                 streamSocket.Dispose();
             }
             catch (Exception ex)
@@ -104,19 +94,10 @@ namespace NetworkServiceLibrary
                 _streamSocketListener.EnableTransferOwnership(backgroundTaskRegistration.TaskId, SocketActivityConnectedStandbyAction.DoNotWake);
                 _streamSocketListener.ConnectionReceived += async (s, e) =>
                 {
-                    using (Stream inputStream = e.Socket.InputStream.AsStreamForRead())
+                    using (StreamReader streamReader = new StreamReader(e.Socket.InputStream.AsStreamForRead()))
                     {
-                        using (StreamReader streamReader = new StreamReader(inputStream))
-                        {
-                            await ProcessInputStream(e.Socket, await streamReader.ReadLineAsync());
-                            streamReader.Close();
-                            streamReader.Dispose();
-                        }
-                        inputStream.Close();
-                        inputStream.Dispose();
+                        await ProcessInputStream(e.Socket, await streamReader.ReadLineAsync());
                     }
-                    await s.CancelIOAsync();
-                    s.Dispose();
                 };
                 await _streamSocketListener.BindServiceNameAsync(_applicationDataService.GetSetting<string>("TcpPort"));
             }
@@ -140,6 +121,20 @@ namespace NetworkServiceLibrary
             }
         }
 
+        public async Task TransferOwnership()
+        {
+            if (_streamSocketListener!=null)
+            {
+                await _streamSocketListener.CancelIOAsync();
+                var dataWriter = new DataWriter();
+                ++_transferOwnershipCount;
+                dataWriter.WriteInt32(_transferOwnershipCount);
+                var context = new SocketActivityContext(dataWriter.DetachBuffer());
+                _streamSocketListener.TransferOwnership("StreamSocket", context);
+                StopListener();
+            }
+        }
+
         private async Task ProcessInputStream(StreamSocket streamSocket, string inputStream)
         {
             Package package = JsonConvert.DeserializeObject<Package>(inputStream);
@@ -160,14 +155,14 @@ namespace NetworkServiceLibrary
                     package.PayloadType = (int)PayloadType.Occupancy;
                     package.Payload = actualOccupancy;
                     json = JsonConvert.SerializeObject(package);
-                    await SendStringData(streamSocket, streamSocket.Information.RemoteHostName, streamSocket.Information.RemotePort, json);
+                    await SendStringData(streamSocket, json);
                     break;
                 case PayloadType.RequestSchedule:
                     agendaItems = await _databaseService.GetAgendaItemsAsync();
                     package.PayloadType = (int)PayloadType.Schedule;
                     package.Payload = agendaItems;
                     json = JsonConvert.SerializeObject(package);
-                    await SendStringData(streamSocket, streamSocket.Information.RemoteHostName, streamSocket.Information.RemotePort, json);
+                    await SendStringData(streamSocket, json);
                     break;
                 case PayloadType.IotDim:
                     await _iotService.Dim((bool)package.Payload);
@@ -177,10 +172,9 @@ namespace NetworkServiceLibrary
                 case PayloadType.RequestStandardWeek:
                     break;
                 default:
+                    streamSocket.Dispose();
                     break;
             }
-            await streamSocket.CancelIOAsync();
-            streamSocket.Dispose();
         }
     }
 }
