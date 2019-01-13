@@ -29,4 +29,7 @@ namespace ModelLibrary
     public class CollapseLowerGridEvent : PubSubEvent
     {
     }
+    public class PortChangedEvent : PubSubEvent
+    {
+    }
 }

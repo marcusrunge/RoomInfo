@@ -16,6 +16,7 @@ namespace NetworkServiceLibrary
     public interface ITransmissionControlService
     {
         Task StartListenerAsync();
+        Task StopListenerAsync();
         Task SendStringData(HostName hostName, string port, string data);
         Task SendStringData(StreamSocket streamSocket, HostName hostName, string port, string data);
     }
@@ -123,6 +124,21 @@ namespace NetworkServiceLibrary
             {
                 SocketErrorStatus webErrorStatus = SocketError.GetStatus(ex.GetBaseException().HResult);
             }
+            _eventAggregator.GetEvent<PortChangedEvent>().Subscribe(async () =>
+            {
+                await StopListenerAsync();
+                await StartListenerAsync();
+            });
+        }
+
+        public async Task StopListenerAsync()
+        {
+            if (_streamSocketListener != null)
+            {
+                await _streamSocketListener.CancelIOAsync();
+                _streamSocketListener.Dispose();
+                _streamSocketListener = null;
+            }
         }
 
         private async Task ProcessInputStream(StreamSocket streamSocket, string inputStream)
@@ -134,7 +150,7 @@ namespace NetworkServiceLibrary
             {
                 case PayloadType.Occupancy:
                     _eventAggregator.GetEvent<RemoteOccupancyOverrideEvent>().Publish((int)package.Payload);
-                    break;                
+                    break;
                 case PayloadType.Schedule:
                     agendaItems = (List<AgendaItem>)package.Payload;
                     await _databaseService.UpdateAgendaItemsAsync(agendaItems);

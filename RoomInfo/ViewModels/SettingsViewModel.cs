@@ -56,10 +56,26 @@ namespace RoomInfo.ViewModels
         public Uri CompanyLogo { get => _companyLogo; set { SetProperty(ref _companyLogo, value); } }
                 
         string _tcpPort = default(string);
-        public string TcpPort { get => _tcpPort; set { SetProperty(ref _tcpPort, value); if (!string.IsNullOrEmpty(UdpPort)) _applicationDataService.SaveSetting("TcpPort", TcpPort); } }
+        public string TcpPort
+        {
+            get => _tcpPort;
+            set {
+                SetProperty(ref _tcpPort, value);
+                if (!string.IsNullOrEmpty(UdpPort)) _applicationDataService.SaveSetting("TcpPort", TcpPort);
+                _eventAggregator.GetEvent<PortChangedEvent>().Publish();
+            }
+        }
 
         string _udpPort = default(string);
-        public string UdpPort { get => _udpPort; set { SetProperty(ref _udpPort, value); if (!string.IsNullOrEmpty(UdpPort)) _applicationDataService.SaveSetting("UdpPort", UdpPort); } }
+        public string UdpPort
+        {
+            get => _udpPort;
+            set {
+                SetProperty(ref _udpPort, value);
+                if (!string.IsNullOrEmpty(UdpPort)) _applicationDataService.SaveSetting("UdpPort", UdpPort);
+                _eventAggregator.GetEvent<PortChangedEvent>().Publish();
+            }
+        }
 
         Visibility _iotPanelVisibility = default(Visibility);
         public Visibility IotPanelVisibility { get => _iotPanelVisibility; set { SetProperty(ref _iotPanelVisibility, value); } }
