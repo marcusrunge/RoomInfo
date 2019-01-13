@@ -54,15 +54,17 @@ namespace RoomInfo.ViewModels
 
         Uri _companyLogo = default(Uri);
         public Uri CompanyLogo { get => _companyLogo; set { SetProperty(ref _companyLogo, value); } }
-                
+
         string _tcpPort = default(string);
         public string TcpPort
         {
             get => _tcpPort;
-            set {
+            set
+            {
                 SetProperty(ref _tcpPort, value);
-                if (!string.IsNullOrEmpty(UdpPort)) _applicationDataService.SaveSetting("TcpPort", TcpPort);
-                _eventAggregator.GetEvent<PortChangedEvent>().Publish();
+                string previousPort = _applicationDataService.GetSetting<string>("TcpPort");
+                if (!string.IsNullOrEmpty(TcpPort)) _applicationDataService.SaveSetting("TcpPort", TcpPort);
+                if (!previousPort.Equals(TcpPort)) _eventAggregator.GetEvent<PortChangedEvent>().Publish();
             }
         }
 
@@ -70,10 +72,12 @@ namespace RoomInfo.ViewModels
         public string UdpPort
         {
             get => _udpPort;
-            set {
+            set
+            {
                 SetProperty(ref _udpPort, value);
+                string previousPort = _applicationDataService.GetSetting<string>("UdpPort");
                 if (!string.IsNullOrEmpty(UdpPort)) _applicationDataService.SaveSetting("UdpPort", UdpPort);
-                _eventAggregator.GetEvent<PortChangedEvent>().Publish();
+                if (!previousPort.Equals(UdpPort)) _eventAggregator.GetEvent<PortChangedEvent>().Publish();
             }
         }
 
@@ -146,7 +150,7 @@ namespace RoomInfo.ViewModels
                 StorageFolder assets = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Assets");
                 StorageFile storageFile = await StorageFile.GetFileFromPathAsync(fileUri.LocalPath);
                 await storageFile.CopyAsync(assets, storageFile.Name, NameCollisionOption.ReplaceExisting);
-                _applicationDataService.SaveSetting("LogoFileName", storageFile.Name);                
+                _applicationDataService.SaveSetting("LogoFileName", storageFile.Name);
                 await LoadCompanyLogo();
                 //InjectedInputKeyboardInfo injectedInputKeyboardInfo = new InjectedInputKeyboardInfo
                 //{
@@ -165,7 +169,7 @@ namespace RoomInfo.ViewModels
                 case "en-US":
                     return ModelLibrary.Language.en_US;
                 default:
-                    if (Windows.Globalization.Language.CurrentInputMethodLanguageTag.Equals("de-DE") ) return ModelLibrary.Language.de_DE;
+                    if (Windows.Globalization.Language.CurrentInputMethodLanguageTag.Equals("de-DE")) return ModelLibrary.Language.de_DE;
                     else return ModelLibrary.Language.en_US;
             }
         }
@@ -268,7 +272,7 @@ namespace RoomInfo.ViewModels
         //private ICommand _reservedCommand;
         //public ICommand ReservedCommand => _reservedCommand ?? (_reservedCommand = new DelegateCommand<object>((param) =>
         //{
-            
+
         //}));
 
         private async Task LoadCompanyLogo()

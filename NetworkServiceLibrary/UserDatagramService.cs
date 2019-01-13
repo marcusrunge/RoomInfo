@@ -14,7 +14,7 @@ namespace NetworkServiceLibrary
     public interface IUserDatagramService
     {
         Task StartListenerAsync();
-        Task StopListenerAsync();
+        void StopListener();
     }
     public class UserDatagramService : IUserDatagramService
     {
@@ -29,13 +29,13 @@ namespace NetworkServiceLibrary
             _applicationDataService = applicationDataService;
             _backgroundTaskService = backgroundTaskService;
             _transmissionControlService = transmissionControlService;
-            _eventAggregator = eventAggregator;
-            _datagramSocket = new DatagramSocket();
+            _eventAggregator = eventAggregator;            
         }
         public async Task StartListenerAsync()
         {
             try
             {
+                _datagramSocket = new DatagramSocket();
                 var window = CoreWindow.GetForCurrentThread();
                 var dispatcher = window.Dispatcher;
                 var backgroundTaskRegistration = await _backgroundTaskService.Register<UserDatagramBackgroundTask>(new SocketActivityTrigger());
@@ -57,16 +57,15 @@ namespace NetworkServiceLibrary
 
             _eventAggregator.GetEvent<PortChangedEvent>().Subscribe(async ()=>
             {
-                await StopListenerAsync();
+                StopListener();
                 await StartListenerAsync();
             });
         }
 
-        public async Task StopListenerAsync()
+        public void StopListener()
         {
             if (_datagramSocket != null)
             {
-                await _datagramSocket.CancelIOAsync();
                 _datagramSocket.Dispose();
                 _datagramSocket = null;
             }

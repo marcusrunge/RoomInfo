@@ -16,7 +16,7 @@ namespace NetworkServiceLibrary
     public interface ITransmissionControlService
     {
         Task StartListenerAsync();
-        Task StopListenerAsync();
+        void StopListener();
         Task SendStringData(HostName hostName, string port, string data);
         Task SendStringData(StreamSocket streamSocket, HostName hostName, string port, string data);
     }
@@ -126,16 +126,15 @@ namespace NetworkServiceLibrary
             }
             _eventAggregator.GetEvent<PortChangedEvent>().Subscribe(async () =>
             {
-                await StopListenerAsync();
+                StopListener();
                 await StartListenerAsync();
             });
         }
 
-        public async Task StopListenerAsync()
+        public void StopListener()
         {
             if (_streamSocketListener != null)
             {
-                await _streamSocketListener.CancelIOAsync();
                 _streamSocketListener.Dispose();
                 _streamSocketListener = null;
             }
