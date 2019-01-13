@@ -49,7 +49,11 @@ namespace NetworkServiceLibrary
                         {
                             await streamWriter.WriteLineAsync(data);
                             await streamWriter.FlushAsync();
+                            streamWriter.Close();
+                            streamWriter.Dispose();
                         }
+                        outputStream.Close();
+                        outputStream.Dispose();
                     }
                     await streamSocket.CancelIOAsync();
                     streamSocket.Dispose();
@@ -74,9 +78,15 @@ namespace NetworkServiceLibrary
                         {
                             await streamWriter.WriteLineAsync(data);
                             await streamWriter.FlushAsync();
+                            streamWriter.Close();
+                            streamWriter.Dispose();
                         }
+                        outputStream.Close();
+                        outputStream.Dispose();
                     }
                 }
+                await streamSocket.CancelIOAsync();
+                streamSocket.Dispose();
             }
             catch (Exception ex)
             {
@@ -98,8 +108,14 @@ namespace NetworkServiceLibrary
                         using (StreamReader streamReader = new StreamReader(inputStream))
                         {
                             await ProcessInputStream(e.Socket, await streamReader.ReadLineAsync());
-                        }                        
+                            streamReader.Close();
+                            streamReader.Dispose();
+                        }
+                        inputStream.Close();
+                        inputStream.Dispose();
                     }
+                    await s.CancelIOAsync();
+                    s.Dispose();
                 };
                 await _streamSocketListener.BindServiceNameAsync(_applicationDataService.GetSetting<string>("TcpPort"));
             }
