@@ -140,7 +140,7 @@ namespace RoomInfo.ViewModels
             }
             _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
             ResetButtonVisibility = Visibility.Visible;
-            _applicationDataService.SaveSetting("ActualOccupancy", (int)Occupancy);
+            _applicationDataService.SaveSetting("ActualOccupancy", SelectedComboBoxIndex);
         }
 
         private async Task UpdateDayAgenda()
