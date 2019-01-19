@@ -133,7 +133,7 @@ namespace RoomInfo.ViewModels
         }
 
         private ICommand _showReservationFlyoutCommand;
-        public ICommand ShowReservationFlyoutCommand => _showReservationFlyoutCommand ?? (_showReservationFlyoutCommand = new DelegateCommand<object>(async (param) =>
+        public ICommand ShowReservationFlyoutCommand => _showReservationFlyoutCommand ?? (_showReservationFlyoutCommand = new DelegateCommand<object>((param) =>
             {
                 var now = DateTime.Now;
                 StartDate = now.Date;

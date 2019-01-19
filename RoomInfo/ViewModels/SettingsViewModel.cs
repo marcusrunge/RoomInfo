@@ -250,7 +250,7 @@ namespace RoomInfo.ViewModels
         }));
 
         private ICommand _configWiFiCommand;
-        public ICommand ConfigWiFiCommand => _configWiFiCommand ?? (_configWiFiCommand = new DelegateCommand<object>(async (param) =>
+        public ICommand ConfigWiFiCommand => _configWiFiCommand ?? (_configWiFiCommand = new DelegateCommand<object>((param) =>
         {
             var currentWindow = Window.Current;
             currentWindow.Content = new WiFiUserControl();

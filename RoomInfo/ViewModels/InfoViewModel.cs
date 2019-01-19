@@ -17,6 +17,7 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Prism.Events;
 using Windows.UI.Xaml.Controls;
+using Windows.ApplicationModel.Core;
 
 namespace RoomInfo.ViewModels
 {
@@ -121,10 +122,13 @@ namespace RoomInfo.ViewModels
             _applicationDataService.SaveSetting("ActualOccupancy", (int)Occupancy);
             await UpdateDayAgenda();
             _eventAggregator.GetEvent<RemoteOccupancyOverrideEvent>().Subscribe(async i =>
-            {
-                SelectedComboBoxIndex = i;
-                Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
-                await OverrideOccupancy();
+            {                
+                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                {
+                    SelectedComboBoxIndex = i;
+                    Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
+                    await OverrideOccupancy();
+                });
             });
             BrightnessAdjustmentVisibility = _iotService.IsIotDevice() ? Visibility.Visible : Visibility.Collapsed;
         }
@@ -290,13 +294,13 @@ namespace RoomInfo.ViewModels
         private ICommand _dimCommand;
         public ICommand DimCommand => _dimCommand ?? (_dimCommand = new DelegateCommand<object>(async (param) =>
         {
-            await _iotService.Dim(true);            
+            await _iotService.Dim(true);
         }));
 
         private ICommand _brightCommand;
         public ICommand BrightCommand => _brightCommand ?? (_brightCommand = new DelegateCommand<object>(async (param) =>
-        {            
-                await _iotService.Dim(false);                
+        {
+            await _iotService.Dim(false);
         }));
     }
 }

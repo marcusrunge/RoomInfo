@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Prism.Events;
 using System.Collections.Generic;
 using Windows.Storage.Streams;
+using Windows.UI.Core;
 
 namespace NetworkServiceLibrary
 {
@@ -89,7 +90,7 @@ namespace NetworkServiceLibrary
         {
             try
             {
-                _streamSocketListener = new StreamSocketListener();
+                _streamSocketListener = new StreamSocketListener();                
                 if (_backgroundTaskService.FindRegistration<TransmissionControlBackgroundTask>() == null)
                 {
                     try
@@ -152,7 +153,7 @@ namespace NetworkServiceLibrary
             switch ((PayloadType)package.PayloadType)
             {
                 case PayloadType.Occupancy:
-                    _eventAggregator.GetEvent<RemoteOccupancyOverrideEvent>().Publish((int)package.Payload);
+                    _eventAggregator.GetEvent<RemoteOccupancyOverrideEvent>().Publish((int)Convert.ChangeType(package.Payload, typeof(int)));
                     break;
                 case PayloadType.Schedule:
                     agendaItems = (List<AgendaItem>)package.Payload;
