@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ModelLibrary
+﻿namespace ModelLibrary
 {
     public class Room
     {

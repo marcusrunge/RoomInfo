@@ -11,6 +11,7 @@ namespace ApplicationServiceLibrary
         IBackgroundTaskRegistration FindRegistration<T>() where T : class;
         Task<BackgroundTaskRegistration> Register<T>(IBackgroundTrigger trigger, IEnumerable<IBackgroundCondition> conditions = null) where T : class;
         Task<bool> Unregister<T>() where T : class;
+        Task<bool> UnregisterAll();
     }
     public class BackgroundTaskService : IBackgroundTaskService
     {

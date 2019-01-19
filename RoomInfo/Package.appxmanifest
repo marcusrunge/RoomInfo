@@ -26,14 +26,9 @@
             <Task Type="timer" />
           </BackgroundTasks>
         </Extension>
-        <Extension Category="windows.backgroundTasks" EntryPoint="BackgroundComponent.UserDatagramBackgroundTask">
+        <Extension Category="windows.backgroundTasks" EntryPoint="BackgroundComponent.SocketActivityTriggerBackgroundTask">
           <BackgroundTasks>
             <Task Type="general" />
-            <Task Type="systemEvent" />
-          </BackgroundTasks>
-        </Extension>
-        <Extension Category="windows.backgroundTasks" EntryPoint="BackgroundComponent.TransmissionControlBackgroundTask">
-          <BackgroundTasks>
             <Task Type="systemEvent" />
           </BackgroundTasks>
         </Extension>

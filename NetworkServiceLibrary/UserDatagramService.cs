@@ -1,11 +1,9 @@
 ﻿using System.Threading.Tasks;
-using Windows.ApplicationModel.Background;
 using Windows.Networking.Sockets;
 using Windows.UI.Core;
 using System;
 using ModelLibrary;
 using Newtonsoft.Json;
-using BackgroundComponent;
 using ApplicationServiceLibrary;
 using Prism.Events;
 using Windows.Storage.Streams;
@@ -15,7 +13,7 @@ namespace NetworkServiceLibrary
     public interface IUserDatagramService
     {
         Task StartListenerAsync();
-        Task StopListener();
+        void StopListener();
         Task TransferOwnership();
     }
     public class UserDatagramService : IUserDatagramService
@@ -24,15 +22,17 @@ namespace NetworkServiceLibrary
         IBackgroundTaskService _backgroundTaskService;
         ITransmissionControlService _transmissionControlService;
         IEventAggregator _eventAggregator;
+        IBackgroundTaskRegistrationProvider _backgroundTaskRegistrationProvider;
         DatagramSocket _datagramSocket;
         private int _transferOwnershipCount;
 
-        public UserDatagramService(IApplicationDataService applicationDataService, IBackgroundTaskService backgroundTaskService, ITransmissionControlService transmissionControlService, IEventAggregator eventAggregator)
+        public UserDatagramService(IApplicationDataService applicationDataService, IBackgroundTaskService backgroundTaskService, ITransmissionControlService transmissionControlService, IEventAggregator eventAggregator, IBackgroundTaskRegistrationProvider backgroundTaskRegistrationProvider)
         {
             _applicationDataService = applicationDataService;
             _backgroundTaskService = backgroundTaskService;
             _transmissionControlService = transmissionControlService;
             _eventAggregator = eventAggregator;
+            _backgroundTaskRegistrationProvider = backgroundTaskRegistrationProvider;
         }
         public async Task StartListenerAsync()
         {
@@ -41,16 +41,7 @@ namespace NetworkServiceLibrary
                 _datagramSocket = new DatagramSocket();
                 var window = CoreWindow.GetForCurrentThread();
                 var dispatcher = window.Dispatcher;
-                if (_backgroundTaskService.FindRegistration<UserDatagramBackgroundTask>() == null)
-                {
-                    try
-                    {
-                        var backgroundTaskRegistration = await _backgroundTaskService.Register<UserDatagramBackgroundTask>(new SocketActivityTrigger());
-                        _datagramSocket.EnableTransferOwnership(backgroundTaskRegistration.TaskId, SocketActivityConnectedStandbyAction.DoNotWake);
-                    }
-                    catch { }
-
-                }
+                if(_backgroundTaskRegistrationProvider.BackgroundTaskRegistration != null) _datagramSocket.EnableTransferOwnership(_backgroundTaskRegistrationProvider.BackgroundTaskRegistration.TaskId, SocketActivityConnectedStandbyAction.DoNotWake);                
                 _datagramSocket.MessageReceived += async (s, e) =>
                 {
                     var roomPackage = new Package()
@@ -76,14 +67,13 @@ namespace NetworkServiceLibrary
 
             _eventAggregator.GetEvent<PortChangedEvent>().Subscribe(async () =>
             {
-                await StopListener();
+                StopListener();
                 await StartListenerAsync();
             });
         }
 
-        public async Task StopListener()
+        public void StopListener()
         {
-            await _backgroundTaskService.Unregister<UserDatagramBackgroundTask>();
             if (_datagramSocket != null)
             {
                 _datagramSocket.Dispose();
@@ -101,7 +91,7 @@ namespace NetworkServiceLibrary
                 dataWriter.WriteInt32(_transferOwnershipCount);
                 var context = new SocketActivityContext(dataWriter.DetachBuffer());
                 _datagramSocket.TransferOwnership("UserDatagramSocket", context);
-                await StopListener();
+                StopListener();
             }
         }
     }

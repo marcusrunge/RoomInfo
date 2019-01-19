@@ -17,6 +17,7 @@ namespace RoomInfo.ViewModels
         ILiveTileUpdateService _liveTileUpdateService;
         IUserDatagramService _userDatagramService;
         ITransmissionControlService _transmissionControlService;
+        IBackgroundTaskRegistrationProvider _backgroundTaskRegistrationProvider;
 
         public PivotViewModel(IUnityContainer unityContainer)
         {
@@ -25,6 +26,7 @@ namespace RoomInfo.ViewModels
             _liveTileUpdateService = unityContainer.Resolve<ILiveTileUpdateService>();
             _userDatagramService = unityContainer.Resolve<IUserDatagramService>();
             _transmissionControlService = unityContainer.Resolve<ITransmissionControlService>();
+            _backgroundTaskRegistrationProvider = unityContainer.Resolve<IBackgroundTaskRegistrationProvider>();
         }
 
         public async override void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
@@ -32,8 +34,9 @@ namespace RoomInfo.ViewModels
             base.OnNavigatedTo(e, viewModelState);
             if (string.IsNullOrEmpty(_applicationDataService.GetSetting<string>("TcpPort"))) _applicationDataService.SaveSetting("TcpPort", "8273");
             if (string.IsNullOrEmpty(_applicationDataService.GetSetting<string>("UdpPort"))) _applicationDataService.SaveSetting("UdpPort", "8274");
-            _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
-            if (_backgroundTaskService.FindRegistration<LiveTileUpdateBackgroundTask>() == null) await _backgroundTaskService.Register<LiveTileUpdateBackgroundTask>(new TimeTrigger(15, false));            
+            _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));            
+            if (_backgroundTaskService.FindRegistration<LiveTileUpdateBackgroundTask>() == null) await _backgroundTaskService.Register<LiveTileUpdateBackgroundTask>(new TimeTrigger(15, false));
+            if (_backgroundTaskService.FindRegistration<SocketActivityTriggerBackgroundTask>() == null) _backgroundTaskRegistrationProvider.BackgroundTaskRegistration = await _backgroundTaskService.Register<SocketActivityTriggerBackgroundTask>(new SocketActivityTrigger());
             await _userDatagramService.StartListenerAsync();
             await _transmissionControlService.StartListenerAsync();
 

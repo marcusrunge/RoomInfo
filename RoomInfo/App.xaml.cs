@@ -46,6 +46,7 @@ namespace RoomInfo
             Container.RegisterType<IUserDatagramService, UserDatagramService>();
             Container.RegisterType<IDateTimeValidationService, DateTimeValidationService>();
             Container.RegisterType<IIotService, IotService>();
+            Container.RegisterType<IBackgroundTaskRegistrationProvider, BackgroundTaskRegistrationProvider>();
         }
 
         protected override Task OnLaunchApplicationAsync(LaunchActivatedEventArgs args)
