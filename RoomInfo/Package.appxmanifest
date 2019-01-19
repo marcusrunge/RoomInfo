@@ -28,6 +28,7 @@
         </Extension>
         <Extension Category="windows.backgroundTasks" EntryPoint="BackgroundComponent.UserDatagramBackgroundTask">
           <BackgroundTasks>
+            <Task Type="general" />
             <Task Type="systemEvent" />
           </BackgroundTasks>
         </Extension>

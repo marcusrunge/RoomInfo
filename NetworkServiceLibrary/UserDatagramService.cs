@@ -15,7 +15,7 @@ namespace NetworkServiceLibrary
     public interface IUserDatagramService
     {
         Task StartListenerAsync();
-        void StopListener();
+        Task StopListener();
         Task TransferOwnership();
     }
     public class UserDatagramService : IUserDatagramService
@@ -41,8 +41,16 @@ namespace NetworkServiceLibrary
                 _datagramSocket = new DatagramSocket();
                 var window = CoreWindow.GetForCurrentThread();
                 var dispatcher = window.Dispatcher;
-                var backgroundTaskRegistration = await _backgroundTaskService.Register<UserDatagramBackgroundTask>(new SocketActivityTrigger());
-                _datagramSocket.EnableTransferOwnership(backgroundTaskRegistration.TaskId, SocketActivityConnectedStandbyAction.DoNotWake);
+                if (_backgroundTaskService.FindRegistration<UserDatagramBackgroundTask>() == null)
+                {
+                    try
+                    {
+                        var backgroundTaskRegistration = await _backgroundTaskService.Register<UserDatagramBackgroundTask>(new SocketActivityTrigger());
+                        _datagramSocket.EnableTransferOwnership(backgroundTaskRegistration.TaskId, SocketActivityConnectedStandbyAction.DoNotWake);
+                    }
+                    catch { }
+
+                }
                 _datagramSocket.MessageReceived += async (s, e) =>
                 {
                     var roomPackage = new Package()
@@ -68,13 +76,14 @@ namespace NetworkServiceLibrary
 
             _eventAggregator.GetEvent<PortChangedEvent>().Subscribe(async () =>
             {
-                StopListener();
+                await StopListener();
                 await StartListenerAsync();
             });
         }
 
-        public void StopListener()
+        public async Task StopListener()
         {
+            await _backgroundTaskService.Unregister<UserDatagramBackgroundTask>();
             if (_datagramSocket != null)
             {
                 _datagramSocket.Dispose();
@@ -92,7 +101,7 @@ namespace NetworkServiceLibrary
                 dataWriter.WriteInt32(_transferOwnershipCount);
                 var context = new SocketActivityContext(dataWriter.DetachBuffer());
                 _datagramSocket.TransferOwnership("UserDatagramSocket", context);
-                StopListener();
+                await StopListener();
             }
         }
     }

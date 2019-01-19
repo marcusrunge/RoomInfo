@@ -17,7 +17,7 @@ namespace NetworkServiceLibrary
     public interface ITransmissionControlService
     {
         Task StartListenerAsync();
-        void StopListener();
+        Task StopListener();
         Task TransferOwnership();
         Task SendStringData(HostName hostName, string port, string data);
         Task SendStringData(StreamSocket streamSocket, string data);
@@ -90,8 +90,16 @@ namespace NetworkServiceLibrary
             try
             {
                 _streamSocketListener = new StreamSocketListener();
-                var backgroundTaskRegistration = await _backgroundTaskService.Register<TransmissionControlBackgroundTask>(new SocketActivityTrigger());
-                _streamSocketListener.EnableTransferOwnership(backgroundTaskRegistration.TaskId, SocketActivityConnectedStandbyAction.DoNotWake);
+                if (_backgroundTaskService.FindRegistration<TransmissionControlBackgroundTask>() == null)
+                {
+                    try
+                    {
+                        var backgroundTaskRegistration = await _backgroundTaskService.Register<TransmissionControlBackgroundTask>(new SocketActivityTrigger());
+                        _streamSocketListener.EnableTransferOwnership(backgroundTaskRegistration.TaskId, SocketActivityConnectedStandbyAction.DoNotWake);
+                    }
+                    catch { }
+                }
+
                 _streamSocketListener.ConnectionReceived += async (s, e) =>
                 {
                     using (StreamReader streamReader = new StreamReader(e.Socket.InputStream.AsStreamForRead()))
@@ -107,13 +115,14 @@ namespace NetworkServiceLibrary
             }
             _eventAggregator.GetEvent<PortChangedEvent>().Subscribe(async () =>
             {
-                StopListener();
+                await StopListener();
                 await StartListenerAsync();
             });
         }
 
-        public void StopListener()
+        public async Task StopListener()
         {
+            await _backgroundTaskService.Unregister<TransmissionControlBackgroundTask>();
             if (_streamSocketListener != null)
             {
                 _streamSocketListener.Dispose();
@@ -123,7 +132,7 @@ namespace NetworkServiceLibrary
 
         public async Task TransferOwnership()
         {
-            if (_streamSocketListener!=null)
+            if (_streamSocketListener != null)
             {
                 await _streamSocketListener.CancelIOAsync();
                 var dataWriter = new DataWriter();
@@ -131,7 +140,7 @@ namespace NetworkServiceLibrary
                 dataWriter.WriteInt32(_transferOwnershipCount);
                 var context = new SocketActivityContext(dataWriter.DetachBuffer());
                 _streamSocketListener.TransferOwnership("StreamSocket", context);
-                StopListener();
+                await StopListener();
             }
         }
 
