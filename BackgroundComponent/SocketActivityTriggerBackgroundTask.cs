@@ -19,6 +19,7 @@ namespace BackgroundComponent
         IUnityContainer _unityContainer;
         IApplicationDataService _applicationDataService;
         IDatabaseService _databaseService;
+        IIotService _iotService;
 
         public async void Run(IBackgroundTaskInstance taskInstance)
         {
@@ -26,8 +27,10 @@ namespace BackgroundComponent
             _unityContainer = new UnityContainer();
             _unityContainer.RegisterType<IApplicationDataService, ApplicationDataService>();
             _unityContainer.RegisterType<IDatabaseService, DatabaseService>();
+            _unityContainer.RegisterType<IIotService, IotService>();
             _applicationDataService = _unityContainer.Resolve<IApplicationDataService>();
             _databaseService = _unityContainer.Resolve<IDatabaseService>();
+            _iotService = _unityContainer.Resolve<IIotService>();
             try
             {
                 var socketActivityTriggerDetails = taskInstance.TriggerDetails as SocketActivityTriggerDetails;
@@ -55,7 +58,8 @@ namespace BackgroundComponent
                                             RoomGuid = _applicationDataService.GetSetting<string>("Guid"),
                                             RoomName = _applicationDataService.GetSetting<string>("RoomName"),
                                             RoomNumber = _applicationDataService.GetSetting<string>("RoomNumber"),
-                                            Occupancy = _applicationDataService.GetSetting<int>("ActualOccupancy")
+                                            Occupancy = _applicationDataService.GetSetting<int>("ActualOccupancy"),
+                                            IsIoT = _iotService.IsIotDevice()
                                         }
                                     };
                                     var json = JsonConvert.SerializeObject(roomPackage);

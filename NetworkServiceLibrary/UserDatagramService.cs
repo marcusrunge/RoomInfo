@@ -23,16 +23,18 @@ namespace NetworkServiceLibrary
         ITransmissionControlService _transmissionControlService;
         IEventAggregator _eventAggregator;
         IBackgroundTaskRegistrationProvider _backgroundTaskRegistrationProvider;
+        IIotService _iotService;
         DatagramSocket _datagramSocket;
         private int _transferOwnershipCount;
 
-        public UserDatagramService(IApplicationDataService applicationDataService, IBackgroundTaskService backgroundTaskService, ITransmissionControlService transmissionControlService, IEventAggregator eventAggregator, IBackgroundTaskRegistrationProvider backgroundTaskRegistrationProvider)
+        public UserDatagramService(IApplicationDataService applicationDataService, IBackgroundTaskService backgroundTaskService, ITransmissionControlService transmissionControlService, IEventAggregator eventAggregator, IBackgroundTaskRegistrationProvider backgroundTaskRegistrationProvider, IIotService iotService)
         {
             _applicationDataService = applicationDataService;
             _backgroundTaskService = backgroundTaskService;
             _transmissionControlService = transmissionControlService;
             _eventAggregator = eventAggregator;
             _backgroundTaskRegistrationProvider = backgroundTaskRegistrationProvider;
+            _iotService = iotService;
         }
         public async Task StartListenerAsync()
         {
@@ -52,7 +54,8 @@ namespace NetworkServiceLibrary
                             RoomGuid = _applicationDataService.GetSetting<string>("Guid"),
                             RoomName = _applicationDataService.GetSetting<string>("RoomName"),
                             RoomNumber = _applicationDataService.GetSetting<string>("RoomNumber"),
-                            Occupancy = _applicationDataService.GetSetting<int>("ActualOccupancy")
+                            Occupancy = _applicationDataService.GetSetting<int>("ActualOccupancy"),
+                            IsIoT = _iotService.IsIotDevice()
                         }
                     };
                     var json = JsonConvert.SerializeObject(roomPackage);
