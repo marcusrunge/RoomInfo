@@ -24,6 +24,7 @@ namespace ModelLibrary
     public class AgendaItem : BindableBase
     {                
         IEventAggregator _eventAggregator = default(IEventAggregator);
+        [JsonIgnore]
         [NotMapped]
         public IEventAggregator EventAggregator
         {
