@@ -63,7 +63,7 @@ namespace BackgroundComponent
                                         }
                                     };
                                     var json = JsonConvert.SerializeObject(roomPackage);
-                                    await SendStringData(new StreamSocket(), s.Information.RemoteAddress, _applicationDataService.GetSetting<string>("TcpPort"), json);
+                                    await SendStringData(new StreamSocket(), socketInformation.Id, s.Information.RemoteAddress, _applicationDataService.GetSetting<string>("TcpPort"), json);
                                     await datagramSocket.CancelIOAsync();
                                     datagramSocket.TransferOwnership(socketInformation.Id);
                                 };
@@ -90,6 +90,7 @@ namespace BackgroundComponent
                                                     agendaItem.IsOverridden = true;
                                                     await _databaseService.UpdateAgendaItemAsync(agendaItem);
                                                 }
+                                                await streamSocket.CancelIOAsync();
                                                 streamSocket.TransferOwnership(socketInformation.Id);
                                                 break;
                                             case PayloadType.Schedule:
@@ -102,14 +103,14 @@ namespace BackgroundComponent
                                                 package.PayloadType = (int)PayloadType.Occupancy;
                                                 package.Payload = actualOccupancy;
                                                 json = JsonConvert.SerializeObject(package);
-                                                await SendStringData(streamSocket, streamSocket.Information.RemoteHostName, streamSocket.Information.RemotePort, json);
+                                                await SendStringData(streamSocket, socketInformation.Id, streamSocket.Information.RemoteHostName, streamSocket.Information.RemotePort, json);
                                                 break;
                                             case PayloadType.RequestSchedule:
                                                 agendaItems = await _databaseService.GetAgendaItemsAsync();
                                                 package.PayloadType = (int)PayloadType.Schedule;
                                                 package.Payload = agendaItems;
                                                 json = JsonConvert.SerializeObject(package);
-                                                await SendStringData(streamSocket, streamSocket.Information.RemoteHostName, streamSocket.Information.RemotePort, json);
+                                                await SendStringData(streamSocket, socketInformation.Id, streamSocket.Information.RemoteHostName, streamSocket.Information.RemotePort, json);
                                                 break;
                                             case PayloadType.StandardWeek:
                                                 break;
@@ -123,13 +124,21 @@ namespace BackgroundComponent
                                                     package.PayloadType = (int)PayloadType.AgendaItemId;
                                                     package.Payload = id;
                                                     json = JsonConvert.SerializeObject(package);
-                                                    await SendStringData(streamSocket, json);
+                                                    await SendStringData(streamSocket, socketInformation.Id, json);
                                                 }
-                                                else await _databaseService.UpdateAgendaItemAsync(agendaItemToAdd);
+                                                else
+                                                {
+                                                    await _databaseService.UpdateAgendaItemAsync(agendaItemToAdd);
+                                                    await streamSocket.CancelIOAsync();
+                                                    streamSocket.TransferOwnership(socketInformation.Id);
+                                                }
                                                 break;
-                                            default:                                                
+                                            default:
+                                                await streamSocket.CancelIOAsync();
+                                                streamSocket.TransferOwnership(socketInformation.Id);
                                                 break;
                                         }
+                                        await streamSocket.CancelIOAsync();
                                         streamSocket.TransferOwnership(socketInformation.Id);
                                     }
                                 }
@@ -193,7 +202,7 @@ namespace BackgroundComponent
             catch { }
         }
 
-        private async Task SendStringData(StreamSocket streamSocket, HostName hostName, string port, string data)
+        private async Task SendStringData(StreamSocket streamSocket, string streamSocketId, HostName hostName, string port, string data)
         {
             try
             {
@@ -215,9 +224,10 @@ namespace BackgroundComponent
                 SocketErrorStatus webErrorStatus = SocketError.GetStatus(ex.GetBaseException().HResult);
             }
             await streamSocket.CancelIOAsync();
+            streamSocket.TransferOwnership(streamSocketId);
         }
 
-        private async Task SendStringData(StreamSocket streamSocket, string data)
+        private async Task SendStringData(StreamSocket streamSocket, string streamSocketId, string data)
         {
             try
             {
@@ -229,7 +239,8 @@ namespace BackgroundComponent
                         await streamWriter.FlushAsync();
                     }
                 }
-                streamSocket.Dispose();
+                await streamSocket.CancelIOAsync();
+                streamSocket.TransferOwnership(streamSocketId);
             }
             catch (Exception ex)
             {

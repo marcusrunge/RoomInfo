@@ -143,11 +143,13 @@ namespace NetworkServiceLibrary
             {
                 case PayloadType.Occupancy:
                     _eventAggregator.GetEvent<RemoteOccupancyOverrideEvent>().Publish((int)Convert.ChangeType(package.Payload, typeof(int)));
+                    streamSocket.Dispose();
                     break;
                 case PayloadType.Schedule:
                     agendaItems = (List<AgendaItem>)package.Payload;
                     await _databaseService.UpdateAgendaItemsAsync(agendaItems);
                     _eventAggregator.GetEvent<RemoteAgendaItemsUpdatedEvent>().Publish();
+                    streamSocket.Dispose();
                     break;
                 case PayloadType.RequestOccupancy:
                     int actualOccupancy = _applicationDataService.GetSetting<int>("ActualOccupancy");
@@ -165,6 +167,7 @@ namespace NetworkServiceLibrary
                     break;
                 case PayloadType.IotDim:
                     await _iotService.Dim((bool)package.Payload);
+                    streamSocket.Dispose();
                     break;
                 case PayloadType.StandardWeek:
                     break;
@@ -180,7 +183,11 @@ namespace NetworkServiceLibrary
                         json = JsonConvert.SerializeObject(package);
                         await SendStringData(streamSocket, json);
                     }
-                    else await _databaseService.UpdateAgendaItemAsync(agendaItem);
+                    else
+                    {
+                        await _databaseService.UpdateAgendaItemAsync(agendaItem);
+                        streamSocket.Dispose();
+                    }
                     _eventAggregator.GetEvent<RemoteAgendaItemsUpdatedEvent>().Publish();
                     break;
                 default:
