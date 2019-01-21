@@ -170,6 +170,19 @@ namespace NetworkServiceLibrary
                     break;
                 case PayloadType.RequestStandardWeek:
                     break;
+                case PayloadType.AgendaItem:
+                    var agendaItem = (AgendaItem)package.Payload;
+                    if (agendaItem.Id < 1)
+                    {
+                        int id = await _databaseService.AddAgendaItemAsync(agendaItem);
+                        package.PayloadType = (int)PayloadType.AgendaItemId;
+                        package.Payload = id;
+                        json = JsonConvert.SerializeObject(package);
+                        await SendStringData(streamSocket, json);
+                    }
+                    else await _databaseService.UpdateAgendaItemAsync(agendaItem);
+                    _eventAggregator.GetEvent<RemoteAgendaItemsUpdatedEvent>().Publish();
+                    break;
                 default:
                     streamSocket.Dispose();
                     break;

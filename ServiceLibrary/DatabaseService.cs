@@ -9,7 +9,7 @@ namespace ApplicationServiceLibrary
 {
     public interface IDatabaseService
     {
-        Task AddAgendaItemAsync(AgendaItem agendaItem);
+        Task<int> AddAgendaItemAsync(AgendaItem agendaItem);
         Task RemoveAgendaItemAsync(AgendaItem agendaItem);
         Task UpdateAgendaItemAsync(AgendaItem agendaItem);
         Task UpdateAgendaItemsAsync(List<AgendaItem> agendaItems);
@@ -27,10 +27,11 @@ namespace ApplicationServiceLibrary
             _agendaItemContext.Database.Migrate();
         }
 
-        public async Task AddAgendaItemAsync(AgendaItem agendaItem)
+        public async Task<int> AddAgendaItemAsync(AgendaItem agendaItem)
         {
-            await _agendaItemContext.AddAsync(agendaItem);
+            agendaItem = (await _agendaItemContext.AddAsync(agendaItem)).Entity;
             await _agendaItemContext.SaveChangesAsync();
+            return agendaItem.Id;
         }
 
         public async Task<List<AgendaItem>> GetAgendaItemsAsync()

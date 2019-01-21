@@ -115,6 +115,18 @@ namespace BackgroundComponent
                                                 break;
                                             case PayloadType.RequestStandardWeek:
                                                 break;
+                                            case PayloadType.AgendaItem:
+                                                var agendaItemToAdd = (AgendaItem)package.Payload;
+                                                if (agendaItemToAdd.Id < 1)
+                                                {
+                                                    int id = await _databaseService.AddAgendaItemAsync(agendaItemToAdd);
+                                                    package.PayloadType = (int)PayloadType.AgendaItemId;
+                                                    package.Payload = id;
+                                                    json = JsonConvert.SerializeObject(package);
+                                                    await SendStringData(streamSocket, json);
+                                                }
+                                                else await _databaseService.UpdateAgendaItemAsync(agendaItemToAdd);
+                                                break;
                                             default:                                                
                                                 break;
                                         }
@@ -203,6 +215,26 @@ namespace BackgroundComponent
                 SocketErrorStatus webErrorStatus = SocketError.GetStatus(ex.GetBaseException().HResult);
             }
             await streamSocket.CancelIOAsync();
+        }
+
+        private async Task SendStringData(StreamSocket streamSocket, string data)
+        {
+            try
+            {
+                using (Stream outputStream = streamSocket.OutputStream.AsStreamForWrite())
+                {
+                    using (var streamWriter = new StreamWriter(outputStream))
+                    {
+                        await streamWriter.WriteLineAsync(data);
+                        await streamWriter.FlushAsync();
+                    }
+                }
+                streamSocket.Dispose();
+            }
+            catch (Exception ex)
+            {
+                SocketErrorStatus webErrorStatus = SocketError.GetStatus(ex.GetBaseException().HResult);
+            }
         }
     }
 }
