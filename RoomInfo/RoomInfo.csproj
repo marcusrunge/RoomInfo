@@ -131,6 +131,7 @@
     <Compile Include="Behaviors\PivotNavigationBehavior.cs" />
     <Compile Include="Helpers\CalendarViewDayItemChangingEventArgsConverter.cs" />
     <Compile Include="Helpers\CalendarViewHelper.cs" />
+    <Compile Include="Helpers\DateTimeFormatConverter.cs" />
     <Compile Include="Helpers\EnumToBooleanConverter.cs" />
     <Compile Include="Helpers\FlyoutDependencyProperty.cs" />
     <Compile Include="Helpers\Json.cs" />

@@ -12,6 +12,7 @@
     prismMvvm:ViewModelLocator.AutoWireViewModel="True" 
     mc:Ignorable="d">
     <Page.Resources>
+        <Helpers:DateTimeFormatConverter x:Key="DateTimeFormatConverter" />
         <Helpers:TimeFormatConverter x:Key="TimeFormatConverter" />
         <Helpers:OccupancyIntToStringConverter x:Key="OccupancyIntToStringConverter"/>
     </Page.Resources>
@@ -466,13 +467,13 @@
                             <StackPanel x:Name="agendaItemStackPanel"  BorderThickness="0,0,0,1" Width="{Binding Width}" BorderBrush="{ThemeResource SystemControlForegroundBaseMediumBrush}">
                                 <TextBlock Text="{Binding Title}" FontSize="{Binding LargeFontSize}"/>
                                 <Grid HorizontalAlignment="Left">
-                                    <Grid.ColumnDefinitions>
+                                    <Grid.ColumnDefinitions>                                        
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding Start.TimeOfDay, Converter={StaticResource TimeFormatConverter}}" FontSize="{Binding MediumFontSize}"/>
+                                    <TextBlock Text="{Binding Start, Converter={StaticResource DateTimeFormatConverter}}" FontSize="{Binding MediumFontSize}"/>
                                     <TextBlock Grid.Column="1" Text="–" FontSize="{Binding MediumFontSize}" HorizontalAlignment="Center" Margin="6,0,6,0"/>
                                     <TextBlock Grid.Column="2" Text="{Binding End.TimeOfDay, Converter={StaticResource TimeFormatConverter}}" FontSize="{Binding MediumFontSize}"/>
                                     <TextBlock Grid.Column="3" Text="{Binding Occupancy, Converter={StaticResource OccupancyIntToStringConverter}}" FontSize="{Binding MediumFontSize}" Margin="12,0,0,0"/>
