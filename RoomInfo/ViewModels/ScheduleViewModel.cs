@@ -216,6 +216,7 @@ namespace RoomInfo.ViewModels
         private async Task UpdateCalendarViewDayItems()
         {
             _agendaItems = await _databaseService.GetAgendaItemsAsync();
+            _agendaItems.Sort();
             var calendarViewDayItems = calendarPanel.Children().OfType<CalendarViewDayItem>();
             foreach (var calendarViewDayItem in calendarViewDayItems)
             {
@@ -237,6 +238,7 @@ namespace RoomInfo.ViewModels
         private async Task UpdateCalendarViewDayItems(DateTime dateTime)
         {
             _agendaItems = await _databaseService.GetAgendaItemsAsync();
+            _agendaItems.Sort();
             var calendarViewDayItems = calendarPanel.Children().OfType<CalendarViewDayItem>();
             foreach (var calendarViewDayItem in calendarViewDayItems)
             {

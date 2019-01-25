@@ -153,10 +153,11 @@ namespace RoomInfo.ViewModels
             else AgendaItems.Clear();
             DateTime dateTimeNow = DateTime.Now;
             var agendaItems = await _databaseService.GetAgendaItemsAsync(dateTimeNow);
+            agendaItems.Sort();
             for (int i = 0; i < agendaItems.Count; i++)
             {
                 AgendaItems.Add(agendaItems[i]);
-            }
+            }            
             await UpdateTimerTask();
         }
 
@@ -274,22 +275,6 @@ namespace RoomInfo.ViewModels
                 AgendaItems[i].LargeFontSize = MediumToLargeFontSize;
             }
         }
-
-        //private ICommand _onPointerPressedCommand;
-        //public ICommand OnPointerPressedCommand => _onPointerPressedCommand ?? (_onPointerPressedCommand = new DelegateCommand<PointerRoutedEventArgs>(async (param) =>
-        //{
-        //    _uIElement = param.OriginalSource as UIElement;
-        //    _onPointerPressedY = param.GetCurrentPoint(_uIElement).Position.Y;
-        //}));
-
-        //private ICommand _onPointerReleasedCommand;
-        //public ICommand OnPointerReleasedCommand => _onPointerReleasedCommand ?? (_onPointerReleasedCommand = new DelegateCommand<PointerRoutedEventArgs>(async (param) =>
-        //{
-        //    _onPointerReleasedY = param.GetCurrentPoint(_uIElement).Position.Y;
-        //    double deltaY = _onPointerReleasedY - _onPointerPressedY;
-        //    if (deltaY > 0 && deltaY > 10) await _iotService.Dim(false);
-        //    if (deltaY < 0 && deltaY < -10) await _iotService.Dim(true);
-        //}));
 
         private ICommand _dimCommand;
         public ICommand DimCommand => _dimCommand ?? (_dimCommand = new DelegateCommand<object>(async (param) =>

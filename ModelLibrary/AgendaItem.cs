@@ -21,7 +21,7 @@ namespace ModelLibrary
         }
     }
 
-    public class AgendaItem : BindableBase
+    public class AgendaItem : BindableBase, IComparable
     {                
         IEventAggregator _eventAggregator = default(IEventAggregator);
         [JsonIgnore]
@@ -106,5 +106,10 @@ namespace ModelLibrary
             var attachedFlyout = Flyout.GetAttachedFlyout(frameworkElement);
             attachedFlyout.ShowAt(frameworkElement);
         }));
+
+        public int CompareTo(object obj)
+        {
+            return ((IComparable)Start).CompareTo(((AgendaItem)obj).Start);
+        }
     }
 }
