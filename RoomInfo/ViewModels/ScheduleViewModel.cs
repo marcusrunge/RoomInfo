@@ -14,6 +14,8 @@ using System.Windows.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Core;
+using Windows.ApplicationModel.Core;
 
 namespace RoomInfo.ViewModels
 {
@@ -129,7 +131,7 @@ namespace RoomInfo.ViewModels
                 SelectedComboBoxIndex = (x).Occupancy;
                 IsFlyoutOpen = true;
             });
-            _eventAggregator.GetEvent<RemoteAgendaItemsUpdatedEvent>().Subscribe(async () => await UpdateCalendarViewDayItems());
+            _eventAggregator.GetEvent<RemoteAgendaItemsUpdatedEvent>().Subscribe(async () => await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => await UpdateCalendarViewDayItems()));
         }
 
         private ICommand _showReservationFlyoutCommand;

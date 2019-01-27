@@ -122,7 +122,7 @@ namespace RoomInfo.ViewModels
             _applicationDataService.SaveSetting("ActualOccupancy", (int)Occupancy);
             await UpdateDayAgenda();
             _eventAggregator.GetEvent<RemoteOccupancyOverrideEvent>().Subscribe(async i =>
-            {                
+            {
                 await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                 {
                     SelectedComboBoxIndex = i;
@@ -130,6 +130,7 @@ namespace RoomInfo.ViewModels
                     await OverrideOccupancy();
                 });
             });
+            _eventAggregator.GetEvent<RemoteAgendaItemsUpdatedEvent>().Subscribe(async () => await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => await UpdateDayAgenda()));
             BrightnessAdjustmentVisibility = _iotService.IsIotDevice() ? Visibility.Visible : Visibility.Collapsed;
         }
 
@@ -157,7 +158,7 @@ namespace RoomInfo.ViewModels
             for (int i = 0; i < agendaItems.Count; i++)
             {
                 AgendaItems.Add(agendaItems[i]);
-            }            
+            }
             await UpdateTimerTask();
         }
 
