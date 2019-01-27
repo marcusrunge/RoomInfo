@@ -174,7 +174,7 @@ namespace RoomInfo.ViewModels
                 StartDate = StartDate.Add(StartDate.TimeOfDay + StartTime);
                 EndDate = EndDate.Date;
                 EndDate = EndDate.Add(EndDate.TimeOfDay + EndTime);
-                if (!_dateTimeValidationService.Validate(new AgendaItem() { Start = StartDate, End = EndDate }, await _databaseService.GetAgendaItemsAsync())) return;
+                if (!_dateTimeValidationService.Validate(new AgendaItem() { Start = StartDate, End = EndDate, Id = _agendaItem.Id }, await _databaseService.GetAgendaItemsAsync())) return;
                 if (Id == 0) await _databaseService.AddAgendaItemAsync(new AgendaItem() { EventAggregator = _eventAggregator, Title = Title, Start = StartDate, End = EndDate, Description = Description, IsAllDayEvent = IsAllDayEvent, Occupancy = SelectedComboBoxIndex, TimeStamp = DateTimeOffset.Now.ToUnixTimeMilliseconds() });
                 else
                 {

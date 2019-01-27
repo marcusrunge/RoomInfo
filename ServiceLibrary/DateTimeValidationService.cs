@@ -13,7 +13,7 @@ namespace ApplicationServiceLibrary
         public bool Validate(AgendaItem agendaItem, List<AgendaItem> agendaItems)
         {
             return agendaItem.End >= agendaItem.Start
-                ? agendaItems.Where(x => (agendaItem.Start >= x.Start && agendaItem.Start <= x.End) || (agendaItem.End >= x.Start && agendaItem.End <= x.End)).FirstOrDefault() == null
+                ? agendaItems.Where(x => x.Id != agendaItem.Id && ((agendaItem.Start >= x.Start && agendaItem.Start <= x.End) || (agendaItem.End >= x.Start && agendaItem.End <= x.End))).FirstOrDefault() == null
                 : false;
         }
     }
