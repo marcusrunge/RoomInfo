@@ -183,6 +183,10 @@ namespace NetworkServiceLibrary
                         json = JsonConvert.SerializeObject(package);
                         await SendStringData(streamSocket, json);
                     }
+                    else if (agendaItem.IsDeleted)
+                    {
+                        await _databaseService.RemoveAgendaItemAsync(agendaItem);
+                    }
                     else
                     {
                         await _databaseService.UpdateAgendaItemAsync(agendaItem);
