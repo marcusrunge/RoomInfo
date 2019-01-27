@@ -130,6 +130,7 @@ namespace RoomInfo.ViewModels
                 IsAllDayEvent = (x).IsAllDayEvent;
                 SelectedComboBoxIndex = (x).Occupancy;
                 IsFlyoutOpen = true;
+                IsReservationButtonEnabled = true;
             });
             _eventAggregator.GetEvent<RemoteAgendaItemsUpdatedEvent>().Subscribe(async () => await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => await UpdateCalendarViewDayItems()));
         }

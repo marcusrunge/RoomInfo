@@ -146,8 +146,8 @@ namespace NetworkServiceLibrary
                     streamSocket.Dispose();
                     break;
                 case PayloadType.Schedule:
-                    agendaItems = (List<AgendaItem>)package.Payload;
-                    await _databaseService.UpdateAgendaItemsAsync(agendaItems);
+                    agendaItems = JsonConvert.DeserializeObject<List<AgendaItem>>(package.Payload.ToString());
+                    await _databaseService.UpdateAgendaItemsAsync(agendaItems, true);
                     _eventAggregator.GetEvent<RemoteAgendaItemsUpdatedEvent>().Publish();
                     streamSocket.Dispose();
                     break;
@@ -174,7 +174,7 @@ namespace NetworkServiceLibrary
                 case PayloadType.RequestStandardWeek:
                     break;
                 case PayloadType.AgendaItem:
-                    var agendaItem = (AgendaItem)package.Payload;
+                    var agendaItem = JsonConvert.DeserializeObject<AgendaItem>(package.Payload.ToString());
                     if (agendaItem.Id < 1)
                     {
                         int id = await _databaseService.AddAgendaItemAsync(agendaItem);
@@ -185,12 +185,12 @@ namespace NetworkServiceLibrary
                     }
                     else if (agendaItem.IsDeleted)
                     {
-                        await _databaseService.RemoveAgendaItemAsync(agendaItem);
+                        await _databaseService.RemoveAgendaItemAsync(agendaItem.Id);
                         streamSocket.Dispose();
                     }
                     else
                     {
-                        await _databaseService.UpdateAgendaItemAsync(agendaItem);
+                        await _databaseService.UpdateAgendaItemAsync(agendaItem, true);
                         streamSocket.Dispose();
                     }
                     _eventAggregator.GetEvent<RemoteAgendaItemsUpdatedEvent>().Publish();

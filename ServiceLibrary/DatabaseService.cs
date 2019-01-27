@@ -11,8 +11,9 @@ namespace ApplicationServiceLibrary
     {
         Task<int> AddAgendaItemAsync(AgendaItem agendaItem);
         Task RemoveAgendaItemAsync(AgendaItem agendaItem);
-        Task UpdateAgendaItemAsync(AgendaItem agendaItem);
-        Task UpdateAgendaItemsAsync(List<AgendaItem> agendaItems);
+        Task RemoveAgendaItemAsync(int id);
+        Task UpdateAgendaItemAsync(AgendaItem agendaItem, bool remote = false);
+        Task UpdateAgendaItemsAsync(List<AgendaItem> agendaItems, bool remote = false);
         Task<List<AgendaItem>> GetAgendaItemsAsync();
         Task<List<AgendaItem>> GetAgendaItemsAsync(DateTime dateTime);
     }
@@ -20,7 +21,7 @@ namespace ApplicationServiceLibrary
     {
         AgendaItemContext _agendaItemContext;
         public DatabaseService()
-        {            
+        {
             _agendaItemContext = new AgendaItemContext();
             _agendaItemContext.Database.ExecuteSqlCommand("CREATE TABLE IF NOT EXISTS AgendaItems (Id INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, Start NUMERIC , End NUMERIC , Description TEXT, IsAllDayEvent INTEGER, IsOverridden INTEGER, Occupancy INTEGER, TimeStamp NUMERIC, IsDeleted INTEGER)");
             //_agendaItemContext.Database.ExecuteSqlCommand("CREATE TABLE IF NOT EXISTS StandardWeek (Id INTEGER PRIMARY KEY AUTOINCREMENT)");
@@ -46,7 +47,7 @@ namespace ApplicationServiceLibrary
                 .Select((x) => x)
                 .Take(3)
                 .ToListAsync();
-        }        
+        }
 
         public async Task RemoveAgendaItemAsync(AgendaItem agendaItem)
         {
@@ -54,25 +55,74 @@ namespace ApplicationServiceLibrary
             await _agendaItemContext.SaveChangesAsync();
         }
 
-        public async Task UpdateAgendaItemAsync(AgendaItem agendaItem)
+        public async Task RemoveAgendaItemAsync(int id)
         {
-            _agendaItemContext.Update(agendaItem);
+            var agendaItem = await _agendaItemContext.AgendaItems.Where(x => x.Id == id).Select(x => x).FirstOrDefaultAsync();
+            _agendaItemContext.Remove(agendaItem);
             await _agendaItemContext.SaveChangesAsync();
         }
 
-        public Task UpdateAgendaItemsAsync(List<AgendaItem> agendaItems)
+        public async Task UpdateAgendaItemAsync(AgendaItem agendaItem, bool remote = false)
         {
-            agendaItems.ForEach(async x => 
+            if (remote)
             {
-                if (x.Id == 0) await AddAgendaItemAsync(x);
-                else if (x.IsDeleted) await RemoveAgendaItemAsync(x);
-                else
+                var queriedAgendaItem = await _agendaItemContext.AgendaItems.Where(x => x.Id == agendaItem.Id).Select(x => x).FirstOrDefaultAsync();
+                queriedAgendaItem.Description = agendaItem.Description;
+                queriedAgendaItem.End = agendaItem.End;
+                queriedAgendaItem.IsAllDayEvent = agendaItem.IsAllDayEvent;
+                queriedAgendaItem.IsDeleted = agendaItem.IsDeleted;
+                queriedAgendaItem.IsOverridden = agendaItem.IsOverridden;
+                queriedAgendaItem.Occupancy = agendaItem.Occupancy;
+                queriedAgendaItem.Start = agendaItem.Start;
+                queriedAgendaItem.TimeStamp = agendaItem.TimeStamp;
+                queriedAgendaItem.Title = agendaItem.Title;
+                _agendaItemContext.Update(queriedAgendaItem);
+            }
+            else _agendaItemContext.Update(agendaItem);
+            await _agendaItemContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateAgendaItemsAsync(List<AgendaItem> agendaItems, bool remote = false)
+        {
+            if (remote)
+            {
+                agendaItems.ForEach(async x =>
                 {
-                    var updatedAgendaItem = await _agendaItemContext.AgendaItems.Where(y => y.Id == x.Id && y.TimeStamp != x.TimeStamp).FirstOrDefaultAsync();
-                    if (updatedAgendaItem != null) await UpdateAgendaItemAsync(updatedAgendaItem);
-                }
-            });
-            return Task.CompletedTask;
+                    if (x.Id == 0) await AddAgendaItemAsync(x);
+                    else if (x.IsDeleted) await RemoveAgendaItemAsync(x);
+                    else
+                    {
+                        var updatedAgendaItem = await _agendaItemContext.AgendaItems.Where(y => y.Id == x.Id && y.TimeStamp != x.TimeStamp).FirstOrDefaultAsync();
+                        if (updatedAgendaItem != null)
+                        {
+                            updatedAgendaItem.Description = x.Description;
+                            updatedAgendaItem.End = x.End;
+                            updatedAgendaItem.IsAllDayEvent = x.IsAllDayEvent;
+                            updatedAgendaItem.IsDeleted = x.IsDeleted;
+                            updatedAgendaItem.IsOverridden = x.IsOverridden;
+                            updatedAgendaItem.Occupancy = x.Occupancy;
+                            updatedAgendaItem.Start = x.Start;
+                            updatedAgendaItem.TimeStamp = x.TimeStamp;
+                            updatedAgendaItem.Title = x.Title;
+                            _agendaItemContext.Update(updatedAgendaItem);
+                        }
+                    }
+                });
+            }
+            else
+            {
+                agendaItems.ForEach(async x =>
+                {
+                    if (x.Id == 0) await AddAgendaItemAsync(x);
+                    else if (x.IsDeleted) await RemoveAgendaItemAsync(x);
+                    else
+                    {
+                        var updatedAgendaItem = await _agendaItemContext.AgendaItems.Where(y => y.Id == x.Id && y.TimeStamp != x.TimeStamp).FirstOrDefaultAsync();
+                        if (updatedAgendaItem != null) await UpdateAgendaItemAsync(updatedAgendaItem);
+                    }
+                });
+            }
+            await _agendaItemContext.SaveChangesAsync();
         }
     }
 }
