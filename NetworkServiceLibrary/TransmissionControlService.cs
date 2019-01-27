@@ -186,6 +186,7 @@ namespace NetworkServiceLibrary
                     else if (agendaItem.IsDeleted)
                     {
                         await _databaseService.RemoveAgendaItemAsync(agendaItem);
+                        streamSocket.Dispose();
                     }
                     else
                     {
