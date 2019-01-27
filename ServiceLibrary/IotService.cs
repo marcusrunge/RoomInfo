@@ -14,6 +14,7 @@ namespace ApplicationServiceLibrary
         void Shutdown();
         void Restart();
         Task Dim(bool dim);
+        Task<bool> IsDimmed();
     }
     public class IotService : IIotService
     {
@@ -33,11 +34,33 @@ namespace ApplicationServiceLibrary
                 byte brightness = dim ? (byte)7 : (byte)255;
                 try
                 {
-                    i2CDevice?.Write(new byte[] { 0x86, brightness });
+                    i2CDevice.Write(new byte[] { 0x86, brightness });
                     i2CDevice.Dispose();
                 }
                 catch { }
             }
+        }
+
+        public async Task<bool> IsDimmed()
+        {
+            bool result = false;
+            string i2cDeviceSelector = I2cDevice.GetDeviceSelector();
+            I2cConnectionSettings i2CConnectionSettings = new I2cConnectionSettings(0x45);
+            IReadOnlyList<DeviceInformation> deviceInformationCollection = await DeviceInformation.FindAllAsync(i2cDeviceSelector);
+            if (deviceInformationCollection.Count > 0)
+            {
+                var i2CDevice = await I2cDevice.FromIdAsync(deviceInformationCollection[0].Id, i2CConnectionSettings);
+                var buffer = new byte[2];
+                buffer[0] = 0x86;
+                try
+                {
+                    i2CDevice.Read(buffer);
+                    if (buffer[1] < 0xff) result = true;
+                    i2CDevice.Dispose();
+                }
+                catch { }
+            }
+            return result;
         }
 
         public bool IsIotDevice() => AnalyticsInfo.VersionInfo.DeviceFamily.Equals("Windows.IoT");

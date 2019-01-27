@@ -60,6 +60,7 @@ namespace BackgroundComponent
                                             RoomNumber = _applicationDataService.GetSetting<string>("RoomNumber"),
                                             Occupancy = _applicationDataService.GetSetting<int>("ActualOccupancy"),
                                             IsIoT = _iotService.IsIotDevice()
+                                            //,IsDimmed = await _iotService.IsDimmed()
                                         }
                                     };
                                     var json = JsonConvert.SerializeObject(roomPackage);

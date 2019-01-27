@@ -7,5 +7,6 @@
         public string RoomNumber { get; set; }
         public int Occupancy { get; set; }
         public bool IsIoT { get; set; }
+        public bool IsDimmed { get; set; }
     }
 }
