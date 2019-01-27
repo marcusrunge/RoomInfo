@@ -19,7 +19,7 @@ namespace ApplicationServiceLibrary
     }
     public class DatabaseService : IDatabaseService
     {
-        AgendaItemContext _agendaItemContext;
+        static AgendaItemContext _agendaItemContext;
         public DatabaseService()
         {
             _agendaItemContext = new AgendaItemContext();
