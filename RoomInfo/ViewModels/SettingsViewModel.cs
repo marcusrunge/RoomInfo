@@ -23,6 +23,7 @@ using Windows.Storage.Search;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.Storage.Streams;
 using RoomInfo.Views;
+using Windows.UI.Core;
 
 namespace RoomInfo.ViewModels
 {
@@ -146,12 +147,19 @@ namespace RoomInfo.ViewModels
             Language = LoadLanguage();
             _eventAggregator.GetEvent<FileItemSelectionChangedUpdatedEvent>().Subscribe(async i =>
             {
-                var fileUri = FileItems.Where(x => x.Id == i).Select(x => x.ImageUri).FirstOrDefault();
-                StorageFolder assets = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Assets");
-                StorageFile storageFile = await StorageFile.GetFileFromPathAsync(fileUri.LocalPath);
-                await storageFile.CopyAsync(assets, storageFile.Name, NameCollisionOption.ReplaceExisting);
-                _applicationDataService.SaveSetting("LogoFileName", storageFile.Name);
-                await LoadCompanyLogo();
+                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                {
+                    try
+                    {
+                        var fileUri = FileItems.Where(x => x.Id == i).Select(x => x.ImageUri).FirstOrDefault();
+                        StorageFolder assets = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Assets");
+                        StorageFile storageFile = await StorageFile.GetFileFromPathAsync(fileUri.LocalPath);
+                        await storageFile.CopyAsync(assets, storageFile.Name, NameCollisionOption.ReplaceExisting);
+                        _applicationDataService.SaveSetting("LogoFileName", storageFile.Name);
+                        await LoadCompanyLogo();
+                    }
+                    catch { }
+                });
                 //InjectedInputKeyboardInfo injectedInputKeyboardInfo = new InjectedInputKeyboardInfo
                 //{
                 //    VirtualKey = (ushort)VirtualKey.Escape
