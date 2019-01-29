@@ -24,6 +24,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using Windows.Storage.Streams;
 using RoomInfo.Views;
 using Windows.UI.Core;
+using Windows.Storage.Pickers;
 
 namespace RoomInfo.ViewModels
 {
@@ -55,6 +56,12 @@ namespace RoomInfo.ViewModels
 
         Uri _companyLogo = default(Uri);
         public Uri CompanyLogo { get => _companyLogo; set { SetProperty(ref _companyLogo, value); } }
+
+        Visibility _selectLogoButtonStdVisibility = default(Visibility);
+        public Visibility SelectLogoButtonStdVisibility { get => _selectLogoButtonStdVisibility; set { SetProperty(ref _selectLogoButtonStdVisibility, value); } }
+
+        Visibility _selectLogoButtonIoTVisibility = default(Visibility);
+        public Visibility SelectLogoButtonIoTVisibility { get => _selectLogoButtonIoTVisibility; set { SetProperty(ref _selectLogoButtonIoTVisibility, value); } }
 
         string _tcpPort = default(string);
         public string TcpPort
@@ -166,6 +173,16 @@ namespace RoomInfo.ViewModels
                 //};
                 //InputInjector.TryCreate().InjectKeyboardInput(new List<InjectedInputKeyboardInfo> { injectedInputKeyboardInfo });
             });
+            if (_iotService.IsIotDevice())
+            {
+                SelectLogoButtonIoTVisibility = Visibility.Visible;
+                SelectLogoButtonStdVisibility = Visibility.Collapsed;
+            }
+            else
+            {
+                SelectLogoButtonIoTVisibility = Visibility.Collapsed;
+                SelectLogoButtonStdVisibility = Visibility.Visible;
+            }
         }
 
         private ModelLibrary.Language LoadLanguage()
@@ -201,46 +218,52 @@ namespace RoomInfo.ViewModels
         private ICommand _selectLogoCommand;
         public ICommand SelectLogoCommand => _selectLogoCommand ?? (_selectLogoCommand = new DelegateCommand<object>(async (param) =>
         {
-            FileItems = new ObservableCollection<FileItem>();
-            QueryOptions queryOption = new QueryOptions(CommonFileQuery.OrderByTitle, new string[] { ".jpg", ".jpeg", ".png" })
+            if (_iotService.IsIotDevice())
             {
-                FolderDepth = FolderDepth.Shallow
-            };
-            var files = await KnownFolders.PicturesLibrary.CreateFileQueryWithOptions(queryOption).GetFilesAsync();
-            int id = 0;
-            foreach (var file in files)
-            {
-                id++;
-                BitmapImage bitmapImage = new BitmapImage();
-                using (IRandomAccessStream fileStream = await file.OpenAsync(FileAccessMode.Read))
+                FileItems = new ObservableCollection<FileItem>();
+                QueryOptions queryOption = new QueryOptions(CommonFileQuery.OrderByTitle, new string[] { ".jpg", ".jpeg", ".png" })
                 {
-                    bitmapImage.DecodePixelWidth = 56;
-                    await bitmapImage.SetSourceAsync(fileStream);
+                    FolderDepth = FolderDepth.Shallow
+                };
+                var files = await KnownFolders.PicturesLibrary.CreateFileQueryWithOptions(queryOption).GetFilesAsync();
+                int id = 0;
+                foreach (var file in files)
+                {
+                    id++;
+                    BitmapImage bitmapImage = new BitmapImage();
+                    using (IRandomAccessStream fileStream = await file.OpenAsync(FileAccessMode.Read))
+                    {
+                        bitmapImage.DecodePixelWidth = 56;
+                        await bitmapImage.SetSourceAsync(fileStream);
+                    }
+                    FileItems.Add(new FileItem()
+                    {
+                        FileName = file.DisplayName,
+                        ImageUri = new Uri(file.Path),
+                        ImageSource = bitmapImage,
+                        Id = id
+                    });
                 }
-                FileItems.Add(new FileItem()
-                {
-                    FileName = file.DisplayName,
-                    ImageUri = new Uri(file.Path),
-                    ImageSource = bitmapImage,
-                    Id = id
-                });
             }
-            //FileOpenPicker openPicker = new FileOpenPicker
-            //{
-            //    ViewMode = PickerViewMode.Thumbnail,
-            //    SuggestedStartLocation = PickerLocationId.PicturesLibrary
-            //};
-            //openPicker.FileTypeFilter.Add(".jpg");
-            //openPicker.FileTypeFilter.Add(".jpeg");
-            //openPicker.FileTypeFilter.Add(".png");
-            //StorageFile file = await openPicker.PickSingleFileAsync();
-            //if (file != null)
-            //{
-            //    StorageFolder assets = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Assets");
-            //    await file.CopyAsync(assets, file.Name, NameCollisionOption.ReplaceExisting);
-            //    _applicationDataService.SaveSetting("LogoFileName", file.Name);
-            //    await LoadCompanyLogo();
-            //}
+            else
+            {
+                FileOpenPicker openPicker = new FileOpenPicker
+                {
+                    ViewMode = PickerViewMode.Thumbnail,
+                    SuggestedStartLocation = PickerLocationId.PicturesLibrary
+                };
+                openPicker.FileTypeFilter.Add(".jpg");
+                openPicker.FileTypeFilter.Add(".jpeg");
+                openPicker.FileTypeFilter.Add(".png");
+                StorageFile file = await openPicker.PickSingleFileAsync();
+                if (file != null)
+                {
+                    StorageFolder assets = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Assets");
+                    await file.CopyAsync(assets, file.Name, NameCollisionOption.ReplaceExisting);
+                    _applicationDataService.SaveSetting("LogoFileName", file.Name);
+                    await LoadCompanyLogo();
+                }
+            }            
         }));
 
         private ICommand _deleteLogoCommand;

@@ -131,7 +131,8 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <Button x:Name="selectLogoButton" Grid.Column="0" x:Uid="Settings_SelectButton" Command="{Binding SelectLogoCommand}" CommandParameter="{Binding ElementName=fileSelectionFlyout}" Margin="0,0,2,0" Flyout="{StaticResource fileSelectionFlyout}" />
+                            <Button x:Name="selectLogoButtonIoT" Grid.Column="0" x:Uid="Settings_SelectButton" Command="{Binding SelectLogoCommand}" CommandParameter="{Binding ElementName=fileSelectionFlyout}" Margin="0,0,2,0" Flyout="{StaticResource fileSelectionFlyout}" Visibility="{Binding SelectLogoButtonIoTVisibility}" />
+                            <Button x:Name="selectLogoButtonStd" Grid.Column="0" x:Uid="Settings_SelectButton" Command="{Binding SelectLogoCommand}" Margin="0,0,2,0" Visibility="{Binding SelectLogoButtonStdVisibility}"/>
                             <Button Grid.Column="1" x:Uid="Settings_DeleteButton" Command="{x:Bind ViewModel.DeleteLogoCommand}" Margin="2,0,0,0" />
                         </Grid>
                     </StackPanel>
