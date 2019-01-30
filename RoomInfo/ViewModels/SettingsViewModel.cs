@@ -159,7 +159,21 @@ namespace RoomInfo.ViewModels
                     try
                     {
                         var fileUri = FileItems.Where(x => x.Id == i).Select(x => x.ImageUri).FirstOrDefault();
-                        StorageFolder assets = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Assets");
+                        StorageFolder assets = null;
+                        IReadOnlyList<StorageFolder> storageFolders = await ApplicationData.Current.LocalFolder.GetFoldersAsync();
+                        foreach (var storageFolder in storageFolders)
+                        {
+                            if (storageFolder.Name.Equals("Logo"))
+                            {
+                                assets = await ApplicationData.Current.LocalFolder.GetFolderAsync("Logo");
+                                break;
+                            }
+                        }
+                        if (assets == null)
+                        {
+                            await ApplicationData.Current.LocalFolder.CreateFolderAsync("Logo");
+                            assets = await ApplicationData.Current.LocalFolder.GetFolderAsync("Logo");
+                        }
                         StorageFile storageFile = await StorageFile.GetFileFromPathAsync(fileUri.LocalPath);
                         await storageFile.CopyAsync(assets, storageFile.Name, NameCollisionOption.ReplaceExisting);
                         _applicationDataService.SaveSetting("LogoFileName", storageFile.Name);
@@ -258,12 +272,26 @@ namespace RoomInfo.ViewModels
                 StorageFile file = await openPicker.PickSingleFileAsync();
                 if (file != null)
                 {
-                    StorageFolder assets = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Assets");
+                    StorageFolder assets = null;
+                    IReadOnlyList<StorageFolder> storageFolders = await ApplicationData.Current.LocalFolder.GetFoldersAsync();
+                    foreach (var storageFolder in storageFolders)
+                    {
+                        if (storageFolder.Name.Equals("Logo"))
+                        {
+                            assets = await ApplicationData.Current.LocalFolder.GetFolderAsync("Logo");
+                            break;
+                        }                        
+                    }
+                    if (assets == null)
+                    {
+                        await ApplicationData.Current.LocalFolder.CreateFolderAsync("Logo");
+                        assets = await ApplicationData.Current.LocalFolder.GetFolderAsync("Logo");
+                    }
                     await file.CopyAsync(assets, file.Name, NameCollisionOption.ReplaceExisting);
                     _applicationDataService.SaveSetting("LogoFileName", file.Name);
                     await LoadCompanyLogo();
                 }
-            }            
+            }
         }));
 
         private ICommand _deleteLogoCommand;
@@ -308,9 +336,27 @@ namespace RoomInfo.ViewModels
 
         private async Task LoadCompanyLogo()
         {
-            StorageFolder assets = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Assets");
-            string logoFileName = _applicationDataService.GetSetting<string>("LogoFileName");
-            CompanyLogo = new Uri(assets.Path + "/" + logoFileName);
+            try
+            {
+                StorageFolder assets = null;
+                IReadOnlyList<StorageFolder> storageFolders = await ApplicationData.Current.LocalFolder.GetFoldersAsync();
+                foreach (var storageFolder in storageFolders)
+                {
+                    if (storageFolder.Name.Equals("Logo"))
+                    {
+                        assets = await ApplicationData.Current.LocalFolder.GetFolderAsync("Logo");
+                        break;
+                    }
+                }
+                if (assets == null)
+                {
+                    await ApplicationData.Current.LocalFolder.CreateFolderAsync("Logo");
+                    assets = await ApplicationData.Current.LocalFolder.GetFolderAsync("Logo");
+                }
+                string logoFileName = _applicationDataService.GetSetting<string>("LogoFileName");
+                CompanyLogo = new Uri(assets.Path + "/" + logoFileName);
+            }
+            catch { }
         }
 
         public void KeyDown(object sender, KeyRoutedEventArgs e)
