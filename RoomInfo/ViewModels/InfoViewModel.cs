@@ -96,7 +96,21 @@ namespace RoomInfo.ViewModels
         {
             base.OnNavigatedTo(navigatedToEventArgs, viewModelState);
             _resourceLoader = ResourceLoader.GetForCurrentView();
-            StorageFolder assets = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("Assets");
+            StorageFolder assets = null;
+            IReadOnlyList<StorageFolder> storageFolders = await ApplicationData.Current.LocalFolder.GetFoldersAsync();
+            foreach (var storageFolder in storageFolders)
+            {
+                if (storageFolder.Name.Equals("Logo"))
+                {
+                    assets = await ApplicationData.Current.LocalFolder.GetFolderAsync("Logo");
+                    break;
+                }
+            }
+            if (assets == null)
+            {
+                await ApplicationData.Current.LocalFolder.CreateFolderAsync("Logo");
+                assets = await ApplicationData.Current.LocalFolder.GetFolderAsync("Logo");
+            }
             string logoFileName = _applicationDataService.GetSetting<string>("LogoFileName");
             CompanyLogo = new Uri(assets.Path + "/" + logoFileName);
             CompanyName = _applicationDataService.GetSetting<string>("CompanyName");
