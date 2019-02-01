@@ -278,54 +278,54 @@
                     <VisualState.Setters>
                         <Setter Target="StatusBar.(Panel.Background).(SolidColorBrush.Color)">
                             <Setter.Value>
-                                <Color>#FF0066FF</Color>
+                                <Color>#01A9F4</Color>
                             </Setter.Value>
                         </Setter>
                         <Setter Target="presentOccupancyTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
                             <Setter.Value>
-                                <Color>#FF002340</Color>
+                                <Color>#006dad</Color>
                             </Setter.Value>
                         </Setter>
                         <Setter Target="presentOccupancyTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
                             <Setter.Value>
-                                <Color>#FF002340</Color>
+                                <Color>#006dad</Color>
                             </Setter.Value>
                         </Setter>
                         <Setter Target="presentOccupancyTextBlock.(UIElement.Visibility)" Value="Visible"/>
                         <Setter Target="occupancySymbolTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
                             <Setter.Value>
-                                <Color>#FF002340</Color>
+                                <Color>#006dad</Color>
                             </Setter.Value>
                         </Setter>
                         <Setter Target="occupancySymbolTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
                             <Setter.Value>
-                                <Color>#FF002340</Color>
+                                <Color>#006dad</Color>
                             </Setter.Value>
                         </Setter>
                         <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="★"/>
                         <Setter Target="grid.(Panel.Background).(SolidColorBrush.Color)">
                             <Setter.Value>
-                                <Color>#7F002340</Color>
+                                <Color>#7F01A9F4</Color>
                             </Setter.Value>
                         </Setter>
                         <Setter Target="roomNameTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
                             <Setter.Value>
-                                <Color>#FF002340</Color>
+                                <Color>#006dad</Color>
                             </Setter.Value>
                         </Setter>
                         <Setter Target="roomNameTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
                             <Setter.Value>
-                                <Color>#FF002340</Color>
+                                <Color>#006dad</Color>
                             </Setter.Value>
                         </Setter>
                         <Setter Target="roomNumberTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
                             <Setter.Value>
-                                <Color>#FF002340</Color>
+                                <Color>#006dad</Color>
                             </Setter.Value>
                         </Setter>
                         <Setter Target="roomNumberTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
                             <Setter.Value>
-                                <Color>#FF002340</Color>
+                                <Color>#006dad</Color>
                             </Setter.Value>
                         </Setter>
                     </VisualState.Setters>
