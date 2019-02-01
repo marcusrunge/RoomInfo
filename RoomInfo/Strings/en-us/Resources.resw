@@ -356,4 +356,7 @@
   <data name="Settings_CompanyLogoInfo.Text" xml:space="preserve">
     <value>(Note: The Logo has to be located in the standard image folder on IoT devices)</value>
   </data>
+  <data name="Settings_Developed.Text" xml:space="preserve">
+    <value>Made in Germany and developed by</value>
+  </data>
 </root>
