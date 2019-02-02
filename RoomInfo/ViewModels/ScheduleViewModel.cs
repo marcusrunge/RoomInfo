@@ -170,6 +170,7 @@ namespace RoomInfo.ViewModels
                     hasDateChanged = _agendaItem.Start.Date != StartDate.Date ? true : false;
                     previousDate = _agendaItem.Start.Date;
                 }
+                else _agendaItem = new AgendaItem();
 
                 StartDate = StartDate.Add(StartDate.TimeOfDay + StartTime);
                 EndDate = EndDate.Date;

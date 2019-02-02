@@ -21,7 +21,7 @@
     <PackageCertificateThumbprint>CEBAA685C8F1BCB713395B925FFD562CE160B7C8</PackageCertificateThumbprint>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
-    <AppxPackageDir>C:\Users\marcusr\Documents\</AppxPackageDir>
+    <AppxPackageDir>C:\Users\Marcus Runge\Austausch\</AppxPackageDir>
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
     <AppInstallerUpdateFrequency>1</AppInstallerUpdateFrequency>
