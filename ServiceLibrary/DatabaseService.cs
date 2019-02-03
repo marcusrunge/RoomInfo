@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
+using Windows.UI.Core;
 
 namespace ApplicationServiceLibrary
 {
@@ -67,15 +69,18 @@ namespace ApplicationServiceLibrary
             if (remote)
             {
                 var queriedAgendaItem = await _agendaItemContext.AgendaItems.Where(x => x.Id == agendaItem.Id).Select(x => x).FirstOrDefaultAsync();
-                queriedAgendaItem.Description = agendaItem.Description;
-                queriedAgendaItem.End = agendaItem.End;
-                queriedAgendaItem.IsAllDayEvent = agendaItem.IsAllDayEvent;
-                queriedAgendaItem.IsDeleted = agendaItem.IsDeleted;
-                queriedAgendaItem.IsOverridden = agendaItem.IsOverridden;
-                queriedAgendaItem.Occupancy = agendaItem.Occupancy;
-                queriedAgendaItem.Start = agendaItem.Start;
-                queriedAgendaItem.TimeStamp = agendaItem.TimeStamp;
-                queriedAgendaItem.Title = agendaItem.Title;
+                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    queriedAgendaItem.Description = agendaItem.Description;
+                    queriedAgendaItem.End = agendaItem.End;
+                    queriedAgendaItem.IsAllDayEvent = agendaItem.IsAllDayEvent;
+                    queriedAgendaItem.IsDeleted = agendaItem.IsDeleted;
+                    queriedAgendaItem.IsOverridden = agendaItem.IsOverridden;
+                    queriedAgendaItem.Occupancy = agendaItem.Occupancy;
+                    queriedAgendaItem.Start = agendaItem.Start;
+                    queriedAgendaItem.TimeStamp = agendaItem.TimeStamp;
+                    queriedAgendaItem.Title = agendaItem.Title;
+                });
                 _agendaItemContext.Update(queriedAgendaItem);
             }
             else _agendaItemContext.Update(agendaItem);
