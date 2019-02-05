@@ -396,15 +396,7 @@
                 <core:EventTriggerBehavior EventName="Loaded">
                     <core:InvokeCommandAction Command="{x:Bind ViewModel.UpdateFontSizeCommand}" CommandParameter="{Binding ElementName=grid}"/>
                 </core:EventTriggerBehavior>
-                <!--<core:EventTriggerBehavior EventName="PointerPressed">
-                    <core:InvokeCommandAction Command="{x:Bind ViewModel.OnPointerPressedCommand, Mode=OneWay}"/>
-                </core:EventTriggerBehavior>
-                <core:EventTriggerBehavior EventName="PointerReleased">
-                    <core:InvokeCommandAction Command="{x:Bind ViewModel.OnPointerReleasedCommand, Mode=OneWay}"/>
-                </core:EventTriggerBehavior>-->
             </interactivity:Interaction.Behaviors>
-            <!--The SystemControlPageBackgroundChromeLowBrush background represents where you should place your content. 
-                Place your content here.-->
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="3*"/>
@@ -465,7 +457,16 @@
                     <ListView.ItemTemplate>
                         <DataTemplate >
                             <StackPanel x:Name="agendaItemStackPanel"  BorderThickness="0,0,0,1" Width="{Binding Width}" BorderBrush="{ThemeResource SystemControlForegroundBaseMediumBrush}">
-                                <TextBlock Text="{Binding Title}" FontSize="{Binding LargeFontSize}"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Title}" FontSize="{Binding LargeFontSize}"/>
+                                    <Border Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="{Binding ElementName=dueTimeTextBlock, Path=Foreground}" Visibility="{Binding DueTimeVisibility}" >
+                                        <TextBlock x:Name="dueTimeTextBlock" Text="{Binding DueTime}" FontSize="{Binding MediumFontSize}" />  
+                                    </Border>                                    
+                                </Grid>                                
                                 <Grid HorizontalAlignment="Left">
                                     <Grid.ColumnDefinitions>                                        
                                         <ColumnDefinition Width="Auto"/>

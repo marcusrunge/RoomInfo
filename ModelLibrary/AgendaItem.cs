@@ -80,6 +80,22 @@ namespace ModelLibrary
         [JsonIgnore]
         [NotMapped]
         public double LargeFontSize { get => _largeFontSize; set { SetProperty(ref _largeFontSize, value); } }
+        
+        Visibility _dueTimeVisibility = default(Visibility);
+        [JsonIgnore]
+        [NotMapped]
+        public Visibility DueTimeVisibility { get => _dueTimeVisibility; set { SetProperty(ref _dueTimeVisibility, value); } }
+
+        string _dueTime = default(string);
+        [JsonIgnore]
+        [NotMapped]
+        public string DueTime { get => _dueTime; set { SetProperty(ref _dueTime, value); } }
+
+        public AgendaItem()
+        {
+            DueTimeVisibility = Visibility.Collapsed;
+            DueTime = "Test in 5min";
+        }
 
         private ICommand _updateReservationCommand;
         [JsonIgnore]

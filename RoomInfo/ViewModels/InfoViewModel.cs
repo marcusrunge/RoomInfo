@@ -261,7 +261,7 @@ namespace RoomInfo.ViewModels
         {
             if (param == null) return;
             ListView listView = (ListView)param;
-            _agendaItemWidth = listView.ActualWidth;
+            _agendaItemWidth = listView.ActualWidth - 24;
 
         }));
 
