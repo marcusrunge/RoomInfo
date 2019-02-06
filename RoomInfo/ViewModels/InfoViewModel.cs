@@ -172,6 +172,7 @@ namespace RoomInfo.ViewModels
             for (int i = 0; i < agendaItems.Count; i++)
             {
                 AgendaItems.Add(agendaItems[i]);
+                AgendaItems[i].SetDueTime();
             }
             await UpdateTimerTask();
         }

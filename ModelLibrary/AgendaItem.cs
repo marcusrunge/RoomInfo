@@ -7,6 +7,8 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Windows.Input;
+using Windows.System.Threading;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -22,7 +24,9 @@ namespace ModelLibrary
     }
 
     public class AgendaItem : BindableBase, IComparable
-    {                
+    {
+        CoreDispatcher _coreDispatcher;
+
         IEventAggregator _eventAggregator = default(IEventAggregator);
         [JsonIgnore]
         [NotMapped]
@@ -94,7 +98,7 @@ namespace ModelLibrary
         public AgendaItem()
         {
             DueTimeVisibility = Visibility.Collapsed;
-            DueTime = "Test in 5min";
+             _coreDispatcher = CoreWindow.GetForCurrentThread().Dispatcher;            
         }
 
         private ICommand _updateReservationCommand;
@@ -126,6 +130,42 @@ namespace ModelLibrary
         public int CompareTo(object obj)
         {
             return ((IComparable)Start).CompareTo(((AgendaItem)obj).Start);
+        }
+
+        public void SetDueTime()
+        {
+            var now = DateTime.Now;
+            if (Start.DateTime > now)
+            {
+                TimeSpan startTimeSpan = (Start - TimeSpan.FromMinutes(18)) - now;
+                ThreadPoolTimer startThreadPoolTimer = ThreadPoolTimer.CreateTimer(async (source) =>
+                {
+                    await _coreDispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+                    {
+                        int countDown = 18;
+
+                        DispatcherTimer dispatcherTimer = new DispatcherTimer { Interval = TimeSpan.FromMinutes(1) };
+                        dispatcherTimer.Tick += async (s, e) =>
+                        {
+                            if (countDown > 0)
+                            {
+                                DueTimeVisibility = Visibility.Visible;
+                                await _coreDispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+                                {
+                                    DueTime = countDown.ToString();
+                                    countDown--;
+                                });
+                            }
+                            else
+                            {
+                                (s as DispatcherTimer).Stop();
+                                DueTimeVisibility = Visibility.Collapsed;
+                            }
+                        };
+                        dispatcherTimer.Start();
+                    });
+                }, startTimeSpan);
+            }
         }
     }
 }
