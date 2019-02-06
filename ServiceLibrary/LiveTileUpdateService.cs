@@ -30,64 +30,70 @@ namespace ApplicationServiceLibrary
             {
                 Occupancy = _applicationDataService.GetSetting<int>("StandardOccupancy")
             };
-            var now = DateTime.Now;
-            List<AgendaItem> agendaItems = await _databaseService.GetAgendaItemsAsync(now);
-            var result = agendaItems.Where(x => now > x.Start && now < x.End).Select(x => x).FirstOrDefault();
-            if (result != null) return result;
-            else return agendaItem;
+            try
+            {
+                var now = DateTime.Now;
+                List<AgendaItem> agendaItems = await _databaseService.GetAgendaItemsAsync(now);
+                var result = agendaItems.Where(x => now > x.Start && now < x.End).Select(x => x).FirstOrDefault();
+                if (result != null) return result;
+            }
+            catch { }
+            return agendaItem;
         }
 
         public TileContent CreateTile(AgendaItem agendaItem)
         {
-            var resourceLoader = ResourceLoader.GetForViewIndependentUse();
-            string occupancyIcon = "-";
-            string occupancyText = "-";
-            string tileBranding = _applicationDataService.GetSetting<string>("RoomName") + " " + _applicationDataService.GetSetting<string>("RoomNumber");
-            string timeWindow = agendaItem.Start.TimeOfDay.ToString(@"hh\:mm") + " - " + agendaItem.End.TimeOfDay.ToString(@"hh\:mm");
-            TileContent tileContent;
-            switch (_applicationDataService.GetSetting<bool>("OccupancyOverridden") ? _applicationDataService.GetSetting<int>("OverriddenOccupancy") : agendaItem.Occupancy)
+            try
             {
-                case 0:
-                    occupancyIcon = "✓";
-                    occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockFree/Text");
-                    break;
-                case 1:
-                    occupancyIcon = "웃";
-                    occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockPresent/Text");
-                    break;
-                case 2:
-                    occupancyIcon = "∞";
-                    occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockAbsent/Text");
-                    break;
-                case 3:
-                    occupancyIcon = "⧖";
-                    occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockBusy/Text");
-                    break;                
-                case 4:
-                    occupancyIcon = "🗙";
-                    occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockOccupied/Text");
-                    break;
-                case 5:
-                    occupancyIcon = "⚷";
-                    occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockLocked/Text");
-                    break;
-
-                default:
-                    break;
-            }
-
-            if (agendaItem.Id < 1)
-            {
-                tileContent = new TileContent()
+                var resourceLoader = ResourceLoader.GetForViewIndependentUse();
+                string occupancyIcon = "-";
+                string occupancyText = "-";
+                string tileBranding = _applicationDataService.GetSetting<string>("RoomName") + " " + _applicationDataService.GetSetting<string>("RoomNumber");
+                string timeWindow = agendaItem.Start.TimeOfDay.ToString(@"hh\:mm") + " - " + agendaItem.End.TimeOfDay.ToString(@"hh\:mm");
+                TileContent tileContent;
+                switch (_applicationDataService.GetSetting<bool>("OccupancyOverridden") ? _applicationDataService.GetSetting<int>("OverriddenOccupancy") : agendaItem.Occupancy)
                 {
-                    Visual = new TileVisual()
+                    case 0:
+                        occupancyIcon = "✓";
+                        occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockFree/Text");
+                        break;
+                    case 1:
+                        occupancyIcon = "웃";
+                        occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockPresent/Text");
+                        break;
+                    case 2:
+                        occupancyIcon = "∞";
+                        occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockAbsent/Text");
+                        break;
+                    case 3:
+                        occupancyIcon = "⧖";
+                        occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockBusy/Text");
+                        break;
+                    case 4:
+                        occupancyIcon = "🗙";
+                        occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockOccupied/Text");
+                        break;
+                    case 5:
+                        occupancyIcon = "⚷";
+                        occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockLocked/Text");
+                        break;
+
+                    default:
+                        break;
+                }
+
+                if (agendaItem.Id < 1)
+                {
+                    tileContent = new TileContent()
                     {
-                        TileSmall = new TileBinding()
+                        Visual = new TileVisual()
                         {
-                            Content = new TileBindingContentAdaptive()
+                            TileSmall = new TileBinding()
                             {
-                                TextStacking = TileTextStacking.Center,
-                                Children =
+                                Content = new TileBindingContentAdaptive()
+                                {
+                                    TextStacking = TileTextStacking.Center,
+                                    Children =
                                 {
                                     new AdaptiveText()
                                     {
@@ -96,15 +102,15 @@ namespace ApplicationServiceLibrary
                                         HintAlign = AdaptiveTextAlign.Center,
                                     }
                                 }
-                            }
-                        },
-                        TileMedium = new TileBinding()
-                        {
-                            Branding = TileBranding.Name,
-                            DisplayName = tileBranding,
-                            Content = new TileBindingContentAdaptive()
+                                }
+                            },
+                            TileMedium = new TileBinding()
                             {
-                                Children =
+                                Branding = TileBranding.Name,
+                                DisplayName = tileBranding,
+                                Content = new TileBindingContentAdaptive()
+                                {
+                                    Children =
                                 {
                                     new AdaptiveText()
                                     {
@@ -118,53 +124,53 @@ namespace ApplicationServiceLibrary
                                         HintStyle = AdaptiveTextStyle.CaptionSubtle
                                     }
                                 }
-                            }
-                        },
-                        TileWide = new TileBinding()
-                        {
-                            Branding = TileBranding.NameAndLogo,
-                            DisplayName = tileBranding,
-                            Content = new TileBindingContentAdaptive()
+                                }
+                            },
+                            TileWide = new TileBinding()
                             {
-                                Children =
+                                Branding = TileBranding.NameAndLogo,
+                                DisplayName = tileBranding,
+                                Content = new TileBindingContentAdaptive()
+                                {
+                                    Children =
                                 {
                                     new AdaptiveText()
                                     {
                                         Text = occupancyText
                                     }
                                 }
-                            }
-                        },
-                        TileLarge = new TileBinding()
-                        {
-                            Branding = TileBranding.NameAndLogo,
-                            DisplayName = tileBranding,
-                            Content = new TileBindingContentAdaptive()
+                                }
+                            },
+                            TileLarge = new TileBinding()
                             {
-                                Children =
+                                Branding = TileBranding.NameAndLogo,
+                                DisplayName = tileBranding,
+                                Content = new TileBindingContentAdaptive()
+                                {
+                                    Children =
                                 {
                                     new AdaptiveText()
                                     {
                                         Text = occupancyText
                                     }
+                                }
                                 }
                             }
                         }
-                    }
-                };
-            }
-            else
-            {
-                tileContent = new TileContent()
+                    };
+                }
+                else
                 {
-                    Visual = new TileVisual()
+                    tileContent = new TileContent()
                     {
-                        TileSmall = new TileBinding()
+                        Visual = new TileVisual()
                         {
-                            Content = new TileBindingContentAdaptive()
+                            TileSmall = new TileBinding()
                             {
-                                TextStacking = TileTextStacking.Center,
-                                Children =
+                                Content = new TileBindingContentAdaptive()
+                                {
+                                    TextStacking = TileTextStacking.Center,
+                                    Children =
                                 {
                                     new AdaptiveText()
                                     {
@@ -173,15 +179,15 @@ namespace ApplicationServiceLibrary
                                         HintAlign = AdaptiveTextAlign.Center,
                                     }
                                 }
-                            }
-                        },
-                        TileMedium = new TileBinding()
-                        {
-                            Branding = TileBranding.Name,
-                            DisplayName = tileBranding,
-                            Content = new TileBindingContentAdaptive()
+                                }
+                            },
+                            TileMedium = new TileBinding()
                             {
-                                Children =
+                                Branding = TileBranding.Name,
+                                DisplayName = tileBranding,
+                                Content = new TileBindingContentAdaptive()
+                                {
+                                    Children =
                                 {
                                     new AdaptiveText()
                                     {
@@ -200,15 +206,15 @@ namespace ApplicationServiceLibrary
                                         HintStyle = AdaptiveTextStyle.CaptionSubtle
                                     }
                                 }
-                            }
-                        },
-                        TileWide = new TileBinding()
-                        {
-                            Branding = TileBranding.NameAndLogo,
-                            DisplayName = tileBranding,
-                            Content = new TileBindingContentAdaptive()
+                                }
+                            },
+                            TileWide = new TileBinding()
                             {
-                                Children =
+                                Branding = TileBranding.NameAndLogo,
+                                DisplayName = tileBranding,
+                                Content = new TileBindingContentAdaptive()
+                                {
+                                    Children =
                                 {
                                     new AdaptiveText()
                                     {
@@ -225,15 +231,15 @@ namespace ApplicationServiceLibrary
                                         HintStyle = AdaptiveTextStyle.CaptionSubtle
                                     }
                                 }
-                            }
-                        },
-                        TileLarge = new TileBinding()
-                        {
-                            Branding = TileBranding.NameAndLogo,
-                            DisplayName = tileBranding,
-                            Content = new TileBindingContentAdaptive()
+                                }
+                            },
+                            TileLarge = new TileBinding()
                             {
-                                Children =
+                                Branding = TileBranding.NameAndLogo,
+                                DisplayName = tileBranding,
+                                Content = new TileBindingContentAdaptive()
+                                {
+                                    Children =
                                 {
                                     new AdaptiveText()
                                     {
@@ -250,16 +256,22 @@ namespace ApplicationServiceLibrary
                                         HintStyle = AdaptiveTextStyle.CaptionSubtle
                                     }
                                 }
+                                }
                             }
                         }
-                    }
-                };
+                    };
+                }
+                return tileContent;
             }
-            return tileContent;
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public void UpdateTile(TileContent tileContent)
         {
+            if (tileContent == null) return;
             var tileNotification = new TileNotification(tileContent.GetXml());
             TileUpdateManager.CreateTileUpdaterForApplication().Update(tileNotification);
         }

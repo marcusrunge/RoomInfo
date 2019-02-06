@@ -49,7 +49,7 @@ namespace RoomInfo.ViewModels
             {
                 SetProperty(ref _startTime, value);
                 EndTime = StartTime;
-                IsReservationButtonEnabled = _dateTimeValidationService.Validate(new AgendaItem() { Start = StartDate.Add(StartTime), End = EndDate.Add(EndTime) }, _agendaItems);
+                IsReservationButtonEnabled = _dateTimeValidationService.Validate(new AgendaItem() { Id=Id, Start = StartDate.Add(StartTime), End = EndDate.Add(EndTime) }, _agendaItems);
             }
         }
 
@@ -60,7 +60,7 @@ namespace RoomInfo.ViewModels
             set
             {
                 SetProperty(ref _endTime, value);
-                IsReservationButtonEnabled = _dateTimeValidationService.Validate(new AgendaItem() { Start = StartDate.Add(StartTime), End = EndDate.Add(EndTime) }, _agendaItems);
+                IsReservationButtonEnabled = _dateTimeValidationService.Validate(new AgendaItem() { Id = Id, Start = StartDate.Add(StartTime), End = EndDate.Add(EndTime) }, _agendaItems);
             }
         }
 

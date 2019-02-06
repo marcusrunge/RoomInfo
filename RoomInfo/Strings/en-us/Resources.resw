@@ -359,4 +359,7 @@
   <data name="Settings_Developed.Text" xml:space="preserve">
     <value>Made in Germany and developed by</value>
   </data>
+  <data name="AgendaItem_Due.Text" xml:space="preserve">
+    <value>Due in</value>
+  </data>
 </root>

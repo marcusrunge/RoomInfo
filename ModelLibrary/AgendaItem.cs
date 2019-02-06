@@ -7,6 +7,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Windows.Input;
+using Windows.ApplicationModel.Resources;
 using Windows.System.Threading;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -98,7 +99,8 @@ namespace ModelLibrary
         public AgendaItem()
         {
             DueTimeVisibility = Visibility.Collapsed;
-             _coreDispatcher = CoreWindow.GetForCurrentThread().Dispatcher;            
+            var coreWindow = CoreWindow.GetForCurrentThread();
+            if (coreWindow != null) _coreDispatcher = coreWindow.Dispatcher;            
         }
 
         private ICommand _updateReservationCommand;
@@ -135,25 +137,34 @@ namespace ModelLibrary
         public void SetDueTime()
         {
             var now = DateTime.Now;
-            if (Start.DateTime > now)
+            if (Start > now)
             {
-                TimeSpan startTimeSpan = (Start - TimeSpan.FromMinutes(18)) - now;
+                TimeSpan startTimeSpan;
+                int countdown = 18;
+                if (Start - now < TimeSpan.FromMinutes(18))
+                {
+                    countdown = (Start - now).Minutes;
+                    startTimeSpan = TimeSpan.FromMilliseconds(1);
+                    var resourceLoader = ResourceLoader.GetForCurrentView();
+                    DueTime = resourceLoader.GetString("AgendaItem_Due/Text") + " " + countdown.ToString() + "min";
+                    DueTimeVisibility = Visibility.Visible;
+                }
+                else startTimeSpan = (Start - TimeSpan.FromMinutes(18)) - now;
                 ThreadPoolTimer startThreadPoolTimer = ThreadPoolTimer.CreateTimer(async (source) =>
                 {
                     await _coreDispatcher.RunAsync(CoreDispatcherPriority.High, () =>
-                    {
-                        int countDown = 18;
-
+                    {     
                         DispatcherTimer dispatcherTimer = new DispatcherTimer { Interval = TimeSpan.FromMinutes(1) };
                         dispatcherTimer.Tick += async (s, e) =>
                         {
-                            if (countDown > 0)
+                            if (countdown > 1)
                             {
                                 DueTimeVisibility = Visibility.Visible;
                                 await _coreDispatcher.RunAsync(CoreDispatcherPriority.High, () =>
                                 {
-                                    DueTime = countDown.ToString();
-                                    countDown--;
+                                    var resourceLoader = ResourceLoader.GetForCurrentView();
+                                    DueTime = resourceLoader.GetString("AgendaItem_Due/Text") +" " + countdown.ToString() + "min";
+                                    countdown--;
                                 });
                             }
                             else
