@@ -74,69 +74,77 @@ namespace BackgroundComponent
                                 {
                                     using (StreamReader streamReader = new StreamReader(inputStream))
                                     {
-                                        var package = JsonConvert.DeserializeObject<Package>(await streamReader.ReadLineAsync());
-                                        string json;
-                                        List<AgendaItem> agendaItems;
-                                        switch ((PayloadType)package.PayloadType)
+                                        try
                                         {
-                                            case PayloadType.Occupancy:
-                                                var now = DateTime.Now;
-                                                _applicationDataService.SaveSetting("OverriddenOccupancy", (int)package.Payload);
-                                                _applicationDataService.SaveSetting("OccupancyOverridden", true);
-                                                agendaItems = await _databaseService.GetAgendaItemsAsync(now);
-                                                var agendaItem = agendaItems.Where(x => now > x.Start && now < x.End).Select(x => x).FirstOrDefault();
-                                                if (agendaItem != null)
-                                                {
-                                                    agendaItem.IsOverridden = true;
-                                                    await _databaseService.UpdateAgendaItemAsync(agendaItem);
-                                                }
-                                                await streamSocket.CancelIOAsync();
-                                                streamSocket.TransferOwnership(socketInformation.Id);
-                                                break;
-                                            case PayloadType.Schedule:
-                                                agendaItems = (List<AgendaItem>)package.Payload;
-                                                await _databaseService.UpdateAgendaItemsAsync(agendaItems);
-                                                streamSocket.TransferOwnership(socketInformation.Id);
-                                                break;
-                                            case PayloadType.RequestOccupancy:
-                                                int actualOccupancy = _applicationDataService.GetSetting<int>("ActualOccupancy");
-                                                package.PayloadType = (int)PayloadType.Occupancy;
-                                                package.Payload = actualOccupancy;
-                                                json = JsonConvert.SerializeObject(package);
-                                                await SendStringData(streamSocket, socketInformation.Id, streamSocket.Information.RemoteHostName, streamSocket.Information.RemotePort, json);
-                                                break;
-                                            case PayloadType.RequestSchedule:
-                                                agendaItems = await _databaseService.GetAgendaItemsAsync();
-                                                package.PayloadType = (int)PayloadType.Schedule;
-                                                package.Payload = agendaItems;
-                                                json = JsonConvert.SerializeObject(package);
-                                                await SendStringData(streamSocket, socketInformation.Id, streamSocket.Information.RemoteHostName, streamSocket.Information.RemotePort, json);
-                                                break;
-                                            case PayloadType.StandardWeek:
-                                                break;
-                                            case PayloadType.RequestStandardWeek:
-                                                break;
-                                            case PayloadType.AgendaItem:
-                                                var agendaItemToAdd = (AgendaItem)package.Payload;
-                                                if (agendaItemToAdd.Id < 1)
-                                                {
-                                                    int id = await _databaseService.AddAgendaItemAsync(agendaItemToAdd);
-                                                    package.PayloadType = (int)PayloadType.AgendaItemId;
-                                                    package.Payload = id;
-                                                    json = JsonConvert.SerializeObject(package);
-                                                    await SendStringData(streamSocket, socketInformation.Id, json);
-                                                }
-                                                else
-                                                {
-                                                    await _databaseService.UpdateAgendaItemAsync(agendaItemToAdd);
+                                            var package = JsonConvert.DeserializeObject<Package>(await streamReader.ReadLineAsync());
+                                            string json;
+                                            List<AgendaItem> agendaItems;
+                                            switch ((PayloadType)package.PayloadType)
+                                            {
+                                                case PayloadType.Occupancy:
+                                                    var now = DateTime.Now;
+                                                    _applicationDataService.SaveSetting("OverriddenOccupancy", (int)package.Payload);
+                                                    _applicationDataService.SaveSetting("OccupancyOverridden", true);
+                                                    agendaItems = await _databaseService.GetAgendaItemsAsync(now);
+                                                    var agendaItem = agendaItems.Where(x => now > x.Start && now < x.End).Select(x => x).FirstOrDefault();
+                                                    if (agendaItem != null)
+                                                    {
+                                                        agendaItem.IsOverridden = true;
+                                                        await _databaseService.UpdateAgendaItemAsync(agendaItem);
+                                                    }
                                                     await streamSocket.CancelIOAsync();
                                                     streamSocket.TransferOwnership(socketInformation.Id);
-                                                }
-                                                break;
-                                            default:
-                                                await streamSocket.CancelIOAsync();
-                                                streamSocket.TransferOwnership(socketInformation.Id);
-                                                break;
+                                                    break;
+                                                case PayloadType.Schedule:
+                                                    agendaItems = (List<AgendaItem>)package.Payload;
+                                                    await _databaseService.UpdateAgendaItemsAsync(agendaItems);
+                                                    streamSocket.TransferOwnership(socketInformation.Id);
+                                                    break;
+                                                case PayloadType.RequestOccupancy:
+                                                    int actualOccupancy = _applicationDataService.GetSetting<int>("ActualOccupancy");
+                                                    package.PayloadType = (int)PayloadType.Occupancy;
+                                                    package.Payload = actualOccupancy;
+                                                    json = JsonConvert.SerializeObject(package);
+                                                    await SendStringData(streamSocket, socketInformation.Id, streamSocket.Information.RemoteHostName, streamSocket.Information.RemotePort, json);
+                                                    break;
+                                                case PayloadType.RequestSchedule:
+                                                    agendaItems = await _databaseService.GetAgendaItemsAsync();
+                                                    package.PayloadType = (int)PayloadType.Schedule;
+                                                    package.Payload = agendaItems;
+                                                    json = JsonConvert.SerializeObject(package);
+                                                    await SendStringData(streamSocket, socketInformation.Id, streamSocket.Information.RemoteHostName, streamSocket.Information.RemotePort, json);
+                                                    break;
+                                                case PayloadType.StandardWeek:
+                                                    break;
+                                                case PayloadType.RequestStandardWeek:
+                                                    break;
+                                                case PayloadType.AgendaItem:
+                                                    var agendaItemToAdd = (AgendaItem)package.Payload;
+                                                    if (agendaItemToAdd.Id < 1)
+                                                    {
+                                                        int id = await _databaseService.AddAgendaItemAsync(agendaItemToAdd);
+                                                        package.PayloadType = (int)PayloadType.AgendaItemId;
+                                                        package.Payload = id;
+                                                        json = JsonConvert.SerializeObject(package);
+                                                        await SendStringData(streamSocket, socketInformation.Id, json);
+                                                    }
+                                                    else
+                                                    {
+                                                        await _databaseService.UpdateAgendaItemAsync(agendaItemToAdd);
+                                                        await streamSocket.CancelIOAsync();
+                                                        streamSocket.TransferOwnership(socketInformation.Id);
+                                                    }
+                                                    break;
+                                                default:
+                                                    await streamSocket.CancelIOAsync();
+                                                    streamSocket.TransferOwnership(socketInformation.Id);
+                                                    break;
+                                            }
+                                        }
+                                        catch (Exception)
+                                        {
+                                            streamReader.Close();
+                                            inputStream.Close();
                                         }
                                         await streamSocket.CancelIOAsync();
                                         streamSocket.TransferOwnership(socketInformation.Id);

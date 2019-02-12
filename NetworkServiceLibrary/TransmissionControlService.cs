@@ -136,69 +136,77 @@ namespace NetworkServiceLibrary
 
         private async Task ProcessInputStream(StreamSocket streamSocket, string inputStream)
         {
-            Package package = JsonConvert.DeserializeObject<Package>(inputStream);
-            string json;
-            List<AgendaItem> agendaItems;
-            switch ((PayloadType)package.PayloadType)
+            try
             {
-                case PayloadType.Occupancy:
-                    _eventAggregator.GetEvent<RemoteOccupancyOverrideEvent>().Publish((int)Convert.ChangeType(package.Payload, typeof(int)));
-                    streamSocket.Dispose();
-                    break;
-                case PayloadType.Schedule:
-                    agendaItems = JsonConvert.DeserializeObject<List<AgendaItem>>(package.Payload.ToString());
-                    await _databaseService.UpdateAgendaItemsAsync(agendaItems, true);
-                    _eventAggregator.GetEvent<RemoteAgendaItemsUpdatedEvent>().Publish();
-                    streamSocket.Dispose();
-                    break;
-                case PayloadType.RequestOccupancy:
-                    int actualOccupancy = _applicationDataService.GetSetting<int>("ActualOccupancy");
-                    package.PayloadType = (int)PayloadType.Occupancy;
-                    package.Payload = actualOccupancy;
-                    json = JsonConvert.SerializeObject(package);
-                    await SendStringData(streamSocket, json);
-                    break;
-                case PayloadType.RequestSchedule:
-                    agendaItems = await _databaseService.GetAgendaItemsAsync();
-                    package.PayloadType = (int)PayloadType.Schedule;
-                    package.Payload = agendaItems;
-                    json = JsonConvert.SerializeObject(package);
-                    await SendStringData(streamSocket, json);
-                    break;
-                case PayloadType.IotDim:
-                    await _iotService.Dim((bool)package.Payload);
-                    streamSocket.Dispose();
-                    break;
-                case PayloadType.StandardWeek:
-                    break;
-                case PayloadType.RequestStandardWeek:
-                    break;
-                case PayloadType.AgendaItem:
-                    var agendaItem = JsonConvert.DeserializeObject<AgendaItem>(package.Payload.ToString());
-                    if (agendaItem.Id < 1)
-                    {
-                        int id = await _databaseService.AddAgendaItemAsync(agendaItem);
-                        package.PayloadType = (int)PayloadType.AgendaItemId;
-                        package.Payload = id;
+                Package package = JsonConvert.DeserializeObject<Package>(inputStream);
+                string json;
+                List<AgendaItem> agendaItems;
+                switch ((PayloadType)package.PayloadType)
+                {
+                    case PayloadType.Occupancy:
+                        _eventAggregator.GetEvent<RemoteOccupancyOverrideEvent>().Publish((int)Convert.ChangeType(package.Payload, typeof(int)));
+                        streamSocket.Dispose();
+                        break;
+                    case PayloadType.Schedule:
+                        agendaItems = JsonConvert.DeserializeObject<List<AgendaItem>>(package.Payload.ToString());
+                        await _databaseService.UpdateAgendaItemsAsync(agendaItems, true);
+                        _eventAggregator.GetEvent<RemoteAgendaItemsUpdatedEvent>().Publish();
+                        streamSocket.Dispose();
+                        break;
+                    case PayloadType.RequestOccupancy:
+                        int actualOccupancy = _applicationDataService.GetSetting<int>("ActualOccupancy");
+                        package.PayloadType = (int)PayloadType.Occupancy;
+                        package.Payload = actualOccupancy;
                         json = JsonConvert.SerializeObject(package);
                         await SendStringData(streamSocket, json);
-                    }
-                    else if (agendaItem.IsDeleted)
-                    {
-                        await _databaseService.RemoveAgendaItemAsync(agendaItem.Id);
+                        break;
+                    case PayloadType.RequestSchedule:
+                        agendaItems = await _databaseService.GetAgendaItemsAsync();
+                        package.PayloadType = (int)PayloadType.Schedule;
+                        package.Payload = agendaItems;
+                        json = JsonConvert.SerializeObject(package);
+                        await SendStringData(streamSocket, json);
+                        break;
+                    case PayloadType.IotDim:
+                        await _iotService.Dim((bool)package.Payload);
                         streamSocket.Dispose();
-                    }
-                    else
-                    {
-                        await _databaseService.UpdateAgendaItemAsync(agendaItem, true);
+                        break;
+                    case PayloadType.StandardWeek:
+                        break;
+                    case PayloadType.RequestStandardWeek:
+                        break;
+                    case PayloadType.AgendaItem:
+                        var agendaItem = JsonConvert.DeserializeObject<AgendaItem>(package.Payload.ToString());
+                        if (agendaItem.Id < 1)
+                        {
+                            int id = await _databaseService.AddAgendaItemAsync(agendaItem);
+                            _eventAggregator.GetEvent<RemoteAgendaItemsUpdatedEvent>().Publish();
+                            package.PayloadType = (int)PayloadType.AgendaItemId;
+                            package.Payload = id;
+                            json = JsonConvert.SerializeObject(package);
+                            await SendStringData(streamSocket, json);
+                        }
+                        else if (agendaItem.IsDeleted)
+                        {
+                            await _databaseService.RemoveAgendaItemAsync(agendaItem.Id);
+                            streamSocket.Dispose();
+                        }
+                        else
+                        {
+                            await _databaseService.UpdateAgendaItemAsync(agendaItem, true);
+                            streamSocket.Dispose();
+                        }
+                        _eventAggregator.GetEvent<RemoteAgendaItemsUpdatedEvent>().Publish();
+                        break;
+                    default:
                         streamSocket.Dispose();
-                    }
-                    _eventAggregator.GetEvent<RemoteAgendaItemsUpdatedEvent>().Publish();
-                    break;
-                default:
-                    streamSocket.Dispose();
-                    break;
+                        break;
+                }
             }
+            catch (Exception)
+            {
+                streamSocket.Dispose();
+            }            
         }
     }
 }

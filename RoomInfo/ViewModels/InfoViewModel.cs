@@ -216,6 +216,7 @@ namespace RoomInfo.ViewModels
                     await coreDispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
                     {
                         SelectedComboBoxIndex = _applicationDataService.GetSetting<int>("StandardOccupancy");
+                        ResetButtonVisibility = Visibility.Collapsed;
                         Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
                         if (AgendaItems.Count > 0) AgendaItems.RemoveAt(0);
                         _activeAgendaItem = null;
