@@ -18,16 +18,28 @@ namespace ApplicationServiceLibrary
         Task UpdateAgendaItemsAsync(List<AgendaItem> agendaItems, bool remote = false);
         Task<List<AgendaItem>> GetAgendaItemsAsync();
         Task<List<AgendaItem>> GetAgendaItemsAsync(DateTime dateTime);
+        Task<List<ExceptionLogItem>> GetExceptionLogItemsAsync();
+        Task<int> AddExceptionLogItem(ExceptionLogItem exceptionLogItem);
+        Task RemoveExceptionLogItemsAsync();
     }
     public class DatabaseService : IDatabaseService
     {
         static AgendaItemContext _agendaItemContext;
+        static ExceptionLogItemContext _exceptionLogItemContext;
+        static StandardWeekContext _standardWeekContext;
         public DatabaseService()
         {
             _agendaItemContext = new AgendaItemContext();
-            _agendaItemContext.Database.ExecuteSqlCommand("CREATE TABLE IF NOT EXISTS AgendaItems (Id INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, Start NUMERIC , End NUMERIC , Description TEXT, IsAllDayEvent INTEGER, IsOverridden INTEGER, Occupancy INTEGER, TimeStamp NUMERIC, IsDeleted INTEGER)");
-            //_agendaItemContext.Database.ExecuteSqlCommand("CREATE TABLE IF NOT EXISTS StandardWeek (Id INTEGER PRIMARY KEY AUTOINCREMENT)");
+            _agendaItemContext.Database.ExecuteSqlCommand("CREATE TABLE IF NOT EXISTS AgendaItems (Id INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, Start NUMERIC , End NUMERIC , Description TEXT, IsAllDayEvent INTEGER, IsOverridden INTEGER, Occupancy INTEGER, TimeStamp NUMERIC, IsDeleted INTEGER)");           
             _agendaItemContext.Database.Migrate();
+
+            _exceptionLogItemContext = new ExceptionLogItemContext();
+            _exceptionLogItemContext.Database.ExecuteSqlCommand("CREATE TABLE IF NOT EXISTS ExceptionLogItems (Id INTEGER PRIMARY KEY AUTOINCREMENT, TimeStamp NUMERIC, Message TEXT, Source TEXT, StackTrace TEXT)");
+            _exceptionLogItemContext.Database.Migrate();
+
+            //_standardWeekContext = new StandardWeekContext();
+            //_standardWeekContext.Database.ExecuteSqlCommand("CREATE TABLE IF NOT EXISTS StandardWeek (Id INTEGER PRIMARY KEY AUTOINCREMENT)");
+            //_standardWeekContext.Database.Migrate();
         }
 
         public async Task<int> AddAgendaItemAsync(AgendaItem agendaItem)
@@ -37,9 +49,21 @@ namespace ApplicationServiceLibrary
             return agendaItem.Id;
         }
 
+        public async Task<int> AddExceptionLogItem(ExceptionLogItem exceptionLogItem)
+        {
+            exceptionLogItem = (await _exceptionLogItemContext.AddAsync(exceptionLogItem)).Entity;
+            await _exceptionLogItemContext.SaveChangesAsync();
+            return exceptionLogItem.Id;
+        }
+
         public async Task<List<AgendaItem>> GetAgendaItemsAsync()
         {
             return await _agendaItemContext.AgendaItems.ToListAsync();
+        }
+
+        public async Task<List<ExceptionLogItem>> GetExceptionLogItemsAsync()
+        {
+            return await _exceptionLogItemContext.ExceptionLogItems.ToListAsync();
         }
 
         public async Task<List<AgendaItem>> GetAgendaItemsAsync(DateTime dateTime)
@@ -62,6 +86,12 @@ namespace ApplicationServiceLibrary
             var agendaItem = await _agendaItemContext.AgendaItems.Where(x => x.Id == id).Select(x => x).FirstOrDefaultAsync();
             _agendaItemContext.Remove(agendaItem);
             await _agendaItemContext.SaveChangesAsync();
+        }
+
+        public async Task RemoveExceptionLogItemsAsync()
+        {
+            _exceptionLogItemContext.RemoveRange(_exceptionLogItemContext.ExceptionLogItems);
+            await _exceptionLogItemContext.SaveChangesAsync();
         }
 
         public async Task UpdateAgendaItemAsync(AgendaItem agendaItem, bool remote = false)

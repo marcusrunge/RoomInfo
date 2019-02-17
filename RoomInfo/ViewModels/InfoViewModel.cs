@@ -172,7 +172,14 @@ namespace RoomInfo.ViewModels
             for (int i = 0; i < agendaItems.Count; i++)
             {
                 AgendaItems.Add(agendaItems[i]);
-                AgendaItems[i].SetDueTime();
+                try
+                {
+                    AgendaItems[i].SetDueTime();
+                }
+                catch (Exception e)
+                {
+                    if (_databaseService != null) await _databaseService.AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
+                }                
             }
             await UpdateTimerTask();
         }

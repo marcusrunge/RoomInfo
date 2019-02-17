@@ -16,6 +16,8 @@ using Windows.UI.Xaml;
 using NetworkServiceLibrary;
 using Windows.Globalization;
 using Microsoft.HockeyApp;
+using ModelLibrary;
+using System.Collections.Generic;
 
 namespace RoomInfo
 {
@@ -25,28 +27,46 @@ namespace RoomInfo
         IApplicationDataService _applicationDataService;
         IUserDatagramService _userDatagramService;
         ITransmissionControlService _transmissionControlService;
+        IDatabaseService _databaseService;
+        List<ExceptionLogItem> _exceptionLogItems;
+
         public App()
         {
-            InitializeComponent();
-            HockeyClient.Current.Configure("5bccdd1ce267413199ecaaeebbf88295");
+            _exceptionLogItems = new List<ExceptionLogItem>();
+            try
+            {
+                InitializeComponent();
+                HockeyClient.Current.Configure("5bccdd1ce267413199ecaaeebbf88295");
+            }
+            catch (Exception e)
+            {
+                if (_exceptionLogItems != null) _exceptionLogItems.Add(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
+            }
         }
 
         protected override void ConfigureContainer()
         {
             // register a singleton using Container.RegisterType<IInterface, Type>(new ContainerControlledLifetimeManager());
             base.ConfigureContainer();
-            Container.RegisterInstance<IResourceLoader>(new ResourceLoaderAdapter(new ResourceLoader()));
-            Container.RegisterType<ISettingsService, SettingsService>();
-            Container.RegisterType<IDatabaseService, DatabaseService>();
-            Container.RegisterType<IApplicationDataService, ApplicationDataService>();
-            Container.RegisterType<ILiveTileUpdateService, LiveTileUpdateService>();
-            Container.RegisterType<IEventAggregator, EventAggregator>(new ContainerControlledLifetimeManager());
-            Container.RegisterType<IBackgroundTaskService, BackgroundTaskService>();
-            Container.RegisterType<ITransmissionControlService, TransmissionControlService>();
-            Container.RegisterType<IUserDatagramService, UserDatagramService>();
-            Container.RegisterType<IDateTimeValidationService, DateTimeValidationService>();
-            Container.RegisterType<IIotService, IotService>();
-            Container.RegisterType<IBackgroundTaskRegistrationProvider, BackgroundTaskRegistrationProvider>();
+            try
+            {
+                Container.RegisterInstance<IResourceLoader>(new ResourceLoaderAdapter(new ResourceLoader()));
+                Container.RegisterType<ISettingsService, SettingsService>();
+                Container.RegisterType<IDatabaseService, DatabaseService>();
+                Container.RegisterType<IApplicationDataService, ApplicationDataService>();
+                Container.RegisterType<ILiveTileUpdateService, LiveTileUpdateService>();
+                Container.RegisterType<IEventAggregator, EventAggregator>(new ContainerControlledLifetimeManager());
+                Container.RegisterType<IBackgroundTaskService, BackgroundTaskService>();
+                Container.RegisterType<ITransmissionControlService, TransmissionControlService>();
+                Container.RegisterType<IUserDatagramService, UserDatagramService>();
+                Container.RegisterType<IDateTimeValidationService, DateTimeValidationService>();
+                Container.RegisterType<IIotService, IotService>();
+                Container.RegisterType<IBackgroundTaskRegistrationProvider, BackgroundTaskRegistrationProvider>();
+            }
+            catch (Exception e)
+            {
+                if (_exceptionLogItems != null) _exceptionLogItems.Add(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
+            }
         }
 
         protected override Task OnLaunchApplicationAsync(LaunchActivatedEventArgs args)
@@ -54,24 +74,44 @@ namespace RoomInfo
             return LaunchApplicationAsync(PageTokens.PivotPage, null);
         }
 
-        private Task LaunchApplicationAsync(string page, object launchParam)
+        private async Task LaunchApplicationAsync(string page, object launchParam)
         {
-            _applicationDataService = Container.Resolve<IApplicationDataService>();
-            _userDatagramService = Container.Resolve<IUserDatagramService>();
-            _transmissionControlService = Container.Resolve<ITransmissionControlService>();
-            if (string.IsNullOrEmpty(_applicationDataService.GetSetting<string>("Guid"))) _applicationDataService.SaveSetting("Guid", Guid.NewGuid().ToString());
-            ThemeSelectorService.SetRequestedTheme();
-            SetSelectedLanguage();
-            NavigationService.Navigate(page, launchParam);
-            Window.Current.Activate();
-            return Task.CompletedTask;
+            try
+            {
+                _applicationDataService = Container.Resolve<IApplicationDataService>();
+                _userDatagramService = Container.Resolve<IUserDatagramService>();
+                _transmissionControlService = Container.Resolve<ITransmissionControlService>();
+                _databaseService = Container.Resolve<IDatabaseService>();
+                if (string.IsNullOrEmpty(_applicationDataService.GetSetting<string>("Guid"))) _applicationDataService.SaveSetting("Guid", Guid.NewGuid().ToString());
+                ThemeSelectorService.SetRequestedTheme();
+                await SetSelectedLanguage();
+                NavigationService.Navigate(page, launchParam);
+                Window.Current.Activate();
+            }
+            catch (Exception e)
+            {
+                if (_databaseService != null) await _databaseService.AddExceptionLogItem(new ExceptionLogItem() { Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
+            }
+            if (_databaseService != null && _exceptionLogItems != null && _exceptionLogItems.Count > 0)
+            {
+                _exceptionLogItems.ForEach(x => _databaseService.AddExceptionLogItem(x));
+            }
+
+            //return Task.CompletedTask;
         }
 
-        private void SetSelectedLanguage()
+        private async Task SetSelectedLanguage()
         {
-            var language = _applicationDataService.GetSetting<string>("Language");
-            if (string.IsNullOrEmpty(language)) return;
-            else ApplicationLanguages.PrimaryLanguageOverride = language;            
+            try
+            {
+                var language = _applicationDataService.GetSetting<string>("Language");
+                if (string.IsNullOrEmpty(language)) return;
+                else ApplicationLanguages.PrimaryLanguageOverride = language;
+            }
+            catch (Exception e)
+            {
+                if (_databaseService != null) await _databaseService.AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
+            }
         }
 
         protected override Task OnActivateApplicationAsync(IActivatedEventArgs args)
@@ -79,38 +119,66 @@ namespace RoomInfo
             return Task.CompletedTask;
         }
 
-        protected override void OnBackgroundActivated(BackgroundActivatedEventArgs args)
+        protected override async void OnBackgroundActivated(BackgroundActivatedEventArgs args)
         {
             base.OnBackgroundActivated(args);
-            CreateAndConfigureContainer();
+            try
+            {
+                CreateAndConfigureContainer();
+            }
+            catch (Exception e)
+            {
+                if (_databaseService != null) await _databaseService.AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
+            }
         }
 
         protected override async Task OnInitializeAsync(IActivatedEventArgs args)
         {
-            await ThemeSelectorService.InitializeAsync().ConfigureAwait(false);
-
-            // We are remapping the default ViewNamePage and ViewNamePageViewModel naming to ViewNamePage and ViewNameViewModel to
-            // gain better code reuse with other frameworks and pages within Windows Template Studio
-            ViewModelLocationProvider.SetDefaultViewTypeToViewModelTypeResolver((viewType) =>
+            try
             {
-                var viewModelTypeName = string.Format(CultureInfo.InvariantCulture, "RoomInfo.ViewModels.{0}ViewModel, RoomInfo", viewType.Name.Substring(0, viewType.Name.Length - 4));
-                return Type.GetType(viewModelTypeName);
-            });
+                await ThemeSelectorService.InitializeAsync().ConfigureAwait(false);
+
+                // We are remapping the default ViewNamePage and ViewNamePageViewModel naming to ViewNamePage and ViewNameViewModel to
+                // gain better code reuse with other frameworks and pages within Windows Template Studio
+                ViewModelLocationProvider.SetDefaultViewTypeToViewModelTypeResolver((viewType) =>
+                {
+                    var viewModelTypeName = string.Format(CultureInfo.InvariantCulture, "RoomInfo.ViewModels.{0}ViewModel, RoomInfo", viewType.Name.Substring(0, viewType.Name.Length - 4));
+                    return Type.GetType(viewModelTypeName);
+                });
+            }
+            catch (Exception e)
+            {
+                if (_databaseService != null) await _databaseService.AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
+            }
             await base.OnInitializeAsync(args);
         }
 
-        protected override void ConfigureServiceLocator()
+        protected override async void ConfigureServiceLocator()
         {
             base.ConfigureServiceLocator();
-            UnityServiceLocator unityServiceLocator = new UnityServiceLocator(Container);
-            ServiceLocator.SetLocatorProvider(() => unityServiceLocator);
+            try
+            {
+                UnityServiceLocator unityServiceLocator = new UnityServiceLocator(Container);
+                ServiceLocator.SetLocatorProvider(() => unityServiceLocator);
+            }
+            catch (Exception e)
+            {
+                if (_databaseService != null) await _databaseService.AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
+            }
         }
 
         protected override async Task OnSuspendingApplicationAsync()
         {
-            await _userDatagramService.TransferOwnership();
-            await _transmissionControlService.TransferOwnership();
-            await base.OnSuspendingApplicationAsync();
+            try
+            {
+                await _userDatagramService.TransferOwnership();
+                await _transmissionControlService.TransferOwnership();
+                await base.OnSuspendingApplicationAsync();
+            }
+            catch (Exception e)
+            {
+                if (_databaseService != null) await _databaseService.AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
+            }
         }
     }
 }

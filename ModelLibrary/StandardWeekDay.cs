@@ -7,13 +7,13 @@ namespace ModelLibrary
 {
     public class StandardWeekContext : DbContext
     {
-        public DbSet<AgendaItem> AgendaItems { get; set; }
+        public DbSet<StandardWeekDay> StandardWeek { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Data Source=RoomInfo.db");
         }
     }
-    public class StandardWeek : BindableBase
+    public class StandardWeekDay : BindableBase
     {
         int _id = default(int);
         [Key]

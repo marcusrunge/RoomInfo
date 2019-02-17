@@ -70,12 +70,12 @@ namespace ModelLibrary
         public long TimeStamp { get; set; }
 
         public bool IsDeleted { get; set; }
-                
+
         double _width = default(double);
         [JsonIgnore]
         [NotMapped]
         public double Width { get => _width; set { SetProperty(ref _width, value); } }
-                
+
         double _mediumFontSize = default(double);
         [JsonIgnore]
         [NotMapped]
@@ -85,7 +85,7 @@ namespace ModelLibrary
         [JsonIgnore]
         [NotMapped]
         public double LargeFontSize { get => _largeFontSize; set { SetProperty(ref _largeFontSize, value); } }
-        
+
         Visibility _dueTimeVisibility = default(Visibility);
         [JsonIgnore]
         [NotMapped]
@@ -100,7 +100,7 @@ namespace ModelLibrary
         {
             DueTimeVisibility = Visibility.Collapsed;
             var coreWindow = CoreWindow.GetForCurrentThread();
-            if (coreWindow != null) _coreDispatcher = coreWindow.Dispatcher;            
+            if (coreWindow != null) _coreDispatcher = coreWindow.Dispatcher;
         }
 
         private ICommand _updateReservationCommand;
@@ -152,29 +152,44 @@ namespace ModelLibrary
                 else startTimeSpan = (Start - TimeSpan.FromMinutes(18)) - now;
                 ThreadPoolTimer startThreadPoolTimer = ThreadPoolTimer.CreateTimer(async (source) =>
                 {
-                    await _coreDispatcher.RunAsync(CoreDispatcherPriority.High, () =>
-                    {     
-                        DispatcherTimer dispatcherTimer = new DispatcherTimer { Interval = TimeSpan.FromMinutes(1) };
-                        dispatcherTimer.Tick += async (s, e) =>
+                    if (_coreDispatcher == null)
+                    {
+                        try
                         {
-                            if (countdown > 1)
+                            _coreDispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
+                        }
+                        catch (Exception)
+                        {
+                            return;
+                        }
+                    }
+                    else try
+                        {
+                            await _coreDispatcher.RunAsync(CoreDispatcherPriority.High, () =>
                             {
-                                DueTimeVisibility = Visibility.Visible;
-                                await _coreDispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+                                DispatcherTimer dispatcherTimer = new DispatcherTimer { Interval = TimeSpan.FromMinutes(1) };
+                                dispatcherTimer.Tick += async (s, e) =>
                                 {
-                                    var resourceLoader = ResourceLoader.GetForCurrentView();
-                                    DueTime = resourceLoader.GetString("AgendaItem_Due/Text") +" " + countdown.ToString() + "min";
-                                    countdown--;
-                                });
-                            }
-                            else
-                            {
-                                (s as DispatcherTimer).Stop();
-                                DueTimeVisibility = Visibility.Collapsed;
-                            }
-                        };
-                        dispatcherTimer.Start();
-                    });
+                                    if (countdown > 1)
+                                    {
+                                        DueTimeVisibility = Visibility.Visible;
+                                        await _coreDispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+                                        {
+                                            var resourceLoader = ResourceLoader.GetForCurrentView();
+                                            DueTime = resourceLoader.GetString("AgendaItem_Due/Text") + " " + countdown.ToString() + "min";
+                                            countdown--;
+                                        });
+                                    }
+                                    else
+                                    {
+                                        (s as DispatcherTimer).Stop();
+                                        DueTimeVisibility = Visibility.Collapsed;
+                                    }
+                                };
+                                dispatcherTimer.Start();
+                            });
+                        }
+                        catch { }
                 }, startTimeSpan);
             }
         }
