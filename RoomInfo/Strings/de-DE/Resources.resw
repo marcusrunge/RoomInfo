@@ -234,6 +234,9 @@
   <data name="Settings_Developed.Text" xml:space="preserve">
     <value>Hergestellt in Deutschland und entwickelt von</value>
   </data>
+  <data name="Settings_ExceptionLog.Text" xml:space="preserve">
+    <value>Fehlerlog</value>
+  </data>
   <data name="Settings_IoT_RestartButton.Content" xml:space="preserve">
     <value>Neustarten</value>
   </data>

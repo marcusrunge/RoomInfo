@@ -362,4 +362,7 @@
   <data name="AgendaItem_Due.Text" xml:space="preserve">
     <value>Due in</value>
   </data>
+  <data name="Settings_ExceptionLog.Text" xml:space="preserve">
+    <value>Errorlog</value>
+  </data>
 </root>

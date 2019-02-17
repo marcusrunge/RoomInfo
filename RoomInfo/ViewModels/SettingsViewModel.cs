@@ -35,6 +35,7 @@ namespace RoomInfo.ViewModels
         IEventAggregator _eventAggregator;
         IIotService _iotService;
         INavigationService _navigationService;
+        IDatabaseService _databaseService;
 
         int _selectedComboBoxIndex = default(int);
         public int SelectedComboBoxIndex { get => _selectedComboBoxIndex; set { SetProperty(ref _selectedComboBoxIndex, value); } }
@@ -62,6 +63,9 @@ namespace RoomInfo.ViewModels
 
         Visibility _selectLogoButtonIoTVisibility = default(Visibility);
         public Visibility SelectLogoButtonIoTVisibility { get => _selectLogoButtonIoTVisibility; set { SetProperty(ref _selectLogoButtonIoTVisibility, value); } }
+
+        ObservableCollection<ExceptionLogItem> _exceptionLogItems = default(ObservableCollection<ExceptionLogItem>);
+        public ObservableCollection<ExceptionLogItem> ExceptionLogItems { get => _exceptionLogItems; set { SetProperty(ref _exceptionLogItems, value); } }
 
         string _tcpPort = default(string);
         public string TcpPort
@@ -101,12 +105,13 @@ namespace RoomInfo.ViewModels
         ModelLibrary.Language _language = default(ModelLibrary.Language);
         public ModelLibrary.Language Language { get => _language; set { SetProperty(ref _language, value); } }
 
-        public SettingsViewModel(IApplicationDataService applicationDataService, IIotService iotService, INavigationService navigationService, IEventAggregator eventAggregator)
+        public SettingsViewModel(IApplicationDataService applicationDataService, IIotService iotService, INavigationService navigationService, IEventAggregator eventAggregator, IDatabaseService databaseService)
         {
             _applicationDataService = applicationDataService;
             _iotService = iotService;
             _navigationService = navigationService;
             _eventAggregator = eventAggregator;
+            _databaseService = databaseService;
         }
 
         private ICommand _switchThemeCommand;
@@ -197,6 +202,9 @@ namespace RoomInfo.ViewModels
                 SelectLogoButtonIoTVisibility = Visibility.Collapsed;
                 SelectLogoButtonStdVisibility = Visibility.Visible;
             }
+            if (ExceptionLogItems == null) ExceptionLogItems = new ObservableCollection<ExceptionLogItem>();
+            else ExceptionLogItems.Clear();
+            (await _databaseService.GetExceptionLogItemsAsync()).ForEach(x => ExceptionLogItems.Add(x));
         }
 
         private ModelLibrary.Language LoadLanguage()
@@ -384,5 +392,18 @@ namespace RoomInfo.ViewModels
         {
             _eventAggregator.GetEvent<CollapseLowerGridEvent>().Publish();
         }
+
+        private ICommand _deleteExeptionLogCommand;
+        public ICommand DeleteExeptionLogCommand => _deleteExeptionLogCommand ?? (_deleteExeptionLogCommand = new DelegateCommand<object>(async(param) =>
+        {
+            ExceptionLogItems.Clear();
+            await _databaseService.RemoveExceptionLogItemsAsync();
+        }));
+
+        private ICommand _sendExceptionLogCommand;
+        public ICommand SendExceptionLogCommand => _sendExceptionLogCommand ?? (_sendExceptionLogCommand = new DelegateCommand<object>((param) =>
+        {
+
+        }));
     }
 }

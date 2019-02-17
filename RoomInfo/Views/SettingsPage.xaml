@@ -26,11 +26,11 @@
                 <ListView ItemsSource="{Binding FileItems}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Grid x:Name="flyoutGrid" >                                
+                            <Grid x:Name="flyoutGrid" >
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>                                
+                                </Grid.ColumnDefinitions>
                                 <RadioButton  IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Command="{Binding SelectCommand}" HorizontalAlignment="Left" Content="{Binding FileName}"/>
                                 <Image Grid.Column="1" Source="{Binding ImageSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="56" Height="56" Margin="12,0,0,0"/>
                             </Grid>
@@ -44,7 +44,7 @@
     <Grid Margin="{StaticResource MediumLeftRightMargin}">
         <ScrollViewer>
             <StackPanel
-            x:Name="ContentArea">                
+            x:Name="ContentArea">
                 <TextBlock
                 x:Uid="Settings_Personalization"
                 Style="{StaticResource SubtitleTextBlockStyle}" />
@@ -138,13 +138,45 @@
                     </StackPanel>
                     <TextBlock x:Uid="Settings_CompanyLogoInfo" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Left"/>
                 </StackPanel>
+                <StackPanel Margin="{StaticResource SettingsSubheaderMargin}" Width="{Binding Path=ActualWidth, ElementName=standardOccupancyTextBlock}" HorizontalAlignment="Left">
+                    <Grid Width="Auto" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock x:Uid="Settings_ExceptionLog" Style="{StaticResource SubtitleTextBlockStyle}" HorizontalAlignment="Left" />
+                        <Button Grid.Column="1" Background="{x:Null}" Command="{x:Bind ViewModel.DeleteExeptionLogCommand}">
+                            <Button.Content>
+                                <SymbolIcon Symbol="Delete" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Grid.Column="2" Background="{x:Null}" Command="{x:Bind ViewModel.SendExceptionLogCommand}">
+                            <Button.Content>
+                                <SymbolIcon Symbol="Send" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Button.Content>
+                        </Button>
+                    </Grid>
+                    <ListView ItemsSource="{Binding ExceptionLogItems}" BorderBrush="Gray" BorderThickness="2,2,2,2" MinHeight="{Binding Path=ActualHeight, ElementName=standardOccupancyTextBlock}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding TimeStamp}"/>
+                                    <TextBlock Text="{Binding Message}"/>
+                                    <TextBlock Text="{Binding Source}"/>
+                                    <TextBlock Text="{Binding StackTrace}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
                 <StackPanel Margin="{StaticResource SettingsSubheaderMargin}" BorderThickness="3" HorizontalAlignment="Left" BorderBrush="#7FFF0000" Visibility="{Binding IotPanelVisibility}">
                     <Border HorizontalAlignment="Left" BorderBrush="#7FFF0000" BorderThickness="0,0,3,3">
                         <TextBlock Text="IoT" Foreground="#7FFF0000" Style="{StaticResource SubtitleTextBlockStyle}" Padding="3,0,0,0"/>
                     </Border>
                     <Button x:Name="WiFiConfigButton" x:Uid="Settings_IoT_WiFiButton" Style="{StaticResource RedTransparentButtonStyle}" Content="Config Wi-Fi" Margin="2,2,2,0" HorizontalAlignment="Left" >
                         <Button.Flyout>
-                            <Flyout Closing="{x:Bind ViewModel.Flyout_Closing}">                                
+                            <Flyout Closing="{x:Bind ViewModel.Flyout_Closing}">
                                 <userControl:WiFiUserControl />
                             </Flyout>
                         </Button.Flyout>
