@@ -25,6 +25,9 @@ using Windows.Storage.Streams;
 using RoomInfo.Views;
 using Windows.UI.Core;
 using Windows.Storage.Pickers;
+using System.Text;
+using Windows.ApplicationModel.Email;
+using System.Net.Mail;
 
 namespace RoomInfo.ViewModels
 {
@@ -288,7 +291,7 @@ namespace RoomInfo.ViewModels
                         {
                             assets = await ApplicationData.Current.LocalFolder.GetFolderAsync("Logo");
                             break;
-                        }                        
+                        }
                     }
                     if (assets == null)
                     {
@@ -394,16 +397,32 @@ namespace RoomInfo.ViewModels
         }
 
         private ICommand _deleteExeptionLogCommand;
-        public ICommand DeleteExeptionLogCommand => _deleteExeptionLogCommand ?? (_deleteExeptionLogCommand = new DelegateCommand<object>(async(param) =>
+        public ICommand DeleteExeptionLogCommand => _deleteExeptionLogCommand ?? (_deleteExeptionLogCommand = new DelegateCommand<object>(async (param) =>
         {
             ExceptionLogItems.Clear();
             await _databaseService.RemoveExceptionLogItemsAsync();
         }));
 
         private ICommand _sendExceptionLogCommand;
-        public ICommand SendExceptionLogCommand => _sendExceptionLogCommand ?? (_sendExceptionLogCommand = new DelegateCommand<object>((param) =>
+        public ICommand SendExceptionLogCommand => _sendExceptionLogCommand ?? (_sendExceptionLogCommand = new DelegateCommand<object>(async (param) =>
         {
-
+            if (_iotService.IsIotDevice()) return;
+            var stringBuilder = new StringBuilder();
+            foreach (var exceptionLogItem in ExceptionLogItems)
+            {
+                stringBuilder.AppendLine(
+                    exceptionLogItem.TimeStamp + ": " +
+                    exceptionLogItem.Message + ", " +
+                    exceptionLogItem.Source + ", " +
+                    exceptionLogItem.StackTrace);
+            }
+            var emailMessage = new EmailMessage
+            {
+                Subject = "RoomInfo ExceptionLog",
+                Body = stringBuilder.ToString()
+            };
+            emailMessage.To.Add(new EmailRecipient("code_m@outlook.de"));
+            await EmailManager.ShowComposeNewEmailAsync(emailMessage);
         }));
     }
 }
