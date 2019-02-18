@@ -95,6 +95,7 @@
                     <TextBox Text="{Binding TcpPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" KeyDown="{x:Bind ViewModel.KeyDown}" PlaceholderText="8273" InputScope="Digits" MaxLength="5" />
                     <TextBlock x:Uid="Settings_UdpPort" Style="{StaticResource BodyTextStyle}"/>
                     <TextBox Text="{Binding UdpPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" KeyDown="{x:Bind ViewModel.KeyDown}" PlaceholderText="8274" InputScope="Digits" MaxLength="5" />
+                    <TextBlock x:Uid="Settings_PortInfo" Style="{StaticResource BodyTextStyle}"/>
                 </StackPanel>
                 <StackPanel Margin="{StaticResource SettingsSubheaderMargin}">
                     <TextBlock x:Name="standardOccupancyTextBlock" x:Uid="Settings_StandardOccupancy" Style="{StaticResource SubtitleTextBlockStyle}" HorizontalAlignment="Left" />

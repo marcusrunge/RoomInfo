@@ -258,6 +258,9 @@
   <data name="Settings_Personalization.Text" xml:space="preserve">
     <value>Personalisierung</value>
   </data>
+  <data name="Settings_PortInfo.Text" xml:space="preserve">
+    <value>(Anm.: Die Ports müssen in der Windows Firewall geöffnet sein)</value>
+  </data>
   <data name="Settings_Ports.Text" xml:space="preserve">
     <value>Port Auswahl</value>
   </data>

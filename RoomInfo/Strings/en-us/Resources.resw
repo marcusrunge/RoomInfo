@@ -365,4 +365,7 @@
   <data name="Settings_ExceptionLog.Text" xml:space="preserve">
     <value>Errorlog</value>
   </data>
+  <data name="Settings_PortInfo.Text" xml:space="preserve">
+    <value>(Note: The ports have to be opened in Windows Firewall)</value>
+  </data>
 </root>
