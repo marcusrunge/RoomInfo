@@ -28,9 +28,38 @@ namespace BackgroundComponent
             _unityContainer.RegisterType<IApplicationDataService, ApplicationDataService>();
             _unityContainer.RegisterType<IDatabaseService, DatabaseService>();
             _unityContainer.RegisterType<IIotService, IotService>();
-            _applicationDataService = _unityContainer.Resolve<IApplicationDataService>();
-            _databaseService = _unityContainer.Resolve<IDatabaseService>();
-            _iotService = _unityContainer.Resolve<IIotService>();
+            try
+            {
+                _databaseService = _unityContainer.Resolve<IDatabaseService>();
+            }
+            catch (Exception)
+            {
+                _deferral.Complete();
+                return;
+            }
+
+            try
+            {
+                _applicationDataService = _unityContainer.Resolve<IApplicationDataService>();
+            }
+            catch (Exception e)
+            {
+                if (_databaseService != null) await _databaseService.AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
+                _deferral.Complete();
+                return;
+            }
+
+            try
+            {
+                _iotService = _unityContainer.Resolve<IIotService>();
+            }
+            catch (Exception e)
+            {
+                if (_databaseService != null) await _databaseService.AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
+                _deferral.Complete();
+                return;
+            }
+
             try
             {
                 var socketActivityTriggerDetails = taskInstance.TriggerDetails as SocketActivityTriggerDetails;
@@ -239,7 +268,10 @@ namespace BackgroundComponent
                         break;
                 }
             }
-            catch { }
+            catch (Exception e)
+            {
+                if (_databaseService != null) await _databaseService.AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
+            }
         }
 
         private async Task SendStringData(StreamSocket streamSocket, string streamSocketId, HostName hostName, string port, string data)
@@ -259,9 +291,10 @@ namespace BackgroundComponent
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                SocketErrorStatus webErrorStatus = SocketError.GetStatus(ex.GetBaseException().HResult);
+                SocketErrorStatus webErrorStatus = SocketError.GetStatus(e.GetBaseException().HResult);
+                if (_databaseService != null) await _databaseService.AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
             }
             await streamSocket.CancelIOAsync();
             streamSocket.TransferOwnership(streamSocketId);
@@ -282,9 +315,10 @@ namespace BackgroundComponent
                 await streamSocket.CancelIOAsync();
                 streamSocket.TransferOwnership(streamSocketId);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                SocketErrorStatus webErrorStatus = SocketError.GetStatus(ex.GetBaseException().HResult);
+                SocketErrorStatus webErrorStatus = SocketError.GetStatus(e.GetBaseException().HResult);
+                if (_databaseService != null) await _databaseService.AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
             }
         }
     }
