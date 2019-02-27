@@ -18,6 +18,9 @@ using Windows.UI.Xaml;
 using Prism.Events;
 using Windows.UI.Xaml.Controls;
 using Windows.ApplicationModel.Core;
+using Newtonsoft.Json;
+using NetworkServiceLibrary;
+using Windows.Networking;
 
 namespace RoomInfo.ViewModels
 {
@@ -28,9 +31,11 @@ namespace RoomInfo.ViewModels
         ILiveTileUpdateService _liveTileUpdateService;
         IEventAggregator _eventAggregator;
         IIotService _iotService;
+        IUserDatagramService _userDatagramService;
         AgendaItem _activeAgendaItem;
         double _agendaItemWidth;
         ResourceLoader _resourceLoader;
+        Package _propertyChangedPackage;
 
         OccupancyVisualState _occupancy = default(OccupancyVisualState);
         public OccupancyVisualState Occupancy { get => _occupancy; set { SetProperty(ref _occupancy, value); } }
@@ -90,6 +95,8 @@ namespace RoomInfo.ViewModels
             _liveTileUpdateService = unityContainer.Resolve<ILiveTileUpdateService>();
             _eventAggregator = unityContainer.Resolve<IEventAggregator>();
             _iotService = unityContainer.Resolve<IIotService>();
+            _userDatagramService = unityContainer.Resolve<IUserDatagramService>();
+            _propertyChangedPackage = new Package() { PayloadType = (int)PayloadType.PropertyChanged };
         }
 
         public async override void OnNavigatedTo(NavigatedToEventArgs navigatedToEventArgs, Dictionary<string, object> viewModelState)
@@ -160,6 +167,7 @@ namespace RoomInfo.ViewModels
             _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
             ResetButtonVisibility = Visibility.Visible;
             _applicationDataService.SaveSetting("ActualOccupancy", SelectedComboBoxIndex);
+            await _userDatagramService.SendStringData(new HostName("255.255.255.255"), _applicationDataService.GetSetting<string>("UdpPort"), JsonConvert.SerializeObject(_propertyChangedPackage));
         }
 
         private async Task UpdateDayAgenda()
@@ -186,54 +194,64 @@ namespace RoomInfo.ViewModels
 
         private async Task UpdateTimerTask()
         {
-            CoreDispatcher coreDispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
-            if (AgendaItems.Count > 0)
+            try
             {
-                if (AgendaItems[0].Start < DateTime.Now && AgendaItems[0].End > DateTime.Now && !AgendaItems[0].IsOverridden)
+                CoreDispatcher coreDispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
+                if (AgendaItems.Count > 0)
                 {
-                    Occupancy = (OccupancyVisualState)AgendaItems[0].Occupancy;
-                    _applicationDataService.SaveSetting("OccupancyOverridden", false);
-                    ResetButtonVisibility = Visibility.Collapsed;
-                    SelectedComboBoxIndex = AgendaItems[0].Occupancy;
-                    _activeAgendaItem = AgendaItems[0];
-                    _applicationDataService.SaveSetting("ActualOccupancy", (int)Occupancy);
-                }
-                else if (!AgendaItems[0].IsOverridden)
-                {
-                    TimeSpan startTimeSpan = AgendaItems[0].Start - DateTime.Now;
-                    ThreadPoolTimer startThreadPoolTimer = ThreadPoolTimer.CreateTimer(async (source) =>
+                    if (AgendaItems[0].Start < DateTime.Now && AgendaItems[0].End > DateTime.Now && !AgendaItems[0].IsOverridden)
                     {
-                        await coreDispatcher.RunAsync(CoreDispatcherPriority.High, () =>
-                        {
-                            Occupancy = (OccupancyVisualState)AgendaItems[0].Occupancy;
-                            _applicationDataService.SaveSetting("OccupancyOverridden", false);
-                            ResetButtonVisibility = Visibility.Collapsed;
-                            SelectedComboBoxIndex = AgendaItems[0].Occupancy;
-                            _activeAgendaItem = AgendaItems[0];
-                            _applicationDataService.SaveSetting("ActualOccupancy", (int)Occupancy);
-                        });
-                    }, startTimeSpan);
-                }
-
-                _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
-
-                TimeSpan endTimeSpan = AgendaItems[0].End - DateTime.Now;
-                ThreadPoolTimer endThreadPoolTimer = ThreadPoolTimer.CreateTimer(async (source) =>
-                {
-                    await coreDispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
-                    {
-                        SelectedComboBoxIndex = _applicationDataService.GetSetting<int>("StandardOccupancy");
+                        Occupancy = (OccupancyVisualState)AgendaItems[0].Occupancy;
+                        _applicationDataService.SaveSetting("OccupancyOverridden", false);
                         ResetButtonVisibility = Visibility.Collapsed;
-                        Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
-                        if (AgendaItems.Count > 0) AgendaItems.RemoveAt(0);
-                        _activeAgendaItem = null;
-                        await UpdateDayAgenda();
-                        _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
+                        SelectedComboBoxIndex = AgendaItems[0].Occupancy;
+                        _activeAgendaItem = AgendaItems[0];
                         _applicationDataService.SaveSetting("ActualOccupancy", (int)Occupancy);
-                    });
+                        await _userDatagramService.SendStringData(new HostName("255.255.255.255"), _applicationDataService.GetSetting<string>("UdpPort"), JsonConvert.SerializeObject(_propertyChangedPackage));
+                    }
+                    else if (!AgendaItems[0].IsOverridden)
+                    {
+                        TimeSpan startTimeSpan = AgendaItems[0].Start - DateTime.Now;
+                        ThreadPoolTimer startThreadPoolTimer = ThreadPoolTimer.CreateTimer(async (source) =>
+                        {
+                            await coreDispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
+                            {
+                                Occupancy = (OccupancyVisualState)AgendaItems[0].Occupancy;
+                                _applicationDataService.SaveSetting("OccupancyOverridden", false);
+                                ResetButtonVisibility = Visibility.Collapsed;
+                                SelectedComboBoxIndex = AgendaItems[0].Occupancy;
+                                _activeAgendaItem = AgendaItems[0];
+                                _applicationDataService.SaveSetting("ActualOccupancy", (int)Occupancy);
+                                await _userDatagramService.SendStringData(new HostName("255.255.255.255"), _applicationDataService.GetSetting<string>("UdpPort"), JsonConvert.SerializeObject(_propertyChangedPackage));
+                            });
+                        }, startTimeSpan);
+                    }
 
-                }, endTimeSpan);
+                    _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
+
+                    TimeSpan endTimeSpan = AgendaItems[0].End - DateTime.Now;
+                    ThreadPoolTimer endThreadPoolTimer = ThreadPoolTimer.CreateTimer(async (source) =>
+                    {
+                        await coreDispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
+                        {
+                            SelectedComboBoxIndex = _applicationDataService.GetSetting<int>("StandardOccupancy");
+                            ResetButtonVisibility = Visibility.Collapsed;
+                            Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
+                            if (AgendaItems.Count > 0) AgendaItems.RemoveAt(0);
+                            _activeAgendaItem = null;
+                            await UpdateDayAgenda();
+                            _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
+                            _applicationDataService.SaveSetting("ActualOccupancy", (int)Occupancy);
+                            await _userDatagramService.SendStringData(new HostName("255.255.255.255"), _applicationDataService.GetSetting<string>("UdpPort"), JsonConvert.SerializeObject(_propertyChangedPackage));
+                        });
+
+                    }, endTimeSpan);
+                }
             }
+            catch (Exception e)
+            {
+                if (_databaseService != null) await _databaseService.AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
+            }            
         }
 
         private ICommand _overrideOccupancyCommand;
@@ -263,6 +281,7 @@ namespace RoomInfo.ViewModels
             _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
             ResetButtonVisibility = Visibility.Collapsed;
             _applicationDataService.SaveSetting("ActualOccupancy", (int)Occupancy);
+            await _userDatagramService.SendStringData(new HostName("255.255.255.255"), _applicationDataService.GetSetting<string>("UdpPort"), JsonConvert.SerializeObject(_propertyChangedPackage));
         }));
 
         private ICommand _updateDataTemplateWidthCommand;

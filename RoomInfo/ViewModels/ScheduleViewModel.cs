@@ -16,19 +16,25 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Core;
 using Windows.ApplicationModel.Core;
+using NetworkServiceLibrary;
+using Windows.Networking;
+using Newtonsoft.Json;
 
 namespace RoomInfo.ViewModels
 {
     public class ScheduleViewModel : ViewModelBase
     {
         IDatabaseService _databaseService;
-        List<AgendaItem> _agendaItems;
-        CalendarPanel calendarPanel;
         IEventAggregator _eventAggregator;
         readonly IUnityContainer _unityContainer;
+        IDateTimeValidationService _dateTimeValidationService;
+        IUserDatagramService _userDatagramService;
+        IApplicationDataService _applicationDataService;
+        List<AgendaItem> _agendaItems;
+        CalendarPanel calendarPanel;
         AgendaItem _agendaItem;
         double _agendaItemWidth;
-        IDateTimeValidationService _dateTimeValidationService;
+        Package _propertyChangedPackage;
 
         string _topDate = default(string);
         public string TopDate { get => _topDate; set { SetProperty(ref _topDate, value); } }
@@ -49,7 +55,7 @@ namespace RoomInfo.ViewModels
             {
                 SetProperty(ref _startTime, value);
                 EndTime = StartTime;
-                IsReservationButtonEnabled = _dateTimeValidationService.Validate(new AgendaItem() { Id=Id, Start = StartDate.Add(StartTime), End = EndDate.Add(EndTime) }, _agendaItems);
+                IsReservationButtonEnabled = _dateTimeValidationService.Validate(new AgendaItem() { Id = Id, Start = StartDate.Add(StartTime), End = EndDate.Add(EndTime) }, _agendaItems);
             }
         }
 
@@ -102,6 +108,9 @@ namespace RoomInfo.ViewModels
             _databaseService = unityContainer.Resolve<IDatabaseService>();
             _dateTimeValidationService = unityContainer.Resolve<IDateTimeValidationService>();
             _eventAggregator = unityContainer.Resolve<IEventAggregator>();
+            _userDatagramService = unityContainer.Resolve<IUserDatagramService>();
+            _applicationDataService = unityContainer.Resolve<IApplicationDataService>();
+            _propertyChangedPackage = new Package() { PayloadType = (int)PayloadType.PropertyChanged };
         }
 
         public async override void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
@@ -114,6 +123,7 @@ namespace RoomInfo.ViewModels
                 {
                     await _databaseService.RemoveAgendaItemAsync(o as AgendaItem);
                     await UpdateCalendarViewDayItems((o as AgendaItem).Start.Date);
+                    await _userDatagramService.SendStringData(new HostName("255.255.255.255"), _applicationDataService.GetSetting<string>("UdpPort"), JsonConvert.SerializeObject(_propertyChangedPackage));
                 }
                 catch { }
             });
@@ -193,6 +203,7 @@ namespace RoomInfo.ViewModels
                 IsFlyoutOpen = false;
                 await UpdateCalendarViewDayItems(StartDate.Date);
                 if (hasDateChanged) await UpdateCalendarViewDayItems(previousDate);
+                await _userDatagramService.SendStringData(new HostName("255.255.255.255"), _applicationDataService.GetSetting<string>("UdpPort"), JsonConvert.SerializeObject(_propertyChangedPackage));
             }
             catch { }
 

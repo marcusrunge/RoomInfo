@@ -50,20 +50,52 @@ namespace BackgroundComponent
                                 var datagramSocket = socketInformation.DatagramSocket;
                                 datagramSocket.MessageReceived += async (s, e) =>
                                 {
-                                    var roomPackage = new Package()
+                                    uint stringLength = e.GetDataReader().UnconsumedBufferLength;
+                                    var incomingMessage = e.GetDataReader().ReadString(stringLength);
+                                    var package = JsonConvert.DeserializeObject<Package>(incomingMessage);
+                                    switch ((PayloadType)package.PayloadType)
                                     {
-                                        PayloadType = (int)PayloadType.Room,
-                                        Payload = new Room()
-                                        {
-                                            RoomGuid = _applicationDataService.GetSetting<string>("Guid"),
-                                            RoomName = _applicationDataService.GetSetting<string>("RoomName"),
-                                            RoomNumber = _applicationDataService.GetSetting<string>("RoomNumber"),
-                                            Occupancy = _applicationDataService.GetSetting<int>("ActualOccupancy"),
-                                            IsIoT = _iotService.IsIotDevice()
-                                        }
-                                    };
-                                    var json = JsonConvert.SerializeObject(roomPackage);
-                                    await SendStringData(new StreamSocket(), socketInformation.Id, s.Information.RemoteAddress, _applicationDataService.GetSetting<string>("TcpPort"), json);
+                                        case PayloadType.Occupancy:
+                                            break;
+                                        case PayloadType.Room:
+                                            break;
+                                        case PayloadType.Schedule:
+                                            break;
+                                        case PayloadType.StandardWeek:
+                                            break;
+                                        case PayloadType.RequestOccupancy:
+                                            break;
+                                        case PayloadType.RequestSchedule:
+                                            break;
+                                        case PayloadType.RequestStandardWeek:
+                                            break;
+                                        case PayloadType.IotDim:
+                                            break;
+                                        case PayloadType.AgendaItem:
+                                            break;
+                                        case PayloadType.AgendaItemId:
+                                            break;
+                                        case PayloadType.Discovery:
+                                            package = new Package()
+                                            {
+                                                PayloadType = (int)PayloadType.Room,
+                                                Payload = new Room()
+                                                {
+                                                    RoomGuid = _applicationDataService.GetSetting<string>("Guid"),
+                                                    RoomName = _applicationDataService.GetSetting<string>("RoomName"),
+                                                    RoomNumber = _applicationDataService.GetSetting<string>("RoomNumber"),
+                                                    Occupancy = _applicationDataService.GetSetting<int>("ActualOccupancy"),
+                                                    IsIoT = _iotService.IsIotDevice()
+                                                }
+                                            };
+                                            var json = JsonConvert.SerializeObject(package);
+                                            await SendStringData(new StreamSocket(), socketInformation.Id, s.Information.RemoteAddress, _applicationDataService.GetSetting<string>("TcpPort"), json);
+                                            break;
+                                        case PayloadType.PropertyChanged:
+                                            break;
+                                        default:
+                                            break;
+                                    }
                                     await datagramSocket.CancelIOAsync();
                                     datagramSocket.TransferOwnership(socketInformation.Id);
                                 };
