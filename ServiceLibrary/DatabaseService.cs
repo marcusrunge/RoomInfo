@@ -24,9 +24,9 @@ namespace ApplicationServiceLibrary
     }
     public class DatabaseService : IDatabaseService
     {
-        static AgendaItemContext _agendaItemContext;
-        static ExceptionLogItemContext _exceptionLogItemContext;
-        static StandardWeekContext _standardWeekContext;
+        readonly AgendaItemContext _agendaItemContext;
+        readonly ExceptionLogItemContext _exceptionLogItemContext;
+        readonly StandardWeekContext _standardWeekContext;
         public DatabaseService()
         {
             try
@@ -45,7 +45,7 @@ namespace ApplicationServiceLibrary
             }
             catch (Exception e)
             {
-                if (_exceptionLogItemContext != null) AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
+                if (_exceptionLogItemContext != null) Task.Run(async () => await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace }));
             }
 
             try
@@ -56,7 +56,7 @@ namespace ApplicationServiceLibrary
             }
             catch (Exception e)
             {
-                if (_exceptionLogItemContext != null) AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
+                if (_exceptionLogItemContext != null) Task.Run(async () => await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace }));
             }
         }
 
@@ -195,7 +195,7 @@ namespace ApplicationServiceLibrary
             catch (Exception e)
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
-            }            
+            }
         }
 
         public async Task UpdateAgendaItemsAsync(List<AgendaItem> agendaItems, bool remote = false)
@@ -245,7 +245,7 @@ namespace ApplicationServiceLibrary
             catch (Exception e)
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
-            }            
+            }
         }
     }
 }
