@@ -21,6 +21,7 @@ using Windows.ApplicationModel.Core;
 using Newtonsoft.Json;
 using NetworkServiceLibrary;
 using Windows.Networking;
+using System.Linq;
 
 namespace RoomInfo.ViewModels
 {
@@ -153,6 +154,27 @@ namespace RoomInfo.ViewModels
             });
             _eventAggregator.GetEvent<RemoteAgendaItemsUpdatedEvent>().Subscribe(async () => await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => await UpdateDayAgenda()));
             BrightnessAdjustmentVisibility = _iotService.IsIotDevice() ? Visibility.Visible : Visibility.Collapsed;
+            _eventAggregator.GetEvent<RemoteAgendaItemDeletedEvent>().Subscribe(async i =>
+            {
+                var agendaItem = AgendaItems.Where(x => x.Id == i).Select(x => x).FirstOrDefault();
+                if (agendaItem != null)
+                {
+                    var now = DateTimeOffset.Now;
+                    if (now >= agendaItem.Start && now <= agendaItem.End)
+                    {
+                        await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                        {
+                            SelectedComboBoxIndex = _applicationDataService.GetSetting<int>("StandardOccupancy");
+                            _applicationDataService.SaveSetting("OverriddenOccupancy", (int)Occupancy);
+                            _applicationDataService.SaveSetting("OccupancyOverridden", false);
+                            _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
+                            ResetButtonVisibility = Visibility.Collapsed;
+                            Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
+                            await UpdateDayAgenda();
+                        });
+                    }
+                }
+            });
         }
 
         private async Task OverrideOccupancy()
@@ -187,7 +209,7 @@ namespace RoomInfo.ViewModels
                 catch (Exception e)
                 {
                     if (_databaseService != null) await _databaseService.AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
-                }                
+                }
             }
             await UpdateTimerTask();
         }
@@ -251,7 +273,7 @@ namespace RoomInfo.ViewModels
             catch (Exception e)
             {
                 if (_databaseService != null) await _databaseService.AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
-            }            
+            }
         }
 
         private ICommand _overrideOccupancyCommand;

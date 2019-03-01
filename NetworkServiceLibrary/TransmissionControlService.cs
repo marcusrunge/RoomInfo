@@ -192,24 +192,25 @@ namespace NetworkServiceLibrary
                             {
                                 await _databaseService.RemoveAgendaItemAsync(agendaItem.Id);
                                 streamSocket.Dispose();
+                                _eventAggregator.GetEvent<RemoteAgendaItemDeletedEvent>().Publish(agendaItem.Id);
                             }
                             else
                             {
                                 await _databaseService.UpdateAgendaItemAsync(agendaItem, true);
                                 streamSocket.Dispose();
+                                _eventAggregator.GetEvent<RemoteAgendaItemsUpdatedEvent>().Publish();
                             }
-                            _eventAggregator.GetEvent<RemoteAgendaItemsUpdatedEvent>().Publish();
                             break;
                         default:
                             streamSocket.Dispose();
                             break;
                     }
-                }                
+                }
             }
             catch (Exception)
             {
                 streamSocket.Dispose();
-            }            
+            }
         }
     }
 }

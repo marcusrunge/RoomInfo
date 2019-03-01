@@ -32,4 +32,7 @@ namespace ModelLibrary
     public class PortChangedEvent : PubSubEvent
     {
     }
+    public class RemoteAgendaItemDeletedEvent : PubSubEvent<int>
+    {
+    }
 }

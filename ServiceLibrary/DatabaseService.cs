@@ -24,9 +24,8 @@ namespace ApplicationServiceLibrary
     }
     public class DatabaseService : IDatabaseService
     {
-        readonly AgendaItemContext _agendaItemContext;
         readonly ExceptionLogItemContext _exceptionLogItemContext;
-        readonly StandardWeekContext _standardWeekContext;
+        //readonly StandardWeekContext _standardWeekContext;
         public DatabaseService()
         {
             try
@@ -39,9 +38,9 @@ namespace ApplicationServiceLibrary
 
             try
             {
-                _agendaItemContext = new AgendaItemContext();
-                _agendaItemContext.Database.ExecuteSqlCommand("CREATE TABLE IF NOT EXISTS AgendaItems (Id INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, Start NUMERIC , End NUMERIC , Description TEXT, IsAllDayEvent INTEGER, IsOverridden INTEGER, Occupancy INTEGER, TimeStamp NUMERIC, IsDeleted INTEGER)");
-                _agendaItemContext.Database.Migrate();
+                AgendaItemContext agendaItemContext = new AgendaItemContext();
+                agendaItemContext.Database.ExecuteSqlCommand("CREATE TABLE IF NOT EXISTS AgendaItems (Id INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, Start NUMERIC , End NUMERIC , Description TEXT, IsAllDayEvent INTEGER, IsOverridden INTEGER, Occupancy INTEGER, TimeStamp NUMERIC, IsDeleted INTEGER)");
+                agendaItemContext.Database.Migrate();
             }
             catch (Exception e)
             {
@@ -64,8 +63,9 @@ namespace ApplicationServiceLibrary
         {
             try
             {
-                agendaItem = (await _agendaItemContext.AddAsync(agendaItem)).Entity;
-                await _agendaItemContext.SaveChangesAsync();
+                AgendaItemContext agendaItemContext = new AgendaItemContext();
+                agendaItem = (await agendaItemContext.AddAsync(agendaItem)).Entity;
+                await agendaItemContext.SaveChangesAsync();
                 return agendaItem.Id;
             }
             catch (Exception e)
@@ -93,7 +93,8 @@ namespace ApplicationServiceLibrary
         {
             try
             {
-                return await _agendaItemContext.AgendaItems.ToListAsync();
+                AgendaItemContext agendaItemContext = new AgendaItemContext();
+                return await agendaItemContext.AgendaItems.ToListAsync();
             }
             catch (Exception e)
             {
@@ -118,7 +119,8 @@ namespace ApplicationServiceLibrary
         {
             try
             {
-                return await _agendaItemContext.AgendaItems
+                AgendaItemContext agendaItemContext = new AgendaItemContext();
+                return await agendaItemContext.AgendaItems
                                 .Where((x) => x.End.DateTime > dateTime)
                                 .Select((x) => x)
                                 .Take(3)
@@ -135,8 +137,9 @@ namespace ApplicationServiceLibrary
         {
             try
             {
-                _agendaItemContext.Remove(agendaItem);
-                await _agendaItemContext.SaveChangesAsync();
+                AgendaItemContext agendaItemContext = new AgendaItemContext();
+                agendaItemContext.Remove(agendaItem);
+                await agendaItemContext.SaveChangesAsync();
             }
             catch (Exception e)
             {
@@ -148,9 +151,10 @@ namespace ApplicationServiceLibrary
         {
             try
             {
-                var agendaItem = await _agendaItemContext.AgendaItems.Where(x => x.Id == id).Select(x => x).FirstOrDefaultAsync();
-                _agendaItemContext.Remove(agendaItem);
-                await _agendaItemContext.SaveChangesAsync();
+                AgendaItemContext agendaItemContext = new AgendaItemContext();
+                var agendaItem = await agendaItemContext.AgendaItems.Where(x => x.Id == id).Select(x => x).FirstOrDefaultAsync();
+                agendaItemContext.Remove(agendaItem);
+                await agendaItemContext.SaveChangesAsync();
             }
             catch (Exception e)
             {
@@ -172,9 +176,10 @@ namespace ApplicationServiceLibrary
         {
             try
             {
+                AgendaItemContext agendaItemContext = new AgendaItemContext();
                 if (remote)
                 {
-                    var queriedAgendaItem = await _agendaItemContext.AgendaItems.Where(x => x.Id == agendaItem.Id).Select(x => x).FirstOrDefaultAsync();
+                    var queriedAgendaItem = await agendaItemContext.AgendaItems.Where(x => x.Id == agendaItem.Id).Select(x => x).FirstOrDefaultAsync();
                     await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                     {
                         queriedAgendaItem.Description = agendaItem.Description;
@@ -187,10 +192,10 @@ namespace ApplicationServiceLibrary
                         queriedAgendaItem.TimeStamp = agendaItem.TimeStamp;
                         queriedAgendaItem.Title = agendaItem.Title;
                     });
-                    _agendaItemContext.Update(queriedAgendaItem);
+                    agendaItemContext.Update(queriedAgendaItem);
                 }
-                else _agendaItemContext.Update(agendaItem);
-                await _agendaItemContext.SaveChangesAsync();
+                else agendaItemContext.Update(agendaItem);
+                await agendaItemContext.SaveChangesAsync();
             }
             catch (Exception e)
             {
@@ -202,6 +207,7 @@ namespace ApplicationServiceLibrary
         {
             try
             {
+                AgendaItemContext agendaItemContext = new AgendaItemContext();
                 if (remote)
                 {
                     agendaItems.ForEach(async x =>
@@ -210,7 +216,7 @@ namespace ApplicationServiceLibrary
                         else if (x.IsDeleted) await RemoveAgendaItemAsync(x);
                         else
                         {
-                            var updatedAgendaItem = await _agendaItemContext.AgendaItems.Where(y => y.Id == x.Id && y.TimeStamp != x.TimeStamp).FirstOrDefaultAsync();
+                            var updatedAgendaItem = await agendaItemContext.AgendaItems.Where(y => y.Id == x.Id && y.TimeStamp != x.TimeStamp).FirstOrDefaultAsync();
                             if (updatedAgendaItem != null)
                             {
                                 updatedAgendaItem.Description = x.Description;
@@ -222,7 +228,7 @@ namespace ApplicationServiceLibrary
                                 updatedAgendaItem.Start = x.Start;
                                 updatedAgendaItem.TimeStamp = x.TimeStamp;
                                 updatedAgendaItem.Title = x.Title;
-                                _agendaItemContext.Update(updatedAgendaItem);
+                                agendaItemContext.Update(updatedAgendaItem);
                             }
                         }
                     });
@@ -235,12 +241,12 @@ namespace ApplicationServiceLibrary
                         else if (x.IsDeleted) await RemoveAgendaItemAsync(x);
                         else
                         {
-                            var updatedAgendaItem = await _agendaItemContext.AgendaItems.Where(y => y.Id == x.Id && y.TimeStamp != x.TimeStamp).FirstOrDefaultAsync();
+                            var updatedAgendaItem = await agendaItemContext.AgendaItems.Where(y => y.Id == x.Id && y.TimeStamp != x.TimeStamp).FirstOrDefaultAsync();
                             if (updatedAgendaItem != null) await UpdateAgendaItemAsync(updatedAgendaItem);
                         }
                     });
                 }
-                await _agendaItemContext.SaveChangesAsync();
+                await agendaItemContext.SaveChangesAsync();
             }
             catch (Exception e)
             {
