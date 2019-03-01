@@ -143,6 +143,7 @@ namespace RoomInfo.ViewModels
                 IsReservationButtonEnabled = true;
             });
             _eventAggregator.GetEvent<RemoteAgendaItemsUpdatedEvent>().Subscribe(async () => await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => await UpdateCalendarViewDayItems()));
+            _eventAggregator.GetEvent<RemoteAgendaItemDeletedEvent>().Subscribe(async i => await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => await UpdateCalendarViewDayItems()));
         }
 
         private ICommand _showReservationFlyoutCommand;
