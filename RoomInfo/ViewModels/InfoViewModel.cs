@@ -37,6 +37,8 @@ namespace RoomInfo.ViewModels
         double _agendaItemWidth;
         ResourceLoader _resourceLoader;
         Package _propertyChangedPackage;
+        ThreadPoolTimer _startThreadPoolTimer;
+        ThreadPoolTimer _endThreadPoolTimer;
 
         OccupancyVisualState _occupancy = default(OccupancyVisualState);
         public OccupancyVisualState Occupancy { get => _occupancy; set { SetProperty(ref _occupancy, value); } }
@@ -220,6 +222,8 @@ namespace RoomInfo.ViewModels
         {
             try
             {
+                if (_startThreadPoolTimer != null) _startThreadPoolTimer.Cancel();
+                if (_endThreadPoolTimer != null) _endThreadPoolTimer.Cancel();
                 CoreDispatcher coreDispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
                 if (AgendaItems.Count > 0)
                 {
@@ -236,7 +240,7 @@ namespace RoomInfo.ViewModels
                     else if (!AgendaItems[0].IsOverridden)
                     {
                         TimeSpan startTimeSpan = AgendaItems[0].Start - DateTime.Now;
-                        ThreadPoolTimer startThreadPoolTimer = ThreadPoolTimer.CreateTimer(async (source) =>
+                        _startThreadPoolTimer = ThreadPoolTimer.CreateTimer(async (source) =>
                         {
                             await coreDispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
                             {
@@ -254,7 +258,7 @@ namespace RoomInfo.ViewModels
                     _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
 
                     TimeSpan endTimeSpan = AgendaItems[0].End - DateTime.Now;
-                    ThreadPoolTimer endThreadPoolTimer = ThreadPoolTimer.CreateTimer(async (source) =>
+                    _endThreadPoolTimer = ThreadPoolTimer.CreateTimer(async (source) =>
                     {
                         await coreDispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
                         {
