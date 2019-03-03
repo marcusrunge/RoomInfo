@@ -187,7 +187,9 @@ namespace RoomInfo.ViewModels
                 await _databaseService.UpdateAgendaItemAsync(_activeAgendaItem);
             }
             _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
-            ResetButtonVisibility = Visibility.Visible;
+            ResetButtonVisibility = _applicationDataService.GetSetting<int>("StandardOccupancy") == SelectedComboBoxIndex
+                ? Visibility.Collapsed
+                : Visibility.Visible;
             _applicationDataService.SaveSetting("ActualOccupancy", SelectedComboBoxIndex);
             await _userDatagramService.SendStringData(new HostName("255.255.255.255"), _applicationDataService.GetSetting<string>("UdpPort"), JsonConvert.SerializeObject(_propertyChangedPackage));
         }
