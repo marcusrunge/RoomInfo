@@ -158,14 +158,14 @@
                             </Button.Content>
                         </Button>
                     </Grid>
-                    <ListView ItemsSource="{Binding ExceptionLogItems}" BorderBrush="Gray" BorderThickness="2,2,2,2" MinHeight="{Binding Path=ActualHeight, ElementName=standardOccupancyTextBlock}">
+                    <ListView ItemsSource="{Binding ExceptionLogItems}" BorderBrush="Gray" BorderThickness="2,2,2,2" MinHeight="{Binding Path=ActualHeight, ElementName=standardOccupancyTextBlock}" MaxHeight="{Binding Path=ActualWidth, RelativeSource={RelativeSource Self}}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel>
-                                    <TextBlock Text="{Binding TimeStamp}"/>
-                                    <TextBlock Text="{Binding Message}"/>
-                                    <TextBlock Text="{Binding Source}"/>
-                                    <TextBlock Text="{Binding StackTrace}"/>
+                                    <TextBlock Text="{Binding TimeStamp}" TextWrapping="Wrap"/>
+                                    <TextBlock Text="{Binding Message}" TextWrapping="Wrap"/>
+                                    <TextBlock Text="{Binding Source}" TextWrapping="Wrap"/>
+                                    <TextBlock Text="{Binding StackTrace}" TextWrapping="Wrap"/>
                                 </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>

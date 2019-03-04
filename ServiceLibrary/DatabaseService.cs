@@ -174,9 +174,11 @@ namespace ApplicationServiceLibrary
 
         public async Task UpdateAgendaItemAsync(AgendaItem agendaItem, bool remote = false)
         {
+            if (agendaItem == null) return;
             try
             {
                 AgendaItemContext agendaItemContext = new AgendaItemContext();
+                agendaItemContext.Entry(agendaItem).State = EntityState.Modified;
                 if (remote)
                 {
                     var queriedAgendaItem = await agendaItemContext.AgendaItems.Where(x => x.Id == agendaItem.Id).Select(x => x).FirstOrDefaultAsync();
@@ -205,6 +207,7 @@ namespace ApplicationServiceLibrary
 
         public async Task UpdateAgendaItemsAsync(List<AgendaItem> agendaItems, bool remote = false)
         {
+            if (agendaItems == null) return;
             try
             {
                 AgendaItemContext agendaItemContext = new AgendaItemContext();
@@ -228,6 +231,7 @@ namespace ApplicationServiceLibrary
                                 updatedAgendaItem.Start = x.Start;
                                 updatedAgendaItem.TimeStamp = x.TimeStamp;
                                 updatedAgendaItem.Title = x.Title;
+                                agendaItemContext.Entry(updatedAgendaItem).State = EntityState.Modified;
                                 agendaItemContext.Update(updatedAgendaItem);
                             }
                         }
