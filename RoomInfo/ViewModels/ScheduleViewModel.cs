@@ -54,8 +54,12 @@ namespace RoomInfo.ViewModels
             get => _startTime; set
             {
                 SetProperty(ref _startTime, value);
-                EndTime = StartTime;
-                IsReservationButtonEnabled = _dateTimeValidationService.Validate(new AgendaItem() { Id = Id, Start = StartDate.Add(StartTime), End = EndDate.Add(EndTime) }, _agendaItems);
+                if (Id < 1)
+                {
+                    EndTime = StartTime;
+                    IsReservationButtonEnabled = _dateTimeValidationService.Validate(new AgendaItem() { Id = Id, Start = StartDate.Add(StartTime), End = EndDate.Add(EndTime) }, _agendaItems);
+                }
+                else IsReservationButtonEnabled = true;
             }
         }
 
@@ -153,7 +157,7 @@ namespace RoomInfo.ViewModels
                 StartDate = now.Date;
                 StartTime = TimeSpan.FromSeconds(now.TimeOfDay.TotalSeconds);
                 EndDate = now.Date;
-                EndTime = TimeSpan.FromSeconds(now.TimeOfDay.TotalSeconds);
+                EndTime = TimeSpan.FromSeconds(now.TimeOfDay.TotalSeconds) + TimeSpan.FromMinutes(30);
                 Title = "";
                 Description = "";
                 IsAllDayEvent = false;

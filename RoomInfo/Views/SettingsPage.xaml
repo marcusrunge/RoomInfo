@@ -158,7 +158,7 @@
                             </Button.Content>
                         </Button>
                     </Grid>
-                    <ListView ItemsSource="{Binding ExceptionLogItems}" BorderBrush="Gray" BorderThickness="2,2,2,2" MinHeight="{Binding Path=ActualHeight, ElementName=standardOccupancyTextBlock}" MaxHeight="{Binding Path=ActualWidth, RelativeSource={RelativeSource Self}}">
+                    <ListView ItemsSource="{Binding ExceptionLogItems}" BorderBrush="Gray" BorderThickness="2,2,2,2" MinHeight="{Binding Path=ActualHeight, ElementName=standardOccupancyTextBlock}" MaxHeight="{Binding Path=ActualWidth, ElementName=standardOccupancyTextBlock}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel>
