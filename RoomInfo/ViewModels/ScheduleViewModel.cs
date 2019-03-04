@@ -162,7 +162,7 @@ namespace RoomInfo.ViewModels
                 Description = "";
                 IsAllDayEvent = false;
                 SelectedComboBoxIndex = 2;
-                IsReservationButtonEnabled = false;
+                IsReservationButtonEnabled = _dateTimeValidationService.Validate(new AgendaItem() { Id = Id, Start = StartDate.Add(StartTime), End = EndDate.Add(EndTime) }, _agendaItems);
             }));
 
         private ICommand _hideReservationCommand;

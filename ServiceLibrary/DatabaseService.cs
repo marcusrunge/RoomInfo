@@ -182,19 +182,22 @@ namespace ApplicationServiceLibrary
                 if (remote)
                 {
                     var queriedAgendaItem = await agendaItemContext.AgendaItems.Where(x => x.Id == agendaItem.Id).Select(x => x).FirstOrDefaultAsync();
-                    await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    if (queriedAgendaItem != null)
                     {
-                        queriedAgendaItem.Description = agendaItem.Description;
-                        queriedAgendaItem.End = agendaItem.End;
-                        queriedAgendaItem.IsAllDayEvent = agendaItem.IsAllDayEvent;
-                        queriedAgendaItem.IsDeleted = agendaItem.IsDeleted;
-                        queriedAgendaItem.IsOverridden = agendaItem.IsOverridden;
-                        queriedAgendaItem.Occupancy = agendaItem.Occupancy;
-                        queriedAgendaItem.Start = agendaItem.Start;
-                        queriedAgendaItem.TimeStamp = agendaItem.TimeStamp;
-                        queriedAgendaItem.Title = agendaItem.Title;
-                    });
-                    agendaItemContext.Update(queriedAgendaItem);
+                        await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                        {
+                            queriedAgendaItem.Description = agendaItem.Description;
+                            queriedAgendaItem.End = agendaItem.End;
+                            queriedAgendaItem.IsAllDayEvent = agendaItem.IsAllDayEvent;
+                            queriedAgendaItem.IsDeleted = agendaItem.IsDeleted;
+                            queriedAgendaItem.IsOverridden = agendaItem.IsOverridden;
+                            queriedAgendaItem.Occupancy = agendaItem.Occupancy;
+                            queriedAgendaItem.Start = agendaItem.Start;
+                            queriedAgendaItem.TimeStamp = agendaItem.TimeStamp;
+                            queriedAgendaItem.Title = agendaItem.Title;
+                        });
+                        agendaItemContext.Update(queriedAgendaItem);
+                    }
                 }
                 else agendaItemContext.Update(agendaItem);
                 await agendaItemContext.SaveChangesAsync();
