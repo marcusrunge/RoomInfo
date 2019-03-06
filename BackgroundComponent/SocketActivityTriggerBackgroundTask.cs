@@ -85,27 +85,7 @@ namespace BackgroundComponent
                                     if (package != null)
                                     {
                                         switch ((PayloadType)package.PayloadType)
-                                        {
-                                            case PayloadType.Occupancy:
-                                                break;
-                                            case PayloadType.Room:
-                                                break;
-                                            case PayloadType.Schedule:
-                                                break;
-                                            case PayloadType.StandardWeek:
-                                                break;
-                                            case PayloadType.RequestOccupancy:
-                                                break;
-                                            case PayloadType.RequestSchedule:
-                                                break;
-                                            case PayloadType.RequestStandardWeek:
-                                                break;
-                                            case PayloadType.IotDim:
-                                                break;
-                                            case PayloadType.AgendaItem:
-                                                break;
-                                            case PayloadType.AgendaItemId:
-                                                break;
+                                        {                                            
                                             case PayloadType.Discovery:
                                                 package = new Package()
                                                 {
@@ -127,7 +107,7 @@ namespace BackgroundComponent
                                             default:
                                                 break;
                                         }
-                                    }                                    
+                                    }
                                     await datagramSocket.CancelIOAsync();
                                     datagramSocket.TransferOwnership(socketInformation.Id);
                                 };
@@ -185,19 +165,23 @@ namespace BackgroundComponent
                                                     case PayloadType.RequestStandardWeek:
                                                         break;
                                                     case PayloadType.AgendaItem:
-                                                        var agendaItemToAdd = (AgendaItem)package.Payload;
-                                                        if (agendaItemToAdd.Id < 1)
+                                                        var payloadAgendaItem = JsonConvert.DeserializeObject<AgendaItem>(package.Payload.ToString());
+                                                        if (!payloadAgendaItem.IsDeleted && payloadAgendaItem.Id < 1)
                                                         {
-                                                            int id = await _databaseService.AddAgendaItemAsync(agendaItemToAdd);
+                                                            int id = await _databaseService.AddAgendaItemAsync(payloadAgendaItem);
                                                             package.PayloadType = (int)PayloadType.AgendaItemId;
                                                             package.Payload = id;
                                                             json = JsonConvert.SerializeObject(package);
                                                             await SendStringData(streamSocket, socketInformation.Id, json);
                                                         }
-                                                        else
+                                                        else if (payloadAgendaItem.IsDeleted && payloadAgendaItem.Id > 0)
                                                         {
-                                                            await _databaseService.UpdateAgendaItemAsync(agendaItemToAdd);
-                                                            await streamSocket.CancelIOAsync();
+                                                            await _databaseService.RemoveAgendaItemAsync(payloadAgendaItem.Id);
+                                                            streamSocket.TransferOwnership(socketInformation.Id);
+                                                        }
+                                                        else if (payloadAgendaItem.Id > 0)
+                                                        {
+                                                            await _databaseService.UpdateAgendaItemAsync(payloadAgendaItem);
                                                             streamSocket.TransferOwnership(socketInformation.Id);
                                                         }
                                                         break;
@@ -206,7 +190,7 @@ namespace BackgroundComponent
                                                         streamSocket.TransferOwnership(socketInformation.Id);
                                                         break;
                                                 }
-                                            }                                            
+                                            }
                                         }
                                         catch (Exception)
                                         {

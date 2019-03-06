@@ -104,27 +104,7 @@ namespace NetworkServiceLibrary
                     if (package != null)
                     {
                         switch ((PayloadType)package.PayloadType)
-                        {
-                            case PayloadType.Occupancy:
-                                break;
-                            case PayloadType.Room:
-                                break;
-                            case PayloadType.Schedule:
-                                break;
-                            case PayloadType.StandardWeek:
-                                break;
-                            case PayloadType.RequestOccupancy:
-                                break;
-                            case PayloadType.RequestSchedule:
-                                break;
-                            case PayloadType.RequestStandardWeek:
-                                break;
-                            case PayloadType.IotDim:
-                                break;
-                            case PayloadType.AgendaItem:
-                                break;
-                            case PayloadType.AgendaItemId:
-                                break;
+                        {                            
                             case PayloadType.Discovery:
                                 package = new Package()
                                 {
