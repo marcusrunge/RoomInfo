@@ -25,7 +25,7 @@ namespace ApplicationServiceLibrary
     public class DatabaseService : IDatabaseService
     {
         readonly ExceptionLogItemContext _exceptionLogItemContext;
-        //readonly StandardWeekContext _standardWeekContext;
+        //readonly TimespanItemContext _timespanItemContext;
         public DatabaseService()
         {
             try
@@ -49,9 +49,9 @@ namespace ApplicationServiceLibrary
 
             try
             {
-                //_standardWeekContext = new StandardWeekContext();
-                //_standardWeekContext.Database.ExecuteSqlCommand("CREATE TABLE IF NOT EXISTS StandardWeek (Id INTEGER PRIMARY KEY AUTOINCREMENT)");
-                //_standardWeekContext.Database.Migrate();
+                //_timespanItemContext = new StandardWeekContext();
+                //_timespanItemContext.Database.ExecuteSqlCommand("CREATE TABLE IF NOT EXISTS TimespanItems (Id INTEGER PRIMARY KEY AUTOINCREMENT)");
+                //_timespanItemContext.Database.Migrate();
             }
             catch (Exception e)
             {

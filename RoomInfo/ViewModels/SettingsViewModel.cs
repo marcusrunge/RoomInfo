@@ -70,6 +70,27 @@ namespace RoomInfo.ViewModels
         ObservableCollection<ExceptionLogItem> _exceptionLogItems = default(ObservableCollection<ExceptionLogItem>);
         public ObservableCollection<ExceptionLogItem> ExceptionLogItems { get => _exceptionLogItems; set { SetProperty(ref _exceptionLogItems, value); } }
 
+        ObservableCollection<TimespanItem> _monday = default(ObservableCollection<TimespanItem>);
+        public ObservableCollection<TimespanItem> Monday { get => _monday; set { SetProperty(ref _monday, value); } }
+
+        ObservableCollection<TimespanItem> _tuesday = default(ObservableCollection<TimespanItem>);
+        public ObservableCollection<TimespanItem> Tuesday { get => _tuesday; set { SetProperty(ref _tuesday, value); } }
+
+        ObservableCollection<TimespanItem> _wednesday = default(ObservableCollection<TimespanItem>);
+        public ObservableCollection<TimespanItem> Wednesday { get => _wednesday; set { SetProperty(ref _wednesday, value); } }
+
+        ObservableCollection<TimespanItem> _thursday = default(ObservableCollection<TimespanItem>);
+        public ObservableCollection<TimespanItem> Thursday { get => _thursday; set { SetProperty(ref _thursday, value); } }
+
+        ObservableCollection<TimespanItem> _friday = default(ObservableCollection<TimespanItem>);
+        public ObservableCollection<TimespanItem> Friday { get => _friday; set { SetProperty(ref _friday, value); } }
+
+        ObservableCollection<TimespanItem> _saturday = default(ObservableCollection<TimespanItem>);
+        public ObservableCollection<TimespanItem> Saturday { get => _saturday; set { SetProperty(ref _saturday, value); } }
+
+        ObservableCollection<TimespanItem> _sunday = default(ObservableCollection<TimespanItem>);
+        public ObservableCollection<TimespanItem> Sunday { get => _sunday; set { SetProperty(ref _sunday, value); } }
+
         string _tcpPort = default(string);
         public string TcpPort
         {
@@ -208,6 +229,14 @@ namespace RoomInfo.ViewModels
             if (ExceptionLogItems == null) ExceptionLogItems = new ObservableCollection<ExceptionLogItem>();
             else ExceptionLogItems.Clear();
             (await _databaseService.GetExceptionLogItemsAsync()).ForEach(x => ExceptionLogItems.Add(x));
+
+            Monday = new ObservableCollection<TimespanItem>();
+            Tuesday = new ObservableCollection<TimespanItem>();
+            Wednesday = new ObservableCollection<TimespanItem>();
+            Thursday = new ObservableCollection<TimespanItem>();
+            Friday = new ObservableCollection<TimespanItem>();
+            Saturday = new ObservableCollection<TimespanItem>();
+            Sunday = new ObservableCollection<TimespanItem>();
         }
 
         private ModelLibrary.Language LoadLanguage()
@@ -423,6 +452,42 @@ namespace RoomInfo.ViewModels
             };
             emailMessage.To.Add(new EmailRecipient("code_m@outlook.de"));
             await EmailManager.ShowComposeNewEmailAsync(emailMessage);
+        }));
+
+        private ICommand _addTimespanItemCommand;
+        public ICommand AddTimespanItemCommand => _addTimespanItemCommand ?? (_addTimespanItemCommand = new DelegateCommand<object>((param) =>
+        {
+            switch ((string)param)
+            {
+                case "Monday":
+                    break;
+                case "Tuesday":
+                    break;
+                case "Wednesday":
+                    break;
+                case "Thursday":
+                    break;
+                case "Friday":
+                    break;
+                case "Saturday":
+                    break;
+                case "Sunday":
+                    break;
+                default:
+                    break;
+            }
+        }));
+
+        private ICommand _editTimespanItemCommand;
+        public ICommand EditTimespanItemCommand => _editTimespanItemCommand ?? (_editTimespanItemCommand = new DelegateCommand<object>((param) =>
+        {
+
+        }));
+
+        private ICommand _deleteTimespanItemCommand;
+        public ICommand DeleteTimespanItemCommand => _deleteTimespanItemCommand ?? (_deleteTimespanItemCommand = new DelegateCommand<object>((param) =>
+        {
+
         }));
     }
 }

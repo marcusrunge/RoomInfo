@@ -1,19 +1,24 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Prism.Mvvm;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ModelLibrary
 {
-    public class StandardWeekContext : DbContext
+    public class TimespanItemContext : DbContext
     {
-        public DbSet<StandardWeekDay> StandardWeek { get; set; }
+        public DbSet<TimespanItem> TimespanItems { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Data Source=RoomInfo.db");
         }
     }
-    public class StandardWeekDay : BindableBase
+    public class TimespanItem : BindableBase
     {
         int _id = default(int);
         [Key]
