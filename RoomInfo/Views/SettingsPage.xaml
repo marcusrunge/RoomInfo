@@ -114,6 +114,74 @@
                     </ComboBox>
                 </StackPanel>
                 <StackPanel Margin="{StaticResource SettingsSubheaderMargin}">
+                    <TextBlock x:Name="standardWeekTextBlock" x:Uid="Settings_StandardWeek" Style="{StaticResource SubtitleTextBlockStyle}" HorizontalAlignment="Left" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock x:Uid="Settings_StandardWeek_Monday" Style="{StaticResource BodyTextStyle}" />
+                        <TextBlock Grid.Column="1" x:Uid="Settings_StandardWeek_Tuesday" Style="{StaticResource BodyTextStyle}" />
+                        <TextBlock Grid.Column="2" x:Uid="Settings_StandardWeek_Wednesday" Style="{StaticResource BodyTextStyle}" />
+                        <TextBlock Grid.Column="3" x:Uid="Settings_StandardWeek_Thursday" Style="{StaticResource BodyTextStyle}" />
+                        <TextBlock Grid.Column="4" x:Uid="Settings_StandardWeek_Friday" Style="{StaticResource BodyTextStyle}" />
+                        <TextBlock Grid.Column="5" x:Uid="Settings_StandardWeek_Saturday" Style="{StaticResource BodyTextStyle}" />
+                        <TextBlock Grid.Column="6" x:Uid="Settings_StandardWeek_Sunday" Style="{StaticResource BodyTextStyle}" />
+                        <Button Grid.Row="1" HorizontalAlignment="Stretch">
+                            <Button.Content>
+                                <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch">
+                            <Button.Content>
+                                <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Grid.Column="2" Grid.Row="1" HorizontalAlignment="Stretch">
+                            <Button.Content>
+                                <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Grid.Column="3" Grid.Row="1" HorizontalAlignment="Stretch">
+                            <Button.Content>
+                                <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Grid.Column="4" Grid.Row="1" HorizontalAlignment="Stretch">
+                            <Button.Content>
+                                <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Grid.Column="5" Grid.Row="1" HorizontalAlignment="Stretch">
+                            <Button.Content>
+                                <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Button.Content>
+                        </Button>
+                        <Button Grid.Column="6" Grid.Row="1" HorizontalAlignment="Stretch">
+                            <Button.Content>
+                                <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Button.Content>
+                        </Button>
+                        <ListView Grid.Row="2"></ListView>
+                        <ListView Grid.Column="1" Grid.Row="2"></ListView>
+                        <ListView Grid.Column="2" Grid.Row="2"></ListView>
+                        <ListView Grid.Column="3" Grid.Row="2"></ListView>
+                        <ListView Grid.Column="4" Grid.Row="2"></ListView>
+                        <ListView Grid.Column="5" Grid.Row="2"></ListView>
+                        <ListView Grid.Column="6" Grid.Row="2"></ListView>
+                    </Grid>
+                </StackPanel>
+                <StackPanel Margin="{StaticResource SettingsSubheaderMargin}">
                     <TextBlock x:Uid="Settings_RoomSettings" Style="{StaticResource SubtitleTextBlockStyle}" />
                     <TextBlock x:Uid="Settings_RoomName" Style="{StaticResource BodyTextStyle}"/>
                     <TextBox Grid.Column="1" x:Uid="Settings_RoomNamePlaceHolder" Text="{Binding RoomName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="{Binding Path=ActualWidth, ElementName=standardOccupancyTextBlock}" HorizontalAlignment="Left"/>
