@@ -27,7 +27,9 @@ using Windows.UI.Core;
 using Windows.Storage.Pickers;
 using System.Text;
 using Windows.ApplicationModel.Email;
-using System.Net.Mail;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.ApplicationModel.Resources;
 
 namespace RoomInfo.ViewModels
 {
@@ -91,6 +93,12 @@ namespace RoomInfo.ViewModels
         ObservableCollection<TimespanItem> _sunday = default(ObservableCollection<TimespanItem>);
         public ObservableCollection<TimespanItem> Sunday { get => _sunday; set { SetProperty(ref _sunday, value); } }
 
+        bool _isFlyoutOpen = default(bool);
+        public bool IsFlyoutOpen { get => _isFlyoutOpen; set { SetProperty(ref _isFlyoutOpen, value); } }
+
+        string _dayOfWeek = default(string);
+        public string DayOfWeek { get => _dayOfWeek; set { SetProperty(ref _dayOfWeek, value); } }
+
         string _tcpPort = default(string);
         public string TcpPort
         {
@@ -123,8 +131,8 @@ namespace RoomInfo.ViewModels
         ObservableCollection<FileItem> _fileItems = default(ObservableCollection<FileItem>);
         public ObservableCollection<FileItem> FileItems { get => _fileItems; set { SetProperty(ref _fileItems, value); } }
 
-        string _reservedProperty = default(string);
-        public string ReservedProperty { get => _reservedProperty; set { SetProperty(ref _reservedProperty, value); } }
+        TimespanItem _timespanItem = default(TimespanItem);
+        public TimespanItem TimespanItem { get => _timespanItem; set { SetProperty(ref _timespanItem, value); } }
 
         ModelLibrary.Language _language = default(ModelLibrary.Language);
         public ModelLibrary.Language Language { get => _language; set { SetProperty(ref _language, value); } }
@@ -457,21 +465,37 @@ namespace RoomInfo.ViewModels
         private ICommand _addTimespanItemCommand;
         public ICommand AddTimespanItemCommand => _addTimespanItemCommand ?? (_addTimespanItemCommand = new DelegateCommand<object>((param) =>
         {
+            var resourceLoader = ResourceLoader.GetForCurrentView();            
+            TimespanItem = new TimespanItem() { TimeStamp = DateTimeOffset.Now.ToUnixTimeMilliseconds() };
             switch ((string)param)
             {
                 case "Monday":
+                    DayOfWeek = resourceLoader.GetString("Settings_StandardWeek_Monday/Text");
+                    TimespanItem.DayOfWeek = (int)System.DayOfWeek.Monday;
                     break;
                 case "Tuesday":
+                    DayOfWeek = resourceLoader.GetString("Settings_StandardWeek_Tuesday/Text");
+                    TimespanItem.DayOfWeek = (int)System.DayOfWeek.Tuesday;
                     break;
                 case "Wednesday":
+                    DayOfWeek = resourceLoader.GetString("Settings_StandardWeek_Wednesday/Text");
+                    TimespanItem.DayOfWeek = (int)System.DayOfWeek.Wednesday;
                     break;
                 case "Thursday":
+                    DayOfWeek = resourceLoader.GetString("Settings_StandardWeek_Thursday/Text");
+                    TimespanItem.DayOfWeek = (int)System.DayOfWeek.Thursday;
                     break;
                 case "Friday":
+                    DayOfWeek = resourceLoader.GetString("Settings_StandardWeek_Friday/Text");
+                    TimespanItem.DayOfWeek = (int)System.DayOfWeek.Friday;
                     break;
                 case "Saturday":
+                    DayOfWeek = resourceLoader.GetString("Settings_StandardWeek_Saturday/Text");
+                    TimespanItem.DayOfWeek = (int)System.DayOfWeek.Saturday;
                     break;
                 case "Sunday":
+                    DayOfWeek = resourceLoader.GetString("Settings_StandardWeek_Sunday/Text");
+                    TimespanItem.DayOfWeek = (int)System.DayOfWeek.Sunday;
                     break;
                 default:
                     break;
@@ -486,6 +510,19 @@ namespace RoomInfo.ViewModels
 
         private ICommand _deleteTimespanItemCommand;
         public ICommand DeleteTimespanItemCommand => _deleteTimespanItemCommand ?? (_deleteTimespanItemCommand = new DelegateCommand<object>((param) =>
+        {
+
+        }));
+
+        private ICommand _hideTimespanItemCommand;
+        public ICommand HideTimespanItemCommand => _hideTimespanItemCommand ?? (_hideTimespanItemCommand = new DelegateCommand<object>((param) =>
+        {
+            (((param as Grid).Parent as FlyoutPresenter).Parent as Popup).IsOpen = false;
+            IsFlyoutOpen = false;
+        }));
+
+        private ICommand _addOrUpdateTimespanItemCommand;
+        public ICommand AddOrUpdateTimespanItemCommand => _addOrUpdateTimespanItemCommand ?? (_addOrUpdateTimespanItemCommand = new DelegateCommand<object>(async (param) =>
         {
 
         }));

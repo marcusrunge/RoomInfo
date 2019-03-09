@@ -1,6 +1,6 @@
 ﻿
 using RoomInfo.ViewModels;
-
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace RoomInfo.Views
@@ -13,6 +13,11 @@ namespace RoomInfo.Views
         public SettingsPage()
         {
             InitializeComponent();
+        }
+
+        private void flyoutGrid_Loading(FrameworkElement sender, object args)
+        {
+            sender.DataContext = DataContext;
         }
     }
 }

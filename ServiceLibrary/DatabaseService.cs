@@ -21,11 +21,17 @@ namespace ApplicationServiceLibrary
         Task<List<ExceptionLogItem>> GetExceptionLogItemsAsync();
         Task<int> AddExceptionLogItem(ExceptionLogItem exceptionLogItem);
         Task RemoveExceptionLogItemsAsync();
+        Task<int> AddTimespanItemAsync(TimespanItem timespanItem);
+        Task RemoveTimespanItemAsync(AgendaItem timespanItem);
+        Task RemoveTimespanItemAsync(int id);
+        Task UpdateTimespanItemAsync(AgendaItem timespanItem, bool remote = false);
+        Task UpdateTimespanItemsAsync(List<AgendaItem> timespanItems, bool remote = false);
+        Task<List<TimespanItem>> GetTimespanItemsAsync();
     }
     public class DatabaseService : IDatabaseService
     {
         readonly ExceptionLogItemContext _exceptionLogItemContext;
-        //readonly TimespanItemContext _timespanItemContext;
+        readonly TimespanItemContext _timespanItemContext;
         public DatabaseService()
         {
             try
@@ -49,9 +55,9 @@ namespace ApplicationServiceLibrary
 
             try
             {
-                //_timespanItemContext = new StandardWeekContext();
-                //_timespanItemContext.Database.ExecuteSqlCommand("CREATE TABLE IF NOT EXISTS TimespanItems (Id INTEGER PRIMARY KEY AUTOINCREMENT)");
-                //_timespanItemContext.Database.Migrate();
+                _timespanItemContext = new TimespanItemContext();
+                _timespanItemContext.Database.ExecuteSqlCommand("CREATE TABLE IF NOT EXISTS TimespanItems (Id INTEGER PRIMARY KEY AUTOINCREMENT, DayOfWeek INTEGER, Start NUMERIC , End NUMERIC, Occupancy INTEGER, TimeStamp NUMERIC, IsDeleted INTEGER)");
+                _timespanItemContext.Database.Migrate();
             }
             catch (Exception e)
             {
@@ -259,6 +265,36 @@ namespace ApplicationServiceLibrary
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
             }
+        }
+
+        public Task<int> AddTimespanItemAsync(TimespanItem timespanItem)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveTimespanItemAsync(AgendaItem timespanItem)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveTimespanItemAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateTimespanItemAsync(AgendaItem timespanItem, bool remote = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateTimespanItemsAsync(List<AgendaItem> timespanItems, bool remote = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<TimespanItem>> GetTimespanItemsAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }
