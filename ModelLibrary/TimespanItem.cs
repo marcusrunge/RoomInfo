@@ -35,11 +35,11 @@ namespace ModelLibrary
         int _dayOfWeek = default(int);
         public int DayOfWeek { get => _dayOfWeek; set { SetProperty(ref _dayOfWeek, value); } }
 
-        DateTimeOffset _start = default(DateTimeOffset);
-        public DateTimeOffset Start { get => _start; set { SetProperty(ref _start, value); } }
+        TimeSpan _start = default(TimeSpan);
+        public TimeSpan Start { get => _start; set { SetProperty(ref _start, value); } }
 
-        DateTimeOffset _end = default(DateTimeOffset);
-        public DateTimeOffset End { get => _end; set { SetProperty(ref _end, value); } }
+        TimeSpan _end = default(TimeSpan);
+        public TimeSpan End { get => _end; set { SetProperty(ref _end, value); } }
 
         int _occupancy = default(int);
         public int Occupancy { get => _occupancy; set { SetProperty(ref _occupancy, value); } }

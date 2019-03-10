@@ -245,6 +245,44 @@ namespace RoomInfo.ViewModels
             Friday = new ObservableCollection<TimespanItem>();
             Saturday = new ObservableCollection<TimespanItem>();
             Sunday = new ObservableCollection<TimespanItem>();
+
+            var timespanItems = await _databaseService.GetTimespanItemsAsync();
+            foreach (var timespanItem in timespanItems)
+            {
+                switch ((System.DayOfWeek)timespanItem.DayOfWeek)
+                {
+                    case System.DayOfWeek.Friday:
+                        Friday.Add(timespanItem);
+                        break;
+                    case System.DayOfWeek.Monday:
+                        Monday.Add(timespanItem);
+                        break;
+                    case System.DayOfWeek.Saturday:
+                        Saturday.Add(timespanItem);
+                        break;
+                    case System.DayOfWeek.Sunday:
+                        Sunday.Add(timespanItem);
+                        break;
+                    case System.DayOfWeek.Thursday:
+                        Thursday.Add(timespanItem);
+                        break;
+                    case System.DayOfWeek.Tuesday:
+                        Tuesday.Add(timespanItem);
+                        break;
+                    case System.DayOfWeek.Wednesday:
+                        Wednesday.Add(timespanItem);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            Friday.OrderByDescending(x => x.Start);
+            Monday.OrderByDescending(x => x.Start);
+            Saturday.OrderByDescending(x => x.Start);
+            Sunday.OrderByDescending(x => x.Start);
+            Thursday.OrderByDescending(x => x.Start);
+            Tuesday.OrderByDescending(x => x.Start);
+            Wednesday.OrderByDescending(x => x.Start);
         }
 
         private ModelLibrary.Language LoadLanguage()
@@ -465,7 +503,7 @@ namespace RoomInfo.ViewModels
         private ICommand _addTimespanItemCommand;
         public ICommand AddTimespanItemCommand => _addTimespanItemCommand ?? (_addTimespanItemCommand = new DelegateCommand<object>((param) =>
         {
-            var resourceLoader = ResourceLoader.GetForCurrentView();            
+            var resourceLoader = ResourceLoader.GetForCurrentView();
             TimespanItem = new TimespanItem() { TimeStamp = DateTimeOffset.Now.ToUnixTimeMilliseconds() };
             switch ((string)param)
             {
@@ -523,6 +561,54 @@ namespace RoomInfo.ViewModels
 
         private ICommand _addOrUpdateTimespanItemCommand;
         public ICommand AddOrUpdateTimespanItemCommand => _addOrUpdateTimespanItemCommand ?? (_addOrUpdateTimespanItemCommand = new DelegateCommand<object>(async (param) =>
+        {
+            if (TimespanItem.Id < 1)
+            {
+                TimespanItem.Id = await _databaseService.AddTimespanItemAsync(TimespanItem);
+                switch ((System.DayOfWeek)TimespanItem.DayOfWeek)
+                {
+                    case System.DayOfWeek.Friday:
+                        Friday.Add(TimespanItem);
+                        Friday.OrderByDescending(x => x.Start);
+                        break;
+                    case System.DayOfWeek.Monday:
+                        Monday.Add(TimespanItem);
+                        Monday.OrderByDescending(x => x.Start);
+                        break;
+                    case System.DayOfWeek.Saturday:
+                        Saturday.Add(TimespanItem);
+                        Saturday.OrderByDescending(x => x.Start);
+                        break;
+                    case System.DayOfWeek.Sunday:
+                        Sunday.Add(TimespanItem);
+                        Sunday.OrderByDescending(x => x.Start);
+                        break;
+                    case System.DayOfWeek.Thursday:
+                        Thursday.Add(TimespanItem);
+                        Thursday.OrderByDescending(x => x.Start);
+                        break;
+                    case System.DayOfWeek.Tuesday:
+                        Tuesday.Add(TimespanItem);
+                        Tuesday.OrderByDescending(x => x.Start);
+                        break;
+                    case System.DayOfWeek.Wednesday:
+                        Wednesday.Add(TimespanItem);
+                        Wednesday.OrderByDescending(x => x.Start);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                await _databaseService.UpdateTimespanItemAsync(TimespanItem);
+            }
+            (((param as Grid).Parent as FlyoutPresenter).Parent as Popup).IsOpen = false;
+            IsFlyoutOpen = false;
+        }));
+
+        private ICommand _validateTimeCommand;
+        public ICommand ValidateTimeCommand => _validateTimeCommand ?? (_validateTimeCommand = new DelegateCommand<object>((param) =>
         {
 
         }));

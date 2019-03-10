@@ -71,6 +71,13 @@
                 <Button x:Name="saveTimespanItemButton" Grid.Row="4" HorizontalAlignment="Right" x:Uid="Schedule_SaveReservationButton" Command="{Binding AddOrUpdateTimespanItemCommand}" CommandParameter="{Binding ElementName=flyoutGrid}"/>
             </Grid>
         </Flyout>
+        <DataTemplate x:Name="TimespanItem">
+            <StackPanel>
+                <TextBlock Text="{Binding Start}"/>
+                <TextBlock Text="{Binding End}"/>
+                <TextBlock Text="{Binding Occupancy}"/>
+            </StackPanel>
+        </DataTemplate>
     </Page.Resources>
 
     <Grid Margin="{StaticResource MediumLeftRightMargin}">
@@ -204,13 +211,13 @@
                                 <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Button.Content>
                         </Button>
-                        <ListView Grid.Row="2" ItemsSource="{Binding Monday}"></ListView>
-                        <ListView Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Monday}"></ListView>
-                        <ListView Grid.Column="2" Grid.Row="2" ItemsSource="{Binding Tuesday}"></ListView>
-                        <ListView Grid.Column="3" Grid.Row="2" ItemsSource="{Binding Wednesday}"></ListView>
-                        <ListView Grid.Column="4" Grid.Row="2" ItemsSource="{Binding Thursday}"></ListView>
-                        <ListView Grid.Column="5" Grid.Row="2" ItemsSource="{Binding Friday}"></ListView>
-                        <ListView Grid.Column="6" Grid.Row="2" ItemsSource="{Binding Saturday}"></ListView>
+                        <ListView Grid.Row="2" ItemsSource="{Binding Monday}" ItemTemplate="{StaticResource TimespanItem}"/>
+                        <ListView Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Tuesday}" ItemTemplate="{StaticResource TimespanItem}"></ListView>
+                        <ListView Grid.Column="2" Grid.Row="2" ItemsSource="{Binding Wednesday}" ItemTemplate="{StaticResource TimespanItem}"/>
+                        <ListView Grid.Column="3" Grid.Row="2" ItemsSource="{Binding Thursday}" ItemTemplate="{StaticResource TimespanItem}"/>
+                        <ListView Grid.Column="4" Grid.Row="2" ItemsSource="{Binding Friday}" ItemTemplate="{StaticResource TimespanItem}"/>
+                        <ListView Grid.Column="5" Grid.Row="2" ItemsSource="{Binding Saturday}" ItemTemplate="{StaticResource TimespanItem}"/>
+                        <ListView Grid.Column="6" Grid.Row="2" ItemsSource="{Binding Sunday}" ItemTemplate="{StaticResource TimespanItem}"/>
                     </Grid>
                 </StackPanel>
                 <StackPanel Margin="{StaticResource SettingsSubheaderMargin}">

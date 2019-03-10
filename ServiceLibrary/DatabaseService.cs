@@ -24,8 +24,8 @@ namespace ApplicationServiceLibrary
         Task<int> AddTimespanItemAsync(TimespanItem timespanItem);
         Task RemoveTimespanItemAsync(AgendaItem timespanItem);
         Task RemoveTimespanItemAsync(int id);
-        Task UpdateTimespanItemAsync(AgendaItem timespanItem, bool remote = false);
-        Task UpdateTimespanItemsAsync(List<AgendaItem> timespanItems, bool remote = false);
+        Task UpdateTimespanItemAsync(TimespanItem timespanItem, bool remote = false);
+        Task UpdateTimespanItemsAsync(List<TimespanItem> timespanItems, bool remote = false);
         Task<List<TimespanItem>> GetTimespanItemsAsync();
     }
     public class DatabaseService : IDatabaseService
@@ -267,9 +267,20 @@ namespace ApplicationServiceLibrary
             }
         }
 
-        public Task<int> AddTimespanItemAsync(TimespanItem timespanItem)
+        public async Task<int> AddTimespanItemAsync(TimespanItem timespanItem)
         {
-            throw new NotImplementedException();
+            try
+            {
+                TimespanItemContext timespanItemContext = new TimespanItemContext();
+                timespanItem = (await timespanItemContext.AddAsync(timespanItem)).Entity;
+                await timespanItemContext.SaveChangesAsync();
+                return timespanItem.Id;
+            }
+            catch (Exception e)
+            {
+                if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
+                return int.MinValue;
+            }
         }
 
         public Task RemoveTimespanItemAsync(AgendaItem timespanItem)
@@ -282,19 +293,28 @@ namespace ApplicationServiceLibrary
             throw new NotImplementedException();
         }
 
-        public Task UpdateTimespanItemAsync(AgendaItem timespanItem, bool remote = false)
+        public Task UpdateTimespanItemAsync(TimespanItem timespanItem, bool remote = false)
         {
             throw new NotImplementedException();
         }
 
-        public Task UpdateTimespanItemsAsync(List<AgendaItem> timespanItems, bool remote = false)
+        public Task UpdateTimespanItemsAsync(List<TimespanItem> timespanItems, bool remote = false)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<TimespanItem>> GetTimespanItemsAsync()
+        public async Task<List<TimespanItem>> GetTimespanItemsAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                TimespanItemContext timespanItemContext = new TimespanItemContext();
+                return await timespanItemContext.TimespanItems.ToListAsync();
+            }
+            catch (Exception e)
+            {
+                if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
+                return new List<TimespanItem>();
+            }
         }
     }
 }
