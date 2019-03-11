@@ -137,6 +137,9 @@ namespace RoomInfo.ViewModels
         ModelLibrary.Language _language = default(ModelLibrary.Language);
         public ModelLibrary.Language Language { get => _language; set { SetProperty(ref _language, value); } }
 
+        FrameworkElement _flyoutParent = default(FrameworkElement);
+        public FrameworkElement FlyoutParent { get => _flyoutParent; set { SetProperty(ref _flyoutParent, value); } }
+
         public SettingsViewModel(IApplicationDataService applicationDataService, IIotService iotService, INavigationService navigationService, IEventAggregator eventAggregator, IDatabaseService databaseService)
         {
             _applicationDataService = applicationDataService;
@@ -249,6 +252,7 @@ namespace RoomInfo.ViewModels
             var timespanItems = await _databaseService.GetTimespanItemsAsync();
             foreach (var timespanItem in timespanItems)
             {
+                timespanItem.EventAggregator = _eventAggregator;
                 switch ((System.DayOfWeek)timespanItem.DayOfWeek)
                 {
                     case System.DayOfWeek.Friday:
@@ -283,6 +287,45 @@ namespace RoomInfo.ViewModels
             Thursday.OrderByDescending(x => x.Start);
             Tuesday.OrderByDescending(x => x.Start);
             Wednesday.OrderByDescending(x => x.Start);
+            _eventAggregator.GetEvent<UpdateTimespanItemEvent>().Subscribe(x =>
+            {
+                TimespanItem = x;
+                IsFlyoutOpen = true;
+            });
+            _eventAggregator.GetEvent<GotFocusEvent>().Subscribe(x =>
+            {
+                FlyoutParent = x;
+            });
+            _eventAggregator.GetEvent<DeleteTimespanItemEvent>().Subscribe(x =>
+            {
+                _databaseService.RemoveTimespanItemAsync(x as TimespanItem);
+                switch ((System.DayOfWeek)(x as TimespanItem).DayOfWeek)
+                {
+                    case System.DayOfWeek.Friday:
+                        Friday.Remove(x as TimespanItem);
+                        break;
+                    case System.DayOfWeek.Monday:
+                        Monday.Remove(x as TimespanItem);
+                        break;
+                    case System.DayOfWeek.Saturday:
+                        Saturday.Remove(x as TimespanItem);
+                        break;
+                    case System.DayOfWeek.Sunday:
+                        Sunday.Remove(x as TimespanItem);
+                        break;
+                    case System.DayOfWeek.Thursday:
+                        Thursday.Remove(x as TimespanItem);
+                        break;
+                    case System.DayOfWeek.Tuesday:
+                        Tuesday.Remove(x as TimespanItem);
+                        break;
+                    case System.DayOfWeek.Wednesday:
+                        Wednesday.Remove(x as TimespanItem);
+                        break;
+                    default:
+                        break;
+                }
+            });
         }
 
         private ModelLibrary.Language LoadLanguage()
@@ -466,7 +509,7 @@ namespace RoomInfo.ViewModels
             else e.Handled = true;
         }
 
-        public void Flyout_Closing(Windows.UI.Xaml.Controls.Primitives.FlyoutBase sender, Windows.UI.Xaml.Controls.Primitives.FlyoutBaseClosingEventArgs args)
+        public void Flyout_Closing(FlyoutBase sender, Windows.UI.Xaml.Controls.Primitives.FlyoutBaseClosingEventArgs args)
         {
             _eventAggregator.GetEvent<CollapseLowerGridEvent>().Publish();
         }
@@ -504,7 +547,7 @@ namespace RoomInfo.ViewModels
         public ICommand AddTimespanItemCommand => _addTimespanItemCommand ?? (_addTimespanItemCommand = new DelegateCommand<object>((param) =>
         {
             var resourceLoader = ResourceLoader.GetForCurrentView();
-            TimespanItem = new TimespanItem() { TimeStamp = DateTimeOffset.Now.ToUnixTimeMilliseconds() };
+            TimespanItem = new TimespanItem() { TimeStamp = DateTimeOffset.Now.ToUnixTimeMilliseconds(), EventAggregator = _eventAggregator };
             switch ((string)param)
             {
                 case "Monday":
@@ -540,17 +583,17 @@ namespace RoomInfo.ViewModels
             }
         }));
 
-        private ICommand _editTimespanItemCommand;
-        public ICommand EditTimespanItemCommand => _editTimespanItemCommand ?? (_editTimespanItemCommand = new DelegateCommand<object>((param) =>
-        {
+        //private ICommand _editTimespanItemCommand;
+        //public ICommand EditTimespanItemCommand => _editTimespanItemCommand ?? (_editTimespanItemCommand = new DelegateCommand<object>((param) =>
+        //{
 
-        }));
+        //}));
 
-        private ICommand _deleteTimespanItemCommand;
-        public ICommand DeleteTimespanItemCommand => _deleteTimespanItemCommand ?? (_deleteTimespanItemCommand = new DelegateCommand<object>((param) =>
-        {
+        //private ICommand _deleteTimespanItemCommand;
+        //public ICommand DeleteTimespanItemCommand => _deleteTimespanItemCommand ?? (_deleteTimespanItemCommand = new DelegateCommand<object>((param) =>
+        //{
 
-        }));
+        //}));
 
         private ICommand _hideTimespanItemCommand;
         public ICommand HideTimespanItemCommand => _hideTimespanItemCommand ?? (_hideTimespanItemCommand = new DelegateCommand<object>((param) =>

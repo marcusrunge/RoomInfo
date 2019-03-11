@@ -78,5 +78,13 @@ namespace ModelLibrary
         {
             return ((IComparable)Start).CompareTo(((TimespanItem)obj).Start);
         }
+
+        private ICommand _relayGotFocusCommand;
+        [JsonIgnore]
+        [NotMapped]
+        public ICommand RelayGotFocusCommand => _relayGotFocusCommand ?? (_relayGotFocusCommand = new DelegateCommand<object>((param) =>
+        {
+            _eventAggregator.GetEvent<GotFocusEvent>().Publish(param as FrameworkElement);
+        }));
     }
 }

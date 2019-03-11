@@ -72,7 +72,19 @@
             </Grid>
         </Flyout>
         <DataTemplate x:Name="TimespanItem">
-            <StackPanel>
+            <StackPanel x:Name="dataTemplateStackPanel">
+                <FlyoutBase.AttachedFlyout>
+                <MenuFlyout x:Name="timespanItemFlyout">
+                        <MenuFlyoutItem x:Uid="Schedule_AgendaItemFlyoutEdit" Command="{Binding UpdateTimespanItemCommand}" CommandParameter="{Binding ElementName=timespanItemFlyout}" ContextFlyout="{StaticResource TimespanFlyout}" />
+                    <MenuFlyoutItem x:Uid="Schedule_AgendaItemFlyoutDelete" Command="{Binding DeleteTimespanItemCommand}" CommandParameter="{Binding}"/>
+                </MenuFlyout>
+                </FlyoutBase.AttachedFlyout>
+                <interactivity:Interaction.Behaviors>
+                    <core:EventTriggerBehavior EventName="RightTapped">
+                        <core:InvokeCommandAction Command="{Binding RelayGotFocusCommand}" CommandParameter="{Binding ElementName=dataTemplateStackPanel}"/>
+                        <core:InvokeCommandAction Command="{Binding ShowAttachedFlyoutCommand}" CommandParameter="{Binding ElementName=dataTemplateStackPanel}"/>
+                    </core:EventTriggerBehavior>                    
+                </interactivity:Interaction.Behaviors>
                 <TextBlock Text="{Binding Start}"/>
                 <TextBlock Text="{Binding End}"/>
                 <TextBlock Text="{Binding Occupancy}"/>

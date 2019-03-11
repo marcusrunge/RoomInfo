@@ -1,4 +1,5 @@
 ﻿using Prism.Events;
+using Windows.UI.Xaml;
 
 namespace ModelLibrary
 {
@@ -39,6 +40,9 @@ namespace ModelLibrary
     {
     }
     public class DeleteTimespanItemEvent : PubSubEvent<object>
+    {
+    }
+    public class GotFocusEvent : PubSubEvent<FrameworkElement>
     {
     }
 }
