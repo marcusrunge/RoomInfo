@@ -36,7 +36,7 @@ namespace ModelLibrary
     public class RemoteAgendaItemDeletedEvent : PubSubEvent<int>
     {
     }
-    public class UpdateTimespanItemEvent : PubSubEvent<TimespanItem>
+    public class UpdateTimespanItemEvent : PubSubEvent<TimeSpanItem>
     {
     }
     public class DeleteTimespanItemEvent : PubSubEvent<object>

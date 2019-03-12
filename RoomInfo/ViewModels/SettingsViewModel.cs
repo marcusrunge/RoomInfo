@@ -72,26 +72,26 @@ namespace RoomInfo.ViewModels
         ObservableCollection<ExceptionLogItem> _exceptionLogItems = default(ObservableCollection<ExceptionLogItem>);
         public ObservableCollection<ExceptionLogItem> ExceptionLogItems { get => _exceptionLogItems; set { SetProperty(ref _exceptionLogItems, value); } }
 
-        ObservableCollection<TimespanItem> _monday = default(ObservableCollection<TimespanItem>);
-        public ObservableCollection<TimespanItem> Monday { get => _monday; set { SetProperty(ref _monday, value); } }
+        ObservableCollection<TimeSpanItem> _monday = default(ObservableCollection<TimeSpanItem>);
+        public ObservableCollection<TimeSpanItem> Monday { get => _monday; set { SetProperty(ref _monday, value); } }
 
-        ObservableCollection<TimespanItem> _tuesday = default(ObservableCollection<TimespanItem>);
-        public ObservableCollection<TimespanItem> Tuesday { get => _tuesday; set { SetProperty(ref _tuesday, value); } }
+        ObservableCollection<TimeSpanItem> _tuesday = default(ObservableCollection<TimeSpanItem>);
+        public ObservableCollection<TimeSpanItem> Tuesday { get => _tuesday; set { SetProperty(ref _tuesday, value); } }
 
-        ObservableCollection<TimespanItem> _wednesday = default(ObservableCollection<TimespanItem>);
-        public ObservableCollection<TimespanItem> Wednesday { get => _wednesday; set { SetProperty(ref _wednesday, value); } }
+        ObservableCollection<TimeSpanItem> _wednesday = default(ObservableCollection<TimeSpanItem>);
+        public ObservableCollection<TimeSpanItem> Wednesday { get => _wednesday; set { SetProperty(ref _wednesday, value); } }
 
-        ObservableCollection<TimespanItem> _thursday = default(ObservableCollection<TimespanItem>);
-        public ObservableCollection<TimespanItem> Thursday { get => _thursday; set { SetProperty(ref _thursday, value); } }
+        ObservableCollection<TimeSpanItem> _thursday = default(ObservableCollection<TimeSpanItem>);
+        public ObservableCollection<TimeSpanItem> Thursday { get => _thursday; set { SetProperty(ref _thursday, value); } }
 
-        ObservableCollection<TimespanItem> _friday = default(ObservableCollection<TimespanItem>);
-        public ObservableCollection<TimespanItem> Friday { get => _friday; set { SetProperty(ref _friday, value); } }
+        ObservableCollection<TimeSpanItem> _friday = default(ObservableCollection<TimeSpanItem>);
+        public ObservableCollection<TimeSpanItem> Friday { get => _friday; set { SetProperty(ref _friday, value); } }
 
-        ObservableCollection<TimespanItem> _saturday = default(ObservableCollection<TimespanItem>);
-        public ObservableCollection<TimespanItem> Saturday { get => _saturday; set { SetProperty(ref _saturday, value); } }
+        ObservableCollection<TimeSpanItem> _saturday = default(ObservableCollection<TimeSpanItem>);
+        public ObservableCollection<TimeSpanItem> Saturday { get => _saturday; set { SetProperty(ref _saturday, value); } }
 
-        ObservableCollection<TimespanItem> _sunday = default(ObservableCollection<TimespanItem>);
-        public ObservableCollection<TimespanItem> Sunday { get => _sunday; set { SetProperty(ref _sunday, value); } }
+        ObservableCollection<TimeSpanItem> _sunday = default(ObservableCollection<TimeSpanItem>);
+        public ObservableCollection<TimeSpanItem> Sunday { get => _sunday; set { SetProperty(ref _sunday, value); } }
 
         bool _isFlyoutOpen = default(bool);
         public bool IsFlyoutOpen { get => _isFlyoutOpen; set { SetProperty(ref _isFlyoutOpen, value); } }
@@ -131,14 +131,17 @@ namespace RoomInfo.ViewModels
         ObservableCollection<FileItem> _fileItems = default(ObservableCollection<FileItem>);
         public ObservableCollection<FileItem> FileItems { get => _fileItems; set { SetProperty(ref _fileItems, value); } }
 
-        TimespanItem _timespanItem = default(TimespanItem);
-        public TimespanItem TimespanItem { get => _timespanItem; set { SetProperty(ref _timespanItem, value); } }
+        TimeSpanItem _timespanItem = default(TimeSpanItem);
+        public TimeSpanItem TimespanItem { get => _timespanItem; set { SetProperty(ref _timespanItem, value); } }
 
         ModelLibrary.Language _language = default(ModelLibrary.Language);
         public ModelLibrary.Language Language { get => _language; set { SetProperty(ref _language, value); } }
 
         FrameworkElement _flyoutParent = default(FrameworkElement);
         public FrameworkElement FlyoutParent { get => _flyoutParent; set { SetProperty(ref _flyoutParent, value); } }
+
+        bool _isSaveButtonEnabled = default(bool);
+        public bool IsSaveButtonEnabled { get => _isSaveButtonEnabled; set { SetProperty(ref _isSaveButtonEnabled, value); } }
 
         public SettingsViewModel(IApplicationDataService applicationDataService, IIotService iotService, INavigationService navigationService, IEventAggregator eventAggregator, IDatabaseService databaseService)
         {
@@ -178,7 +181,7 @@ namespace RoomInfo.ViewModels
 
         public override async void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
         {
-            base.OnNavigatedTo(e, viewModelState);
+            base.OnNavigatedTo(e, viewModelState);            
 
             VersionDescription = GetVersionDescription();
             SelectedComboBoxIndex = _applicationDataService.GetSetting<int>("StandardOccupancy");
@@ -241,15 +244,15 @@ namespace RoomInfo.ViewModels
             else ExceptionLogItems.Clear();
             (await _databaseService.GetExceptionLogItemsAsync()).ForEach(x => ExceptionLogItems.Add(x));
 
-            Monday = new ObservableCollection<TimespanItem>();
-            Tuesday = new ObservableCollection<TimespanItem>();
-            Wednesday = new ObservableCollection<TimespanItem>();
-            Thursday = new ObservableCollection<TimespanItem>();
-            Friday = new ObservableCollection<TimespanItem>();
-            Saturday = new ObservableCollection<TimespanItem>();
-            Sunday = new ObservableCollection<TimespanItem>();
+            Monday = new ObservableCollection<TimeSpanItem>();
+            Tuesday = new ObservableCollection<TimeSpanItem>();
+            Wednesday = new ObservableCollection<TimeSpanItem>();
+            Thursday = new ObservableCollection<TimeSpanItem>();
+            Friday = new ObservableCollection<TimeSpanItem>();
+            Saturday = new ObservableCollection<TimeSpanItem>();
+            Sunday = new ObservableCollection<TimeSpanItem>();
 
-            var timespanItems = await _databaseService.GetTimespanItemsAsync();
+            var timespanItems = await _databaseService.GetTimeSpanItemsAsync();
             foreach (var timespanItem in timespanItems)
             {
                 timespanItem.EventAggregator = _eventAggregator;
@@ -289,6 +292,7 @@ namespace RoomInfo.ViewModels
             Wednesday.OrderByDescending(x => x.Start);
             _eventAggregator.GetEvent<UpdateTimespanItemEvent>().Subscribe(x =>
             {
+                IsSaveButtonEnabled = true;
                 TimespanItem = x;
                 IsFlyoutOpen = true;
             });
@@ -298,34 +302,35 @@ namespace RoomInfo.ViewModels
             });
             _eventAggregator.GetEvent<DeleteTimespanItemEvent>().Subscribe(x =>
             {
-                _databaseService.RemoveTimespanItemAsync(x as TimespanItem);
-                switch ((System.DayOfWeek)(x as TimespanItem).DayOfWeek)
+                _databaseService.RemoveTimeSpanItemAsync(x as TimeSpanItem);
+                switch ((System.DayOfWeek)(x as TimeSpanItem).DayOfWeek)
                 {
                     case System.DayOfWeek.Friday:
-                        Friday.Remove(x as TimespanItem);
+                        Friday.Remove(x as TimeSpanItem);
                         break;
                     case System.DayOfWeek.Monday:
-                        Monday.Remove(x as TimespanItem);
+                        Monday.Remove(x as TimeSpanItem);
                         break;
                     case System.DayOfWeek.Saturday:
-                        Saturday.Remove(x as TimespanItem);
+                        Saturday.Remove(x as TimeSpanItem);
                         break;
                     case System.DayOfWeek.Sunday:
-                        Sunday.Remove(x as TimespanItem);
+                        Sunday.Remove(x as TimeSpanItem);
                         break;
                     case System.DayOfWeek.Thursday:
-                        Thursday.Remove(x as TimespanItem);
+                        Thursday.Remove(x as TimeSpanItem);
                         break;
                     case System.DayOfWeek.Tuesday:
-                        Tuesday.Remove(x as TimespanItem);
+                        Tuesday.Remove(x as TimeSpanItem);
                         break;
                     case System.DayOfWeek.Wednesday:
-                        Wednesday.Remove(x as TimespanItem);
+                        Wednesday.Remove(x as TimeSpanItem);
                         break;
                     default:
                         break;
                 }
             });
+            IsSaveButtonEnabled = false;
         }
 
         private ModelLibrary.Language LoadLanguage()
@@ -546,8 +551,9 @@ namespace RoomInfo.ViewModels
         private ICommand _addTimespanItemCommand;
         public ICommand AddTimespanItemCommand => _addTimespanItemCommand ?? (_addTimespanItemCommand = new DelegateCommand<object>((param) =>
         {
+            IsSaveButtonEnabled = false;
             var resourceLoader = ResourceLoader.GetForCurrentView();
-            TimespanItem = new TimespanItem() { TimeStamp = DateTimeOffset.Now.ToUnixTimeMilliseconds(), EventAggregator = _eventAggregator };
+            TimespanItem = new TimeSpanItem() { TimeStamp = DateTimeOffset.Now.ToUnixTimeMilliseconds(), EventAggregator = _eventAggregator};
             switch ((string)param)
             {
                 case "Monday":
@@ -607,7 +613,7 @@ namespace RoomInfo.ViewModels
         {
             if (TimespanItem.Id < 1)
             {
-                TimespanItem.Id = await _databaseService.AddTimespanItemAsync(TimespanItem);
+                TimespanItem.Id = await _databaseService.AddTimeSpanItemAsync(TimespanItem);
                 switch ((System.DayOfWeek)TimespanItem.DayOfWeek)
                 {
                     case System.DayOfWeek.Friday:
@@ -644,7 +650,7 @@ namespace RoomInfo.ViewModels
             }
             else
             {
-                await _databaseService.UpdateTimespanItemAsync(TimespanItem);
+                await _databaseService.UpdateTimeSpanItemAsync(TimespanItem);
             }
             (((param as Grid).Parent as FlyoutPresenter).Parent as Popup).IsOpen = false;
             IsFlyoutOpen = false;
@@ -653,7 +659,45 @@ namespace RoomInfo.ViewModels
         private ICommand _validateTimeCommand;
         public ICommand ValidateTimeCommand => _validateTimeCommand ?? (_validateTimeCommand = new DelegateCommand<object>((param) =>
         {
-
+            List<TimeSpanItem> timeSpanItems;
+            switch ((System.DayOfWeek)TimespanItem.DayOfWeek)
+            {
+                case System.DayOfWeek.Friday:
+                    timeSpanItems = Friday.ToList();
+                    break;
+                case System.DayOfWeek.Monday:
+                    timeSpanItems = Monday.ToList();
+                    break;
+                case System.DayOfWeek.Saturday:
+                    timeSpanItems = Saturday.ToList();
+                    break;
+                case System.DayOfWeek.Sunday:
+                    timeSpanItems = Sunday.ToList();
+                    break;
+                case System.DayOfWeek.Thursday:
+                    timeSpanItems = Thursday.ToList();
+                    break;
+                case System.DayOfWeek.Tuesday:
+                    timeSpanItems = Tuesday.ToList();
+                    break;
+                case System.DayOfWeek.Wednesday:
+                    timeSpanItems = Wednesday.ToList();
+                    break;
+                default:
+                    timeSpanItems = new List<TimeSpanItem>();
+                    break;
+            }
+            if ((param as string).Equals("Start"))
+            {
+                var timeSpan = TimeValidator.ValidateStartTime(TimespanItem, timeSpanItems);
+                if (timeSpan != TimeSpan.Zero) TimespanItem.Start = timeSpan;
+            }
+            else if ((param as string).Equals("End"))
+            {
+                var timeSpan = TimeValidator.ValidateEndTime(TimespanItem, timeSpanItems);
+                if (timeSpan != TimeSpan.Zero) TimespanItem.End = timeSpan;
+            }
+            IsSaveButtonEnabled = TimespanItem.End <= TimespanItem.Start ? false : true;
         }));
     }
 }

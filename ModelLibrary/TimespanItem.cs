@@ -12,15 +12,15 @@ using Windows.UI.Xaml.Controls;
 
 namespace ModelLibrary
 {
-    public class TimespanItemContext : DbContext
+    public class TimeSpanItemContext : DbContext
     {
-        public DbSet<TimespanItem> TimespanItems { get; set; }
+        public DbSet<TimeSpanItem> TimeSpanItems { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Data Source=RoomInfo.db");
         }
     }
-    public class TimespanItem : BindableBase, IComparable
+    public class TimeSpanItem : BindableBase, IComparable
     {
         IEventAggregator _eventAggregator = default(IEventAggregator);
         [JsonIgnore]
@@ -76,7 +76,7 @@ namespace ModelLibrary
 
         public int CompareTo(object obj)
         {
-            return ((IComparable)Start).CompareTo(((TimespanItem)obj).Start);
+            return ((IComparable)Start).CompareTo(((TimeSpanItem)obj).Start);
         }
 
         private ICommand _relayGotFocusCommand;

@@ -58,8 +58,20 @@
                 <Button x:Name="hideTimespanButton" HorizontalAlignment="Right" Background="{x:Null}" Margin="0,0,0,6" Command="{Binding HideTimespanItemCommand}" CommandParameter="{Binding ElementName=flyoutGrid}">
                     <SymbolIcon Symbol="Cancel"/>
                 </Button>
-                <TimePicker Grid.Row="1" Margin="0,6,0,6" Time="{Binding TimespanItem.Start, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ClockIdentifier="24HourClock"/>
-                <TimePicker Grid.Row="2" Margin="0,6,0,6" Time="{Binding TimespanItem.End, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ClockIdentifier="24HourClock"/>
+                <TimePicker Grid.Row="1" Margin="0,6,0,6" Time="{Binding TimespanItem.Start, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ClockIdentifier="24HourClock" SelectedTime="{Binding TimespanItem.Start, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+                    <interactivity:Interaction.Behaviors>
+                        <core:EventTriggerBehavior EventName="SelectedTimeChanged">
+                            <core:InvokeCommandAction Command="{Binding ValidateTimeCommand}" CommandParameter="Start"/>
+                        </core:EventTriggerBehavior>
+                    </interactivity:Interaction.Behaviors>
+                </TimePicker>
+                <TimePicker Grid.Row="2" Margin="0,6,0,6" Time="{Binding TimespanItem.End, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ClockIdentifier="24HourClock" SelectedTime="{Binding TimespanItem.End, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <interactivity:Interaction.Behaviors>
+                        <core:EventTriggerBehavior EventName="SelectedTimeChanged">
+                            <core:InvokeCommandAction Command="{Binding ValidateTimeCommand}" CommandParameter="End"/>
+                        </core:EventTriggerBehavior>
+                    </interactivity:Interaction.Behaviors>
+                </TimePicker>
                 <ComboBox Grid.Row="3" Margin="0,6,0,6" HorizontalAlignment="Stretch" VerticalAlignment="Center" SelectedIndex="{Binding TimespanItem.Occupancy, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                     <ComboBoxItem x:Uid="Info_OccupancyFree" />
                     <ComboBoxItem x:Uid="Info_OccupancyPresent" />
@@ -68,7 +80,7 @@
                     <ComboBoxItem x:Uid="Info_OccupancyOccupied" />
                     <ComboBoxItem x:Uid="Info_OccupancyLocked" />
                 </ComboBox>
-                <Button x:Name="saveTimespanItemButton" Grid.Row="4" HorizontalAlignment="Right" x:Uid="Schedule_SaveReservationButton" Command="{Binding AddOrUpdateTimespanItemCommand}" CommandParameter="{Binding ElementName=flyoutGrid}"/>
+                <Button x:Name="saveTimespanItemButton" Grid.Row="4" HorizontalAlignment="Right" x:Uid="Schedule_SaveReservationButton" Command="{Binding AddOrUpdateTimespanItemCommand}" CommandParameter="{Binding ElementName=flyoutGrid}" IsEnabled="{Binding IsSaveButtonEnabled}"/>
             </Grid>
         </Flyout>
         <DataTemplate x:Name="TimespanItem">
