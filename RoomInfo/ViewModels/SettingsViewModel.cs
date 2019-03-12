@@ -181,7 +181,7 @@ namespace RoomInfo.ViewModels
 
         public override async void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
         {
-            base.OnNavigatedTo(e, viewModelState);            
+            base.OnNavigatedTo(e, viewModelState);
 
             VersionDescription = GetVersionDescription();
             SelectedComboBoxIndex = _applicationDataService.GetSetting<int>("StandardOccupancy");
@@ -553,7 +553,7 @@ namespace RoomInfo.ViewModels
         {
             IsSaveButtonEnabled = false;
             var resourceLoader = ResourceLoader.GetForCurrentView();
-            TimespanItem = new TimeSpanItem() { TimeStamp = DateTimeOffset.Now.ToUnixTimeMilliseconds(), EventAggregator = _eventAggregator};
+            TimespanItem = new TimeSpanItem() { TimeStamp = DateTimeOffset.Now.ToUnixTimeMilliseconds(), EventAggregator = _eventAggregator };
             switch ((string)param)
             {
                 case "Monday":
@@ -699,5 +699,25 @@ namespace RoomInfo.ViewModels
             }
             IsSaveButtonEnabled = TimespanItem.End <= TimespanItem.Start ? false : true;
         }));
+
+        double width;
+        private ICommand _updateDataTemplateWidthCommand;
+        public ICommand UpdateDataTemplateWidthCommand => _updateDataTemplateWidthCommand ?? (_updateDataTemplateWidthCommand = new DelegateCommand<object>((param) =>
+        {
+            if (param == null) return;
+            ListView listView = (ListView)param;
+            width = listView.ActualWidth;
+        }));
+
+        public void monday_LayoutUpdated(object sender, object e)
+        {
+            if (Monday != null)
+            {
+                for (int i = 0; i < Monday.Count; i++)
+                {
+                    Monday[i].Width = width;
+                }
+            }
+        }
     }
 }

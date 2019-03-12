@@ -142,6 +142,7 @@
     <Compile Include="Helpers\TimeFormatConverter.cs" />
     <Compile Include="Helpers\TimeValidator.cs" />
     <Compile Include="Helpers\VisualStateDependencyProperty.cs" />
+    <Compile Include="Helpers\PropertyValueConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Constants\PageTokens.cs" />
     <Compile Include="Services\DatabaseService.cs" />

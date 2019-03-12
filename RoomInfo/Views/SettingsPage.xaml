@@ -17,6 +17,7 @@
     <Page.Resources>
         <helper:EnumToBooleanConverter x:Key="EnumToBooleanConverter" EnumType="ElementTheme" />
         <helper:LanguageEnumToBooleanConverter x:Key="LanguageEnumToBooleanConverter"/>
+        <helper:PropertyValueConverter x:Key="PropertyValueConverter"/>
         <Flyout x:Name="fileSelectionFlyout">
             <Flyout.FlyoutPresenterStyle>
                 <Style TargetType="FlyoutPresenter">
@@ -84,7 +85,7 @@
             </Grid>
         </Flyout>
         <DataTemplate x:Name="TimespanItem">
-            <StackPanel x:Name="dataTemplateStackPanel">
+            <StackPanel x:Name="dataTemplateStackPanel" BorderThickness="0,0,0,1" Width="{Binding Width}" BorderBrush="{ThemeResource SystemControlForegroundBaseMediumBrush}">
                 <FlyoutBase.AttachedFlyout>
                 <MenuFlyout x:Name="timespanItemFlyout">
                         <MenuFlyoutItem x:Uid="Schedule_AgendaItemFlyoutEdit" Command="{Binding UpdateTimespanItemCommand}" CommandParameter="{Binding ElementName=timespanItemFlyout}" ContextFlyout="{StaticResource TimespanFlyout}" />
@@ -99,7 +100,7 @@
                 </interactivity:Interaction.Behaviors>
                 <TextBlock Text="{Binding Start}"/>
                 <TextBlock Text="{Binding End}"/>
-                <TextBlock Text="{Binding Occupancy}"/>
+                <TextBlock Text="{Binding Occupancy,Converter={StaticResource PropertyValueConverter}}"/>
             </StackPanel>
         </DataTemplate>
     </Page.Resources>
@@ -200,48 +201,57 @@
                         <TextBlock Grid.Column="4" x:Uid="Settings_StandardWeek_Friday" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center"/>
                         <TextBlock Grid.Column="5" x:Uid="Settings_StandardWeek_Saturday" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center"/>
                         <TextBlock Grid.Column="6" x:Uid="Settings_StandardWeek_Sunday" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center"/>
-                        <Button Grid.Row="1" HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.AddTimespanItemCommand}" CommandParameter="Monday" Flyout="{StaticResource TimespanFlyout}">
+                        <Button Grid.Row="1" HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.AddTimespanItemCommand}" CommandParameter="Monday" Flyout="{StaticResource TimespanFlyout}" Margin="4,0,8,0">
                             <Button.Content>
                                 <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Button.Content>
                         </Button>
-                        <Button Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.AddTimespanItemCommand}" CommandParameter="Tuesday" Flyout="{StaticResource TimespanFlyout}">
+                        <Button Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.AddTimespanItemCommand}" CommandParameter="Tuesday" Flyout="{StaticResource TimespanFlyout}" Margin="8,0,8,0">
                             <Button.Content>
                                 <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Button.Content>
                         </Button>
-                        <Button Grid.Column="2" Grid.Row="1" HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.AddTimespanItemCommand}" CommandParameter="Wednesday" Flyout="{StaticResource TimespanFlyout}">
+                        <Button Grid.Column="2" Grid.Row="1" HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.AddTimespanItemCommand}" CommandParameter="Wednesday" Flyout="{StaticResource TimespanFlyout}" Margin="8,0,8,0">
                             <Button.Content>
                                 <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Button.Content>
                         </Button>
-                        <Button Grid.Column="3" Grid.Row="1" HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.AddTimespanItemCommand}" CommandParameter="Thursday" Flyout="{StaticResource TimespanFlyout}">
+                        <Button Grid.Column="3" Grid.Row="1" HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.AddTimespanItemCommand}" CommandParameter="Thursday" Flyout="{StaticResource TimespanFlyout}" Margin="8,0,8,0">
                             <Button.Content>
                                 <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Button.Content>
                         </Button>
-                        <Button Grid.Column="4" Grid.Row="1" HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.AddTimespanItemCommand}" CommandParameter="Friday" Flyout="{StaticResource TimespanFlyout}">
+                        <Button Grid.Column="4" Grid.Row="1" HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.AddTimespanItemCommand}" CommandParameter="Friday" Flyout="{StaticResource TimespanFlyout}" Margin="8,0,8,0">
                             <Button.Content>
                                 <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Button.Content>
                         </Button>
-                        <Button Grid.Column="5" Grid.Row="1" HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.AddTimespanItemCommand}" CommandParameter="Saturday" Flyout="{StaticResource TimespanFlyout}">
+                        <Button Grid.Column="5" Grid.Row="1" HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.AddTimespanItemCommand}" CommandParameter="Saturday" Flyout="{StaticResource TimespanFlyout}" Margin="8,0,8,0">
                             <Button.Content>
                                 <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Button.Content>
                         </Button>
-                        <Button Grid.Column="6" Grid.Row="1" HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.AddTimespanItemCommand}" CommandParameter="Sunday" Flyout="{StaticResource TimespanFlyout}">
+                        <Button Grid.Column="6" Grid.Row="1" HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.AddTimespanItemCommand}" CommandParameter="Sunday" Flyout="{StaticResource TimespanFlyout}" Margin="8,0,4,0">
                             <Button.Content>
                                 <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Button.Content>
                         </Button>
-                        <ListView Grid.Row="2" ItemsSource="{Binding Monday}" ItemTemplate="{StaticResource TimespanItem}"/>
-                        <ListView Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Tuesday}" ItemTemplate="{StaticResource TimespanItem}"></ListView>
-                        <ListView Grid.Column="2" Grid.Row="2" ItemsSource="{Binding Wednesday}" ItemTemplate="{StaticResource TimespanItem}"/>
-                        <ListView Grid.Column="3" Grid.Row="2" ItemsSource="{Binding Thursday}" ItemTemplate="{StaticResource TimespanItem}"/>
-                        <ListView Grid.Column="4" Grid.Row="2" ItemsSource="{Binding Friday}" ItemTemplate="{StaticResource TimespanItem}"/>
-                        <ListView Grid.Column="5" Grid.Row="2" ItemsSource="{Binding Saturday}" ItemTemplate="{StaticResource TimespanItem}"/>
-                        <ListView Grid.Column="6" Grid.Row="2" ItemsSource="{Binding Sunday}" ItemTemplate="{StaticResource TimespanItem}"/>
+                        <ListView x:Name="monday" Grid.Row="2" ItemsSource="{Binding Monday}" ItemTemplate="{StaticResource TimespanItem}" LayoutUpdated="{x:Bind ViewModel.monday_LayoutUpdated}" Margin="4,0,8,0">
+                            <interactivity:Interaction.Behaviors>
+                                <core:EventTriggerBehavior EventName="SizeChanged">
+                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.UpdateDataTemplateWidthCommand}" CommandParameter="{Binding ElementName=monday}"/>
+                                </core:EventTriggerBehavior>
+                                <core:EventTriggerBehavior EventName="Loaded">
+                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.UpdateDataTemplateWidthCommand}" CommandParameter="{Binding ElementName=monday}"/>
+                                </core:EventTriggerBehavior>
+                            </interactivity:Interaction.Behaviors>
+                        </ListView>
+                        <ListView Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Tuesday}" ItemTemplate="{StaticResource TimespanItem}" Margin="8,0,8,0"/>
+                        <ListView Grid.Column="2" Grid.Row="2" ItemsSource="{Binding Wednesday}" ItemTemplate="{StaticResource TimespanItem}" Margin="8,0,8,0"/>
+                        <ListView Grid.Column="3" Grid.Row="2" ItemsSource="{Binding Thursday}" ItemTemplate="{StaticResource TimespanItem}" Margin="8,0,8,0"/>
+                        <ListView Grid.Column="4" Grid.Row="2" ItemsSource="{Binding Friday}" ItemTemplate="{StaticResource TimespanItem}" Margin="8,0,8,0"/>
+                        <ListView Grid.Column="5" Grid.Row="2" ItemsSource="{Binding Saturday}" ItemTemplate="{StaticResource TimespanItem}" Margin="8,0,8,0"/>
+                        <ListView Grid.Column="6" Grid.Row="2" ItemsSource="{Binding Sunday}" ItemTemplate="{StaticResource TimespanItem}" Margin="8,0,4,0"/>
                     </Grid>
                 </StackPanel>
                 <StackPanel Margin="{StaticResource SettingsSubheaderMargin}">

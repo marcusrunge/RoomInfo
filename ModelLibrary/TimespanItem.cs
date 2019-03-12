@@ -48,6 +48,11 @@ namespace ModelLibrary
 
         public bool IsDeleted { get; set; }
 
+        double _width = default(double);
+        [JsonIgnore]
+        [NotMapped]
+        public double Width { get => _width; set { SetProperty(ref _width, value); } }
+
         private ICommand _updateTimespanItemCommand;
         [JsonIgnore]
         [NotMapped]
