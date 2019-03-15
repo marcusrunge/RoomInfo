@@ -143,6 +143,7 @@ namespace NetworkServiceLibrary
                 {
                     string json;
                     List<AgendaItem> agendaItems;
+                    List<TimeSpanItem> timeSpanItems;
                     switch ((PayloadType)package.PayloadType)
                     {
                         case PayloadType.Occupancy:
@@ -174,8 +175,17 @@ namespace NetworkServiceLibrary
                             streamSocket.Dispose();
                             break;
                         case PayloadType.StandardWeek:
+                            timeSpanItems = JsonConvert.DeserializeObject<List<TimeSpanItem>>(package.Payload.ToString());
+                            await _databaseService.UpdateTimeSpanItemsAsync(timeSpanItems, true);
+                            _eventAggregator.GetEvent<StandardWeekUpdatedEvent>().Publish((int)DateTime.Now.DayOfWeek);
+                            streamSocket.Dispose();
                             break;
                         case PayloadType.RequestStandardWeek:
+                            timeSpanItems = await _databaseService.GetTimeSpanItemsAsync();
+                            package.PayloadType = (int)PayloadType.StandardWeek;
+                            package.Payload = timeSpanItems;
+                            json = JsonConvert.SerializeObject(package);
+                            await SendStringData(streamSocket, json);
                             break;
                         case PayloadType.AgendaItem:
                             var agendaItem = JsonConvert.DeserializeObject<AgendaItem>(package.Payload.ToString());

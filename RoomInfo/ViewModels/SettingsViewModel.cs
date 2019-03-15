@@ -329,6 +329,7 @@ namespace RoomInfo.ViewModels
                     default:
                         break;
                 }
+                _eventAggregator.GetEvent<StandardWeekUpdatedEvent>().Publish((x as TimeSpanItem).DayOfWeek);
             });
             IsSaveButtonEnabled = false;
         }
@@ -654,6 +655,7 @@ namespace RoomInfo.ViewModels
             }
             (((param as Grid).Parent as FlyoutPresenter).Parent as Popup).IsOpen = false;
             IsFlyoutOpen = false;
+            _eventAggregator.GetEvent<StandardWeekUpdatedEvent>().Publish(TimespanItem.DayOfWeek);
         }));
 
         private ICommand _validateTimeCommand;
@@ -711,13 +713,13 @@ namespace RoomInfo.ViewModels
 
         public void monday_LayoutUpdated(object sender, object e)
         {
-            if (Monday != null)
-            {
-                for (int i = 0; i < Monday.Count; i++)
-                {
-                    Monday[i].Width = width;
-                }
-            }
+            if (Monday != null)for (int i = 0; i < Monday.Count; i++)Monday[i].Width = width;            
+            if (Tuesday != null) for (int i = 0; i < Tuesday.Count; i++) Tuesday[i].Width = width;
+            if (Wednesday != null) for (int i = 0; i < Wednesday.Count; i++) Wednesday[i].Width = width;
+            if (Thursday != null) for (int i = 0; i < Thursday.Count; i++) Thursday[i].Width = width;
+            if (Friday != null) for (int i = 0; i < Friday.Count; i++) Friday[i].Width = width;
+            if (Saturday != null) for (int i = 0; i < Saturday.Count; i++) Saturday[i].Width = width;
+            if (Sunday != null) for (int i = 0; i < Sunday.Count; i++) Sunday[i].Width = width;
         }
     }
 }

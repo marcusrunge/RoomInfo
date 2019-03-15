@@ -45,4 +45,7 @@ namespace ModelLibrary
     public class GotFocusEvent : PubSubEvent<FrameworkElement>
     {
     }
+    public class StandardWeekUpdatedEvent : PubSubEvent<int>
+    {
+    }
 }

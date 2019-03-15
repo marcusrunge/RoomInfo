@@ -125,6 +125,7 @@ namespace BackgroundComponent
                                             {
                                                 string json;
                                                 List<AgendaItem> agendaItems;
+                                                List<TimeSpanItem> timeSpanItems;
                                                 switch ((PayloadType)package.PayloadType)
                                                 {
                                                     case PayloadType.Occupancy:
@@ -161,8 +162,16 @@ namespace BackgroundComponent
                                                         await SendStringData(streamSocket, socketInformation.Id, streamSocket.Information.RemoteHostName, streamSocket.Information.RemotePort, json);
                                                         break;
                                                     case PayloadType.StandardWeek:
+                                                        timeSpanItems = JsonConvert.DeserializeObject<List<TimeSpanItem>>(package.Payload.ToString());
+                                                        await _databaseService.UpdateTimeSpanItemsAsync(timeSpanItems, true);
+                                                        streamSocket.Dispose();
                                                         break;
                                                     case PayloadType.RequestStandardWeek:
+                                                        timeSpanItems = await _databaseService.GetTimeSpanItemsAsync();
+                                                        package.PayloadType = (int)PayloadType.StandardWeek;
+                                                        package.Payload = timeSpanItems;
+                                                        json = JsonConvert.SerializeObject(package);
+                                                        await SendStringData(streamSocket, socketInformation.Id, streamSocket.Information.RemoteHostName, streamSocket.Information.RemotePort, json);
                                                         break;
                                                     case PayloadType.AgendaItem:
                                                         var payloadAgendaItem = JsonConvert.DeserializeObject<AgendaItem>(package.Payload.ToString());

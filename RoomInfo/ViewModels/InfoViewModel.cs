@@ -37,8 +37,18 @@ namespace RoomInfo.ViewModels
         double _agendaItemWidth;
         ResourceLoader _resourceLoader;
         Package _propertyChangedPackage;
-        ThreadPoolTimer _startThreadPoolTimer;
-        ThreadPoolTimer _endThreadPoolTimer;
+        ThreadPoolTimer _startThreadPoolTimer, _endThreadPoolTimer, _startTimeSpanThreadPoolTimer, _stopTimeSpanThreadPoolTimer;
+        DayOfWeek _dayOfWeek;
+        CoreDispatcher _coreDispatcher;
+
+        class WeekDayChangedEventArgs
+        {
+            public WeekDayChangedEventArgs(DayOfWeek dayOfWeek) { DayOfWeek = dayOfWeek; }
+            public DayOfWeek DayOfWeek { get; }
+        }
+        delegate void WeekDayChangedEventHandler(object s, WeekDayChangedEventArgs e);
+        event WeekDayChangedEventHandler _weekDayChangedEvent;
+        void OnWeekDayChangedEvent(object s, WeekDayChangedEventArgs e) => _weekDayChangedEvent?.Invoke(s, e);
 
         OccupancyVisualState _occupancy = default(OccupancyVisualState);
         public OccupancyVisualState Occupancy { get => _occupancy; set { SetProperty(ref _occupancy, value); } }
@@ -106,6 +116,7 @@ namespace RoomInfo.ViewModels
         {
             base.OnNavigatedTo(navigatedToEventArgs, viewModelState);
             _resourceLoader = ResourceLoader.GetForCurrentView();
+            _coreDispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
             StorageFolder assets = null;
             IReadOnlyList<StorageFolder> storageFolders = await ApplicationData.Current.LocalFolder.GetFoldersAsync();
             foreach (var storageFolder in storageFolders)
@@ -137,6 +148,11 @@ namespace RoomInfo.ViewModels
             {
                 Clock = DateTime.Now.ToString("t", cultureInfo) + " " + _resourceLoader.GetString("InfoViewModel_Clock");
                 Date = DateTime.Now.ToString("D", cultureInfo);
+                if (_dayOfWeek != DateTime.Now.DayOfWeek)
+                {
+                    OnWeekDayChangedEvent(s, new WeekDayChangedEventArgs(DateTime.Now.DayOfWeek));
+                    _dayOfWeek = DateTime.Now.DayOfWeek;
+                }
             };
             dispatcherTimer.Start();
             SelectedComboBoxIndex = _applicationDataService.GetSetting<bool>("OccupancyOverridden") ? _applicationDataService.GetSetting<int>("OverriddenOccupancy") : _applicationDataService.GetSetting<int>("StandardOccupancy");
@@ -164,7 +180,7 @@ namespace RoomInfo.ViewModels
                     var now = DateTimeOffset.Now;
                     if (now >= agendaItem.Start && now <= agendaItem.End)
                     {
-                        await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                        await _coreDispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                         {
                             SelectedComboBoxIndex = _applicationDataService.GetSetting<int>("StandardOccupancy");
                             _applicationDataService.SaveSetting("OverriddenOccupancy", (int)Occupancy);
@@ -177,6 +193,67 @@ namespace RoomInfo.ViewModels
                     }
                 }
             });
+            await UpdateStandardWeek(DateTime.Now.DayOfWeek);
+            _weekDayChangedEvent += async (s, e) => { await UpdateStandardWeek(e.DayOfWeek); };
+            _eventAggregator.GetEvent<StandardWeekUpdatedEvent>().Subscribe(async i =>
+            {
+                if ((int)DateTime.Now.DayOfWeek == i)
+                {
+                    ResetOccupancyCommand.Execute(null);
+                    await UpdateStandardWeek(DateTime.Now.DayOfWeek);
+                }
+            });
+        }
+
+        async Task UpdateStandardWeek(DayOfWeek dayOfWeek)
+        {
+            var currentTimeSpanItem = (await _databaseService.GetTimeSpanItemsAsync()).Where(x => x.DayOfWeek == (int)dayOfWeek).Where(x => x.Start < DateTime.Now.TimeOfDay).Where(x => x.End > DateTime.Now.TimeOfDay).Select(x => x).FirstOrDefault();
+            var nextTimeSpanItem = (await _databaseService.GetTimeSpanItemsAsync()).Where(x => x.DayOfWeek == (int)dayOfWeek).Where(x => x.Start >= DateTime.Now.TimeOfDay).Select(x => x).FirstOrDefault();
+
+            if (nextTimeSpanItem != null)
+            {
+                SetTimeSpanStartTimer(nextTimeSpanItem);
+            }
+            else if (currentTimeSpanItem != null)
+            {
+                await _coreDispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                {
+                    SelectedComboBoxIndex = currentTimeSpanItem.Occupancy;
+                    Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
+                    await OverrideOccupancy();
+                    SetTimeSpanStopTimer(currentTimeSpanItem.End);
+                });
+            }
+        }
+
+        void SetTimeSpanStartTimer(TimeSpanItem nextTimeSpanItem)
+        {
+            if (_startTimeSpanThreadPoolTimer != null) _startTimeSpanThreadPoolTimer.Cancel();
+            TimeSpan startTimeSpan = nextTimeSpanItem.Start - DateTime.Now.TimeOfDay;
+            _startTimeSpanThreadPoolTimer = ThreadPoolTimer.CreateTimer(async (source) =>
+            {
+                await _coreDispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
+                {
+                    SelectedComboBoxIndex = nextTimeSpanItem.Occupancy;
+                    Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
+                    await OverrideOccupancy();
+                });
+            }, startTimeSpan);
+            SetTimeSpanStopTimer(nextTimeSpanItem.End);
+        }
+
+        void SetTimeSpanStopTimer(TimeSpan end)
+        {
+            if (_stopTimeSpanThreadPoolTimer != null) _stopTimeSpanThreadPoolTimer.Cancel();
+            TimeSpan stopTimeSpan = end - DateTime.Now.TimeOfDay;
+            _stopTimeSpanThreadPoolTimer = ThreadPoolTimer.CreateTimer(async (source) =>
+            {
+                await _coreDispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
+                {
+                    ResetOccupancyCommand.Execute(null);
+                    await UpdateStandardWeek(DateTime.Now.DayOfWeek);
+                });
+            }, stopTimeSpan);
         }
 
         private async Task OverrideOccupancy()
@@ -224,7 +301,6 @@ namespace RoomInfo.ViewModels
             {
                 if (_startThreadPoolTimer != null) _startThreadPoolTimer.Cancel();
                 if (_endThreadPoolTimer != null) _endThreadPoolTimer.Cancel();
-                CoreDispatcher coreDispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
                 if (AgendaItems.Count > 0)
                 {
                     if (AgendaItems[0].Start < DateTime.Now && AgendaItems[0].End > DateTime.Now && !AgendaItems[0].IsOverridden)
@@ -242,7 +318,7 @@ namespace RoomInfo.ViewModels
                         TimeSpan startTimeSpan = AgendaItems[0].Start - DateTime.Now;
                         _startThreadPoolTimer = ThreadPoolTimer.CreateTimer(async (source) =>
                         {
-                            await coreDispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
+                            await _coreDispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
                             {
                                 Occupancy = (OccupancyVisualState)AgendaItems[0].Occupancy;
                                 _applicationDataService.SaveSetting("OccupancyOverridden", false);
@@ -260,7 +336,7 @@ namespace RoomInfo.ViewModels
                     TimeSpan endTimeSpan = AgendaItems[0].End - DateTime.Now;
                     _endThreadPoolTimer = ThreadPoolTimer.CreateTimer(async (source) =>
                     {
-                        await coreDispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
+                        await _coreDispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
                         {
                             SelectedComboBoxIndex = _applicationDataService.GetSetting<int>("StandardOccupancy");
                             ResetButtonVisibility = Visibility.Collapsed;
