@@ -600,7 +600,7 @@ namespace RoomInfo.ViewModels
                 switch ((System.DayOfWeek)TimespanItem.DayOfWeek)
                 {
                     case System.DayOfWeek.Friday:
-                        Friday.Add(TimespanItem);
+                        Friday.Add(new TimeSpanItem() { DayOfWeek = TimespanItem.DayOfWeek, End = TimespanItem.End, Id = TimespanItem.Id, Occupancy = TimespanItem.Occupancy, Start = TimespanItem.Start, TimeStamp = TimespanItem.TimeStamp, Width = TimespanItem.Width });
                         Friday.OrderByDescending(x => x.Start);
                         break;
                     case System.DayOfWeek.Monday:

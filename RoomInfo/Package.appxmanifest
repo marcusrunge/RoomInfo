@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:genTemplate="http://schemas.microsoft.com/appx/developer/windowsTemplateStudio" xmlns:iot="http://schemas.microsoft.com/appx/manifest/iot/windows10" IgnorableNamespaces="uap mp genTemplate iot">
-  <Identity Name="27242Daedalus737.RoomInfo" Publisher="CN=34360351-E0A4-43A5-99AE-0840493AC494" Version="1.1.5.0" />
+  <Identity Name="27242Daedalus737.RoomInfo" Publisher="CN=34360351-E0A4-43A5-99AE-0840493AC494" Version="1.1.6.0" />
   <mp:PhoneIdentity PhoneProductId="f30ba2a0-9334-4b03-bf79-023585738c8d" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Room Info</DisplayName>
