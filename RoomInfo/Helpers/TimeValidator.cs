@@ -9,7 +9,7 @@ namespace RoomInfo.Helpers
     {
         public static TimeSpan ValidateStartTime(TimeSpanItem timeSpanItem, List<TimeSpanItem> timeSpanItems)
         {
-            var collisioningTimeSpanItem = timeSpanItems.Where(x => timeSpanItem.Start >= x.Start && timeSpanItem.End <= x.End).Select(x => x).FirstOrDefault();
+            var collisioningTimeSpanItem = timeSpanItems.Where(x => x.Id != timeSpanItem.Id && timeSpanItem.Start >= x.Start && timeSpanItem.Start <= x.End).Select(x => x).FirstOrDefault();
             return collisioningTimeSpanItem != null ? collisioningTimeSpanItem.End.Add(TimeSpan.FromMinutes(1)) : TimeSpan.Zero;
         }
 
@@ -18,8 +18,8 @@ namespace RoomInfo.Helpers
             if (timeSpanItem.End < timeSpanItem.Start) return timeSpanItem.Start;
             else
             {
-                var collisioningTimeSpanItem = timeSpanItems.Where(x => timeSpanItem.Start >= x.Start && timeSpanItem.End <= x.End).Select(x => x).FirstOrDefault();
-                return collisioningTimeSpanItem != null ? collisioningTimeSpanItem.Start.Subtract(TimeSpan.FromMinutes(1)) : TimeSpan.Zero;
+                var collisioningTimeSpanItem = timeSpanItems.Where(x => x.Id != timeSpanItem.Id && timeSpanItem.End >= x.Start && timeSpanItem.End <= x.End).Select(x => x).FirstOrDefault();
+                return collisioningTimeSpanItem != null ? collisioningTimeSpanItem.Start.Subtract(TimeSpan.FromMinutes(1)) > TimeSpan.Zero ? collisioningTimeSpanItem.Start.Subtract(TimeSpan.FromMinutes(1)) : timeSpanItem.Start.Add(TimeSpan.FromMinutes(1)) : TimeSpan.Zero;
             }
         }
     }

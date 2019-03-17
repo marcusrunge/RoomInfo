@@ -209,12 +209,8 @@ namespace RoomInfo.ViewModels
         {
             var currentTimeSpanItem = (await _databaseService.GetTimeSpanItemsAsync()).Where(x => x.DayOfWeek == (int)dayOfWeek).Where(x => x.Start < DateTime.Now.TimeOfDay).Where(x => x.End > DateTime.Now.TimeOfDay).Select(x => x).FirstOrDefault();
             var nextTimeSpanItem = (await _databaseService.GetTimeSpanItemsAsync()).Where(x => x.DayOfWeek == (int)dayOfWeek).Where(x => x.Start >= DateTime.Now.TimeOfDay).Select(x => x).FirstOrDefault();
-
-            if (nextTimeSpanItem != null)
-            {
-                SetTimeSpanStartTimer(nextTimeSpanItem);
-            }
-            else if (currentTimeSpanItem != null)
+                        
+            if (currentTimeSpanItem != null)
             {
                 await _coreDispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                 {
@@ -223,6 +219,10 @@ namespace RoomInfo.ViewModels
                     await OverrideOccupancy();
                     SetTimeSpanStopTimer(currentTimeSpanItem.End);
                 });
+            }
+            else if (nextTimeSpanItem != null)
+            {
+                SetTimeSpanStartTimer(nextTimeSpanItem);
             }
         }
 
