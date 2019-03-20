@@ -346,6 +346,7 @@ namespace RoomInfo.ViewModels
                             await UpdateDayAgenda();
                             _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
                             _applicationDataService.SaveSetting("ActualOccupancy", (int)Occupancy);
+                            await UpdateStandardWeek(DateTime.Now.DayOfWeek);
                             await _userDatagramService.SendStringData(new HostName("255.255.255.255"), _applicationDataService.GetSetting<string>("UdpPort"), JsonConvert.SerializeObject(_propertyChangedPackage));
                         });
 
