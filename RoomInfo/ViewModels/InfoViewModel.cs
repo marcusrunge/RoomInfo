@@ -173,7 +173,7 @@ namespace RoomInfo.ViewModels
             _eventAggregator.GetEvent<RemoteAgendaItemsUpdatedEvent>().Subscribe(async () => await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
                 await UpdateDayAgenda();
-                await UpdateStandardWeek(DateTime.Now.DayOfWeek);
+                //await UpdateStandardWeek(DateTime.Now.DayOfWeek);
             }));
             BrightnessAdjustmentVisibility = _iotService.IsIotDevice() ? Visibility.Visible : Visibility.Collapsed;
             _eventAggregator.GetEvent<RemoteAgendaItemDeletedEvent>().Subscribe(async i =>
@@ -210,11 +210,11 @@ namespace RoomInfo.ViewModels
             });
         }
 
-        async Task UpdateStandardWeek(DayOfWeek dayOfWeek)
+        async Task<bool> UpdateStandardWeek(DayOfWeek dayOfWeek)
         {
             var currentTimeSpanItem = (await _databaseService.GetTimeSpanItemsAsync()).Where(x => x.DayOfWeek == (int)dayOfWeek).Where(x => x.Start < DateTime.Now.TimeOfDay).Where(x => x.End > DateTime.Now.TimeOfDay).Select(x => x).FirstOrDefault();
             var nextTimeSpanItem = (await _databaseService.GetTimeSpanItemsAsync()).Where(x => x.DayOfWeek == (int)dayOfWeek).Where(x => x.Start >= DateTime.Now.TimeOfDay).Select(x => x).FirstOrDefault();
-                        
+
             if (currentTimeSpanItem != null)
             {
                 await _coreDispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
@@ -225,11 +225,13 @@ namespace RoomInfo.ViewModels
                     _applicationDataService.SaveSetting("ActualOccupancy", (int)Occupancy);
                     SetTimeSpanStopTimer(currentTimeSpanItem.End);
                 });
+                return true;
             }
             else if (nextTimeSpanItem != null)
             {
                 SetTimeSpanStartTimer(nextTimeSpanItem);
             }
+            return false;
         }
 
         void SetTimeSpanStartTimer(TimeSpanItem nextTimeSpanItem)
@@ -345,15 +347,17 @@ namespace RoomInfo.ViewModels
                     {
                         await _coreDispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
                         {
-                            SelectedComboBoxIndex = _applicationDataService.GetSetting<int>("StandardOccupancy");
-                            ResetButtonVisibility = Visibility.Collapsed;
-                            Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
-                            if (AgendaItems.Count > 0) AgendaItems.RemoveAt(0);
+                            if (!await UpdateStandardWeek(DateTime.Now.DayOfWeek))
+                            {
+                                SelectedComboBoxIndex = _applicationDataService.GetSetting<int>("StandardOccupancy");
+                                ResetButtonVisibility = Visibility.Collapsed;
+                                Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
+                                if (AgendaItems.Count > 0) AgendaItems.RemoveAt(0);
+                                _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
+                                _applicationDataService.SaveSetting("ActualOccupancy", (int)Occupancy);
+                            }                            
                             _activeAgendaItem = null;
                             await UpdateDayAgenda();
-                            _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
-                            _applicationDataService.SaveSetting("ActualOccupancy", (int)Occupancy);
-                            await UpdateStandardWeek(DateTime.Now.DayOfWeek);
                             await _userDatagramService.SendStringData(new HostName("255.255.255.255"), _applicationDataService.GetSetting<string>("UdpPort"), JsonConvert.SerializeObject(_propertyChangedPackage));
                         });
 
@@ -364,6 +368,11 @@ namespace RoomInfo.ViewModels
             {
                 if (_databaseService != null) await _databaseService.AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
             }
+        }
+
+        private bool GetIsStandardWeekActive()
+        {
+            throw new NotImplementedException();
         }
 
         private ICommand _overrideOccupancyCommand;
