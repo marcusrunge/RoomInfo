@@ -170,7 +170,11 @@ namespace RoomInfo.ViewModels
                     await OverrideOccupancy();
                 });
             });
-            _eventAggregator.GetEvent<RemoteAgendaItemsUpdatedEvent>().Subscribe(async () => await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => await UpdateDayAgenda()));
+            _eventAggregator.GetEvent<RemoteAgendaItemsUpdatedEvent>().Subscribe(async () => await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+            {
+                await UpdateDayAgenda();
+                await UpdateStandardWeek(DateTime.Now.DayOfWeek);
+            }));
             BrightnessAdjustmentVisibility = _iotService.IsIotDevice() ? Visibility.Visible : Visibility.Collapsed;
             _eventAggregator.GetEvent<RemoteAgendaItemDeletedEvent>().Subscribe(async i =>
             {
@@ -189,6 +193,7 @@ namespace RoomInfo.ViewModels
                             ResetButtonVisibility = Visibility.Collapsed;
                             Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
                             await UpdateDayAgenda();
+                            await UpdateStandardWeek(DateTime.Now.DayOfWeek);
                         });
                     }
                 }
@@ -216,7 +221,8 @@ namespace RoomInfo.ViewModels
                 {
                     SelectedComboBoxIndex = currentTimeSpanItem.Occupancy;
                     Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
-                    await OverrideOccupancy();
+                    _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
+                    _applicationDataService.SaveSetting("ActualOccupancy", (int)Occupancy);
                     SetTimeSpanStopTimer(currentTimeSpanItem.End);
                 });
             }
@@ -236,7 +242,8 @@ namespace RoomInfo.ViewModels
                 {
                     SelectedComboBoxIndex = nextTimeSpanItem.Occupancy;
                     Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
-                    await OverrideOccupancy();
+                    _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
+                    _applicationDataService.SaveSetting("ActualOccupancy", (int)Occupancy);
                 });
             }, startTimeSpan);
             SetTimeSpanStopTimer(nextTimeSpanItem.End);
