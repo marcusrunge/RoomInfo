@@ -633,6 +633,95 @@ namespace RoomInfo.ViewModels
             }
             else
             {
+                switch ((System.DayOfWeek)TimespanItem.DayOfWeek)
+                {
+                    case System.DayOfWeek.Friday:
+                        for (int i = 0; i < Friday.Count; i++)
+                        {
+                            if (Friday[i].Id == TimespanItem.Id)
+                            {
+                                Friday[i].End = TimespanItem.End;
+                                Friday[i].Occupancy = TimespanItem.Occupancy;
+                                Friday[i].Start = TimespanItem.Start;
+                                Friday[i].TimeStamp = TimespanItem.TimeStamp;
+                            }
+                        }
+                        break;
+                    case System.DayOfWeek.Monday:
+                        for (int i = 0; i < Monday.Count; i++)
+                        {
+                            if (Monday[i].Id == TimespanItem.Id)
+                            {
+                                Monday[i].End = TimespanItem.End;
+                                Monday[i].Occupancy = TimespanItem.Occupancy;
+                                Monday[i].Start = TimespanItem.Start;
+                                Monday[i].TimeStamp = TimespanItem.TimeStamp;
+                            }
+                        }
+                        break;
+                    case System.DayOfWeek.Saturday:
+                        for (int i = 0; i < Sunday.Count; i++)
+                        {
+                            if (Saturday[i].Id == TimespanItem.Id)
+                            {
+                                Saturday[i].End = TimespanItem.End;
+                                Saturday[i].Occupancy = TimespanItem.Occupancy;
+                                Saturday[i].Start = TimespanItem.Start;
+                                Saturday[i].TimeStamp = TimespanItem.TimeStamp;
+                            }
+                        }
+                        break;
+                    case System.DayOfWeek.Sunday:
+                        for (int i = 0; i < Sunday.Count; i++)
+                        {
+                            if(Sunday[i].Id == TimespanItem.Id)
+                            {
+                                Sunday[i].End = TimespanItem.End;
+                                Sunday[i].Occupancy = TimespanItem.Occupancy;
+                                Sunday[i].Start = TimespanItem.Start;
+                                Sunday[i].TimeStamp = TimespanItem.TimeStamp;
+                            }
+                        }
+                        break;
+                    case System.DayOfWeek.Thursday:
+                        for (int i = 0; i < Thursday.Count; i++)
+                        {
+                            if (Thursday[i].Id == TimespanItem.Id)
+                            {
+                                Thursday[i].End = TimespanItem.End;
+                                Thursday[i].Occupancy = TimespanItem.Occupancy;
+                                Thursday[i].Start = TimespanItem.Start;
+                                Thursday[i].TimeStamp = TimespanItem.TimeStamp;
+                            }
+                        }
+                        break;
+                    case System.DayOfWeek.Tuesday:
+                        for (int i = 0; i < Tuesday.Count; i++)
+                        {
+                            if (Tuesday[i].Id == TimespanItem.Id)
+                            {
+                                Tuesday[i].End = TimespanItem.End;
+                                Tuesday[i].Occupancy = TimespanItem.Occupancy;
+                                Tuesday[i].Start = TimespanItem.Start;
+                                Tuesday[i].TimeStamp = TimespanItem.TimeStamp;
+                            }
+                        }
+                        break;
+                    case System.DayOfWeek.Wednesday:
+                        for (int i = 0; i < Wednesday.Count; i++)
+                        {
+                            if (Wednesday[i].Id == TimespanItem.Id)
+                            {
+                                Wednesday[i].End = TimespanItem.End;
+                                Wednesday[i].Occupancy = TimespanItem.Occupancy;
+                                Wednesday[i].Start = TimespanItem.Start;
+                                Wednesday[i].TimeStamp = TimespanItem.TimeStamp;
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
                 await _databaseService.UpdateTimeSpanItemAsync(TimespanItem);
             }
             (((param as Grid).Parent as FlyoutPresenter).Parent as Popup).IsOpen = false;
