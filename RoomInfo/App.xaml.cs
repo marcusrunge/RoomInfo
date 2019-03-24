@@ -52,13 +52,13 @@ namespace RoomInfo
             {
                 Container.RegisterInstance<IResourceLoader>(new ResourceLoaderAdapter(new ResourceLoader()));
                 Container.RegisterType<ISettingsService, SettingsService>();
-                Container.RegisterType<IDatabaseService, DatabaseService>();
+                Container.RegisterType<IDatabaseService, DatabaseService>(new ContainerControlledLifetimeManager());
                 Container.RegisterType<IApplicationDataService, ApplicationDataService>();
                 Container.RegisterType<ILiveTileUpdateService, LiveTileUpdateService>();
                 Container.RegisterType<IEventAggregator, EventAggregator>(new ContainerControlledLifetimeManager());
                 Container.RegisterType<IBackgroundTaskService, BackgroundTaskService>();
-                Container.RegisterType<ITransmissionControlService, TransmissionControlService>();
-                Container.RegisterType<IUserDatagramService, UserDatagramService>();
+                Container.RegisterType<ITransmissionControlService, TransmissionControlService>(new ContainerControlledLifetimeManager());
+                Container.RegisterType<IUserDatagramService, UserDatagramService>(new ContainerControlledLifetimeManager());
                 Container.RegisterType<IDateTimeValidationService, DateTimeValidationService>();
                 Container.RegisterType<IIotService, IotService>();
                 Container.RegisterType<IBackgroundTaskRegistrationProvider, BackgroundTaskRegistrationProvider>();

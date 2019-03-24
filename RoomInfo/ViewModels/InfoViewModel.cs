@@ -160,6 +160,7 @@ namespace RoomInfo.ViewModels
             Occupancy = OccupancyVisualState.UndefinedVisualState;
             Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
             _applicationDataService.SaveSetting("ActualOccupancy", (int)Occupancy);
+            await UpdateStandardWeek(DateTime.Now.DayOfWeek);
             await UpdateDayAgenda();
             _eventAggregator.GetEvent<RemoteOccupancyOverrideEvent>().Subscribe(async i =>
             {
@@ -173,7 +174,6 @@ namespace RoomInfo.ViewModels
             _eventAggregator.GetEvent<RemoteAgendaItemsUpdatedEvent>().Subscribe(async () => await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
                 await UpdateDayAgenda();
-                //await UpdateStandardWeek(DateTime.Now.DayOfWeek);
             }));
             BrightnessAdjustmentVisibility = _iotService.IsIotDevice() ? Visibility.Visible : Visibility.Collapsed;
             _eventAggregator.GetEvent<RemoteAgendaItemDeletedEvent>().Subscribe(async i =>
@@ -198,7 +198,6 @@ namespace RoomInfo.ViewModels
                     }
                 }
             });
-            await UpdateStandardWeek(DateTime.Now.DayOfWeek);
             _weekDayChangedEvent += async (s, e) => { await UpdateStandardWeek(e.DayOfWeek); };
             _eventAggregator.GetEvent<StandardWeekUpdatedEvent>().Subscribe(async i =>
             {
@@ -219,6 +218,7 @@ namespace RoomInfo.ViewModels
             {
                 await _coreDispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                 {
+                    ResetButtonVisibility = Visibility.Collapsed;
                     SelectedComboBoxIndex = currentTimeSpanItem.Occupancy;
                     Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
                     _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
@@ -312,21 +312,29 @@ namespace RoomInfo.ViewModels
                 if (_endThreadPoolTimer != null) _endThreadPoolTimer.Cancel();
                 if (AgendaItems.Count > 0)
                 {
-                    if (AgendaItems[0].Start < DateTime.Now && AgendaItems[0].End > DateTime.Now && !AgendaItems[0].IsOverridden)
+                    if (AgendaItems[0].Start < DateTime.Now && AgendaItems[0].End > DateTime.Now)
                     {
-                        Occupancy = (OccupancyVisualState)AgendaItems[0].Occupancy;
-                        _applicationDataService.SaveSetting("OccupancyOverridden", false);
-                        ResetButtonVisibility = Visibility.Collapsed;
-                        SelectedComboBoxIndex = AgendaItems[0].Occupancy;
-                        _activeAgendaItem = AgendaItems[0];
-                        _applicationDataService.SaveSetting("ActualOccupancy", (int)Occupancy);
-                        await _userDatagramService.SendStringData(new HostName("255.255.255.255"), _applicationDataService.GetSetting<string>("UdpPort"), JsonConvert.SerializeObject(_propertyChangedPackage));
+                        //_activeAgendaItem = AgendaItems[0];
+                        if (!AgendaItems[0].IsOverridden)
+                        {
+                            _activeAgendaItem = AgendaItems[0];
+                            if (_startTimeSpanThreadPoolTimer != null) _startTimeSpanThreadPoolTimer.Cancel();
+                            if (_stopTimeSpanThreadPoolTimer != null) _stopTimeSpanThreadPoolTimer.Cancel();
+                            Occupancy = (OccupancyVisualState)AgendaItems[0].Occupancy;
+                            _applicationDataService.SaveSetting("OccupancyOverridden", false);
+                            ResetButtonVisibility = Visibility.Collapsed;
+                            SelectedComboBoxIndex = AgendaItems[0].Occupancy;
+                            _applicationDataService.SaveSetting("ActualOccupancy", (int)Occupancy);
+                            await _userDatagramService.SendStringData(new HostName("255.255.255.255"), _applicationDataService.GetSetting<string>("UdpPort"), JsonConvert.SerializeObject(_propertyChangedPackage));
+                        }
                     }
                     else if (!AgendaItems[0].IsOverridden)
                     {
                         TimeSpan startTimeSpan = AgendaItems[0].Start - DateTime.Now;
                         _startThreadPoolTimer = ThreadPoolTimer.CreateTimer(async (source) =>
                         {
+                            if (_startTimeSpanThreadPoolTimer != null) _startTimeSpanThreadPoolTimer.Cancel();
+                            if (_stopTimeSpanThreadPoolTimer != null) _stopTimeSpanThreadPoolTimer.Cancel();
                             await _coreDispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
                             {
                                 Occupancy = (OccupancyVisualState)AgendaItems[0].Occupancy;
@@ -355,7 +363,7 @@ namespace RoomInfo.ViewModels
                                 if (AgendaItems.Count > 0) AgendaItems.RemoveAt(0);
                                 _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
                                 _applicationDataService.SaveSetting("ActualOccupancy", (int)Occupancy);
-                            }                            
+                            }
                             _activeAgendaItem = null;
                             await UpdateDayAgenda();
                             await _userDatagramService.SendStringData(new HostName("255.255.255.255"), _applicationDataService.GetSetting<string>("UdpPort"), JsonConvert.SerializeObject(_propertyChangedPackage));
@@ -370,10 +378,7 @@ namespace RoomInfo.ViewModels
             }
         }
 
-        private bool GetIsStandardWeekActive()
-        {
-            throw new NotImplementedException();
-        }
+        private async Task<bool> GetIsStandardWeekActive(DayOfWeek dayOfWeek) => (await _databaseService.GetTimeSpanItemsAsync()).Where(x => x.DayOfWeek == (int)dayOfWeek).Where(x => x.Start < DateTime.Now.TimeOfDay).Where(x => x.End > DateTime.Now.TimeOfDay).Select(x => x).FirstOrDefault() == null;
 
         private ICommand _overrideOccupancyCommand;
         public ICommand OverrideOccupancyCommand => _overrideOccupancyCommand ?? (_overrideOccupancyCommand = new DelegateCommand<object>(async (param) =>
