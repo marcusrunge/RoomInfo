@@ -80,6 +80,7 @@
                     <ComboBoxItem x:Uid="Info_OccupancyBusy" />
                     <ComboBoxItem x:Uid="Info_OccupancyOccupied" />
                     <ComboBoxItem x:Uid="Info_OccupancyLocked" />
+                    <ComboBoxItem x:Uid="Info_OccupancyHome" />
                 </ComboBox>
                 <Button x:Name="saveTimespanItemButton" Grid.Row="4" HorizontalAlignment="Right" x:Uid="Schedule_SaveReservationButton" Command="{Binding AddOrUpdateTimespanItemCommand}" CommandParameter="{Binding ElementName=flyoutGrid}" IsEnabled="{Binding IsSaveButtonEnabled}"/>
             </Grid>
