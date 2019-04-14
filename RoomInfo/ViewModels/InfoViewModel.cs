@@ -402,6 +402,7 @@ namespace RoomInfo.ViewModels
                 SelectedComboBoxIndex = _applicationDataService.GetSetting<int>("StandardOccupancy");
                 _applicationDataService.SaveSetting("OverriddenOccupancy", (int)Occupancy);
             }
+            await UpdateStandardWeek(DateTime.Now.DayOfWeek);
             Occupancy = OccupancyVisualState.UndefinedVisualState;
             Occupancy = (OccupancyVisualState)SelectedComboBoxIndex;
             _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
