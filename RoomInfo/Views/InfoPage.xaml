@@ -386,6 +386,62 @@
                         </Setter>
                     </VisualState.Setters>
                 </VisualState>
+                <VisualState x:Name="HomeVisualState">
+                    <VisualState.Setters>
+                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF00796b</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="occupancySymbolTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF00796b</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="homeOccupancyTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF00796b</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="homeOccupancyTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF00796b</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="homeOccupancyTextBlock.(UIElement.Visibility)" Value="Visible"/>
+                        <Setter Target="StatusBar.(Panel.Background).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF00bfa5</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="grid.(Panel.Background).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#7F00bfa5</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="⌂"/>
+                        <Setter Target="roomNameTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF00796b</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="roomNameTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF00796b</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="roomNumberTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF00796b</Color>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="roomNumberTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
+                            <Setter.Value>
+                                <Color>#FF00796b</Color>
+                            </Setter.Value>
+                        </Setter>
+                    </VisualState.Setters>
+                </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
         <Grid x:Name="grid" Background="#00000000" Padding="{StaticResource MediumLeftRightBottomMargin}"   >
@@ -435,6 +491,7 @@
                 <TextBlock Grid.Row="1" x:Name="occupiedOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockOccupied" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
                 <TextBlock Grid.Row="1" x:Name="busyOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockBusy" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
                 <TextBlock Grid.Row="1" x:Name="lockedOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockLocked" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
+                <TextBlock Grid.Row="1" x:Name="homeOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockHome" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
                 <TextBlock Grid.Row="1" x:Name="occupancySymbolTextBlock" FontSize="{Binding SuperLargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" />
             </Grid>
             <Grid Grid.Row="2" Margin="0,12,0,0">
@@ -533,6 +590,14 @@
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:GoToStateAction StateName="LockedVisualState"/>
+                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.OverrideOccupancyCommand}"/>
+                                </core:EventTriggerBehavior>
+                            </interactivity:Interaction.Behaviors>
+                        </ComboBoxItem>
+                        <ComboBoxItem x:Uid="Info_OccupancyHome" FontSize="{Binding MediumFontSize}" >
+                            <interactivity:Interaction.Behaviors>
+                                <core:EventTriggerBehavior EventName="Tapped">
+                                    <core:GoToStateAction StateName="HomeVisualState"/>
                                     <core:InvokeCommandAction Command="{x:Bind ViewModel.OverrideOccupancyCommand}"/>
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>

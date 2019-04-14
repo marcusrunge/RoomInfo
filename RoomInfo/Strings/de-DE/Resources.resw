@@ -147,6 +147,9 @@
   <data name="Info_OccupancyFree.Content" xml:space="preserve">
     <value>FREI</value>
   </data>
+  <data name="Info_OccupancyHome.Content" xml:space="preserve">
+    <value>HEIMBÜRO</value>
+  </data>
   <data name="Info_OccupancyLocked.Content" xml:space="preserve">
     <value>GESPERRT</value>
   </data>
@@ -164,6 +167,9 @@
   </data>
   <data name="Info_OccupancyTextBlockFree.Text" xml:space="preserve">
     <value>F R E I</value>
+  </data>
+  <data name="Info_OccupancyTextBlockHome.Text" xml:space="preserve">
+    <value>H E I M B Ü R O</value>
   </data>
   <data name="Info_OccupancyTextBlockLocked.Text" xml:space="preserve">
     <value>G E S P E R R T</value>

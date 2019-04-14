@@ -368,4 +368,10 @@
   <data name="Settings_PortInfo.Text" xml:space="preserve">
     <value>(Note: The ports have to be opened in Windows Firewall)</value>
   </data>
+  <data name="Info_OccupancyHome.Content" xml:space="preserve">
+    <value>HOMEOFFICE</value>
+  </data>
+  <data name="Info_OccupancyTextBlockHome.Text" xml:space="preserve">
+    <value>H O M E O F F I C E</value>
+  </data>
 </root>
