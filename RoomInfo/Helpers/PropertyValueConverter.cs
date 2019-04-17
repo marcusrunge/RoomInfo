@@ -24,6 +24,7 @@ namespace RoomInfo.Helpers
                     case OccupancyVisualState.BusyVisualState: return resourceLoader.GetString("Info_OccupancyBusy/Content");
                     case OccupancyVisualState.OccupiedVisualState: return resourceLoader.GetString("Info_OccupancyOccupied/Content");
                     case OccupancyVisualState.LockedVisualState: return resourceLoader.GetString("Info_OccupancyLocked/Content");
+                    case OccupancyVisualState.HomeVisualState: return resourceLoader.GetString("Info_OccupancyHome/Content");
                     case OccupancyVisualState.UndefinedVisualState: return null;
                     default: return null;
                 }

@@ -58,11 +58,11 @@ namespace ApplicationServiceLibrary
                         occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockFree/Text");
                         break;
                     case 1:
-                        occupancyIcon = "웃";
+                        occupancyIcon = "★";
                         occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockPresent/Text");
                         break;
                     case 2:
-                        occupancyIcon = "∞";
+                        occupancyIcon = "➔";
                         occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockAbsent/Text");
                         break;
                     case 3:
@@ -70,14 +70,17 @@ namespace ApplicationServiceLibrary
                         occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockBusy/Text");
                         break;
                     case 4:
-                        occupancyIcon = "🗙";
+                        occupancyIcon = "⛛";
                         occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockOccupied/Text");
                         break;
                     case 5:
-                        occupancyIcon = "⚷";
+                        occupancyIcon = "🗙";
                         occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockLocked/Text");
                         break;
-
+                    case 6:
+                        occupancyIcon = "⌂";
+                        occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockHome/Text");
+                        break;
                     default:
                         break;
                 }
