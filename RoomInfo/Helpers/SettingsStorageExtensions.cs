@@ -30,7 +30,7 @@ namespace RoomInfo.Helpers
         {
             if (!File.Exists(Path.Combine(folder.Path, GetFileName(name))))
             {
-                return default(T);
+                return default;
             }
 
             var file = await folder.GetFileAsync($"{name}.json");
@@ -58,7 +58,7 @@ namespace RoomInfo.Helpers
                 return await Json.ToObjectAsync<T>((string)obj);
             }
 
-            return default(T);
+            return default;
         }
 
         public static async Task<StorageFile> SaveFileAsync(this StorageFolder folder, byte[] content, string fileName, CreationCollisionOption options = CreationCollisionOption.ReplaceExisting)

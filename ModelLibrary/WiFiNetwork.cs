@@ -18,7 +18,7 @@ namespace ModelLibrary
     {
         IEventAggregator _eventAggregator;
         bool _isConnected;
-        int _hashCode = default(int);
+        int _hashCode = default;
         CoreDispatcher _coreDispatcher;
         ResourceLoader _resourceLoader;
         WiFiAvailableNetwork _wiFiAvailableNetwork;
@@ -26,22 +26,22 @@ namespace ModelLibrary
 
         public int HashCode { get => _hashCode; set { SetProperty(ref _hashCode, value); } }
 
-        string _networkName = default(string);
+        string _networkName = default;
         public string NetworkName { get => _networkName; set { SetProperty(ref _networkName, value); } }
 
-        PasswordCredential _passwordCredential = default(PasswordCredential);
+        PasswordCredential _passwordCredential = default;
         public PasswordCredential PasswordCredential { get => _passwordCredential; set { SetProperty(ref _passwordCredential, value); } }
 
-        bool _automaticReconnect = default(bool);
+        bool _automaticReconnect = default;
         public bool AutomaticReconnect { get => _automaticReconnect; set { SetProperty(ref _automaticReconnect, value); } }
 
-        Visibility _lowerGridVisibility = default(Visibility);
+        Visibility _lowerGridVisibility = default;
         public Visibility LowerGridVisibility { get => _lowerGridVisibility; set { SetProperty(ref _lowerGridVisibility, value); } }
         
-        string _connectButtonContent = default(string);
+        string _connectButtonContent = default;
         public string ConnectButtonContent { get => _connectButtonContent; set { SetProperty(ref _connectButtonContent, value); } }
 
-        string _networkStrength = default(string);
+        string _networkStrength = default;
         public string NetworkStrength { get => _networkStrength; set { SetProperty(ref _networkStrength, value); } }
 
         public WiFiNetwork(WiFiAdapter wiFiAdapter, WiFiAvailableNetwork wiFiAvailableNetwork)

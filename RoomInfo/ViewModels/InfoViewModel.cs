@@ -50,55 +50,55 @@ namespace RoomInfo.ViewModels
         event WeekDayChangedEventHandler _weekDayChangedEvent;
         void OnWeekDayChangedEvent(object s, WeekDayChangedEventArgs e) => _weekDayChangedEvent?.Invoke(s, e);
 
-        OccupancyVisualState _occupancy = default(OccupancyVisualState);
+        OccupancyVisualState _occupancy = default;
         public OccupancyVisualState Occupancy { get => _occupancy; set { SetProperty(ref _occupancy, value); } }
 
-        string _clock = default(string);
+        string _clock = default;
         public string Clock { get => _clock; set { SetProperty(ref _clock, value); } }
 
-        string _date = default(string);
+        string _date = default;
         public string Date { get => _date; set { SetProperty(ref _date, value); } }
 
-        string _room = default(string);
+        string _room = default;
         public string Room { get => _room; set { SetProperty(ref _room, value); } }
 
-        int _selectedComboBoxIndex = default(int);
+        int _selectedComboBoxIndex = default;
         public int SelectedComboBoxIndex { get => _selectedComboBoxIndex; set { SetProperty(ref _selectedComboBoxIndex, value); } }
 
-        ObservableCollection<AgendaItem> _agendaItems = default(ObservableCollection<AgendaItem>);
+        ObservableCollection<AgendaItem> _agendaItems = default;
         public ObservableCollection<AgendaItem> AgendaItems { get => _agendaItems; set { SetProperty(ref _agendaItems, value); } }
 
-        Uri _companyLogo = default(Uri);
+        Uri _companyLogo = default;
         public Uri CompanyLogo { get => _companyLogo; set { SetProperty(ref _companyLogo, value); } }
 
-        string _companyName = default(string);
+        string _companyName = default;
         public string CompanyName { get => _companyName; set { SetProperty(ref _companyName, value); } }
 
-        string _roomName = default(string);
+        string _roomName = default;
         public string RoomName { get => _roomName; set { SetProperty(ref _roomName, value); } }
 
-        string _roomNumber = default(string);
+        string _roomNumber = default;
         public string RoomNumber { get => _roomNumber; set { SetProperty(ref _roomNumber, value); } }
 
-        Visibility _resetButtonVisibility = default(Visibility);
+        Visibility _resetButtonVisibility = default;
         public Visibility ResetButtonVisibility { get => _resetButtonVisibility; set { SetProperty(ref _resetButtonVisibility, value); } }
 
-        double _mediumFontSize = default(double);
+        double _mediumFontSize = default;
         public double MediumFontSize { get => _mediumFontSize; set { SetProperty(ref _mediumFontSize, value); } }
 
-        double _mediumToLargeFontSize = default(double);
+        double _mediumToLargeFontSize = default;
         public double MediumToLargeFontSize { get => _mediumToLargeFontSize; set { SetProperty(ref _mediumToLargeFontSize, value); } }
 
-        double _largeFontSize = default(double);
+        double _largeFontSize = default;
         public double LargeFontSize { get => _largeFontSize; set { SetProperty(ref _largeFontSize, value); } }
 
-        double _extraLargeFontSize = default(double);
+        double _extraLargeFontSize = default;
         public double ExtraLargeFontSize { get => _extraLargeFontSize; set { SetProperty(ref _extraLargeFontSize, value); } }
 
-        double _superLargeFontSize = default(double);
+        double _superLargeFontSize = default;
         public double SuperLargeFontSize { get => _superLargeFontSize; set { SetProperty(ref _superLargeFontSize, value); } }
 
-        Visibility _brightnessAdjustmentVisibility = default(Visibility);
+        Visibility _brightnessAdjustmentVisibility = default;
         public Visibility BrightnessAdjustmentVisibility { get => _brightnessAdjustmentVisibility; set { SetProperty(ref _brightnessAdjustmentVisibility, value); } }
 
         public InfoViewModel(IUnityContainer unityContainer)

@@ -18,7 +18,7 @@ namespace RoomInfo.Views
     public sealed partial class WiFiUserControl : UserControl, INotifyPropertyChanged
     {
         WiFiAdapter _wiFiAdapter;
-        ObservableCollection<WiFiNetwork> _wiFiNetworks = default(ObservableCollection<WiFiNetwork>);
+        ObservableCollection<WiFiNetwork> _wiFiNetworks = default;
         public ObservableCollection<WiFiNetwork> WiFiNetworks { get => _wiFiNetworks; set { SetProperty(ref _wiFiNetworks, value); } }
 
         public WiFiUserControl()

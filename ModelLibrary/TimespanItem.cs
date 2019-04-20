@@ -22,33 +22,33 @@ namespace ModelLibrary
     }
     public class TimeSpanItem : BindableBase, IComparable
     {
-        IEventAggregator _eventAggregator = default(IEventAggregator);
+        IEventAggregator _eventAggregator = default;
         [JsonIgnore]
         [NotMapped]
         public IEventAggregator EventAggregator { get => _eventAggregator; set { SetProperty(ref _eventAggregator, value); } }
 
-        int _id = default(int);
+        int _id = default;
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get => _id; set { SetProperty(ref _id, value); } }
 
-        int _dayOfWeek = default(int);
+        int _dayOfWeek = default;
         public int DayOfWeek { get => _dayOfWeek; set { SetProperty(ref _dayOfWeek, value); } }
 
-        TimeSpan _start = default(TimeSpan);
+        TimeSpan _start = default;
         public TimeSpan Start { get => _start; set { SetProperty(ref _start, value); } }
 
-        TimeSpan _end = default(TimeSpan);
+        TimeSpan _end = default;
         public TimeSpan End { get => _end; set { SetProperty(ref _end, value); } }
 
-        int _occupancy = default(int);
+        int _occupancy = default;
         public int Occupancy { get => _occupancy; set { SetProperty(ref _occupancy, value); } }
 
         public long TimeStamp { get; set; }
 
         public bool IsDeleted { get; set; }
 
-        double _width = default(double);
+        double _width = default;
         [JsonIgnore]
         [NotMapped]
         public double Width { get => _width; set { SetProperty(ref _width, value); } }

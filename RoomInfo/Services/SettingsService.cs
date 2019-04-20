@@ -46,7 +46,7 @@ namespace RoomInfo.Services
                     else if (typeof(T) == typeof(ICollection<string>)) return (T)(object)_roamingSettings.Values[key];
                     else return (T)(object)_roamingSettings.Values[key];                
                 default:
-                    return default(T);
+                    return default;
             }
         }
 

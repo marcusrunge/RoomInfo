@@ -212,6 +212,33 @@ namespace NetworkServiceLibrary
                             }
                             else streamSocket.Dispose();
                             break;
+                        case PayloadType.TimeSpanItem:
+                            var timeSpanItem = JsonConvert.DeserializeObject<TimeSpanItem>(package.Payload.ToString());
+                            if (!timeSpanItem.IsDeleted && timeSpanItem.Id < 1)
+                            {
+                                int id = await _databaseService.AddTimeSpanItemAsync(timeSpanItem);
+                                _eventAggregator.GetEvent<StandardWeekUpdatedEvent>().Publish(timeSpanItem.Id);
+                                package.PayloadType = (int)PayloadType.TimeSpanItemId;
+                                package.Payload = id;
+                                json = JsonConvert.SerializeObject(package);
+                                await SendStringData(streamSocket, json);
+                            }
+                            else if (timeSpanItem.IsDeleted && timeSpanItem.Id > 0)
+                            {
+                                await _databaseService.RemoveAgendaItemAsync(timeSpanItem.Id);
+                                streamSocket.Dispose();
+                                _eventAggregator.GetEvent<RemoteTimeSpanItemDeletedEvent>().Publish(timeSpanItem.Id);
+                            }
+                            else if (timeSpanItem.Id > 0)
+                            {
+                                await _databaseService.UpdateTimeSpanItemAsync(timeSpanItem, true);
+                                streamSocket.Dispose();
+                                _eventAggregator.GetEvent<StandardWeekUpdatedEvent>().Publish(timeSpanItem.Id);
+                            }
+                            else streamSocket.Dispose();
+                            break;
+                        case PayloadType.TimeSpanItemId:
+                            break;
                         default:
                             streamSocket.Dispose();
                             break;

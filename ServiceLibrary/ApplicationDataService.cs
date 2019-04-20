@@ -29,7 +29,7 @@ namespace ApplicationServiceLibrary
                 var value = _localSettings.Values[key];
                 if (value.GetType() == typeof(T)) return (T)value;
             }
-            return default(T);
+            return default;
         }
 
         /// <summary>    

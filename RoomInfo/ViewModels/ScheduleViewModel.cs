@@ -36,19 +36,19 @@ namespace RoomInfo.ViewModels
         double _agendaItemWidth;
         Package _propertyChangedPackage;
 
-        string _topDate = default(string);
+        string _topDate = default;
         public string TopDate { get => _topDate; set { SetProperty(ref _topDate, value); } }
 
-        int _id = default(int);
+        int _id = default;
         public int Id { get => _id; set { SetProperty(ref _id, value); } }
 
-        DateTimeOffset _startDate = default(DateTimeOffset);
+        DateTimeOffset _startDate = default;
         public DateTimeOffset StartDate { get => _startDate; set { SetProperty(ref _startDate, value); EndDate = StartDate; } }
 
-        DateTimeOffset _endDate = default(DateTimeOffset);
+        DateTimeOffset _endDate = default;
         public DateTimeOffset EndDate { get => _endDate; set { SetProperty(ref _endDate, value); } }
 
-        TimeSpan _startTime = default(TimeSpan);
+        TimeSpan _startTime = default;
         public TimeSpan StartTime
         {
             get => _startTime; set
@@ -63,7 +63,7 @@ namespace RoomInfo.ViewModels
             }
         }
 
-        TimeSpan _endTime = default(TimeSpan);
+        TimeSpan _endTime = default;
         public TimeSpan EndTime
         {
             get => _endTime;
@@ -74,10 +74,10 @@ namespace RoomInfo.ViewModels
             }
         }
 
-        bool _isReservationButtonEnabled = default(bool);
+        bool _isReservationButtonEnabled = default;
         public bool IsReservationButtonEnabled { get => _isReservationButtonEnabled; set { SetProperty(ref _isReservationButtonEnabled, value); } }
 
-        bool _isAllDayEvent = default(bool);
+        bool _isAllDayEvent = default;
         public bool IsAllDayEvent
         {
             get => _isAllDayEvent; set
@@ -91,19 +91,19 @@ namespace RoomInfo.ViewModels
             }
         }
 
-        string _title = default(string);
+        string _title = default;
         public string Title { get => _title; set { SetProperty(ref _title, value); } }
 
-        string _description = default(string);
+        string _description = default;
         public string Description { get => _description; set { SetProperty(ref _description, value); } }
 
-        bool _isFlyoutOpen = default(bool);
+        bool _isFlyoutOpen = default;
         public bool IsFlyoutOpen { get => _isFlyoutOpen; set { SetProperty(ref _isFlyoutOpen, value); } }
 
-        FrameworkElement _flyoutParent = default(FrameworkElement);
+        FrameworkElement _flyoutParent = default;
         public FrameworkElement FlyoutParent { get => _flyoutParent; set { SetProperty(ref _flyoutParent, value); } }
 
-        int _selectedComboBoxIndex = default(int);
+        int _selectedComboBoxIndex = default;
         public int SelectedComboBoxIndex { get => _selectedComboBoxIndex; set { SetProperty(ref _selectedComboBoxIndex, value); } }
 
         public ScheduleViewModel(IUnityContainer unityContainer)

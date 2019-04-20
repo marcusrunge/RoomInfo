@@ -194,6 +194,29 @@ namespace BackgroundComponent
                                                             streamSocket.TransferOwnership(socketInformation.Id);
                                                         }
                                                         break;
+
+                                                    case PayloadType.TimeSpanItem:
+                                                        var timeSpanItem = JsonConvert.DeserializeObject<TimeSpanItem>(package.Payload.ToString());
+                                                        if (!timeSpanItem.IsDeleted && timeSpanItem.Id < 1)
+                                                        {
+                                                            int id = await _databaseService.AddTimeSpanItemAsync(timeSpanItem);                                                            
+                                                            package.PayloadType = (int)PayloadType.TimeSpanItemId;
+                                                            package.Payload = id;
+                                                            json = JsonConvert.SerializeObject(package);
+                                                            await SendStringData(streamSocket, socketInformation.Id, json);
+                                                        }
+                                                        else if (timeSpanItem.IsDeleted && timeSpanItem.Id > 0)
+                                                        {
+                                                            await _databaseService.RemoveAgendaItemAsync(timeSpanItem.Id);
+                                                            streamSocket.Dispose();
+                                                        }
+                                                        else if (timeSpanItem.Id > 0)
+                                                        {
+                                                            await _databaseService.UpdateTimeSpanItemAsync(timeSpanItem, true);
+                                                            streamSocket.Dispose();
+                                                        }
+                                                        else streamSocket.Dispose();
+                                                        break;
                                                     default:
                                                         await streamSocket.CancelIOAsync();
                                                         streamSocket.TransferOwnership(socketInformation.Id);

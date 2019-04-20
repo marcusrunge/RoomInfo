@@ -42,7 +42,7 @@ namespace RoomInfo.ViewModels
         INavigationService _navigationService;
         IDatabaseService _databaseService;
 
-        int _selectedComboBoxIndex = default(int);
+        int _selectedComboBoxIndex = default;
         public int SelectedComboBoxIndex { get => _selectedComboBoxIndex; set { SetProperty(ref _selectedComboBoxIndex, value); } }
 
         private ElementTheme _elementTheme = ThemeSelectorService.Theme;
@@ -51,55 +51,55 @@ namespace RoomInfo.ViewModels
         private string _versionDescription;
         public string VersionDescription { get => _versionDescription; set { SetProperty(ref _versionDescription, value); } }
 
-        string _roomName = default(string);
+        string _roomName = default;
         public string RoomName { get => _roomName; set { SetProperty(ref _roomName, value); _applicationDataService.SaveSetting("RoomName", _roomName); } }
 
-        string _roomNumber = default(string);
+        string _roomNumber = default;
         public string RoomNumber { get => _roomNumber; set { SetProperty(ref _roomNumber, value); _applicationDataService.SaveSetting("RoomNumber", _roomNumber); } }
 
-        string _companyName = default(string);
+        string _companyName = default;
         public string CompanyName { get => _companyName; set { SetProperty(ref _companyName, value); _applicationDataService.SaveSetting("CompanyName", _companyName); } }
 
-        Uri _companyLogo = default(Uri);
+        Uri _companyLogo = default;
         public Uri CompanyLogo { get => _companyLogo; set { SetProperty(ref _companyLogo, value); } }
 
-        Visibility _selectLogoButtonStdVisibility = default(Visibility);
+        Visibility _selectLogoButtonStdVisibility = default;
         public Visibility SelectLogoButtonStdVisibility { get => _selectLogoButtonStdVisibility; set { SetProperty(ref _selectLogoButtonStdVisibility, value); } }
 
-        Visibility _selectLogoButtonIoTVisibility = default(Visibility);
+        Visibility _selectLogoButtonIoTVisibility = default;
         public Visibility SelectLogoButtonIoTVisibility { get => _selectLogoButtonIoTVisibility; set { SetProperty(ref _selectLogoButtonIoTVisibility, value); } }
 
-        ObservableCollection<ExceptionLogItem> _exceptionLogItems = default(ObservableCollection<ExceptionLogItem>);
+        ObservableCollection<ExceptionLogItem> _exceptionLogItems = default;
         public ObservableCollection<ExceptionLogItem> ExceptionLogItems { get => _exceptionLogItems; set { SetProperty(ref _exceptionLogItems, value); } }
 
-        ObservableCollection<TimeSpanItem> _monday = default(ObservableCollection<TimeSpanItem>);
+        ObservableCollection<TimeSpanItem> _monday = default;
         public ObservableCollection<TimeSpanItem> Monday { get => _monday; set { SetProperty(ref _monday, value); } }
 
-        ObservableCollection<TimeSpanItem> _tuesday = default(ObservableCollection<TimeSpanItem>);
+        ObservableCollection<TimeSpanItem> _tuesday = default;
         public ObservableCollection<TimeSpanItem> Tuesday { get => _tuesday; set { SetProperty(ref _tuesday, value); } }
 
-        ObservableCollection<TimeSpanItem> _wednesday = default(ObservableCollection<TimeSpanItem>);
+        ObservableCollection<TimeSpanItem> _wednesday = default;
         public ObservableCollection<TimeSpanItem> Wednesday { get => _wednesday; set { SetProperty(ref _wednesday, value); } }
 
-        ObservableCollection<TimeSpanItem> _thursday = default(ObservableCollection<TimeSpanItem>);
+        ObservableCollection<TimeSpanItem> _thursday = default;
         public ObservableCollection<TimeSpanItem> Thursday { get => _thursday; set { SetProperty(ref _thursday, value); } }
 
-        ObservableCollection<TimeSpanItem> _friday = default(ObservableCollection<TimeSpanItem>);
+        ObservableCollection<TimeSpanItem> _friday = default;
         public ObservableCollection<TimeSpanItem> Friday { get => _friday; set { SetProperty(ref _friday, value); } }
 
-        ObservableCollection<TimeSpanItem> _saturday = default(ObservableCollection<TimeSpanItem>);
+        ObservableCollection<TimeSpanItem> _saturday = default;
         public ObservableCollection<TimeSpanItem> Saturday { get => _saturday; set { SetProperty(ref _saturday, value); } }
 
-        ObservableCollection<TimeSpanItem> _sunday = default(ObservableCollection<TimeSpanItem>);
+        ObservableCollection<TimeSpanItem> _sunday = default;
         public ObservableCollection<TimeSpanItem> Sunday { get => _sunday; set { SetProperty(ref _sunday, value); } }
 
-        bool _isFlyoutOpen = default(bool);
+        bool _isFlyoutOpen = default;
         public bool IsFlyoutOpen { get => _isFlyoutOpen; set { SetProperty(ref _isFlyoutOpen, value); } }
 
-        string _dayOfWeek = default(string);
+        string _dayOfWeek = default;
         public string DayOfWeek { get => _dayOfWeek; set { SetProperty(ref _dayOfWeek, value); } }
 
-        string _tcpPort = default(string);
+        string _tcpPort = default;
         public string TcpPort
         {
             get => _tcpPort;
@@ -112,7 +112,7 @@ namespace RoomInfo.ViewModels
             }
         }
 
-        string _udpPort = default(string);
+        string _udpPort = default;
         public string UdpPort
         {
             get => _udpPort;
@@ -125,22 +125,22 @@ namespace RoomInfo.ViewModels
             }
         }
 
-        Visibility _iotPanelVisibility = default(Visibility);
+        Visibility _iotPanelVisibility = default;
         public Visibility IotPanelVisibility { get => _iotPanelVisibility; set { SetProperty(ref _iotPanelVisibility, value); } }
 
-        ObservableCollection<FileItem> _fileItems = default(ObservableCollection<FileItem>);
+        ObservableCollection<FileItem> _fileItems = default;
         public ObservableCollection<FileItem> FileItems { get => _fileItems; set { SetProperty(ref _fileItems, value); } }
 
-        TimeSpanItem _timespanItem = default(TimeSpanItem);
+        TimeSpanItem _timespanItem = default;
         public TimeSpanItem TimespanItem { get => _timespanItem; set { SetProperty(ref _timespanItem, value); } }
 
-        ModelLibrary.Language _language = default(ModelLibrary.Language);
+        ModelLibrary.Language _language = default;
         public ModelLibrary.Language Language { get => _language; set { SetProperty(ref _language, value); } }
 
-        FrameworkElement _flyoutParent = default(FrameworkElement);
+        FrameworkElement _flyoutParent = default;
         public FrameworkElement FlyoutParent { get => _flyoutParent; set { SetProperty(ref _flyoutParent, value); } }
 
-        bool _isSaveButtonEnabled = default(bool);
+        bool _isSaveButtonEnabled = default;
         public bool IsSaveButtonEnabled { get => _isSaveButtonEnabled; set { SetProperty(ref _isSaveButtonEnabled, value); } }
 
         public SettingsViewModel(IApplicationDataService applicationDataService, IIotService iotService, INavigationService navigationService, IEventAggregator eventAggregator, IDatabaseService databaseService)
