@@ -294,6 +294,7 @@ namespace RoomInfo.ViewModels
             {
                 IsSaveButtonEnabled = true;
                 TimespanItem = new TimeSpanItem() { DayOfWeek = x.DayOfWeek, End = x.End, Id = x.Id, Occupancy = x.Occupancy, Start = x.Start, TimeStamp = x.TimeStamp, Width = x.Width };
+                TimespanItem.EventAggregator = _eventAggregator;
                 IsFlyoutOpen = true;
             });
             _eventAggregator.GetEvent<GotFocusEvent>().Subscribe(x =>
