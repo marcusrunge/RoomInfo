@@ -217,7 +217,7 @@ namespace NetworkServiceLibrary
                             if (!timeSpanItem.IsDeleted && timeSpanItem.Id < 1)
                             {
                                 int id = await _databaseService.AddTimeSpanItemAsync(timeSpanItem);
-                                _eventAggregator.GetEvent<StandardWeekUpdatedEvent>().Publish(timeSpanItem.Id);
+                                _eventAggregator.GetEvent<StandardWeekUpdatedEvent>().Publish(timeSpanItem.DayOfWeek);
                                 package.PayloadType = (int)PayloadType.TimeSpanItemId;
                                 package.Payload = id;
                                 json = JsonConvert.SerializeObject(package);
@@ -225,7 +225,7 @@ namespace NetworkServiceLibrary
                             }
                             else if (timeSpanItem.IsDeleted && timeSpanItem.Id > 0)
                             {
-                                await _databaseService.RemoveAgendaItemAsync(timeSpanItem.Id);
+                                await _databaseService.RemoveTimeSpanItemAsync(timeSpanItem.Id);
                                 streamSocket.Dispose();
                                 _eventAggregator.GetEvent<RemoteTimeSpanItemDeletedEvent>().Publish(timeSpanItem.Id);
                             }
@@ -233,7 +233,7 @@ namespace NetworkServiceLibrary
                             {
                                 await _databaseService.UpdateTimeSpanItemAsync(timeSpanItem, true);
                                 streamSocket.Dispose();
-                                _eventAggregator.GetEvent<StandardWeekUpdatedEvent>().Publish(timeSpanItem.Id);
+                                _eventAggregator.GetEvent<StandardWeekUpdatedEvent>().Publish(timeSpanItem.DayOfWeek);
                             }
                             else streamSocket.Dispose();
                             break;

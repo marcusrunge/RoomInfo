@@ -201,11 +201,14 @@ namespace RoomInfo.ViewModels
             _weekDayChangedEvent += async (s, e) => { await UpdateStandardWeek(e.DayOfWeek); };
             _eventAggregator.GetEvent<StandardWeekUpdatedEvent>().Subscribe(async i =>
             {
-                if ((int)DateTime.Now.DayOfWeek == i)
+                await _coreDispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                 {
-                    ResetOccupancyCommand.Execute(null);
-                    await UpdateStandardWeek(DateTime.Now.DayOfWeek);
-                }
+                    if ((int)DateTime.Now.DayOfWeek == i)
+                    {
+                        ResetOccupancyCommand.Execute(null);
+                        await UpdateStandardWeek(DateTime.Now.DayOfWeek);
+                    }
+                });
             });
         }
 
