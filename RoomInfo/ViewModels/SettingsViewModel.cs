@@ -41,6 +41,7 @@ namespace RoomInfo.ViewModels
         IIotService _iotService;
         INavigationService _navigationService;
         IDatabaseService _databaseService;
+        bool _isStandardWeekUpdatedEventAcceptable;
 
         int _selectedComboBoxIndex = default;
         public int SelectedComboBoxIndex { get => _selectedComboBoxIndex; set { SetProperty(ref _selectedComboBoxIndex, value); } }
@@ -150,6 +151,7 @@ namespace RoomInfo.ViewModels
             _navigationService = navigationService;
             _eventAggregator = eventAggregator;
             _databaseService = databaseService;
+            _isStandardWeekUpdatedEventAcceptable = true;
         }
 
         private ICommand _switchThemeCommand;
@@ -305,61 +307,70 @@ namespace RoomInfo.ViewModels
             {
                 _databaseService.RemoveTimeSpanItemAsync(x as TimeSpanItem);
                 RemoveTimespanItemFromList(x as TimeSpanItem);
+                _isStandardWeekUpdatedEventAcceptable = false;
                 _eventAggregator.GetEvent<StandardWeekUpdatedEvent>().Publish((x as TimeSpanItem).DayOfWeek);
             });
             IsSaveButtonEnabled = false;
             _eventAggregator.GetEvent<StandardWeekUpdatedEvent>().Subscribe(async (dayOfWeek) =>
             {
-                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                if (_isStandardWeekUpdatedEventAcceptable)
                 {
-                    Monday.Clear();
-                    Tuesday.Clear();
-                    Wednesday.Clear();
-                    Thursday.Clear();
-                    Friday.Clear();
-                    Saturday.Clear();
-                    Sunday.Clear();
-                    timespanItems = await _databaseService.GetTimeSpanItemsAsync();
-                    foreach (var timespanItem in timespanItems)
+                    await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                     {
-                        timespanItem.EventAggregator = _eventAggregator;
-                        switch ((System.DayOfWeek)timespanItem.DayOfWeek)
+                        Monday.Clear();
+                        Tuesday.Clear();
+                        Wednesday.Clear();
+                        Thursday.Clear();
+                        Friday.Clear();
+                        Saturday.Clear();
+                        Sunday.Clear();
+                        timespanItems = await _databaseService.GetTimeSpanItemsAsync();
+                        foreach (var timespanItem in timespanItems)
                         {
-                            case System.DayOfWeek.Friday:
-                                Friday.Add(timespanItem);
-                                break;
-                            case System.DayOfWeek.Monday:
-                                Monday.Add(timespanItem);
-                                break;
-                            case System.DayOfWeek.Saturday:
-                                Saturday.Add(timespanItem);
-                                break;
-                            case System.DayOfWeek.Sunday:
-                                Sunday.Add(timespanItem);
-                                break;
-                            case System.DayOfWeek.Thursday:
-                                Thursday.Add(timespanItem);
-                                break;
-                            case System.DayOfWeek.Tuesday:
-                                Tuesday.Add(timespanItem);
-                                break;
-                            case System.DayOfWeek.Wednesday:
-                                Wednesday.Add(timespanItem);
-                                break;
-                            default:
-                                break;
+                            timespanItem.EventAggregator = _eventAggregator;
+                            switch ((System.DayOfWeek)timespanItem.DayOfWeek)
+                            {
+                                case System.DayOfWeek.Friday:
+                                    Friday.Add(timespanItem);
+                                    break;
+                                case System.DayOfWeek.Monday:
+                                    Monday.Add(timespanItem);
+                                    break;
+                                case System.DayOfWeek.Saturday:
+                                    Saturday.Add(timespanItem);
+                                    break;
+                                case System.DayOfWeek.Sunday:
+                                    Sunday.Add(timespanItem);
+                                    break;
+                                case System.DayOfWeek.Thursday:
+                                    Thursday.Add(timespanItem);
+                                    break;
+                                case System.DayOfWeek.Tuesday:
+                                    Tuesday.Add(timespanItem);
+                                    break;
+                                case System.DayOfWeek.Wednesday:
+                                    Wednesday.Add(timespanItem);
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
-                    }
-                    Friday.OrderByDescending(x => x.Start);
-                    Monday.OrderByDescending(x => x.Start);
-                    Saturday.OrderByDescending(x => x.Start);
-                    Sunday.OrderByDescending(x => x.Start);
-                    Thursday.OrderByDescending(x => x.Start);
-                    Tuesday.OrderByDescending(x => x.Start);
-                    Wednesday.OrderByDescending(x => x.Start);
-                });
+                        Friday.OrderByDescending(x => x.Start);
+                        Monday.OrderByDescending(x => x.Start);
+                        Saturday.OrderByDescending(x => x.Start);
+                        Sunday.OrderByDescending(x => x.Start);
+                        Thursday.OrderByDescending(x => x.Start);
+                        Tuesday.OrderByDescending(x => x.Start);
+                        Wednesday.OrderByDescending(x => x.Start);
+                    });
+                }
+                else
+                {
+                    _isStandardWeekUpdatedEventAcceptable = true;
+                    return;
+                }
             });
-            _eventAggregator.GetEvent<RemoteTimespanItemDeletedEvent>().Subscribe(x => RemoveTimespanItemFromList(x));
+            _eventAggregator.GetEvent<RemoteTimespanItemDeletedEvent>().Subscribe(async x => await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => RemoveTimespanItemFromList(x)));
         }
 
         private void RemoveTimespanItemFromList(TimeSpanItem timeSpanItem)
