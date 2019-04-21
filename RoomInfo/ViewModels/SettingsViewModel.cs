@@ -307,25 +307,74 @@ namespace RoomInfo.ViewModels
                 switch ((System.DayOfWeek)(x as TimeSpanItem).DayOfWeek)
                 {
                     case System.DayOfWeek.Friday:
-                        Friday.Remove(x as TimeSpanItem);
+                        for (int i = Friday.Count; i > 0; i--)
+                        {
+                            if (Friday.ElementAt(i - 1).Id == (x as TimeSpanItem).Id)
+                            {
+                                Friday.RemoveAt(i - 1);
+                                break;
+                            }
+                        }
                         break;
                     case System.DayOfWeek.Monday:
-                        Monday.Remove(x as TimeSpanItem);
+                        for (int i = Monday.Count; i > 0; i--)
+                        {
+                            if (Monday.ElementAt(i - 1).Id == (x as TimeSpanItem).Id)
+                            {
+                                Monday.RemoveAt(i - 1);
+                                break;
+                            }
+                        }
                         break;
                     case System.DayOfWeek.Saturday:
-                        Saturday.Remove(x as TimeSpanItem);
+                        for (int i = Saturday.Count; i > 0; i--)
+                        {
+                            if (Saturday.ElementAt(i - 1).Id == (x as TimeSpanItem).Id)
+                            {
+                                Saturday.RemoveAt(i - 1);
+                                break;
+                            }
+                        }
                         break;
                     case System.DayOfWeek.Sunday:
-                        Sunday.Remove(x as TimeSpanItem);
+                        for (int i = Sunday.Count; i > 0; i--)
+                        {
+                            if (Sunday.ElementAt(i - 1).Id == (x as TimeSpanItem).Id)
+                            {
+                                Sunday.RemoveAt(i - 1);
+                                break;
+                            }
+                        }
                         break;
                     case System.DayOfWeek.Thursday:
-                        Thursday.Remove(x as TimeSpanItem);
+                        for (int i = Thursday.Count; i > 0; i--)
+                        {
+                            if (Thursday.ElementAt(i - 1).Id == (x as TimeSpanItem).Id)
+                            {
+                                Thursday.RemoveAt(i - 1);
+                                break;
+                            }
+                        }
                         break;
                     case System.DayOfWeek.Tuesday:
-                        Tuesday.Remove(x as TimeSpanItem);
+                        for (int i = Tuesday.Count; i > 0; i--)
+                        {
+                            if (Tuesday.ElementAt(i - 1).Id == (x as TimeSpanItem).Id)
+                            {
+                                Tuesday.RemoveAt(i - 1);
+                                break;
+                            }
+                        }
                         break;
                     case System.DayOfWeek.Wednesday:
-                        Wednesday.Remove(x as TimeSpanItem);
+                        for (int i = Wednesday.Count; i > 0; i--)
+                        {
+                            if (Wednesday.ElementAt(i - 1).Id == (x as TimeSpanItem).Id)
+                            {
+                                Wednesday.RemoveAt(i - 1);
+                                break;
+                            }
+                        }
                         break;
                     default:
                         break;

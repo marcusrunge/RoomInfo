@@ -167,18 +167,18 @@ namespace RoomInfo
             }
         }
 
-        protected override async Task OnSuspendingApplicationAsync()
-        {
-            try
-            {
-                await _userDatagramService.TransferOwnership();
-                await _transmissionControlService.TransferOwnership();
-                await base.OnSuspendingApplicationAsync();
-            }
-            catch (Exception e)
-            {
-                if (_databaseService != null) await _databaseService.AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
-            }
-        }
+        //protected override async Task OnSuspendingApplicationAsync()
+        //{
+        //    try
+        //    {
+        //        await _userDatagramService.TransferOwnership();
+        //        await _transmissionControlService.TransferOwnership();
+        //        await base.OnSuspendingApplicationAsync();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        if (_databaseService != null) await _databaseService.AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
+        //    }
+        //}
     }
 }
