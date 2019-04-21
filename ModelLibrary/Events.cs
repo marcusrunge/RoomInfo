@@ -47,5 +47,8 @@ namespace ModelLibrary
     }
     public class StandardWeekUpdatedEvent : PubSubEvent<int>
     {
-    }    
+    }
+    public class RemoteTimespanItemDeletedEvent : PubSubEvent<TimeSpanItem>
+    {
+    }
 }

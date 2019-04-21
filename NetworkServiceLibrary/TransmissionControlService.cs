@@ -224,10 +224,9 @@ namespace NetworkServiceLibrary
                                 await SendStringData(streamSocket, json);
                             }
                             else if (timeSpanItem.IsDeleted && timeSpanItem.Id > 0)
-                            {
-                                _eventAggregator.GetEvent<DeleteTimespanItemEvent>().Publish(timeSpanItem);
-                                //await _databaseService.RemoveTimeSpanItemAsync(timeSpanItem.Id);
-                                //_eventAggregator.GetEvent<StandardWeekUpdatedEvent>().Publish(timeSpanItem.DayOfWeek);
+                            {                                
+                                await _databaseService.RemoveTimeSpanItemAsync(timeSpanItem.Id);
+                                _eventAggregator.GetEvent<RemoteTimespanItemDeletedEvent>().Publish(timeSpanItem);
                                 streamSocket.Dispose();
                             }
                             else if (timeSpanItem.Id > 0)

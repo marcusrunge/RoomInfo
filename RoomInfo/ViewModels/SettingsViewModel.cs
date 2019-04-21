@@ -304,81 +304,7 @@ namespace RoomInfo.ViewModels
             _eventAggregator.GetEvent<DeleteTimespanItemEvent>().Subscribe(x =>
             {
                 _databaseService.RemoveTimeSpanItemAsync(x as TimeSpanItem);
-                switch ((System.DayOfWeek)(x as TimeSpanItem).DayOfWeek)
-                {
-                    case System.DayOfWeek.Friday:
-                        for (int i = Friday.Count; i > 0; i--)
-                        {
-                            if (Friday.ElementAt(i - 1).Id == (x as TimeSpanItem).Id)
-                            {
-                                Friday.RemoveAt(i - 1);
-                                break;
-                            }
-                        }
-                        break;
-                    case System.DayOfWeek.Monday:
-                        for (int i = Monday.Count; i > 0; i--)
-                        {
-                            if (Monday.ElementAt(i - 1).Id == (x as TimeSpanItem).Id)
-                            {
-                                Monday.RemoveAt(i - 1);
-                                break;
-                            }
-                        }
-                        break;
-                    case System.DayOfWeek.Saturday:
-                        for (int i = Saturday.Count; i > 0; i--)
-                        {
-                            if (Saturday.ElementAt(i - 1).Id == (x as TimeSpanItem).Id)
-                            {
-                                Saturday.RemoveAt(i - 1);
-                                break;
-                            }
-                        }
-                        break;
-                    case System.DayOfWeek.Sunday:
-                        for (int i = Sunday.Count; i > 0; i--)
-                        {
-                            if (Sunday.ElementAt(i - 1).Id == (x as TimeSpanItem).Id)
-                            {
-                                Sunday.RemoveAt(i - 1);
-                                break;
-                            }
-                        }
-                        break;
-                    case System.DayOfWeek.Thursday:
-                        for (int i = Thursday.Count; i > 0; i--)
-                        {
-                            if (Thursday.ElementAt(i - 1).Id == (x as TimeSpanItem).Id)
-                            {
-                                Thursday.RemoveAt(i - 1);
-                                break;
-                            }
-                        }
-                        break;
-                    case System.DayOfWeek.Tuesday:
-                        for (int i = Tuesday.Count; i > 0; i--)
-                        {
-                            if (Tuesday.ElementAt(i - 1).Id == (x as TimeSpanItem).Id)
-                            {
-                                Tuesday.RemoveAt(i - 1);
-                                break;
-                            }
-                        }
-                        break;
-                    case System.DayOfWeek.Wednesday:
-                        for (int i = Wednesday.Count; i > 0; i--)
-                        {
-                            if (Wednesday.ElementAt(i - 1).Id == (x as TimeSpanItem).Id)
-                            {
-                                Wednesday.RemoveAt(i - 1);
-                                break;
-                            }
-                        }
-                        break;
-                    default:
-                        break;
-                }
+                RemoveTimespanItemFromList(x as TimeSpanItem);
                 _eventAggregator.GetEvent<StandardWeekUpdatedEvent>().Publish((x as TimeSpanItem).DayOfWeek);
             });
             IsSaveButtonEnabled = false;
@@ -386,6 +312,13 @@ namespace RoomInfo.ViewModels
             {
                 await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                 {
+                    Monday.Clear();
+                    Tuesday.Clear();
+                    Wednesday.Clear();
+                    Thursday.Clear();
+                    Friday.Clear();
+                    Saturday.Clear();
+                    Sunday.Clear();
                     timespanItems = await _databaseService.GetTimeSpanItemsAsync();
                     foreach (var timespanItem in timespanItems)
                     {
@@ -425,7 +358,87 @@ namespace RoomInfo.ViewModels
                     Tuesday.OrderByDescending(x => x.Start);
                     Wednesday.OrderByDescending(x => x.Start);
                 });
-            });            
+            });
+            _eventAggregator.GetEvent<RemoteTimespanItemDeletedEvent>().Subscribe(x => RemoveTimespanItemFromList(x));
+        }
+
+        private void RemoveTimespanItemFromList(TimeSpanItem timeSpanItem)
+        {
+            switch ((System.DayOfWeek)timeSpanItem.DayOfWeek)
+            {
+                case System.DayOfWeek.Friday:
+                    for (int i = Friday.Count; i > 0; i--)
+                    {
+                        if (Friday.ElementAt(i - 1).Id == timeSpanItem.Id)
+                        {
+                            Friday.RemoveAt(i - 1);
+                            break;
+                        }
+                    }
+                    break;
+                case System.DayOfWeek.Monday:
+                    for (int i = Monday.Count; i > 0; i--)
+                    {
+                        if (Monday.ElementAt(i - 1).Id == timeSpanItem.Id)
+                        {
+                            Monday.RemoveAt(i - 1);
+                            break;
+                        }
+                    }
+                    break;
+                case System.DayOfWeek.Saturday:
+                    for (int i = Saturday.Count; i > 0; i--)
+                    {
+                        if (Saturday.ElementAt(i - 1).Id == timeSpanItem.Id)
+                        {
+                            Saturday.RemoveAt(i - 1);
+                            break;
+                        }
+                    }
+                    break;
+                case System.DayOfWeek.Sunday:
+                    for (int i = Sunday.Count; i > 0; i--)
+                    {
+                        if (Sunday.ElementAt(i - 1).Id == timeSpanItem.Id)
+                        {
+                            Sunday.RemoveAt(i - 1);
+                            break;
+                        }
+                    }
+                    break;
+                case System.DayOfWeek.Thursday:
+                    for (int i = Thursday.Count; i > 0; i--)
+                    {
+                        if (Thursday.ElementAt(i - 1).Id == timeSpanItem.Id)
+                        {
+                            Thursday.RemoveAt(i - 1);
+                            break;
+                        }
+                    }
+                    break;
+                case System.DayOfWeek.Tuesday:
+                    for (int i = Tuesday.Count; i > 0; i--)
+                    {
+                        if (Tuesday.ElementAt(i - 1).Id == timeSpanItem.Id)
+                        {
+                            Tuesday.RemoveAt(i - 1);
+                            break;
+                        }
+                    }
+                    break;
+                case System.DayOfWeek.Wednesday:
+                    for (int i = Wednesday.Count; i > 0; i--)
+                    {
+                        if (Wednesday.ElementAt(i - 1).Id == timeSpanItem.Id)
+                        {
+                            Wednesday.RemoveAt(i - 1);
+                            break;
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
 
         private ModelLibrary.Language LoadLanguage()
