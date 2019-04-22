@@ -246,52 +246,51 @@ namespace RoomInfo.ViewModels
             else ExceptionLogItems.Clear();
             (await _databaseService.GetExceptionLogItemsAsync()).ForEach(x => ExceptionLogItems.Add(x));
 
-            Monday = new ObservableCollection<TimeSpanItem>();
-            Tuesday = new ObservableCollection<TimeSpanItem>();
-            Wednesday = new ObservableCollection<TimeSpanItem>();
-            Thursday = new ObservableCollection<TimeSpanItem>();
-            Friday = new ObservableCollection<TimeSpanItem>();
-            Saturday = new ObservableCollection<TimeSpanItem>();
-            Sunday = new ObservableCollection<TimeSpanItem>();
-
             var timespanItems = await _databaseService.GetTimeSpanItemsAsync();
+            var monday = new List<TimeSpanItem>();
+            var tuesday = new List<TimeSpanItem>();
+            var wednesday = new List<TimeSpanItem>();
+            var thursday = new List<TimeSpanItem>();
+            var friday = new List<TimeSpanItem>();
+            var saturday = new List<TimeSpanItem>();
+            var sunday = new List<TimeSpanItem>();
             foreach (var timespanItem in timespanItems)
             {
                 timespanItem.EventAggregator = _eventAggregator;
                 switch ((System.DayOfWeek)timespanItem.DayOfWeek)
                 {
                     case System.DayOfWeek.Friday:
-                        Friday.Add(timespanItem);
+                        friday.Add(timespanItem);
                         break;
                     case System.DayOfWeek.Monday:
-                        Monday.Add(timespanItem);
+                        monday.Add(timespanItem);
                         break;
                     case System.DayOfWeek.Saturday:
-                        Saturday.Add(timespanItem);
+                        saturday.Add(timespanItem);
                         break;
                     case System.DayOfWeek.Sunday:
-                        Sunday.Add(timespanItem);
+                        sunday.Add(timespanItem);
                         break;
                     case System.DayOfWeek.Thursday:
-                        Thursday.Add(timespanItem);
+                        thursday.Add(timespanItem);
                         break;
                     case System.DayOfWeek.Tuesday:
-                        Tuesday.Add(timespanItem);
+                        tuesday.Add(timespanItem);
                         break;
                     case System.DayOfWeek.Wednesday:
-                        Wednesday.Add(timespanItem);
+                        wednesday.Add(timespanItem);
                         break;
                     default:
                         break;
                 }
             }
-            Friday.OrderByDescending(x => x.Start);
-            Monday.OrderByDescending(x => x.Start);
-            Saturday.OrderByDescending(x => x.Start);
-            Sunday.OrderByDescending(x => x.Start);
-            Thursday.OrderByDescending(x => x.Start);
-            Tuesday.OrderByDescending(x => x.Start);
-            Wednesday.OrderByDescending(x => x.Start);
+            Monday = new ObservableCollection<TimeSpanItem>(monday.OrderBy(x => x.Start));
+            Tuesday = new ObservableCollection<TimeSpanItem>(tuesday.OrderBy(x => x.Start));
+            Wednesday = new ObservableCollection<TimeSpanItem>(wednesday.OrderBy(x => x.Start));
+            Thursday = new ObservableCollection<TimeSpanItem>(thursday.OrderBy(x => x.Start));
+            Friday = new ObservableCollection<TimeSpanItem>(friday.OrderBy(x => x.Start));
+            Saturday = new ObservableCollection<TimeSpanItem>(saturday.OrderBy(x => x.Start));
+            Sunday = new ObservableCollection<TimeSpanItem>(sunday.OrderBy(x => x.Start));
             _eventAggregator.GetEvent<UpdateTimespanItemEvent>().Subscribe(x =>
             {
                 IsSaveButtonEnabled = true;
@@ -317,13 +316,13 @@ namespace RoomInfo.ViewModels
                 {
                     await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                     {
-                        Monday.Clear();
-                        Tuesday.Clear();
-                        Wednesday.Clear();
-                        Thursday.Clear();
-                        Friday.Clear();
-                        Saturday.Clear();
-                        Sunday.Clear();
+                        var updatedMonday = new List<TimeSpanItem>();
+                        var updatedTuesday = new List<TimeSpanItem>();
+                        var updatedWednesday = new List<TimeSpanItem>();
+                        var updatedThursday = new List<TimeSpanItem>();
+                        var updatedFriday = new List<TimeSpanItem>();
+                        var updatedSaturday = new List<TimeSpanItem>();
+                        var updatedSunday = new List<TimeSpanItem>();
                         timespanItems = await _databaseService.GetTimeSpanItemsAsync();
                         foreach (var timespanItem in timespanItems)
                         {
@@ -331,37 +330,37 @@ namespace RoomInfo.ViewModels
                             switch ((System.DayOfWeek)timespanItem.DayOfWeek)
                             {
                                 case System.DayOfWeek.Friday:
-                                    Friday.Add(timespanItem);
+                                    updatedFriday.Add(timespanItem);                                    
                                     break;
                                 case System.DayOfWeek.Monday:
-                                    Monday.Add(timespanItem);
+                                    updatedMonday.Add(timespanItem);
                                     break;
                                 case System.DayOfWeek.Saturday:
-                                    Saturday.Add(timespanItem);
+                                    updatedSaturday.Add(timespanItem);
                                     break;
                                 case System.DayOfWeek.Sunday:
-                                    Sunday.Add(timespanItem);
+                                    updatedSunday.Add(timespanItem);
                                     break;
                                 case System.DayOfWeek.Thursday:
-                                    Thursday.Add(timespanItem);
+                                    updatedThursday.Add(timespanItem);
                                     break;
                                 case System.DayOfWeek.Tuesday:
-                                    Tuesday.Add(timespanItem);
+                                    updatedTuesday.Add(timespanItem);
                                     break;
                                 case System.DayOfWeek.Wednesday:
-                                    Wednesday.Add(timespanItem);
+                                    updatedWednesday.Add(timespanItem);
                                     break;
                                 default:
                                     break;
                             }
                         }
-                        Friday.OrderByDescending(x => x.Start);
-                        Monday.OrderByDescending(x => x.Start);
-                        Saturday.OrderByDescending(x => x.Start);
-                        Sunday.OrderByDescending(x => x.Start);
-                        Thursday.OrderByDescending(x => x.Start);
-                        Tuesday.OrderByDescending(x => x.Start);
-                        Wednesday.OrderByDescending(x => x.Start);
+                        Monday = new ObservableCollection<TimeSpanItem>(monday.OrderBy(x => x.Start));
+                        Tuesday = new ObservableCollection<TimeSpanItem>(tuesday.OrderBy(x => x.Start));
+                        Wednesday = new ObservableCollection<TimeSpanItem>(wednesday.OrderBy(x => x.Start));
+                        Thursday = new ObservableCollection<TimeSpanItem>(thursday.OrderBy(x => x.Start));
+                        Friday = new ObservableCollection<TimeSpanItem>(friday.OrderBy(x => x.Start));
+                        Saturday = new ObservableCollection<TimeSpanItem>(saturday.OrderBy(x => x.Start));
+                        Sunday = new ObservableCollection<TimeSpanItem>(sunday.OrderBy(x => x.Start));
                     });
                 }
                 else
@@ -719,31 +718,31 @@ namespace RoomInfo.ViewModels
                 {
                     case System.DayOfWeek.Friday:
                         Friday.Add(new TimeSpanItem() { DayOfWeek = TimespanItem.DayOfWeek, End = TimespanItem.End, Id = TimespanItem.Id, Occupancy = TimespanItem.Occupancy, Start = TimespanItem.Start, TimeStamp = TimespanItem.TimeStamp, Width = TimespanItem.Width });
-                        Friday.OrderByDescending(x => x.Start);
+                        Friday = new ObservableCollection<TimeSpanItem>(Friday.OrderBy(x => x.Start));
                         break;
                     case System.DayOfWeek.Monday:
                         Monday.Add(new TimeSpanItem() { DayOfWeek = TimespanItem.DayOfWeek, End = TimespanItem.End, Id = TimespanItem.Id, Occupancy = TimespanItem.Occupancy, Start = TimespanItem.Start, TimeStamp = TimespanItem.TimeStamp, Width = TimespanItem.Width });
-                        Monday.OrderByDescending(x => x.Start);
+                        Monday = new ObservableCollection<TimeSpanItem>(Monday.OrderBy(x => x.Start));
                         break;
                     case System.DayOfWeek.Saturday:
                         Saturday.Add(new TimeSpanItem() { DayOfWeek = TimespanItem.DayOfWeek, End = TimespanItem.End, Id = TimespanItem.Id, Occupancy = TimespanItem.Occupancy, Start = TimespanItem.Start, TimeStamp = TimespanItem.TimeStamp, Width = TimespanItem.Width });
-                        Saturday.OrderByDescending(x => x.Start);
+                        Saturday = new ObservableCollection<TimeSpanItem>(Saturday.OrderBy(x => x.Start));
                         break;
                     case System.DayOfWeek.Sunday:
                         Sunday.Add(new TimeSpanItem() { DayOfWeek = TimespanItem.DayOfWeek, End = TimespanItem.End, Id = TimespanItem.Id, Occupancy = TimespanItem.Occupancy, Start = TimespanItem.Start, TimeStamp = TimespanItem.TimeStamp, Width = TimespanItem.Width });
-                        Sunday.OrderByDescending(x => x.Start);
+                        Sunday = new ObservableCollection<TimeSpanItem>(Sunday.OrderBy(x => x.Start));
                         break;
                     case System.DayOfWeek.Thursday:
                         Thursday.Add(new TimeSpanItem() { DayOfWeek = TimespanItem.DayOfWeek, End = TimespanItem.End, Id = TimespanItem.Id, Occupancy = TimespanItem.Occupancy, Start = TimespanItem.Start, TimeStamp = TimespanItem.TimeStamp, Width = TimespanItem.Width });
-                        Thursday.OrderByDescending(x => x.Start);
+                        Thursday = new ObservableCollection<TimeSpanItem>(Thursday.OrderBy(x => x.Start));
                         break;
                     case System.DayOfWeek.Tuesday:
                         Tuesday.Add(new TimeSpanItem() { DayOfWeek = TimespanItem.DayOfWeek, End = TimespanItem.End, Id = TimespanItem.Id, Occupancy = TimespanItem.Occupancy, Start = TimespanItem.Start, TimeStamp = TimespanItem.TimeStamp, Width = TimespanItem.Width });
-                        Tuesday.OrderByDescending(x => x.Start);
+                        Tuesday = new ObservableCollection<TimeSpanItem>(Tuesday.OrderBy(x => x.Start));
                         break;
                     case System.DayOfWeek.Wednesday:
                         Wednesday.Add(new TimeSpanItem() { DayOfWeek = TimespanItem.DayOfWeek, End = TimespanItem.End, Id = TimespanItem.Id, Occupancy = TimespanItem.Occupancy, Start = TimespanItem.Start, TimeStamp = TimespanItem.TimeStamp, Width = TimespanItem.Width });
-                        Wednesday.OrderByDescending(x => x.Start);
+                        Wednesday = new ObservableCollection<TimeSpanItem>(Wednesday.OrderBy(x => x.Start));
                         break;
                     default:
                         break;
