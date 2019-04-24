@@ -143,7 +143,7 @@
       <Version>6.2.8</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.1</Version>
+      <Version>12.0.2</Version>
     </PackageReference>
     <PackageReference Include="Prism.Unity">
       <Version>6.3.0</Version>
