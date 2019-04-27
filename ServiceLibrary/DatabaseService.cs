@@ -127,9 +127,10 @@ namespace ApplicationServiceLibrary
             {
                 AgendaItemContext agendaItemContext = new AgendaItemContext();
                 return await agendaItemContext.AgendaItems
-                                .Where((x) => x.End.DateTime > dateTime)
+                                .Where((x) => x.End.DateTime > dateTime)                                
                                 .Select((x) => x)
                                 .Take(3)
+                                .OrderBy(x => x.Start)
                                 .ToListAsync();
             }
             catch (Exception e)
@@ -159,8 +160,11 @@ namespace ApplicationServiceLibrary
             {
                 AgendaItemContext agendaItemContext = new AgendaItemContext();
                 var agendaItem = await agendaItemContext.AgendaItems.Where(x => x.Id == id).Select(x => x).FirstOrDefaultAsync();
-                agendaItemContext.Remove(agendaItem);
-                await agendaItemContext.SaveChangesAsync();
+                if (agendaItem != null)
+                {
+                    agendaItemContext.Remove(agendaItem);
+                    await agendaItemContext.SaveChangesAsync();
+                }
             }
             catch (Exception e)
             {
@@ -180,37 +184,39 @@ namespace ApplicationServiceLibrary
 
         public async Task UpdateAgendaItemAsync(AgendaItem agendaItem, bool remote = false)
         {
-            if (agendaItem == null) return;
-            try
+            if (agendaItem != null)
             {
-                AgendaItemContext agendaItemContext = new AgendaItemContext();
-                agendaItemContext.Entry(agendaItem).State = EntityState.Modified;
-                if (remote)
+                try
                 {
-                    var queriedAgendaItem = await agendaItemContext.AgendaItems.Where(x => x.Id == agendaItem.Id).Select(x => x).FirstOrDefaultAsync();
-                    if (queriedAgendaItem != null)
+                    AgendaItemContext agendaItemContext = new AgendaItemContext();
+                    agendaItemContext.Entry(agendaItem).State = EntityState.Modified;
+                    if (remote)
                     {
-                        await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                        var queriedAgendaItem = await agendaItemContext.AgendaItems.Where(x => x.Id == agendaItem.Id).Select(x => x).FirstOrDefaultAsync();
+                        if (queriedAgendaItem != null)
                         {
-                            queriedAgendaItem.Description = agendaItem.Description;
-                            queriedAgendaItem.End = agendaItem.End;
-                            queriedAgendaItem.IsAllDayEvent = agendaItem.IsAllDayEvent;
-                            queriedAgendaItem.IsDeleted = agendaItem.IsDeleted;
-                            queriedAgendaItem.IsOverridden = agendaItem.IsOverridden;
-                            queriedAgendaItem.Occupancy = agendaItem.Occupancy;
-                            queriedAgendaItem.Start = agendaItem.Start;
-                            queriedAgendaItem.TimeStamp = agendaItem.TimeStamp;
-                            queriedAgendaItem.Title = agendaItem.Title;
-                        });
-                        agendaItemContext.Update(queriedAgendaItem);
+                            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                            {
+                                queriedAgendaItem.Description = agendaItem.Description;
+                                queriedAgendaItem.End = agendaItem.End;
+                                queriedAgendaItem.IsAllDayEvent = agendaItem.IsAllDayEvent;
+                                queriedAgendaItem.IsDeleted = agendaItem.IsDeleted;
+                                queriedAgendaItem.IsOverridden = agendaItem.IsOverridden;
+                                queriedAgendaItem.Occupancy = agendaItem.Occupancy;
+                                queriedAgendaItem.Start = agendaItem.Start;
+                                queriedAgendaItem.TimeStamp = agendaItem.TimeStamp;
+                                queriedAgendaItem.Title = agendaItem.Title;
+                            });
+                            agendaItemContext.Update(queriedAgendaItem);
+                        }
                     }
+                    else agendaItemContext.Update(agendaItem);
+                    await agendaItemContext.SaveChangesAsync();
                 }
-                else agendaItemContext.Update(agendaItem);
-                await agendaItemContext.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
+                catch (Exception e)
+                {
+                    if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
+                }
             }
         }
 
@@ -303,8 +309,11 @@ namespace ApplicationServiceLibrary
             {
                 TimeSpanItemContext timespanItemContext = new TimeSpanItemContext();
                 var timespanItem = await timespanItemContext.TimeSpanItems.Where(x => x.Id == id).Select(x => x).FirstOrDefaultAsync();
-                timespanItemContext.Remove(timespanItem);
-                await timespanItemContext.SaveChangesAsync();
+                if (timespanItem != null)
+                {
+                    timespanItemContext.Remove(timespanItem);
+                    await timespanItemContext.SaveChangesAsync();
+                }
             }
             catch (Exception e)
             {

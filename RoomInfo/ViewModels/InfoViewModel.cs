@@ -291,7 +291,7 @@ namespace RoomInfo.ViewModels
             else AgendaItems.Clear();
             DateTime dateTimeNow = DateTime.Now;
             var agendaItems = await _databaseService.GetAgendaItemsAsync(dateTimeNow);
-            agendaItems.Sort();
+            //agendaItems.Sort();
             for (int i = 0; i < agendaItems.Count; i++)
             {
                 AgendaItems.Add(agendaItems[i]);
