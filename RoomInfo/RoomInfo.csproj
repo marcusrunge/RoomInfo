@@ -114,7 +114,7 @@
       <Version>6.2.8</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed">
-      <Version>2.0.0</Version>
+      <Version>2.0.1</Version>
     </PackageReference>
     <!-- Nuget package references -->
     <PackageReference Include="Prism.Unity">
