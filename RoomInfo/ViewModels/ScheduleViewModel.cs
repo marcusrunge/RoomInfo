@@ -31,7 +31,7 @@ namespace RoomInfo.ViewModels
         IUserDatagramService _userDatagramService;
         IApplicationDataService _applicationDataService;
         List<AgendaItem> _agendaItems;
-        CalendarPanel calendarPanel;
+        CalendarPanel _calendarPanel;
         AgendaItem _agendaItem;
         double _agendaItemWidth;
         Package _propertyChangedPackage;
@@ -105,7 +105,7 @@ namespace RoomInfo.ViewModels
 
         int _selectedComboBoxIndex = default;
         public int SelectedComboBoxIndex { get => _selectedComboBoxIndex; set { SetProperty(ref _selectedComboBoxIndex, value); } }
-
+       
         public ScheduleViewModel(IUnityContainer unityContainer)
         {
             _unityContainer = unityContainer;
@@ -117,10 +117,10 @@ namespace RoomInfo.ViewModels
             _propertyChangedPackage = new Package() { PayloadType = (int)PayloadType.PropertyChanged };
         }
 
-        public async override void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
+        public override void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
         {
             base.OnNavigatedTo(e, viewModelState);
-            await UpdateCalendarViewDayItems();
+            //await UpdateCalendarViewDayItems();
             _eventAggregator.GetEvent<DeleteReservationEvent>().Subscribe(async (o) =>
             {
                 try
@@ -218,7 +218,7 @@ namespace RoomInfo.ViewModels
         public ICommand HandleCalendarViewDayItemChangingCommand => _handleCalendarViewDayItemChangingCommand ?? (_handleCalendarViewDayItemChangingCommand = new DelegateCommand<object>((param) =>
         {
             var frameworkElementCalendarViewDayItemChangingEventArgs = param as CalendarViewDayItemChangingEventArgs;
-            if (calendarPanel == null) calendarPanel = frameworkElementCalendarViewDayItemChangingEventArgs.Item.Parent as CalendarPanel;
+            if (_calendarPanel == null) _calendarPanel = frameworkElementCalendarViewDayItemChangingEventArgs.Item.Parent as CalendarPanel;
         }));
 
         private ICommand _saveFlyoutCommand;
@@ -237,7 +237,7 @@ namespace RoomInfo.ViewModels
         {
             _agendaItems = await _databaseService.GetAgendaItemsAsync();
             _agendaItems.Sort();
-            var calendarViewDayItems = calendarPanel.Children().OfType<CalendarViewDayItem>();
+            var calendarViewDayItems = _calendarPanel.Children().OfType<CalendarViewDayItem>();
             foreach (var calendarViewDayItem in calendarViewDayItems)
             {
                 List<AgendaItem> dayAgendaItems = _agendaItems.Where((x) => x.Start.Date == calendarViewDayItem.Date.Date).Select((x) =>
@@ -259,7 +259,7 @@ namespace RoomInfo.ViewModels
         {
             _agendaItems = await _databaseService.GetAgendaItemsAsync();
             _agendaItems.Sort();
-            var calendarViewDayItems = calendarPanel.Children().OfType<CalendarViewDayItem>();
+            var calendarViewDayItems = _calendarPanel.Children().OfType<CalendarViewDayItem>();
             foreach (var calendarViewDayItem in calendarViewDayItems)
             {
                 if (calendarViewDayItem.Date.DateTime.Date == dateTime.Date)
@@ -279,5 +279,11 @@ namespace RoomInfo.ViewModels
                 _eventAggregator.GetEvent<UpdateWidthEvent>().Publish(_agendaItemWidth);
             }
         }
+
+        private ICommand _handlePageLoadedCommand;
+        public ICommand HandlePageLoadedCommand => _handlePageLoadedCommand ?? (_handlePageLoadedCommand = new DelegateCommand<object>(async (param) =>
+        {
+            await UpdateCalendarViewDayItems();
+        }));
     }
 }

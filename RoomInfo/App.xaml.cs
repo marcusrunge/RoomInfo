@@ -18,6 +18,9 @@ using Windows.Globalization;
 using Microsoft.HockeyApp;
 using ModelLibrary;
 using System.Collections.Generic;
+using Windows.UI.Xaml.Controls;
+using Prism.Windows.Navigation;
+using RoomInfo.Views;
 
 namespace RoomInfo
 {
@@ -71,7 +74,7 @@ namespace RoomInfo
 
         protected override Task OnLaunchApplicationAsync(LaunchActivatedEventArgs args)
         {
-            return LaunchApplicationAsync(PageTokens.PivotPage, null);
+            return LaunchApplicationAsync(PageTokens.InfoPage, null);
         }
 
         private async Task LaunchApplicationAsync(string page, object launchParam)
@@ -165,6 +168,26 @@ namespace RoomInfo
             {
                 if (_databaseService != null) await _databaseService.AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
             }
+        }
+
+        protected override IDeviceGestureService OnCreateDeviceGestureService()
+        {
+            var service = base.OnCreateDeviceGestureService();
+            service.UseTitleBarBackButton = false;
+            return service;
+        }
+
+        public void SetNavigationFrame(Frame frame)
+        {
+            var sessionStateService = Container.Resolve<ISessionStateService>();
+            CreateNavigationService(new FrameFacadeAdapter(frame), sessionStateService);
+        }
+
+        protected override UIElement CreateShell(Frame rootFrame)
+        {
+            var shell = Container.Resolve<ShellPage>();
+            shell.SetRootFrame(rootFrame);
+            return shell;
         }
 
         //protected override async Task OnSuspendingApplicationAsync()

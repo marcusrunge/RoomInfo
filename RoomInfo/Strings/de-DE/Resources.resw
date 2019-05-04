@@ -345,6 +345,12 @@
   <data name="Settings_UdpPort.Text" xml:space="preserve">
     <value>UDP-Port:</value>
   </data>
+  <data name="Shell_Info.Content" xml:space="preserve">
+    <value>Belegung</value>
+  </data>
+  <data name="Shell_Schedule.Content" xml:space="preserve">
+    <value>Kalendar</value>
+  </data>
   <data name="WiFiUserControl_ConnectButton.Content" xml:space="preserve">
     <value>Verbinden</value>
   </data>

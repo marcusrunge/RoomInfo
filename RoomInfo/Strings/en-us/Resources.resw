@@ -374,4 +374,10 @@
   <data name="Info_OccupancyTextBlockHome.Text" xml:space="preserve">
     <value>H O M E O F F I C E</value>
   </data>
+  <data name="Shell_Info.Content" xml:space="preserve">
+    <value>Occupancy</value>
+  </data>
+  <data name="Shell_Schedule.Content" xml:space="preserve">
+    <value>Calendar</value>
+  </data>
 </root>
