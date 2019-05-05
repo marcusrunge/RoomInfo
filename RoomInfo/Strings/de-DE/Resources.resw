@@ -349,7 +349,7 @@
     <value>Belegung</value>
   </data>
   <data name="Shell_Schedule.Content" xml:space="preserve">
-    <value>Kalendar</value>
+    <value>Kalender</value>
   </data>
   <data name="WiFiUserControl_ConnectButton.Content" xml:space="preserve">
     <value>Verbinden</value>

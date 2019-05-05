@@ -351,4 +351,9 @@
             </StackPanel>
         </ScrollViewer>
     </Grid>
+    <interactivity:Interaction.Behaviors>
+        <core:EventTriggerBehavior EventName="Loaded">
+            <core:InvokeCommandAction Command="{Binding HandlePageLoadedCommand}"/>
+        </core:EventTriggerBehavior>
+    </interactivity:Interaction.Behaviors>
 </Page>

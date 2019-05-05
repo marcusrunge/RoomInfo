@@ -109,7 +109,7 @@ namespace RoomInfo.ViewModels
                 SetProperty(ref _tcpPort, value);
                 string previousPort = _applicationDataService.GetSetting<string>("TcpPort");
                 if (!string.IsNullOrEmpty(TcpPort)) _applicationDataService.SaveSetting("TcpPort", TcpPort);
-                if (!previousPort.Equals(TcpPort)) _eventAggregator.GetEvent<PortChangedEvent>().Publish();
+                if (!string.IsNullOrEmpty(previousPort) && !previousPort.Equals(TcpPort)) _eventAggregator.GetEvent<PortChangedEvent>().Publish();
             }
         }
 
@@ -122,7 +122,7 @@ namespace RoomInfo.ViewModels
                 SetProperty(ref _udpPort, value);
                 string previousPort = _applicationDataService.GetSetting<string>("UdpPort");
                 if (!string.IsNullOrEmpty(UdpPort)) _applicationDataService.SaveSetting("UdpPort", UdpPort);
-                if (!previousPort.Equals(UdpPort)) _eventAggregator.GetEvent<PortChangedEvent>().Publish();
+                if (!string.IsNullOrEmpty(previousPort) && !previousPort.Equals(UdpPort)) _eventAggregator.GetEvent<PortChangedEvent>().Publish();
             }
         }
 
@@ -330,7 +330,7 @@ namespace RoomInfo.ViewModels
                             switch ((System.DayOfWeek)timespanItem.DayOfWeek)
                             {
                                 case System.DayOfWeek.Friday:
-                                    updatedFriday.Add(timespanItem);                                    
+                                    updatedFriday.Add(timespanItem);
                                     break;
                                 case System.DayOfWeek.Monday:
                                     updatedMonday.Add(timespanItem);

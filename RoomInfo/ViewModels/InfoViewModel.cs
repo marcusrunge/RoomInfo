@@ -112,7 +112,7 @@ namespace RoomInfo.ViewModels
             _propertyChangedPackage = new Package() { PayloadType = (int)PayloadType.PropertyChanged };
         }
 
-        public async override void OnNavigatedTo(NavigatedToEventArgs navigatedToEventArgs, Dictionary<string, object> viewModelState)
+        public override async void OnNavigatedTo(NavigatedToEventArgs navigatedToEventArgs, Dictionary<string, object> viewModelState)
         {
             base.OnNavigatedTo(navigatedToEventArgs, viewModelState);
             _resourceLoader = ResourceLoader.GetForCurrentView();
@@ -460,5 +460,11 @@ namespace RoomInfo.ViewModels
         {
             await _iotService.Dim(false);
         }));
+
+        //private ICommand _handleComboBoxLoadedCommand;
+        //public ICommand HandleComboBoxLoadedCommand => _handleComboBoxLoadedCommand ?? (_handleComboBoxLoadedCommand = new DelegateCommand<object>((param) =>
+        //{
+        //    SelectedComboBoxIndex = _applicationDataService.GetSetting<bool>("OccupancyOverridden") ? _applicationDataService.GetSetting<int>("OverriddenOccupancy") : _applicationDataService.GetSetting<int>("StandardOccupancy");
+        //}));
     }
 }
