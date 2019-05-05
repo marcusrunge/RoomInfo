@@ -465,10 +465,10 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Image x:Name="CompanyLogo" Source="{Binding CompanyLogo}" HorizontalAlignment="Left" Margin="12,12,12,12"/>
-                <TextBlock x:Name="CompanyName" Grid.Column="1" Text="{x:Bind ViewModel.CompanyName, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="{x:Bind ViewModel.ExtraLargeFontSize, Mode=OneWay}"/>
+                <TextBlock x:Name="CompanyName" Grid.Column="1" Text="{x:Bind ViewModel.CompanyName, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="{Binding ExtraLargeFontSize}"/>
                 <StackPanel Grid.Column="2">
-                    <TextBlock x:Name="Clock" Text="{Binding Clock, UpdateSourceTrigger=PropertyChanged}" FontSize="{x:Bind ViewModel.ExtraLargeFontSize, Mode=OneWay}" HorizontalAlignment="Right" />
-                    <TextBlock x:Name="Date" Text="{Binding Date, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" FontSize="{x:Bind ViewModel.MediumFontSize, Mode=OneWay}"/>
+                    <TextBlock x:Name="Clock" Text="{Binding Clock, UpdateSourceTrigger=PropertyChanged}" FontSize="{Binding ExtraLargeFontSize}" HorizontalAlignment="Right" />
+                    <TextBlock x:Name="Date" Text="{Binding Date, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" FontSize="{Binding MediumFontSize}"/>
                 </StackPanel>
 
             </Grid>
@@ -545,13 +545,13 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <ComboBox Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Top" FontSize="{x:Bind ViewModel.MediumFontSize, Mode=OneWay}" SelectedIndex="{x:Bind ViewModel.SelectedComboBoxIndex, Mode=TwoWay}">
+                    <ComboBox Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Top" FontSize="{Binding MediumFontSize}" SelectedIndex="{x:Bind ViewModel.SelectedComboBoxIndex, Mode=TwoWay}">
                         <!--<interactivity:Interaction.Behaviors>
                             <core:EventTriggerBehavior EventName="Loaded">
                                 <core:InvokeCommandAction Command="{Binding HandleComboBoxLoadedCommand}"/>
                             </core:EventTriggerBehavior>
                         </interactivity:Interaction.Behaviors>-->
-                        <ComboBoxItem x:Uid="Info_OccupancyFree" FontSize="{x:Bind ViewModel.MediumFontSize, Mode=OneWay}">
+                        <ComboBoxItem x:Uid="Info_OccupancyFree" FontSize="{Binding MediumFontSize}">
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:GoToStateAction StateName="FreeVisualState"/>
@@ -559,7 +559,7 @@
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
-                        <ComboBoxItem x:Uid="Info_OccupancyPresent" FontSize="{x:Bind ViewModel.MediumFontSize, Mode=OneWay}" >
+                        <ComboBoxItem x:Uid="Info_OccupancyPresent" FontSize="{Binding MediumFontSize}" >
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:GoToStateAction StateName="PresentVisualState"/>
@@ -567,7 +567,7 @@
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
-                        <ComboBoxItem x:Uid="Info_OccupancyAbsent" FontSize="{x:Bind ViewModel.MediumFontSize, Mode=OneWay}">
+                        <ComboBoxItem x:Uid="Info_OccupancyAbsent" FontSize="{Binding MediumFontSize}">
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:GoToStateAction StateName="AbsentVisualState"/>
@@ -575,7 +575,7 @@
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
-                        <ComboBoxItem x:Uid="Info_OccupancyBusy" FontSize="{x:Bind ViewModel.MediumFontSize, Mode=OneWay}">
+                        <ComboBoxItem x:Uid="Info_OccupancyBusy" FontSize="{Binding MediumFontSize}">
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:GoToStateAction StateName="BusyVisualState"/>
@@ -583,7 +583,7 @@
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
-                        <ComboBoxItem x:Uid="Info_OccupancyOccupied" FontSize="{x:Bind ViewModel.MediumFontSize, Mode=OneWay}">
+                        <ComboBoxItem x:Uid="Info_OccupancyOccupied" FontSize="{Binding MediumFontSize}">
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:GoToStateAction StateName="OccupiedVisualState"/>
@@ -591,7 +591,7 @@
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
-                        <ComboBoxItem x:Uid="Info_OccupancyLocked" FontSize="{x:Bind ViewModel.MediumFontSize, Mode=OneWay}" >
+                        <ComboBoxItem x:Uid="Info_OccupancyLocked" FontSize="{Binding MediumFontSize}" >
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:GoToStateAction StateName="LockedVisualState"/>
@@ -599,7 +599,7 @@
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
-                        <ComboBoxItem x:Uid="Info_OccupancyHome" FontSize="{x:Bind ViewModel.MediumFontSize, Mode=OneWay}" >
+                        <ComboBoxItem x:Uid="Info_OccupancyHome" FontSize="{Binding MediumFontSize}" >
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
                                     <core:GoToStateAction StateName="HomeVisualState"/>
@@ -613,8 +613,8 @@
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <Button HorizontalAlignment="Stretch" Grid.Column="1" x:Name="dimButton" Content="☾" FontSize="{x:Bind ViewModel.MediumToLargeFontSize, Mode=OneWay}" Command="{Binding DimCommand}" Margin="6,0,6,0" Visibility="{Binding BrightnessAdjustmentVisibility}"/>
-                        <Button HorizontalAlignment="Stretch"  x:Name="brightButton" Content="☼"  FontSize="{x:Bind ViewModel.MediumToLargeFontSize, Mode=OneWay}" Command="{Binding BrightCommand}" Margin="6,0,6,0" Visibility="{Binding BrightnessAdjustmentVisibility}"/>
+                        <Button HorizontalAlignment="Stretch" Grid.Column="1" x:Name="dimButton" Content="☾" FontSize="{Binding MediumToLargeFontSize}" Command="{Binding DimCommand}" Margin="6,0,6,0" Visibility="{Binding BrightnessAdjustmentVisibility}"/>
+                        <Button HorizontalAlignment="Stretch"  x:Name="brightButton" Content="☼"  FontSize="{Binding MediumToLargeFontSize}" Command="{Binding BrightCommand}" Margin="6,0,6,0" Visibility="{Binding BrightnessAdjustmentVisibility}"/>
                     </Grid>                    
                 </Grid>
             </Grid>
