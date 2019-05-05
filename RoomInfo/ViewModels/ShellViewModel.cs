@@ -59,9 +59,21 @@ namespace RoomInfo.ViewModels
             ItemInvokedCommand = new DelegateCommand<WinUI.NavigationViewItemInvokedEventArgs>(OnItemInvoked);
         }
 
-        public async override void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
+        public override void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
         {
             base.OnNavigatedTo(e, viewModelState);
+        }
+
+        public async void Initialize(Frame frame, WinUI.NavigationView navigationView)
+        {
+            _frame = frame;
+            _navigationView = navigationView;
+            _frame.NavigationFailed += (sender, e) =>
+            {
+                throw e.Exception;
+            };
+            _frame.Navigated += Frame_Navigated;
+            _navigationView.BackRequested += OnBackRequested;
             if (string.IsNullOrEmpty(_applicationDataService.GetSetting<string>("TcpPort"))) _applicationDataService.SaveSetting("TcpPort", "8273");
             if (string.IsNullOrEmpty(_applicationDataService.GetSetting<string>("UdpPort"))) _applicationDataService.SaveSetting("UdpPort", "8274");
             _liveTileUpdateService.UpdateTile(_liveTileUpdateService.CreateTile(await _liveTileUpdateService.GetActiveAgendaItem()));
@@ -77,19 +89,6 @@ namespace RoomInfo.ViewModels
             catch { }
             await _userDatagramService.StartListenerAsync();
             await _transmissionControlService.StartListenerAsync();
-
-        }
-
-        public void Initialize(Frame frame, WinUI.NavigationView navigationView)
-        {
-            _frame = frame;
-            _navigationView = navigationView;
-            _frame.NavigationFailed += (sender, e) =>
-            {
-                throw e.Exception;
-            };
-            _frame.Navigated += Frame_Navigated;
-            _navigationView.BackRequested += OnBackRequested;
         }
 
         private void OnItemInvoked(WinUI.NavigationViewItemInvokedEventArgs args)
