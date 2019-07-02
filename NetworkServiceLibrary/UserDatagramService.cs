@@ -15,7 +15,7 @@ namespace NetworkServiceLibrary
 {
     public interface IUserDatagramService
     {
-        Task StartListenerAsync();        
+        Task StartListenerAsync();
         Task TransferOwnership();
         Task SendStringData(HostName hostName, string port, string data);
         Task SendStringData(DatagramSocket datagramSocket, string data);
@@ -90,7 +90,7 @@ namespace NetworkServiceLibrary
         public async Task StartListenerAsync()
         {
             try
-            {            
+            {
                 _datagramSocket = new DatagramSocket();
                 var window = CoreWindow.GetForCurrentThread();
                 var dispatcher = window.Dispatcher;
@@ -106,7 +106,7 @@ namespace NetworkServiceLibrary
                     if (package != null)
                     {
                         switch ((PayloadType)package.PayloadType)
-                        {                            
+                        {
                             case PayloadType.Discovery:
                                 package = new Package()
                                 {
@@ -129,7 +129,7 @@ namespace NetworkServiceLibrary
                                 break;
                         }
                     }
-                };                
+                };
             }
             catch (Exception ex)
             {
@@ -137,10 +137,10 @@ namespace NetworkServiceLibrary
             }
 
             _eventAggregator.GetEvent<PortChangedEvent>().Subscribe(async () =>
-            {                
+            {
                 await StartListenerAsync();
             });
-        }        
+        }
 
         public async Task TransferOwnership()
         {

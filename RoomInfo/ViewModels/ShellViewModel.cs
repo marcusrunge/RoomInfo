@@ -64,7 +64,6 @@ namespace RoomInfo.ViewModels
 
         public async void Initialize(Frame frame, WinUI.NavigationView navigationView)
         {
-            BackgroundTaskRegistration backgroundTaskRegistration= null;
             _frame = frame;
             _navigationView = navigationView;
             _frame.NavigationFailed += (sender, e) =>
