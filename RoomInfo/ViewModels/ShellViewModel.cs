@@ -84,7 +84,8 @@ namespace RoomInfo.ViewModels
             catch { }
             try
             {
-                if (_backgroundTaskService.FindRegistration<SocketActivityTriggerBackgroundTask>() == null) _backgroundTaskRegistrationProvider.BackgroundTaskRegistration = await _backgroundTaskService.Register<SocketActivityTriggerBackgroundTask>(new SocketActivityTrigger());
+                _backgroundTaskRegistrationProvider.BackgroundTaskRegistration = (BackgroundTaskRegistration)_backgroundTaskService.FindRegistration<SocketActivityTriggerBackgroundTask>();
+                if (_backgroundTaskRegistrationProvider.BackgroundTaskRegistration == null) _backgroundTaskRegistrationProvider.BackgroundTaskRegistration = await _backgroundTaskService.Register<SocketActivityTriggerBackgroundTask>(new SocketActivityTrigger());                 
             }
             catch { }
             await _userDatagramService.StartListenerAsync();
