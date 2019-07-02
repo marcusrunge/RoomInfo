@@ -9,12 +9,13 @@ using Newtonsoft.Json;
 using Prism.Events;
 using System.Collections.Generic;
 using Windows.Storage.Streams;
+using Windows.ApplicationModel.Background;
 
 namespace NetworkServiceLibrary
 {
     public interface ITransmissionControlService
     {
-        Task StartListenerAsync();
+        Task StartListenerAsync(BackgroundTaskRegistration backgroundTaskRegistration);
         void StopListener();
         Task TransferOwnership();
         Task SendStringData(HostName hostName, string port, string data);
@@ -27,18 +28,16 @@ namespace NetworkServiceLibrary
         IBackgroundTaskService _backgroundTaskService;
         IDatabaseService _databaseService;
         IIotService _iotService;
-        IBackgroundTaskRegistrationProvider _backgroundTaskRegistrationProvider;
         StreamSocketListener _streamSocketListener;
         private int _transferOwnershipCount;
 
-        public TransmissionControlService(IApplicationDataService applicationDataService, IBackgroundTaskService backgroundTaskService, IEventAggregator eventAggregator, IDatabaseService databaseService, IIotService iotService, IBackgroundTaskRegistrationProvider backgroundTaskRegistrationProvider)
+        public TransmissionControlService(IApplicationDataService applicationDataService, IBackgroundTaskService backgroundTaskService, IEventAggregator eventAggregator, IDatabaseService databaseService, IIotService iotService)
         {
             _applicationDataService = applicationDataService;
             _backgroundTaskService = backgroundTaskService;
             _eventAggregator = eventAggregator;
             _databaseService = databaseService;
             _iotService = iotService;
-            _backgroundTaskRegistrationProvider = backgroundTaskRegistrationProvider;
         }
 
         public async Task SendStringData(HostName hostName, string port, string data)
@@ -85,12 +84,12 @@ namespace NetworkServiceLibrary
             }
         }
 
-        public async Task StartListenerAsync()
+        public async Task StartListenerAsync(BackgroundTaskRegistration backgroundTaskRegistration)
         {
             try
             {
                 _streamSocketListener = new StreamSocketListener();
-                if (_backgroundTaskRegistrationProvider.BackgroundTaskRegistration != null) _streamSocketListener.EnableTransferOwnership(_backgroundTaskRegistrationProvider.BackgroundTaskRegistration.TaskId, SocketActivityConnectedStandbyAction.DoNotWake);
+                if (backgroundTaskRegistration != null) _streamSocketListener.EnableTransferOwnership(backgroundTaskRegistration.TaskId, SocketActivityConnectedStandbyAction.DoNotWake);
                 _streamSocketListener.ConnectionReceived += async (s, e) =>
                 {
                     using (StreamReader streamReader = new StreamReader(e.Socket.InputStream.AsStreamForRead()))
@@ -107,7 +106,7 @@ namespace NetworkServiceLibrary
             _eventAggregator.GetEvent<PortChangedEvent>().Subscribe(async () =>
             {
                 StopListener();
-                await StartListenerAsync();
+                await StartListenerAsync(backgroundTaskRegistration);
             });
         }
 

@@ -31,7 +31,6 @@ namespace RoomInfo.ViewModels
         ILiveTileUpdateService _liveTileUpdateService;
         IUserDatagramService _userDatagramService;
         ITransmissionControlService _transmissionControlService;
-        IBackgroundTaskRegistrationProvider _backgroundTaskRegistrationProvider;
 
         public ICommand ItemInvokedCommand { get; }
 
@@ -55,7 +54,6 @@ namespace RoomInfo.ViewModels
             _liveTileUpdateService = unityContainer.Resolve<ILiveTileUpdateService>();
             _userDatagramService = unityContainer.Resolve<IUserDatagramService>();
             _transmissionControlService = unityContainer.Resolve<ITransmissionControlService>();
-            _backgroundTaskRegistrationProvider = unityContainer.Resolve<IBackgroundTaskRegistrationProvider>();
             ItemInvokedCommand = new DelegateCommand<WinUI.NavigationViewItemInvokedEventArgs>(OnItemInvoked);
         }
 
@@ -66,6 +64,7 @@ namespace RoomInfo.ViewModels
 
         public async void Initialize(Frame frame, WinUI.NavigationView navigationView)
         {
+            BackgroundTaskRegistration backgroundTaskRegistration= null;
             _frame = frame;
             _navigationView = navigationView;
             _frame.NavigationFailed += (sender, e) =>
@@ -84,12 +83,12 @@ namespace RoomInfo.ViewModels
             catch { }
             try
             {
-                _backgroundTaskRegistrationProvider.BackgroundTaskRegistration = (BackgroundTaskRegistration)_backgroundTaskService.FindRegistration<SocketActivityTriggerBackgroundTask>();
-                if (_backgroundTaskRegistrationProvider.BackgroundTaskRegistration == null) _backgroundTaskRegistrationProvider.BackgroundTaskRegistration = await _backgroundTaskService.Register<SocketActivityTriggerBackgroundTask>(new SocketActivityTrigger());                 
+                backgroundTaskRegistration = (BackgroundTaskRegistration)_backgroundTaskService.FindRegistration<SocketActivityTriggerBackgroundTask>();
+                if (backgroundTaskRegistration == null) backgroundTaskRegistration = await _backgroundTaskService.Register<SocketActivityTriggerBackgroundTask>(new SocketActivityTrigger());                 
             }
             catch { }
-            await _userDatagramService.StartListenerAsync();
-            await _transmissionControlService.StartListenerAsync();
+            await _userDatagramService.StartListenerAsync(backgroundTaskRegistration);
+            await _transmissionControlService.StartListenerAsync(backgroundTaskRegistration);
         }
 
         private void OnItemInvoked(WinUI.NavigationViewItemInvokedEventArgs args)

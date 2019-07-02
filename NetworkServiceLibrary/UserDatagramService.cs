@@ -9,12 +9,13 @@ using Prism.Events;
 using Windows.Storage.Streams;
 using Windows.Networking;
 using System.IO;
+using Windows.ApplicationModel.Background;
 
 namespace NetworkServiceLibrary
 {
     public interface IUserDatagramService
     {
-        Task StartListenerAsync();
+        Task StartListenerAsync(BackgroundTaskRegistration backgroundTaskRegistration);
         void StopListener();
         Task TransferOwnership();
         Task SendStringData(HostName hostName, string port, string data);
@@ -26,18 +27,16 @@ namespace NetworkServiceLibrary
         IBackgroundTaskService _backgroundTaskService;
         ITransmissionControlService _transmissionControlService;
         IEventAggregator _eventAggregator;
-        IBackgroundTaskRegistrationProvider _backgroundTaskRegistrationProvider;
         IIotService _iotService;
         DatagramSocket _datagramSocket;
         private int _transferOwnershipCount;
 
-        public UserDatagramService(IApplicationDataService applicationDataService, IBackgroundTaskService backgroundTaskService, ITransmissionControlService transmissionControlService, IEventAggregator eventAggregator, IBackgroundTaskRegistrationProvider backgroundTaskRegistrationProvider, IIotService iotService)
+        public UserDatagramService(IApplicationDataService applicationDataService, IBackgroundTaskService backgroundTaskService, ITransmissionControlService transmissionControlService, IEventAggregator eventAggregator, IIotService iotService)
         {
             _applicationDataService = applicationDataService;
             _backgroundTaskService = backgroundTaskService;
             _transmissionControlService = transmissionControlService;
             _eventAggregator = eventAggregator;
-            _backgroundTaskRegistrationProvider = backgroundTaskRegistrationProvider;
             _iotService = iotService;
         }
 
@@ -88,14 +87,14 @@ namespace NetworkServiceLibrary
             }
         }
 
-        public async Task StartListenerAsync()
+        public async Task StartListenerAsync(BackgroundTaskRegistration backgroundTaskRegistration)
         {
             try
             {
                 _datagramSocket = new DatagramSocket();
                 var window = CoreWindow.GetForCurrentThread();
                 var dispatcher = window.Dispatcher;
-                if (_backgroundTaskRegistrationProvider.BackgroundTaskRegistration != null) _datagramSocket.EnableTransferOwnership(_backgroundTaskRegistrationProvider.BackgroundTaskRegistration.TaskId, SocketActivityConnectedStandbyAction.DoNotWake);
+                if (backgroundTaskRegistration != null) _datagramSocket.EnableTransferOwnership(backgroundTaskRegistration.TaskId, SocketActivityConnectedStandbyAction.DoNotWake);
                 _datagramSocket.MessageReceived += async (s, e) =>
                 {
                     uint stringLength = e.GetDataReader().UnconsumedBufferLength;
@@ -138,7 +137,7 @@ namespace NetworkServiceLibrary
             _eventAggregator.GetEvent<PortChangedEvent>().Subscribe(async () =>
             {
                 StopListener();
-                await StartListenerAsync();
+                await StartListenerAsync(backgroundTaskRegistration);
             });
         }
 

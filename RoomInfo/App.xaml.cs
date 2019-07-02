@@ -64,7 +64,6 @@ namespace RoomInfo
                 Container.RegisterType<IUserDatagramService, UserDatagramService>(new ContainerControlledLifetimeManager());
                 Container.RegisterType<IDateTimeValidationService, DateTimeValidationService>();
                 Container.RegisterType<IIotService, IotService>();
-                Container.RegisterType<IBackgroundTaskRegistrationProvider, BackgroundTaskRegistrationProvider>();
             }
             catch (Exception e)
             {
