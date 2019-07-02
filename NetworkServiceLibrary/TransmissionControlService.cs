@@ -8,15 +8,14 @@ using ModelLibrary;
 using Newtonsoft.Json;
 using Prism.Events;
 using System.Collections.Generic;
-using Windows.Storage.Streams;
 using Windows.ApplicationModel.Background;
+using BackgroundComponent;
 
 namespace NetworkServiceLibrary
 {
     public interface ITransmissionControlService
     {
-        Task StartListenerAsync(BackgroundTaskRegistration backgroundTaskRegistration);
-        void StopListener();
+        Task StartListenerAsync();
         Task TransferOwnership();
         Task SendStringData(HostName hostName, string port, string data);
         Task SendStringData(StreamSocket streamSocket, string data);
@@ -29,7 +28,7 @@ namespace NetworkServiceLibrary
         IDatabaseService _databaseService;
         IIotService _iotService;
         StreamSocketListener _streamSocketListener;
-        private int _transferOwnershipCount;
+        BackgroundTaskRegistration _backgroundTaskRegistration;
 
         public TransmissionControlService(IApplicationDataService applicationDataService, IBackgroundTaskService backgroundTaskService, IEventAggregator eventAggregator, IDatabaseService databaseService, IIotService iotService)
         {
@@ -38,6 +37,7 @@ namespace NetworkServiceLibrary
             _eventAggregator = eventAggregator;
             _databaseService = databaseService;
             _iotService = iotService;
+            _backgroundTaskRegistration = null;
         }
 
         public async Task SendStringData(HostName hostName, string port, string data)
@@ -84,12 +84,15 @@ namespace NetworkServiceLibrary
             }
         }
 
-        public async Task StartListenerAsync(BackgroundTaskRegistration backgroundTaskRegistration)
+        public async Task StartListenerAsync()
         {
             try
             {
                 _streamSocketListener = new StreamSocketListener();
-                if (backgroundTaskRegistration != null) _streamSocketListener.EnableTransferOwnership(backgroundTaskRegistration.TaskId, SocketActivityConnectedStandbyAction.DoNotWake);
+                _backgroundTaskRegistration = (BackgroundTaskRegistration)_backgroundTaskService.FindRegistration<SocketActivityTriggerBackgroundTask>();
+                if (_backgroundTaskRegistration == null) _backgroundTaskRegistration = await _backgroundTaskService.Register<SocketActivityTriggerBackgroundTask>(new SocketActivityTrigger());
+                if (_backgroundTaskRegistration != null) _streamSocketListener.EnableTransferOwnership(_backgroundTaskRegistration.TaskId, SocketActivityConnectedStandbyAction.DoNotWake);
+                await _streamSocketListener.BindServiceNameAsync(_applicationDataService.GetSetting<string>("TcpPort"));
                 _streamSocketListener.ConnectionReceived += async (s, e) =>
                 {
                     using (StreamReader streamReader = new StreamReader(e.Socket.InputStream.AsStreamForRead()))
@@ -97,7 +100,6 @@ namespace NetworkServiceLibrary
                         await ProcessInputStream(e.Socket, await streamReader.ReadLineAsync());
                     }
                 };
-                await _streamSocketListener.BindServiceNameAsync(_applicationDataService.GetSetting<string>("TcpPort"));
             }
             catch (Exception ex)
             {
@@ -105,31 +107,17 @@ namespace NetworkServiceLibrary
             }
             _eventAggregator.GetEvent<PortChangedEvent>().Subscribe(async () =>
             {
-                StopListener();
-                await StartListenerAsync(backgroundTaskRegistration);
+                await StartListenerAsync();
             });
         }
 
-        public void StopListener()
-        {
-            if (_streamSocketListener != null)
-            {
-                _streamSocketListener.Dispose();
-                _streamSocketListener = null;
-            }
-        }
 
         public async Task TransferOwnership()
         {
             if (_streamSocketListener != null)
             {
                 await _streamSocketListener.CancelIOAsync();
-                var dataWriter = new DataWriter();
-                ++_transferOwnershipCount;
-                dataWriter.WriteInt32(_transferOwnershipCount);
-                var context = new SocketActivityContext(dataWriter.DetachBuffer());
-                _streamSocketListener.TransferOwnership("StreamSocket", context);
-                StopListener();
+                _streamSocketListener.TransferOwnership("StreamSocket");
             }
         }
 
@@ -223,7 +211,7 @@ namespace NetworkServiceLibrary
                                 await SendStringData(streamSocket, json);
                             }
                             else if (timeSpanItem.IsDeleted && timeSpanItem.Id > 0)
-                            {                                
+                            {
                                 await _databaseService.RemoveTimeSpanItemAsync(timeSpanItem.Id);
                                 _eventAggregator.GetEvent<RemoteTimespanItemDeletedEvent>().Publish(timeSpanItem);
                                 streamSocket.Dispose();

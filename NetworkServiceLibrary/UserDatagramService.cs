@@ -6,17 +6,16 @@ using ModelLibrary;
 using Newtonsoft.Json;
 using ApplicationServiceLibrary;
 using Prism.Events;
-using Windows.Storage.Streams;
 using Windows.Networking;
 using System.IO;
 using Windows.ApplicationModel.Background;
+using BackgroundComponent;
 
 namespace NetworkServiceLibrary
 {
     public interface IUserDatagramService
     {
-        Task StartListenerAsync(BackgroundTaskRegistration backgroundTaskRegistration);
-        void StopListener();
+        Task StartListenerAsync();        
         Task TransferOwnership();
         Task SendStringData(HostName hostName, string port, string data);
         Task SendStringData(DatagramSocket datagramSocket, string data);
@@ -29,7 +28,7 @@ namespace NetworkServiceLibrary
         IEventAggregator _eventAggregator;
         IIotService _iotService;
         DatagramSocket _datagramSocket;
-        private int _transferOwnershipCount;
+        BackgroundTaskRegistration _backgroundTaskRegistration;
 
         public UserDatagramService(IApplicationDataService applicationDataService, IBackgroundTaskService backgroundTaskService, ITransmissionControlService transmissionControlService, IEventAggregator eventAggregator, IIotService iotService)
         {
@@ -38,6 +37,7 @@ namespace NetworkServiceLibrary
             _transmissionControlService = transmissionControlService;
             _eventAggregator = eventAggregator;
             _iotService = iotService;
+            _backgroundTaskRegistration = null;
         }
 
         public async Task SendStringData(HostName hostName, string port, string data)
@@ -87,14 +87,17 @@ namespace NetworkServiceLibrary
             }
         }
 
-        public async Task StartListenerAsync(BackgroundTaskRegistration backgroundTaskRegistration)
+        public async Task StartListenerAsync()
         {
             try
-            {
+            {            
                 _datagramSocket = new DatagramSocket();
                 var window = CoreWindow.GetForCurrentThread();
                 var dispatcher = window.Dispatcher;
-                if (backgroundTaskRegistration != null) _datagramSocket.EnableTransferOwnership(backgroundTaskRegistration.TaskId, SocketActivityConnectedStandbyAction.DoNotWake);
+                _backgroundTaskRegistration = (BackgroundTaskRegistration)_backgroundTaskService.FindRegistration<SocketActivityTriggerBackgroundTask>();
+                if (_backgroundTaskRegistration == null) _backgroundTaskRegistration = await _backgroundTaskService.Register<SocketActivityTriggerBackgroundTask>(new SocketActivityTrigger());
+                if (_backgroundTaskRegistration != null) _datagramSocket.EnableTransferOwnership(_backgroundTaskRegistration.TaskId, SocketActivityConnectedStandbyAction.DoNotWake);
+                await _datagramSocket.BindServiceNameAsync(_applicationDataService.GetSetting<string>("UdpPort"));
                 _datagramSocket.MessageReceived += async (s, e) =>
                 {
                     uint stringLength = e.GetDataReader().UnconsumedBufferLength;
@@ -126,8 +129,7 @@ namespace NetworkServiceLibrary
                                 break;
                         }
                     }
-                };
-                await _datagramSocket.BindServiceNameAsync(_applicationDataService.GetSetting<string>("UdpPort"));
+                };                
             }
             catch (Exception ex)
             {
@@ -135,32 +137,17 @@ namespace NetworkServiceLibrary
             }
 
             _eventAggregator.GetEvent<PortChangedEvent>().Subscribe(async () =>
-            {
-                StopListener();
-                await StartListenerAsync(backgroundTaskRegistration);
+            {                
+                await StartListenerAsync();
             });
-        }
-
-        public void StopListener()
-        {
-            if (_datagramSocket != null)
-            {
-                _datagramSocket.Dispose();
-                _datagramSocket = null;
-            }
-        }
+        }        
 
         public async Task TransferOwnership()
         {
             if (_datagramSocket != null)
             {
                 await _datagramSocket.CancelIOAsync();
-                var dataWriter = new DataWriter();
-                ++_transferOwnershipCount;
-                dataWriter.WriteInt32(_transferOwnershipCount);
-                var context = new SocketActivityContext(dataWriter.DetachBuffer());
-                _datagramSocket.TransferOwnership("UserDatagramSocket", context);
-                StopListener();
+                _datagramSocket.TransferOwnership("UserDatagramSocket");
             }
         }
     }

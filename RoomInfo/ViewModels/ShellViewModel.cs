@@ -80,15 +80,9 @@ namespace RoomInfo.ViewModels
             {
                 if (_backgroundTaskService.FindRegistration<LiveTileUpdateBackgroundTask>() == null) await _backgroundTaskService.Register<LiveTileUpdateBackgroundTask>(new TimeTrigger(15, false));
             }
-            catch { }
-            try
-            {
-                backgroundTaskRegistration = (BackgroundTaskRegistration)_backgroundTaskService.FindRegistration<SocketActivityTriggerBackgroundTask>();
-                if (backgroundTaskRegistration == null) backgroundTaskRegistration = await _backgroundTaskService.Register<SocketActivityTriggerBackgroundTask>(new SocketActivityTrigger());                 
-            }
-            catch { }
-            await _userDatagramService.StartListenerAsync(backgroundTaskRegistration);
-            await _transmissionControlService.StartListenerAsync(backgroundTaskRegistration);
+            catch { }            
+            await _userDatagramService.StartListenerAsync();
+            await _transmissionControlService.StartListenerAsync();
         }
 
         private void OnItemInvoked(WinUI.NavigationViewItemInvokedEventArgs args)
