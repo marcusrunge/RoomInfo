@@ -134,7 +134,7 @@
       <Version>3.0.0-preview3.19153.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyModel">
-      <Version>3.0.0-preview3-27503-5</Version>
+      <Version>3.0.0-preview8-28405-07</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.8</Version>
