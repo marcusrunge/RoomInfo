@@ -19,7 +19,7 @@
     <WindowsXamlEnableOverview>true</WindowsXamlEnableOverview>
     <PackageCertificateKeyFile>
     </PackageCertificateKeyFile>
-    <PackageCertificateThumbprint>8DAEC40465D8863D0020D9AFB4646D64643D0BCA</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>9AB5C622D79B3FB9C3A31E9DBA83A9713252D437</PackageCertificateThumbprint>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxPackageDir>C:\Users\Marcus Runge\Austausch\</AppxPackageDir>
@@ -118,7 +118,7 @@
       <Version>6.2.9</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.UI.Xaml">
-      <Version>2.2.190731001-prerelease</Version>
+      <Version>2.2.190917002</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.UI.Xaml.Core.Direct">
       <Version>2.0.190315001-prerelease</Version>
