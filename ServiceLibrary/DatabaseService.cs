@@ -3,6 +3,7 @@ using ModelLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
@@ -32,6 +33,7 @@ namespace ApplicationServiceLibrary
     {
         readonly ExceptionLogItemContext _exceptionLogItemContext;
         readonly TimeSpanItemContext _timespanItemContext;
+        Mutex _mutex;
         public DatabaseService()
         {
             try
@@ -63,22 +65,26 @@ namespace ApplicationServiceLibrary
             {
                 if (_exceptionLogItemContext != null) Task.Run(async () => await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace }));
             }
+            _mutex = new Mutex();
         }
 
         public async Task<int> AddAgendaItemAsync(AgendaItem agendaItem)
         {
+            _mutex.WaitOne();
             try
             {
                 AgendaItemContext agendaItemContext = new AgendaItemContext();
                 agendaItem = (await agendaItemContext.AddAsync(agendaItem)).Entity;
                 await agendaItemContext.SaveChangesAsync();
+                _mutex.ReleaseMutex();
                 return agendaItem.Id;
             }
             catch (Exception e)
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
+                _mutex.ReleaseMutex();
                 return int.MinValue;
-            }
+            }            
         }
 
         public async Task<int> AddExceptionLogItem(ExceptionLogItem exceptionLogItem)
@@ -97,14 +103,17 @@ namespace ApplicationServiceLibrary
 
         public async Task<List<AgendaItem>> GetAgendaItemsAsync()
         {
+            _mutex.WaitOne();
             try
             {
                 AgendaItemContext agendaItemContext = new AgendaItemContext();
+                _mutex.ReleaseMutex();
                 return await agendaItemContext.AgendaItems.ToListAsync();
             }
             catch (Exception e)
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
+                _mutex.ReleaseMutex();
                 return new List<AgendaItem>();
             }
         }
@@ -123,9 +132,11 @@ namespace ApplicationServiceLibrary
 
         public async Task<List<AgendaItem>> GetAgendaItemsAsync(DateTime dateTime)
         {
+            _mutex.WaitOne();
             try
             {
                 AgendaItemContext agendaItemContext = new AgendaItemContext();
+                _mutex.ReleaseMutex();
                 return await agendaItemContext.AgendaItems
                                 .Where((x) => x.End.DateTime > dateTime)                                
                                 .Select((x) => x)
@@ -136,12 +147,14 @@ namespace ApplicationServiceLibrary
             catch (Exception e)
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
+                _mutex.ReleaseMutex();
                 return new List<AgendaItem>();
             }
         }
 
         public async Task RemoveAgendaItemAsync(AgendaItem agendaItem)
         {
+            _mutex.WaitOne();
             try
             {
                 AgendaItemContext agendaItemContext = new AgendaItemContext();
@@ -152,10 +165,12 @@ namespace ApplicationServiceLibrary
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
             }
+            _mutex.ReleaseMutex();
         }
 
         public async Task RemoveAgendaItemAsync(int id)
         {
+            _mutex.WaitOne();
             try
             {
                 AgendaItemContext agendaItemContext = new AgendaItemContext();
@@ -170,6 +185,7 @@ namespace ApplicationServiceLibrary
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
             }
+            _mutex.ReleaseMutex();
         }
 
         public async Task RemoveExceptionLogItemsAsync()
@@ -184,6 +200,7 @@ namespace ApplicationServiceLibrary
 
         public async Task UpdateAgendaItemAsync(AgendaItem agendaItem, bool remote = false)
         {
+            _mutex.WaitOne();
             if (agendaItem != null)
             {
                 try
@@ -218,10 +235,12 @@ namespace ApplicationServiceLibrary
                     if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
                 }
             }
+            _mutex.ReleaseMutex();
         }
 
         public async Task UpdateAgendaItemsAsync(List<AgendaItem> agendaItems, bool remote = false)
         {
+            _mutex.WaitOne();
             if (agendaItems == null) return;
             try
             {
@@ -271,26 +290,31 @@ namespace ApplicationServiceLibrary
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
             }
+            _mutex.ReleaseMutex();
         }
 
         public async Task<int> AddTimeSpanItemAsync(TimeSpanItem timeSpanItem)
         {
+            _mutex.WaitOne();
             try
             {
                 TimeSpanItemContext timeSpanItemContext = new TimeSpanItemContext();
                 timeSpanItem = (await timeSpanItemContext.AddAsync(timeSpanItem)).Entity;
                 await timeSpanItemContext.SaveChangesAsync();
+                _mutex.ReleaseMutex();
                 return timeSpanItem.Id;
             }
             catch (Exception e)
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
+                _mutex.ReleaseMutex();
                 return int.MinValue;
             }
         }
 
         public async Task RemoveTimeSpanItemAsync(TimeSpanItem timeSpanItem)
         {
+            _mutex.WaitOne();
             try
             {
                 TimeSpanItemContext timeSpanItemContext = new TimeSpanItemContext();
@@ -301,10 +325,12 @@ namespace ApplicationServiceLibrary
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
             }
+            _mutex.ReleaseMutex();
         }
 
         public async Task RemoveTimeSpanItemAsync(int id)
         {
+            _mutex.WaitOne();
             try
             {
                 TimeSpanItemContext timespanItemContext = new TimeSpanItemContext();
@@ -319,10 +345,12 @@ namespace ApplicationServiceLibrary
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
             }
+            _mutex.ReleaseMutex();
         }
 
         public async Task UpdateTimeSpanItemAsync(TimeSpanItem timeSpanItem, bool remote = false)
         {
+            _mutex.WaitOne();
             if (timeSpanItem == null) return;
             try
             {
@@ -350,10 +378,12 @@ namespace ApplicationServiceLibrary
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
             }
+            _mutex.ReleaseMutex();
         }
 
         public async Task UpdateTimeSpanItemsAsync(List<TimeSpanItem> timeSpanItems, bool remote = false)
         {
+            _mutex.WaitOne();
             if (timeSpanItems == null) return;
             try
             {
@@ -396,18 +426,22 @@ namespace ApplicationServiceLibrary
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
             }
+            _mutex.ReleaseMutex();
         }
 
         public async Task<List<TimeSpanItem>> GetTimeSpanItemsAsync()
         {
+            _mutex.WaitOne();
             try
             {
                 TimeSpanItemContext timeSpanItemContext = new TimeSpanItemContext();
+                _mutex.ReleaseMutex();
                 return await timeSpanItemContext.TimeSpanItems.ToListAsync();
             }
             catch (Exception e)
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
+                _mutex.ReleaseMutex(); _mutex.ReleaseMutex();
                 return new List<TimeSpanItem>();
             }
         }
