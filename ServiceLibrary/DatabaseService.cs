@@ -39,7 +39,7 @@ namespace ApplicationServiceLibrary
             try
             {
                 _exceptionLogItemContext = new ExceptionLogItemContext();
-                _exceptionLogItemContext.Database.ExecuteSqlCommand($"CREATE TABLE IF NOT EXISTS ExceptionLogItems (Id INTEGER PRIMARY KEY AUTOINCREMENT, TimeStamp NUMERIC, Message TEXT, Source TEXT, StackTrace TEXT)");
+                _exceptionLogItemContext.Database.ExecuteSqlRaw($"CREATE TABLE IF NOT EXISTS ExceptionLogItems (Id INTEGER PRIMARY KEY AUTOINCREMENT, TimeStamp NUMERIC, Message TEXT, Source TEXT, StackTrace TEXT)");
                 _exceptionLogItemContext.Database.Migrate();
             }
             catch { }
@@ -47,7 +47,7 @@ namespace ApplicationServiceLibrary
             try
             {
                 AgendaItemContext agendaItemContext = new AgendaItemContext();
-                agendaItemContext.Database.ExecuteSqlCommand($"CREATE TABLE IF NOT EXISTS AgendaItems (Id INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, Start NUMERIC , End NUMERIC , Description TEXT, IsAllDayEvent INTEGER, IsOverridden INTEGER, Occupancy INTEGER, TimeStamp NUMERIC, IsDeleted INTEGER)");
+                agendaItemContext.Database.ExecuteSqlRaw($"CREATE TABLE IF NOT EXISTS AgendaItems (Id INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, Start NUMERIC , End NUMERIC , Description TEXT, IsAllDayEvent INTEGER, IsOverridden INTEGER, Occupancy INTEGER, TimeStamp NUMERIC, IsDeleted INTEGER)");
                 agendaItemContext.Database.Migrate();
             }
             catch (Exception e)
@@ -58,7 +58,7 @@ namespace ApplicationServiceLibrary
             try
             {
                 _timespanItemContext = new TimeSpanItemContext();
-                _timespanItemContext.Database.ExecuteSqlCommand($"CREATE TABLE IF NOT EXISTS TimeSpanItems (Id INTEGER PRIMARY KEY AUTOINCREMENT, DayOfWeek INTEGER, Start NUMERIC , End NUMERIC, Occupancy INTEGER, TimeStamp NUMERIC, IsDeleted INTEGER)");
+                _timespanItemContext.Database.ExecuteSqlRaw($"CREATE TABLE IF NOT EXISTS TimeSpanItems (Id INTEGER PRIMARY KEY AUTOINCREMENT, DayOfWeek INTEGER, Start NUMERIC , End NUMERIC, Occupancy INTEGER, TimeStamp NUMERIC, IsDeleted INTEGER)");
                 _timespanItemContext.Database.Migrate();
             }
             catch (Exception e)
@@ -103,17 +103,14 @@ namespace ApplicationServiceLibrary
 
         public async Task<List<AgendaItem>> GetAgendaItemsAsync()
         {
-            _mutex.WaitOne();
             try
             {
                 AgendaItemContext agendaItemContext = new AgendaItemContext();
-                _mutex.ReleaseMutex();
                 return await agendaItemContext.AgendaItems.ToListAsync();
             }
             catch (Exception e)
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
-                _mutex.ReleaseMutex();
                 return new List<AgendaItem>();
             }
         }
@@ -132,22 +129,19 @@ namespace ApplicationServiceLibrary
 
         public async Task<List<AgendaItem>> GetAgendaItemsAsync(DateTime dateTime)
         {
-            _mutex.WaitOne();
             try
             {
                 AgendaItemContext agendaItemContext = new AgendaItemContext();
-                _mutex.ReleaseMutex();
-                return await agendaItemContext.AgendaItems
+                return agendaItemContext.AgendaItems.AsEnumerable()
                                 .Where((x) => x.End.DateTime > dateTime)                                
                                 .Select((x) => x)
                                 .Take(3)
                                 .OrderBy(x => x.Start)
-                                .ToListAsync();
+                                .ToList();
             }
             catch (Exception e)
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
-                _mutex.ReleaseMutex();
                 return new List<AgendaItem>();
             }
         }
