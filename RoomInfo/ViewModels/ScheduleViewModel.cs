@@ -43,10 +43,31 @@ namespace RoomInfo.ViewModels
         public int Id { get => _id; set { SetProperty(ref _id, value); } }
 
         DateTimeOffset _startDate = default;
-        public DateTimeOffset StartDate { get => _startDate; set { SetProperty(ref _startDate, value); EndDate = StartDate; } }
+        public DateTimeOffset StartDate
+        {
+            get => _startDate; set
+            {
+                SetProperty(ref _startDate, value);
+                EndDate = StartDate;
+                if (Id < 1)
+                {
+                    EndTime = StartTime;
+                    IsReservationButtonEnabled = _dateTimeValidationService.Validate(new AgendaItem() { Id = Id, Start = StartDate.Add(StartTime), End = EndDate.Add(EndTime) }, _agendaItems);
+                }
+                else IsReservationButtonEnabled = true;
+            }
+        }
 
         DateTimeOffset _endDate = default;
-        public DateTimeOffset EndDate { get => _endDate; set { SetProperty(ref _endDate, value); } }
+        public DateTimeOffset EndDate
+        {
+            get => _endDate;
+            set
+            {
+                SetProperty(ref _endDate, value);
+                IsReservationButtonEnabled = _dateTimeValidationService.Validate(new AgendaItem() { Id = Id, Start = StartDate.Add(StartTime), End = EndDate.Add(EndTime) }, _agendaItems);
+            }
+        }
 
         TimeSpan _startTime = default;
         public TimeSpan StartTime
