@@ -33,7 +33,7 @@ namespace ApplicationServiceLibrary
     {
         readonly ExceptionLogItemContext _exceptionLogItemContext;
         readonly TimeSpanItemContext _timespanItemContext;
-        Mutex _mutex;
+        ManualResetEvent _manualResetEvent;
         public DatabaseService()
         {
             try
@@ -65,24 +65,24 @@ namespace ApplicationServiceLibrary
             {
                 if (_exceptionLogItemContext != null) Task.Run(async () => await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace }));
             }
-            _mutex = new Mutex();
+            _manualResetEvent = new ManualResetEvent(true);
         }
 
         public async Task<int> AddAgendaItemAsync(AgendaItem agendaItem)
         {
-            _mutex.WaitOne();
+            _manualResetEvent.WaitOne();
             try
             {
                 AgendaItemContext agendaItemContext = new AgendaItemContext();
                 agendaItem = (await agendaItemContext.AddAsync(agendaItem)).Entity;
                 await agendaItemContext.SaveChangesAsync();
-                _mutex.ReleaseMutex();
+                _manualResetEvent.Set();
                 return agendaItem.Id;
             }
             catch (Exception e)
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
-                _mutex.ReleaseMutex();
+                _manualResetEvent.Set();
                 return int.MinValue;
             }            
         }
@@ -148,7 +148,7 @@ namespace ApplicationServiceLibrary
 
         public async Task RemoveAgendaItemAsync(AgendaItem agendaItem)
         {
-            _mutex.WaitOne();
+            _manualResetEvent.WaitOne();
             try
             {
                 AgendaItemContext agendaItemContext = new AgendaItemContext();
@@ -159,12 +159,12 @@ namespace ApplicationServiceLibrary
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
             }
-            _mutex.ReleaseMutex();
+            _manualResetEvent.Set();
         }
 
         public async Task RemoveAgendaItemAsync(int id)
         {
-            _mutex.WaitOne();
+            _manualResetEvent.WaitOne();
             try
             {
                 AgendaItemContext agendaItemContext = new AgendaItemContext();
@@ -179,7 +179,7 @@ namespace ApplicationServiceLibrary
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
             }
-            _mutex.ReleaseMutex();
+            _manualResetEvent.Set();
         }
 
         public async Task RemoveExceptionLogItemsAsync()
@@ -194,7 +194,7 @@ namespace ApplicationServiceLibrary
 
         public async Task UpdateAgendaItemAsync(AgendaItem agendaItem, bool remote = false)
         {
-            _mutex.WaitOne();
+            _manualResetEvent.WaitOne();
             if (agendaItem != null)
             {
                 try
@@ -219,22 +219,42 @@ namespace ApplicationServiceLibrary
                                 queriedAgendaItem.Title = agendaItem.Title;
                             });
                             agendaItemContext.Update(queriedAgendaItem);
+                            agendaItemContext.Entry(queriedAgendaItem).State = EntityState.Modified;
                         }
                     }
-                    else agendaItemContext.Update(agendaItem);
-                    await agendaItemContext.SaveChangesAsync();
+                    else
+                    {
+                        agendaItemContext.Update(agendaItem);
+                        agendaItemContext.Entry(agendaItem).State = EntityState.Modified;
+                    }
+                    bool saveFailed;
+                    do
+                    {
+                        saveFailed = false;
+                        try
+                        {
+                            await agendaItemContext.SaveChangesAsync();
+                        }
+                        catch (DbUpdateConcurrencyException ex)
+                        {
+                            saveFailed = true;
+                            var entry = ex.Entries.Single();
+                            entry.OriginalValues.SetValues(entry.GetDatabaseValues());
+                        }
+
+                    } while (saveFailed);
                 }
                 catch (Exception e)
                 {
                     if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
                 }
             }
-            _mutex.ReleaseMutex();
+            _manualResetEvent.Set();
         }
 
         public async Task UpdateAgendaItemsAsync(List<AgendaItem> agendaItems, bool remote = false)
         {
-            _mutex.WaitOne();
+            _manualResetEvent.WaitOne();
             if (agendaItems == null) return;
             try
             {
@@ -277,38 +297,53 @@ namespace ApplicationServiceLibrary
                             if (updatedAgendaItem != null) await UpdateAgendaItemAsync(updatedAgendaItem);
                         }
                     });
-                }
-                await agendaItemContext.SaveChangesAsync();
+                }                
+                bool saveFailed;
+                do
+                {
+                    saveFailed = false;
+                    try
+                    {
+                        await agendaItemContext.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException ex)
+                    {
+                        saveFailed = true;
+                        var entry = ex.Entries.Single();
+                        entry.OriginalValues.SetValues(entry.GetDatabaseValues());
+                    }
+
+                } while (saveFailed);
             }
             catch (Exception e)
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
             }
-            _mutex.ReleaseMutex();
+            _manualResetEvent.Set();
         }
 
         public async Task<int> AddTimeSpanItemAsync(TimeSpanItem timeSpanItem)
         {
-            _mutex.WaitOne();
+            _manualResetEvent.WaitOne();
             try
             {
                 TimeSpanItemContext timeSpanItemContext = new TimeSpanItemContext();
                 timeSpanItem = (await timeSpanItemContext.AddAsync(timeSpanItem)).Entity;
                 await timeSpanItemContext.SaveChangesAsync();
-                _mutex.ReleaseMutex();
+                _manualResetEvent.Set();
                 return timeSpanItem.Id;
             }
             catch (Exception e)
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
-                _mutex.ReleaseMutex();
+                _manualResetEvent.Set();
                 return int.MinValue;
             }
         }
 
         public async Task RemoveTimeSpanItemAsync(TimeSpanItem timeSpanItem)
         {
-            _mutex.WaitOne();
+            _manualResetEvent.WaitOne();
             try
             {
                 TimeSpanItemContext timeSpanItemContext = new TimeSpanItemContext();
@@ -319,12 +354,12 @@ namespace ApplicationServiceLibrary
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
             }
-            _mutex.ReleaseMutex();
+            _manualResetEvent.Set();
         }
 
         public async Task RemoveTimeSpanItemAsync(int id)
         {
-            _mutex.WaitOne();
+            _manualResetEvent.WaitOne();
             try
             {
                 TimeSpanItemContext timespanItemContext = new TimeSpanItemContext();
@@ -339,12 +374,12 @@ namespace ApplicationServiceLibrary
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
             }
-            _mutex.ReleaseMutex();
+            _manualResetEvent.Set();
         }
 
         public async Task UpdateTimeSpanItemAsync(TimeSpanItem timeSpanItem, bool remote = false)
         {
-            _mutex.WaitOne();
+            _manualResetEvent.WaitOne();
             if (timeSpanItem == null) return;
             try
             {
@@ -372,12 +407,12 @@ namespace ApplicationServiceLibrary
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
             }
-            _mutex.ReleaseMutex();
+            _manualResetEvent.Set();
         }
 
         public async Task UpdateTimeSpanItemsAsync(List<TimeSpanItem> timeSpanItems, bool remote = false)
         {
-            _mutex.WaitOne();
+            _manualResetEvent.WaitOne();
             if (timeSpanItems == null) return;
             try
             {
@@ -420,22 +455,22 @@ namespace ApplicationServiceLibrary
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
             }
-            _mutex.ReleaseMutex();
+            _manualResetEvent.Set();
         }
 
         public async Task<List<TimeSpanItem>> GetTimeSpanItemsAsync()
         {
-            _mutex.WaitOne();
+            _manualResetEvent.WaitOne();
             try
             {
                 TimeSpanItemContext timeSpanItemContext = new TimeSpanItemContext();
-                _mutex.ReleaseMutex();
+                _manualResetEvent.Set();
                 return await timeSpanItemContext.TimeSpanItems.ToListAsync();
             }
             catch (Exception e)
             {
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
-                _mutex.ReleaseMutex(); _mutex.ReleaseMutex();
+                _manualResetEvent.Set();
                 return new List<TimeSpanItem>();
             }
         }
