@@ -351,7 +351,7 @@
     <value>Support</value>
   </data>
   <data name="Settings_SupportLink.NavigateUri" xml:space="preserve">
-    <value>mailto:code_m@outlook.de?subject=RoomInfo</value>
+    <value>mailto:mr.software@outlook.de?subject=RoomInfo</value>
   </data>
   <data name="Settings_CompanyLogoInfo.Text" xml:space="preserve">
     <value>(Note: The Logo has to be located in the standard image folder on IoT devices)</value>
@@ -379,5 +379,8 @@
   </data>
   <data name="Shell_Schedule.Content" xml:space="preserve">
     <value>Calendar</value>
+  </data>
+  <data name="Settings_Softwareengineering.Text" xml:space="preserve">
+    <value>SOFTWAREENGINEERING</value>
   </data>
 </root>

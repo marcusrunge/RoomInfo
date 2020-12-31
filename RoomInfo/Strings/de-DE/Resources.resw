@@ -294,6 +294,9 @@
   <data name="Settings_SelectButton.Content" xml:space="preserve">
     <value>Auswahl</value>
   </data>
+  <data name="Settings_Softwareengineering.Text" xml:space="preserve">
+    <value>SOFTWARETECHNIK</value>
+  </data>
   <data name="Settings_StandardOccupancy.Text" xml:space="preserve">
     <value>Standardbelegung außerhalb von Terminen:</value>
   </data>
@@ -325,7 +328,7 @@
     <value>Unterstützung</value>
   </data>
   <data name="Settings_SupportLink.NavigateUri" xml:space="preserve">
-    <value>mailto:code_m@outlook.de?subject=RoomInfo</value>
+    <value>mailto:mr.software@outlook.de?subject=RoomInfo</value>
   </data>
   <data name="Settings_TcpPort.Text" xml:space="preserve">
     <value>TCP-Port:</value>

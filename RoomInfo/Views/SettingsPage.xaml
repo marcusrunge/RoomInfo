@@ -344,9 +344,10 @@
                     x:Uid="Settings_PrivacyTermsLink" 
                     Margin="{StaticResource EightTopMargin}" />
 
-                    <TextBlock x:Uid="Settings_Developed" Style="{StaticResource BodyTextStyle}" Margin="{StaticResource EightTopMargin}"/>
-                    <Image Source="/Assets/MarcusRunge.png" Width="{Binding ElementName=marcusRunge,Path=ActualWidth}" HorizontalAlignment="Left"/>
-                    <TextBlock x:Name="marcusRunge" Text="Marcus Runge" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Left"/>
+                    <StackPanel HorizontalAlignment="Left" Margin="{StaticResource EightTopMargin}">
+                        <Image Width="{Binding ElementName=SoftwareengineeringTextBlock, Path=ActualWidth}" Source="/Assets/MR.png" HorizontalAlignment="Center" />
+                        <TextBlock x:Name="SoftwareengineeringTextBlock" x:Uid="Settings_Softwareengineering" FontFamily="Segoe UI Light" FontSize="16" Foreground="#FF606165"/>
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
