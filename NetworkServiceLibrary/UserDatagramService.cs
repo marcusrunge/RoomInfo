@@ -1,15 +1,15 @@
-﻿using System.Threading.Tasks;
-using Windows.Networking.Sockets;
-using Windows.UI.Core;
-using System;
+﻿using ApplicationServiceLibrary;
+using BackgroundComponent;
 using ModelLibrary;
 using Newtonsoft.Json;
-using ApplicationServiceLibrary;
 using Prism.Events;
-using Windows.Networking;
+using System;
 using System.IO;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
-using BackgroundComponent;
+using Windows.Networking;
+using Windows.Networking.Sockets;
+using Windows.UI.Core;
 
 namespace NetworkServiceLibrary
 {

@@ -30,11 +30,11 @@ namespace RoomInfo.Views
         private void ShowNetworks()
         {
             if (_wiFiAdapter != null)
-            {                
+            {
                 foreach (var wiFiAvailableNetwork in _wiFiAdapter.NetworkReport.AvailableNetworks)
                 {
                     var wiFiAvailableNetworkQuery = WiFiNetworks.Where(x => x.NetworkName.Equals(wiFiAvailableNetwork.Ssid)).Select(x => x).FirstOrDefault();
-                    if (wiFiAvailableNetworkQuery == null) WiFiNetworks.Add(new WiFiNetwork(_wiFiAdapter, wiFiAvailableNetwork) { HashCode = wiFiAvailableNetwork.GetHashCode(), NetworkName = wiFiAvailableNetwork.Ssid  });
+                    if (wiFiAvailableNetworkQuery == null) WiFiNetworks.Add(new WiFiNetwork(_wiFiAdapter, wiFiAvailableNetwork) { HashCode = wiFiAvailableNetwork.GetHashCode(), NetworkName = wiFiAvailableNetwork.Ssid });
                 }
             }
         }
@@ -45,13 +45,13 @@ namespace RoomInfo.Views
             if (access == WiFiAccessStatus.Allowed)
             {
                 var wifiAdapterResults = await DeviceInformation.FindAllAsync(WiFiAdapter.GetDeviceSelector());
-                if (wifiAdapterResults.Count >= 1) _wiFiAdapter = await WiFiAdapter.FromIdAsync(wifiAdapterResults[0].Id);                
+                if (wifiAdapterResults.Count >= 1) _wiFiAdapter = await WiFiAdapter.FromIdAsync(wifiAdapterResults[0].Id);
             }
         }
 
         private async Task ScanForNetworks()
         {
-            if (_wiFiAdapter != null)await _wiFiAdapter.ScanAsync();            
+            if (_wiFiAdapter != null) await _wiFiAdapter.ScanAsync();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -74,7 +74,7 @@ namespace RoomInfo.Views
             RaisePropertyChanged(propertyName);
             return true;
         }
-        void RaisePropertyChanged([CallerMemberName]string propertyName = null) => OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+        void RaisePropertyChanged([CallerMemberName] string propertyName = null) => OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
         void OnPropertyChanged(PropertyChangedEventArgs args) => PropertyChanged?.Invoke(this, args);
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs routedEventArgs)

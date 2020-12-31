@@ -85,7 +85,7 @@ namespace BackgroundComponent
                                     if (package != null)
                                     {
                                         switch ((PayloadType)package.PayloadType)
-                                        {                                            
+                                        {
                                             case PayloadType.Discovery:
                                                 package = new Package()
                                                 {
@@ -199,7 +199,7 @@ namespace BackgroundComponent
                                                         var timeSpanItem = JsonConvert.DeserializeObject<TimeSpanItem>(package.Payload.ToString());
                                                         if (!timeSpanItem.IsDeleted && timeSpanItem.Id < 1)
                                                         {
-                                                            int id = await _databaseService.AddTimeSpanItemAsync(timeSpanItem);                                                            
+                                                            int id = await _databaseService.AddTimeSpanItemAsync(timeSpanItem);
                                                             package.PayloadType = (int)PayloadType.TimeSpanItemId;
                                                             package.Payload = id;
                                                             json = JsonConvert.SerializeObject(package);

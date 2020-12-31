@@ -1,8 +1,6 @@
-﻿using System;
+﻿using RoomInfo.Helpers;
+using System;
 using System.Threading.Tasks;
-
-using RoomInfo.Helpers;
-
 using Windows.Storage;
 using Windows.UI.Xaml;
 

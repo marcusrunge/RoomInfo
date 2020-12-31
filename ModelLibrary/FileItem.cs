@@ -10,7 +10,7 @@ namespace ModelLibrary
 {
     public class FileItem : BindableBase
     {
-        IEventAggregator _eventAggregator;        
+        IEventAggregator _eventAggregator;
 
         string _fileName = default;
         public string FileName { get => _fileName; set { SetProperty(ref _fileName, value); } }
@@ -32,7 +32,7 @@ namespace ModelLibrary
             _eventAggregator.GetEvent<FileItemSelectionChangedUpdatedEvent>().Subscribe((i) => IsSelected = i == Id);
         }
 
-        private ICommand _selectCommand;        
+        private ICommand _selectCommand;
         public ICommand SelectCommand => _selectCommand ?? (_selectCommand = new DelegateCommand<object>((param) =>
         {
             _eventAggregator.GetEvent<FileItemSelectionChangedUpdatedEvent>().Publish(Id);

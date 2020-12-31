@@ -84,7 +84,7 @@ namespace ApplicationServiceLibrary
                 if (_exceptionLogItemContext != null) await AddExceptionLogItem(new ExceptionLogItem() { TimeStamp = DateTime.Now, Message = e.Message, Source = e.Source, StackTrace = e.StackTrace });
                 _manualResetEvent.Set();
                 return int.MinValue;
-            }            
+            }
         }
 
         public async Task<int> AddExceptionLogItem(ExceptionLogItem exceptionLogItem)
@@ -133,7 +133,7 @@ namespace ApplicationServiceLibrary
             {
                 AgendaItemContext agendaItemContext = new AgendaItemContext();
                 return agendaItemContext.AgendaItems.AsEnumerable()
-                                .Where((x) => x.End.DateTime > dateTime)                                
+                                .Where((x) => x.End.DateTime > dateTime)
                                 .Select((x) => x)
                                 .Take(3)
                                 .OrderBy(x => x.Start)
@@ -297,7 +297,7 @@ namespace ApplicationServiceLibrary
                             if (updatedAgendaItem != null) await UpdateAgendaItemAsync(updatedAgendaItem);
                         }
                     });
-                }                
+                }
                 bool saveFailed;
                 do
                 {

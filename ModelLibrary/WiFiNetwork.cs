@@ -37,7 +37,7 @@ namespace ModelLibrary
 
         Visibility _lowerGridVisibility = default;
         public Visibility LowerGridVisibility { get => _lowerGridVisibility; set { SetProperty(ref _lowerGridVisibility, value); } }
-        
+
         string _connectButtonContent = default;
         public string ConnectButtonContent { get => _connectButtonContent; set { SetProperty(ref _connectButtonContent, value); } }
 
@@ -65,16 +65,16 @@ namespace ModelLibrary
             {
                 //await _coreDispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                 //{
-                    var connectedProfile = await _wiFiAdapter.NetworkAdapter.GetConnectedProfileAsync();
-                    if (connectedProfile != null && connectedProfile.WlanConnectionProfileDetails.GetConnectedSsid() == _wiFiAvailableNetwork.Ssid)
-                    {
-                        _isConnected = true;
-                        ConnectButtonContent = _resourceLoader.GetString("WiFiUserControl_DisconnectButton/Content");
-                    }
-                    else ConnectButtonContent = _resourceLoader.GetString("WiFiUserControl_ConnectButton/Content");
+                var connectedProfile = await _wiFiAdapter.NetworkAdapter.GetConnectedProfileAsync();
+                if (connectedProfile != null && connectedProfile.WlanConnectionProfileDetails.GetConnectedSsid() == _wiFiAvailableNetwork.Ssid)
+                {
+                    _isConnected = true;
+                    ConnectButtonContent = _resourceLoader.GetString("WiFiUserControl_DisconnectButton/Content");
+                }
+                else ConnectButtonContent = _resourceLoader.GetString("WiFiUserControl_ConnectButton/Content");
                 //});
             }).Wait();
-            NetworkInformation.NetworkStatusChanged += async (s)=> 
+            NetworkInformation.NetworkStatusChanged += async (s) =>
             {
                 await _coreDispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                 {
@@ -88,7 +88,7 @@ namespace ModelLibrary
                 });
             };
             _eventAggregator.GetEvent<CollapseLowerGridEvent>().Subscribe(() => LowerGridVisibility = Visibility.Collapsed);
-            NetworkStrength = string.Format(" {0} {1}dBm", _resourceLoader.GetString("WiFiUserControl_with"), _wiFiAvailableNetwork.NetworkRssiInDecibelMilliwatts); 
+            NetworkStrength = string.Format(" {0} {1}dBm", _resourceLoader.GetString("WiFiUserControl_with"), _wiFiAvailableNetwork.NetworkRssiInDecibelMilliwatts);
         }
 
         private ICommand _cycleVisibilityCommand;

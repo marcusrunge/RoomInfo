@@ -1,35 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Windows.Input;
-
+﻿using ApplicationServiceLibrary;
+using ModelLibrary;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Windows.Mvvm;
 using Prism.Windows.Navigation;
-
 using RoomInfo.Helpers;
 using RoomInfo.Services;
-using ApplicationServiceLibrary;
-using Windows.Storage;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Input;
-using ModelLibrary;
-using Windows.Globalization;
-using Windows.ApplicationModel.Core;
-using System.Collections.ObjectModel;
-using Prism.Events;
-using System.Linq;
-using Windows.Storage.Search;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Storage.Streams;
 using RoomInfo.Views;
-using Windows.UI.Core;
-using Windows.Storage.Pickers;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.Email;
+using Windows.ApplicationModel.Resources;
+using Windows.Globalization;
+using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.Storage.Search;
+using Windows.Storage.Streams;
+using Windows.UI.Core;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
-using Windows.ApplicationModel.Resources;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace RoomInfo.ViewModels
 {

@@ -3,7 +3,7 @@ using Windows.Storage;
 
 namespace RoomInfo.Services
 {
-    public enum SettingStrategy { Local, Roaming}
+    public enum SettingStrategy { Local, Roaming }
     public interface ISettingsService
     {
         T GetSetting<T>(string key, SettingStrategy settingStrategy);
@@ -18,7 +18,7 @@ namespace RoomInfo.Services
 
         public SettingsService()
         {
-            _localSettings =  ApplicationData.Current.LocalSettings;
+            _localSettings = ApplicationData.Current.LocalSettings;
             _roamingSettings = ApplicationData.Current.RoamingSettings;
         }
         /// <summary>    
@@ -44,7 +44,7 @@ namespace RoomInfo.Services
                     else if (typeof(T) == typeof(int)) return (T)(object)_roamingSettings.Values[key];
                     else if (typeof(T) == typeof(long)) return (T)(object)_roamingSettings.Values[key];
                     else if (typeof(T) == typeof(ICollection<string>)) return (T)(object)_roamingSettings.Values[key];
-                    else return (T)(object)_roamingSettings.Values[key];                
+                    else return (T)(object)_roamingSettings.Values[key];
                 default:
                     return default;
             }
@@ -65,7 +65,7 @@ namespace RoomInfo.Services
                     break;
                 case SettingStrategy.Roaming:
                     _roamingSettings.Values[key] = value;
-                    break;                
+                    break;
                 default:
                     break;
             }

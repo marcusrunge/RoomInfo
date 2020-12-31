@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Input;
-using ApplicationServiceLibrary;
+﻿using ApplicationServiceLibrary;
 using BackgroundComponent;
 using Microsoft.Practices.Unity;
 using NetworkServiceLibrary;
@@ -11,10 +7,13 @@ using Prism.Windows.Mvvm;
 using Prism.Windows.Navigation;
 using RoomInfo.Helpers;
 using RoomInfo.Views;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Input;
 using Windows.ApplicationModel.Background;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-
 using WinUI = Microsoft.UI.Xaml.Controls;
 
 namespace RoomInfo.ViewModels
@@ -79,7 +78,7 @@ namespace RoomInfo.ViewModels
             {
                 if (_backgroundTaskService.FindRegistration<LiveTileUpdateBackgroundTask>() == null) await _backgroundTaskService.Register<LiveTileUpdateBackgroundTask>(new TimeTrigger(15, false));
             }
-            catch { }            
+            catch { }
             await _userDatagramService.StartListenerAsync();
             await _transmissionControlService.StartListenerAsync();
         }

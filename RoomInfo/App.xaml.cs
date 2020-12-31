@@ -1,26 +1,25 @@
-﻿using System;
-using System.Globalization;
-using System.Threading.Tasks;
+﻿using ApplicationServiceLibrary;
+using Microsoft.HockeyApp;
 using Microsoft.Practices.ServiceLocation;
 using Microsoft.Practices.Unity;
+using ModelLibrary;
+using NetworkServiceLibrary;
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Unity.Windows;
 using Prism.Windows.AppModel;
-
+using Prism.Windows.Navigation;
 using RoomInfo.Services;
-using ApplicationServiceLibrary;
+using RoomInfo.Views;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Resources;
-using Windows.UI.Xaml;
-using NetworkServiceLibrary;
 using Windows.Globalization;
-using Microsoft.HockeyApp;
-using ModelLibrary;
-using System.Collections.Generic;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Prism.Windows.Navigation;
-using RoomInfo.Views;
 
 namespace RoomInfo
 {

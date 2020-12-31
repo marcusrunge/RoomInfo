@@ -1,24 +1,24 @@
-﻿using Microsoft.Practices.Unity;
+﻿using ApplicationServiceLibrary;
+using Microsoft.Practices.Unity;
 using ModelLibrary;
+using NetworkServiceLibrary;
+using Newtonsoft.Json;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Windows.Mvvm;
 using Prism.Windows.Navigation;
 using RoomInfo.Helpers;
-using ApplicationServiceLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.ApplicationModel.Core;
+using Windows.Networking;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Core;
-using Windows.ApplicationModel.Core;
-using NetworkServiceLibrary;
-using Windows.Networking;
-using Newtonsoft.Json;
 
 namespace RoomInfo.ViewModels
 {
@@ -126,7 +126,7 @@ namespace RoomInfo.ViewModels
 
         int _selectedComboBoxIndex = default;
         public int SelectedComboBoxIndex { get => _selectedComboBoxIndex; set { SetProperty(ref _selectedComboBoxIndex, value); } }
-       
+
         public ScheduleViewModel(IUnityContainer unityContainer)
         {
             _unityContainer = unityContainer;

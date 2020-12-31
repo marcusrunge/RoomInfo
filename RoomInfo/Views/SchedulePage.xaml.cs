@@ -10,8 +10,8 @@ namespace RoomInfo.Views
 
         public SchedulePage()
         {
-            InitializeComponent();            
-        }       
+            InitializeComponent();
+        }
 
         private void flyoutGrid_Loading(FrameworkElement sender, object args)
         {
