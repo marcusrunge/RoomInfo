@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <StoreAssociation xmlns="http://schemas.microsoft.com/appx/2010/storeassociation">
   <Publisher>CN=34360351-E0A4-43A5-99AE-0840493AC494</Publisher>
-  <PublisherDisplayName>Marcus Runge</PublisherDisplayName>
+  <PublisherDisplayName>MR Softwaretechnik</PublisherDisplayName>
   <DeveloperAccountType>MSA</DeveloperAccountType>
   <GeneratePackageHash>http://www.w3.org/2001/04/xmlenc#sha256</GeneratePackageHash>
   <SupportedLocales>
