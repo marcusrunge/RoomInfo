@@ -131,7 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite">
-      <Version>3.1.14</Version>
+      <Version>3.1.20</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyModel">
       <Version>5.0.0</Version>
