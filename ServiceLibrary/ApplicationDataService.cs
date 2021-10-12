@@ -5,22 +5,27 @@ namespace ApplicationServiceLibrary
     public interface IApplicationDataService
     {
         T GetSetting<T>(string key);
+
         void SaveSetting(string key, object value);
+
         void RemoveSetting(string key);
+
         bool HasSetting(string key);
     }
+
     public class ApplicationDataService : IApplicationDataService
     {
-        ApplicationDataContainer _localSettings;
+        private ApplicationDataContainer _localSettings;
+
         public ApplicationDataService()
         {
             _localSettings = ApplicationData.Current.LocalSettings;
         }
 
-        /// <summary>    
+        /// <summary>
         /// Retrieves application settings
-        /// </summary>   
-        /// <param name="key">Settings Key</param>  
+        /// </summary>
+        /// <param name="key">Settings Key</param>
         /// <returns>Application Settings of type T</returns>
         public T GetSetting<T>(string key)
         {
@@ -32,24 +37,24 @@ namespace ApplicationServiceLibrary
             return default;
         }
 
-        /// <summary>    
-        /// Saves application settings 
-        /// </summary>   
-        /// <param name="key">Settings Key</param>  
+        /// <summary>
+        /// Saves application settings
+        /// </summary>
+        /// <param name="key">Settings Key</param>
         /// <param name="value">Settings Value</param>
         public void SaveSetting(string key, object value) => _localSettings.Values[key] = value;
 
-        /// <summary>    
+        /// <summary>
         /// Removes application settings
-        /// </summary>   
-        /// <param name="key">Settings Key</param>  
+        /// </summary>
+        /// <param name="key">Settings Key</param>
         /// <param name="settingStrategy">Setting Strategy</param>
         public void RemoveSetting(string key) => _localSettings.Values.Remove(key);
 
-        /// <summary>    
+        /// <summary>
         /// Checks whether setting already exists or not
-        /// </summary>   
-        /// <param name="key">Settings Key</param>  
+        /// </summary>
+        /// <param name="key">Settings Key</param>
         /// <returns>Boolean whether setting exists</returns>
         public bool HasSetting(string key)
         {

@@ -27,78 +27,85 @@ namespace RoomInfo.ViewModels
 {
     public class InfoViewModel : ViewModelBase
     {
-        IDatabaseService _databaseService;
-        IApplicationDataService _applicationDataService;
-        ILiveTileUpdateService _liveTileUpdateService;
-        IEventAggregator _eventAggregator;
-        IIotService _iotService;
-        IUserDatagramService _userDatagramService;
-        AgendaItem _activeAgendaItem;
-        double _agendaItemWidth;
-        ResourceLoader _resourceLoader;
-        Package _propertyChangedPackage;
-        ThreadPoolTimer _startThreadPoolTimer, _endThreadPoolTimer, _startTimeSpanThreadPoolTimer, _stopTimeSpanThreadPoolTimer;
-        DayOfWeek _dayOfWeek;
-        CoreDispatcher _coreDispatcher;
+        private IDatabaseService _databaseService;
+        private IApplicationDataService _applicationDataService;
+        private ILiveTileUpdateService _liveTileUpdateService;
+        private IEventAggregator _eventAggregator;
+        private IIotService _iotService;
+        private IUserDatagramService _userDatagramService;
+        private AgendaItem _activeAgendaItem;
+        private double _agendaItemWidth;
+        private ResourceLoader _resourceLoader;
+        private Package _propertyChangedPackage;
+        private ThreadPoolTimer _startThreadPoolTimer, _endThreadPoolTimer, _startTimeSpanThreadPoolTimer, _stopTimeSpanThreadPoolTimer;
+        private DayOfWeek _dayOfWeek;
+        private CoreDispatcher _coreDispatcher;
 
-        class WeekDayChangedEventArgs
+        private class WeekDayChangedEventArgs
         {
-            public WeekDayChangedEventArgs(DayOfWeek dayOfWeek) { DayOfWeek = dayOfWeek; }
+            public WeekDayChangedEventArgs(DayOfWeek dayOfWeek)
+            {
+                DayOfWeek = dayOfWeek;
+            }
+
             public DayOfWeek DayOfWeek { get; }
         }
-        delegate void WeekDayChangedEventHandler(object s, WeekDayChangedEventArgs e);
-        event WeekDayChangedEventHandler _weekDayChangedEvent;
-        void OnWeekDayChangedEvent(object s, WeekDayChangedEventArgs e) => _weekDayChangedEvent?.Invoke(s, e);
 
-        OccupancyVisualState _occupancy = default;
+        private delegate void WeekDayChangedEventHandler(object s, WeekDayChangedEventArgs e);
+
+        private event WeekDayChangedEventHandler _weekDayChangedEvent;
+
+        private void OnWeekDayChangedEvent(object s, WeekDayChangedEventArgs e) => _weekDayChangedEvent?.Invoke(s, e);
+
+        private OccupancyVisualState _occupancy = default;
         public OccupancyVisualState Occupancy { get => _occupancy; set { SetProperty(ref _occupancy, value); } }
 
-        string _clock = default;
+        private string _clock = default;
         public string Clock { get => _clock; set { SetProperty(ref _clock, value); } }
 
-        string _date = default;
+        private string _date = default;
         public string Date { get => _date; set { SetProperty(ref _date, value); } }
 
-        string _room = default;
+        private string _room = default;
         public string Room { get => _room; set { SetProperty(ref _room, value); } }
 
-        int _selectedComboBoxIndex = default;
+        private int _selectedComboBoxIndex = default;
         public int SelectedComboBoxIndex { get => _selectedComboBoxIndex; set { SetProperty(ref _selectedComboBoxIndex, value); } }
 
-        ObservableCollection<AgendaItem> _agendaItems = default;
+        private ObservableCollection<AgendaItem> _agendaItems = default;
         public ObservableCollection<AgendaItem> AgendaItems { get => _agendaItems; set { SetProperty(ref _agendaItems, value); } }
 
-        Uri _companyLogo = default;
+        private Uri _companyLogo = default;
         public Uri CompanyLogo { get => _companyLogo; set { SetProperty(ref _companyLogo, value); } }
 
-        string _companyName = default;
+        private string _companyName = default;
         public string CompanyName { get => _companyName; set { SetProperty(ref _companyName, value); } }
 
-        string _roomName = default;
+        private string _roomName = default;
         public string RoomName { get => _roomName; set { SetProperty(ref _roomName, value); } }
 
-        string _roomNumber = default;
+        private string _roomNumber = default;
         public string RoomNumber { get => _roomNumber; set { SetProperty(ref _roomNumber, value); } }
 
-        Visibility _resetButtonVisibility = default;
+        private Visibility _resetButtonVisibility = default;
         public Visibility ResetButtonVisibility { get => _resetButtonVisibility; set { SetProperty(ref _resetButtonVisibility, value); } }
 
-        double _mediumFontSize = default;
+        private double _mediumFontSize = default;
         public double MediumFontSize { get => _mediumFontSize; set { SetProperty(ref _mediumFontSize, value); } }
 
-        double _mediumToLargeFontSize = default;
+        private double _mediumToLargeFontSize = default;
         public double MediumToLargeFontSize { get => _mediumToLargeFontSize; set { SetProperty(ref _mediumToLargeFontSize, value); } }
 
-        double _largeFontSize = default;
+        private double _largeFontSize = default;
         public double LargeFontSize { get => _largeFontSize; set { SetProperty(ref _largeFontSize, value); } }
 
-        double _extraLargeFontSize = default;
+        private double _extraLargeFontSize = default;
         public double ExtraLargeFontSize { get => _extraLargeFontSize; set { SetProperty(ref _extraLargeFontSize, value); } }
 
-        double _superLargeFontSize = default;
+        private double _superLargeFontSize = default;
         public double SuperLargeFontSize { get => _superLargeFontSize; set { SetProperty(ref _superLargeFontSize, value); } }
 
-        Visibility _brightnessAdjustmentVisibility = default;
+        private Visibility _brightnessAdjustmentVisibility = default;
         public Visibility BrightnessAdjustmentVisibility { get => _brightnessAdjustmentVisibility; set { SetProperty(ref _brightnessAdjustmentVisibility, value); } }
 
         public InfoViewModel(IUnityContainer unityContainer)
@@ -212,7 +219,7 @@ namespace RoomInfo.ViewModels
             });
         }
 
-        async Task<bool> UpdateStandardWeek(DayOfWeek dayOfWeek)
+        private async Task<bool> UpdateStandardWeek(DayOfWeek dayOfWeek)
         {
             var currentTimeSpanItem = (await _databaseService.GetTimeSpanItemsAsync()).Where(x => x.DayOfWeek == (int)dayOfWeek).Where(x => x.Start < DateTime.Now.TimeOfDay).Where(x => x.End > DateTime.Now.TimeOfDay).Select(x => x).FirstOrDefault();
             var nextTimeSpanItem = (await _databaseService.GetTimeSpanItemsAsync()).Where(x => x.DayOfWeek == (int)dayOfWeek).Where(x => x.Start >= DateTime.Now.TimeOfDay).Select(x => x).FirstOrDefault();
@@ -237,7 +244,7 @@ namespace RoomInfo.ViewModels
             return false;
         }
 
-        void SetTimeSpanStartTimer(TimeSpanItem nextTimeSpanItem)
+        private void SetTimeSpanStartTimer(TimeSpanItem nextTimeSpanItem)
         {
             if (_startTimeSpanThreadPoolTimer != null) _startTimeSpanThreadPoolTimer.Cancel();
             TimeSpan startTimeSpan = nextTimeSpanItem.Start - DateTime.Now.TimeOfDay;
@@ -254,7 +261,7 @@ namespace RoomInfo.ViewModels
             SetTimeSpanStopTimer(nextTimeSpanItem.End);
         }
 
-        void SetTimeSpanStopTimer(TimeSpan end)
+        private void SetTimeSpanStopTimer(TimeSpan end)
         {
             if (_stopTimeSpanThreadPoolTimer != null) _stopTimeSpanThreadPoolTimer.Cancel();
             TimeSpan stopTimeSpan = end - DateTime.Now.TimeOfDay;
@@ -371,7 +378,6 @@ namespace RoomInfo.ViewModels
                             await UpdateDayAgenda();
                             await _userDatagramService.SendStringData(new HostName("255.255.255.255"), _applicationDataService.GetSetting<string>("UdpPort"), JsonConvert.SerializeObject(_propertyChangedPackage));
                         });
-
                     }, endTimeSpan);
                 }
             }
@@ -384,12 +390,14 @@ namespace RoomInfo.ViewModels
         private async Task<bool> GetIsStandardWeekActive(DayOfWeek dayOfWeek) => (await _databaseService.GetTimeSpanItemsAsync()).Where(x => x.DayOfWeek == (int)dayOfWeek).Where(x => x.Start < DateTime.Now.TimeOfDay).Where(x => x.End > DateTime.Now.TimeOfDay).Select(x => x).FirstOrDefault() == null;
 
         private ICommand _overrideOccupancyCommand;
+
         public ICommand OverrideOccupancyCommand => _overrideOccupancyCommand ?? (_overrideOccupancyCommand = new DelegateCommand<object>(async (param) =>
         {
             await OverrideOccupancy();
         }));
 
         private ICommand _resetOccupancyCommand;
+
         public ICommand ResetOccupancyCommand => _resetOccupancyCommand ?? (_resetOccupancyCommand = new DelegateCommand<object>(async (param) =>
         {
             _applicationDataService.SaveSetting("OccupancyOverridden", false);
@@ -415,15 +423,16 @@ namespace RoomInfo.ViewModels
         }));
 
         private ICommand _updateDataTemplateWidthCommand;
+
         public ICommand UpdateDataTemplateWidthCommand => _updateDataTemplateWidthCommand ?? (_updateDataTemplateWidthCommand = new DelegateCommand<object>((param) =>
         {
             if (param == null) return;
             ListView listView = (ListView)param;
             _agendaItemWidth = listView.ActualWidth - 24;
-
         }));
 
         private ICommand _updateFontSizeCommand;
+
         public ICommand UpdateFontSizeCommand => _updateFontSizeCommand ?? (_updateFontSizeCommand = new DelegateCommand<object>((param) =>
         {
             if (param == null) return;
@@ -450,12 +459,14 @@ namespace RoomInfo.ViewModels
         }
 
         private ICommand _dimCommand;
+
         public ICommand DimCommand => _dimCommand ?? (_dimCommand = new DelegateCommand<object>(async (param) =>
         {
             await _iotService.Dim(true);
         }));
 
         private ICommand _brightCommand;
+
         public ICommand BrightCommand => _brightCommand ?? (_brightCommand = new DelegateCommand<object>(async (param) =>
         {
             await _iotService.Dim(false);

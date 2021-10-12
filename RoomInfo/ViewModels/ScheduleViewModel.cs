@@ -24,25 +24,26 @@ namespace RoomInfo.ViewModels
 {
     public class ScheduleViewModel : ViewModelBase
     {
-        IDatabaseService _databaseService;
-        IEventAggregator _eventAggregator;
-        readonly IUnityContainer _unityContainer;
-        IDateTimeValidationService _dateTimeValidationService;
-        IUserDatagramService _userDatagramService;
-        IApplicationDataService _applicationDataService;
-        List<AgendaItem> _agendaItems;
-        CalendarPanel _calendarPanel;
-        AgendaItem _agendaItem;
-        double _agendaItemWidth;
-        Package _propertyChangedPackage;
+        private IDatabaseService _databaseService;
+        private IEventAggregator _eventAggregator;
+        private readonly IUnityContainer _unityContainer;
+        private IDateTimeValidationService _dateTimeValidationService;
+        private IUserDatagramService _userDatagramService;
+        private IApplicationDataService _applicationDataService;
+        private List<AgendaItem> _agendaItems;
+        private CalendarPanel _calendarPanel;
+        private AgendaItem _agendaItem;
+        private double _agendaItemWidth;
+        private Package _propertyChangedPackage;
 
-        string _topDate = default;
+        private string _topDate = default;
         public string TopDate { get => _topDate; set { SetProperty(ref _topDate, value); } }
 
-        int _id = default;
+        private int _id = default;
         public int Id { get => _id; set { SetProperty(ref _id, value); } }
 
-        DateTimeOffset _startDate = default;
+        private DateTimeOffset _startDate = default;
+
         public DateTimeOffset StartDate
         {
             get => _startDate; set
@@ -58,7 +59,8 @@ namespace RoomInfo.ViewModels
             }
         }
 
-        DateTimeOffset _endDate = default;
+        private DateTimeOffset _endDate = default;
+
         public DateTimeOffset EndDate
         {
             get => _endDate;
@@ -69,7 +71,8 @@ namespace RoomInfo.ViewModels
             }
         }
 
-        TimeSpan _startTime = default;
+        private TimeSpan _startTime = default;
+
         public TimeSpan StartTime
         {
             get => _startTime; set
@@ -84,7 +87,8 @@ namespace RoomInfo.ViewModels
             }
         }
 
-        TimeSpan _endTime = default;
+        private TimeSpan _endTime = default;
+
         public TimeSpan EndTime
         {
             get => _endTime;
@@ -95,10 +99,11 @@ namespace RoomInfo.ViewModels
             }
         }
 
-        bool _isReservationButtonEnabled = default;
+        private bool _isReservationButtonEnabled = default;
         public bool IsReservationButtonEnabled { get => _isReservationButtonEnabled; set { SetProperty(ref _isReservationButtonEnabled, value); } }
 
-        bool _isAllDayEvent = default;
+        private bool _isAllDayEvent = default;
+
         public bool IsAllDayEvent
         {
             get => _isAllDayEvent; set
@@ -112,19 +117,19 @@ namespace RoomInfo.ViewModels
             }
         }
 
-        string _title = default;
+        private string _title = default;
         public string Title { get => _title; set { SetProperty(ref _title, value); } }
 
-        string _description = default;
+        private string _description = default;
         public string Description { get => _description; set { SetProperty(ref _description, value); } }
 
-        bool _isFlyoutOpen = default;
+        private bool _isFlyoutOpen = default;
         public bool IsFlyoutOpen { get => _isFlyoutOpen; set { SetProperty(ref _isFlyoutOpen, value); } }
 
-        FrameworkElement _flyoutParent = default;
+        private FrameworkElement _flyoutParent = default;
         public FrameworkElement FlyoutParent { get => _flyoutParent; set { SetProperty(ref _flyoutParent, value); } }
 
-        int _selectedComboBoxIndex = default;
+        private int _selectedComboBoxIndex = default;
         public int SelectedComboBoxIndex { get => _selectedComboBoxIndex; set { SetProperty(ref _selectedComboBoxIndex, value); } }
 
         public ScheduleViewModel(IUnityContainer unityContainer)
@@ -172,6 +177,7 @@ namespace RoomInfo.ViewModels
         }
 
         private ICommand _showReservationFlyoutCommand;
+
         public ICommand ShowReservationFlyoutCommand => _showReservationFlyoutCommand ?? (_showReservationFlyoutCommand = new DelegateCommand<object>((param) =>
             {
                 var now = DateTime.Now;
@@ -187,6 +193,7 @@ namespace RoomInfo.ViewModels
             }));
 
         private ICommand _hideReservationCommand;
+
         public ICommand HideReservationCommand => _hideReservationCommand ?? (_hideReservationCommand = new DelegateCommand<object>((param) =>
         {
             (((param as Grid).Parent as FlyoutPresenter).Parent as Popup).IsOpen = false;
@@ -195,6 +202,7 @@ namespace RoomInfo.ViewModels
         }));
 
         private ICommand _addOrUpdateReservationCommand;
+
         public ICommand AddOrUpdateReservationCommand => _addOrUpdateReservationCommand ?? (_addOrUpdateReservationCommand = new DelegateCommand<object>(async (param) =>
         {
             try
@@ -232,10 +240,10 @@ namespace RoomInfo.ViewModels
                 await _userDatagramService.SendStringData(new HostName("255.255.255.255"), _applicationDataService.GetSetting<string>("UdpPort"), JsonConvert.SerializeObject(_propertyChangedPackage));
             }
             catch { }
-
         }));
 
         private ICommand _handleCalendarViewDayItemChangingCommand;
+
         public ICommand HandleCalendarViewDayItemChangingCommand => _handleCalendarViewDayItemChangingCommand ?? (_handleCalendarViewDayItemChangingCommand = new DelegateCommand<object>((param) =>
         {
             var frameworkElementCalendarViewDayItemChangingEventArgs = param as CalendarViewDayItemChangingEventArgs;
@@ -243,11 +251,13 @@ namespace RoomInfo.ViewModels
         }));
 
         private ICommand _saveFlyoutCommand;
+
         public ICommand SaveFlyoutCommand => _saveFlyoutCommand ?? (_saveFlyoutCommand = new DelegateCommand<object>((param) =>
         {
         }));
 
         private ICommand _updateWidthCommand;
+
         public ICommand UpdateWidthCommand => _updateWidthCommand ?? (_updateWidthCommand = new DelegateCommand<object>((param) =>
         {
             if (param == null) return;
@@ -302,6 +312,7 @@ namespace RoomInfo.ViewModels
         }
 
         private ICommand _handlePageLoadedCommand;
+
         public ICommand HandlePageLoadedCommand => _handlePageLoadedCommand ?? (_handlePageLoadedCommand = new DelegateCommand<object>(async (param) =>
         {
             await UpdateCalendarViewDayItems();

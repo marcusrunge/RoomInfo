@@ -12,37 +12,37 @@
     d:DesignWidth="400"
     DataContext="{Binding RelativeSource={RelativeSource Self}}" Loaded="UserControl_Loaded">
 
-    <Grid >
+    <Grid>
         <ListView ItemsSource="{Binding WiFiNetworks, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid Width="400">
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
+                            <RowDefinition />
+                            <RowDefinition />
                         </Grid.RowDefinitions>
                         <interactivity:Interaction.Behaviors>
                             <core:EventTriggerBehavior EventName="Tapped">
-                                <core:InvokeCommandAction Command="{Binding CycleVisibilityCommand}" CommandParameter="true"/>
+                                <core:InvokeCommandAction Command="{Binding CycleVisibilityCommand}" CommandParameter="true" />
                             </core:EventTriggerBehavior>
                         </interactivity:Interaction.Behaviors>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="{Binding NetworkName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            <TextBlock Grid.Column="1" Text="{Binding NetworkStrength}"/>
-                        </Grid>                        
+                            <TextBlock Grid.Column="1" Text="{Binding NetworkStrength}" />
+                        </Grid>
                         <Grid Grid.Row="1" Visibility="{Binding LowerGridVisibility}" Margin="0,0,0,12">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <PasswordBox Password="{Binding PasswordCredential.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <CheckBox Grid.Column="1" HorizontalAlignment="Center" MinWidth="32" IsChecked="{Binding AutomaticReconnect, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Uid="WiFiUserControl_ReconnectCheckBox" Margin="12,0,0,0"/>
-                            <Button Grid.Column="2" Content="{Binding ConnectButtonContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Command="{Binding ConnectCommand}" Margin="12,0,0,0"/>
+                            <PasswordBox Password="{Binding PasswordCredential.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <CheckBox Grid.Column="1" HorizontalAlignment="Center" MinWidth="32" IsChecked="{Binding AutomaticReconnect, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Uid="WiFiUserControl_ReconnectCheckBox" Margin="12,0,0,0" />
+                            <Button Grid.Column="2" Content="{Binding ConnectButtonContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Command="{Binding ConnectCommand}" Margin="12,0,0,0" />
                         </Grid>
                     </Grid>
                 </DataTemplate>

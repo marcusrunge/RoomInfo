@@ -28,6 +28,5 @@
   <Library Name="ServiceLibrary">
 
   	<!-- Fügen Sie hier Direktiven für Ihre Bibliothek ein. -->
-
   </Library>
 </Directives>

@@ -11,10 +11,14 @@ namespace ApplicationServiceLibrary
     public interface IIotService
     {
         bool IsIotDevice();
+
         void Shutdown();
+
         void Restart();
+
         Task Dim(bool dim);
     }
+
     public class IotService : IIotService
     {
         public Task ConfigWifi()

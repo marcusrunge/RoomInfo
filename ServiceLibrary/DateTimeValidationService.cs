@@ -8,6 +8,7 @@ namespace ApplicationServiceLibrary
     {
         bool Validate(AgendaItem agendaItem, List<AgendaItem> agendaItems);
     }
+
     public class DateTimeValidationService : IDateTimeValidationService
     {
         public bool Validate(AgendaItem agendaItem, List<AgendaItem> agendaItems)

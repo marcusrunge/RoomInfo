@@ -16,19 +16,23 @@ namespace NetworkServiceLibrary
     public interface IUserDatagramService
     {
         Task StartListenerAsync();
+
         Task TransferOwnership();
+
         Task SendStringData(HostName hostName, string port, string data);
+
         Task SendStringData(DatagramSocket datagramSocket, string data);
     }
+
     public class UserDatagramService : IUserDatagramService
     {
-        IApplicationDataService _applicationDataService;
-        IBackgroundTaskService _backgroundTaskService;
-        ITransmissionControlService _transmissionControlService;
-        IEventAggregator _eventAggregator;
-        IIotService _iotService;
-        DatagramSocket _datagramSocket;
-        BackgroundTaskRegistration _backgroundTaskRegistration;
+        private IApplicationDataService _applicationDataService;
+        private IBackgroundTaskService _backgroundTaskService;
+        private ITransmissionControlService _transmissionControlService;
+        private IEventAggregator _eventAggregator;
+        private IIotService _iotService;
+        private DatagramSocket _datagramSocket;
+        private BackgroundTaskRegistration _backgroundTaskRegistration;
 
         public UserDatagramService(IApplicationDataService applicationDataService, IBackgroundTaskService backgroundTaskService, ITransmissionControlService transmissionControlService, IEventAggregator eventAggregator, IIotService iotService)
         {
@@ -123,8 +127,10 @@ namespace NetworkServiceLibrary
                                 var json = JsonConvert.SerializeObject(package);
                                 await _transmissionControlService.SendStringData(e.RemoteAddress, _applicationDataService.GetSetting<string>("TcpPort"), json);
                                 break;
+
                             case PayloadType.PropertyChanged:
                                 break;
+
                             default:
                                 break;
                         }

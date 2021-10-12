@@ -9,50 +9,50 @@
     Style="{StaticResource PageStyle}"
     xmlns:prismMvvm="using:Prism.Windows.Mvvm"
     xmlns:Helpers="using:RoomInfo.Helpers"
-    prismMvvm:ViewModelLocator.AutoWireViewModel="True" 
-    mc:Ignorable="d" >    
+    prismMvvm:ViewModelLocator.AutoWireViewModel="True"
+    mc:Ignorable="d">
     <Page.Resources>
-        <Helpers:CalendarViewDayItemChangingEventArgsConverter x:Key="CalendarViewDayItemChangingEventArgsConverter"/>
+        <Helpers:CalendarViewDayItemChangingEventArgsConverter x:Key="CalendarViewDayItemChangingEventArgsConverter" />
         <Helpers:TimeFormatConverter x:Key="TimeFormatConverter" />
         <Flyout x:Name="reservationFlyout"  x:Key="ReservationFlyout" Placement="Top" Helpers:FlyoutDependencyProperty.IsOpen="{Binding IsFlyoutOpen, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Helpers:FlyoutDependencyProperty.Parent="{Binding FlyoutParent}">
             <Flyout.FlyoutPresenterStyle>
                 <Style TargetType="FlyoutPresenter">
-                    <Setter Property="MaxWidth" Value="768"/>
+                    <Setter Property="MaxWidth" Value="768" />
                 </Style>
             </Flyout.FlyoutPresenterStyle>
-            <Grid x:Name="flyoutGrid" Loading="flyoutGrid_Loading" >                
+            <Grid x:Name="flyoutGrid" Loading="flyoutGrid_Loading">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <Button x:Name="hideReservationButton" HorizontalAlignment="Right" Background="{x:Null}" Margin="0,0,0,6" Command="{Binding HideReservationCommand}" CommandParameter="{Binding ElementName=flyoutGrid}">
-                    <SymbolIcon Symbol="Cancel"/>
+                    <SymbolIcon Symbol="Cancel" />
                 </Button>
                 <TextBox Grid.Row="1" x:Uid="Schedule_AppointmentName" Margin="0,6,0,6" Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <Grid Grid.Row="2" Margin="0,6,0,6">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <DatePicker Margin="0,0,6,0" Date="{Binding StartDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <TimePicker Grid.Column="1" Margin="6,0,6,0" Time="{Binding StartTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ClockIdentifier="24HourClock"/>
-                    <CheckBox Grid.Column="2" x:Uid="Schedule_AppointmentAllDay" Margin="6,0,0,0" IsChecked="{Binding IsAllDayEvent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TimePicker Grid.Column="1" Margin="6,0,6,0" Time="{Binding StartTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ClockIdentifier="24HourClock" />
+                    <CheckBox Grid.Column="2" x:Uid="Schedule_AppointmentAllDay" Margin="6,0,0,0" IsChecked="{Binding IsAllDayEvent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
                 <Grid Grid.Row="3" Margin="0,6,0,6">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <DatePicker Margin="0,0,6,0" Date="{Binding EndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <TimePicker Grid.Column="1" Margin="6,0,0,0" Time="{Binding EndTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ClockIdentifier="24HourClock"/>
+                    <TimePicker Grid.Column="1" Margin="6,0,0,0" Time="{Binding EndTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ClockIdentifier="24HourClock" />
                 </Grid>
-                <TextBox Grid.Row="4" Margin="0,6,0,6" Height="64" x:Uid="Schedule_AppointmentDescription"  TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Grid.Row="4" Margin="0,6,0,6" Height="64" x:Uid="Schedule_AppointmentDescription"  TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <ComboBox Grid.Row="5" HorizontalAlignment="Stretch" VerticalAlignment="Center" SelectedIndex="{Binding SelectedComboBoxIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                     <ComboBoxItem x:Uid="Info_OccupancyFree" />
                     <ComboBoxItem x:Uid="Info_OccupancyPresent" />
@@ -67,29 +67,29 @@
         </Flyout>
     </Page.Resources>
     <Grid
-        x:Name="ContentArea" Margin="0,0,0,12"    >
+        x:Name="ContentArea" Margin="0,0,0,12">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <!--<RowDefinition Height="Auto" />-->
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock Text="{Binding TopDate}" FontSize="{ThemeResource TextStyleExtraLargeFontSize}"/>
+        <TextBlock Text="{Binding TopDate}" FontSize="{ThemeResource TextStyleExtraLargeFontSize}" />
         <Button HorizontalAlignment="Right" Background="{x:Null}" Command="{Binding ShowReservationFlyoutCommand}" CommandParameter="{Binding ElementName=reservationFlyout}" Flyout="{StaticResource ReservationFlyout}">
             <Button.Content>
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="1" x:Uid="Schedule_AddReservation" FontSize="{ThemeResource TextStyleExtraLargeFontSize}" Margin="6,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="1" x:Uid="Schedule_AddReservation" FontSize="{ThemeResource TextStyleExtraLargeFontSize}" Margin="6,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Grid>
             </Button.Content>
         </Button>
         <CalendarView x:Name="calendarView" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalDayItemAlignment="Left" VerticalDayItemAlignment="Top" FirstDayOfWeek="Monday" DayOfWeekFormat="{}{dayofweek.abbreviated}">
             <interactivity:Interaction.Behaviors>
                 <core:EventTriggerBehavior EventName="CalendarViewDayItemChanging">
-                    <core:InvokeCommandAction Command="{Binding HandleCalendarViewDayItemChangingCommand}" InputConverter="{StaticResource CalendarViewDayItemChangingEventArgsConverter}" InputConverterParameter="{Binding ElementName=calendarView}"/>
+                    <core:InvokeCommandAction Command="{Binding HandleCalendarViewDayItemChangingCommand}" InputConverter="{StaticResource CalendarViewDayItemChangingEventArgsConverter}" InputConverterParameter="{Binding ElementName=calendarView}" />
                 </core:EventTriggerBehavior>
             </interactivity:Interaction.Behaviors>
             <CalendarView.CalendarViewDayItemStyle>
@@ -97,27 +97,27 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate>
-                                <ListView x:Name="listView" ItemsSource="{Binding}" Margin="0,30,0,0" VerticalAlignment="Stretch" Height="119" >                                    
+                                <ListView x:Name="listView" ItemsSource="{Binding}" Margin="0,30,0,0" VerticalAlignment="Stretch" Height="119">
                                     <ListView.ItemTemplate>
-                                        <DataTemplate x:Name="agendaItemDataTemplate" >
+                                        <DataTemplate x:Name="agendaItemDataTemplate">
                                             <Grid x:Name="dataTemplateGrid" BorderBrush="LightGray" BorderThickness="0,0,0,1" Width="{Binding Width}">
                                                 <interactivity:Interaction.Behaviors>
                                                     <core:EventTriggerBehavior EventName="RightTapped">
-                                                        <core:InvokeCommandAction Command="{Binding ShowAttachedFlyoutCommand}" CommandParameter="{Binding ElementName=dataTemplateGrid}"/>
+                                                        <core:InvokeCommandAction Command="{Binding ShowAttachedFlyoutCommand}" CommandParameter="{Binding ElementName=dataTemplateGrid}" />
                                                     </core:EventTriggerBehavior>
                                                 </interactivity:Interaction.Behaviors>
                                                 <FlyoutBase.AttachedFlyout>
                                                     <MenuFlyout x:Name="agendaItemFlyout">
                                                         <MenuFlyoutItem x:Uid="Schedule_AgendaItemFlyoutEdit" Command="{Binding UpdateReservationCommand}" CommandParameter="{Binding ElementName=agendaItemFlyout}" ContextFlyout="{StaticResource ReservationFlyout}" />
-                                                        <MenuFlyoutItem x:Uid="Schedule_AgendaItemFlyoutDelete" Command="{Binding DeleteReservationCommand}" CommandParameter="{Binding}"/>
+                                                        <MenuFlyoutItem x:Uid="Schedule_AgendaItemFlyoutDelete" Command="{Binding DeleteReservationCommand}" CommandParameter="{Binding}" />
                                                     </MenuFlyout>
                                                 </FlyoutBase.AttachedFlyout>
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition Width="1*"/>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="1*" />
                                                 </Grid.ColumnDefinitions>
-                                                <TextBlock Text="{Binding Start.TimeOfDay, Converter={StaticResource TimeFormatConverter}}"/>
-                                                <TextBlock Grid.Column="1" Text="{Binding Title}" Margin="3,0,0,0" TextWrapping="Wrap"/>
+                                                <TextBlock Text="{Binding Start.TimeOfDay, Converter={StaticResource TimeFormatConverter}}" />
+                                                <TextBlock Grid.Column="1" Text="{Binding Title}" Margin="3,0,0,0" TextWrapping="Wrap" />
                                             </Grid>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
@@ -127,11 +127,11 @@
                     </Setter>
                 </Style>
             </CalendarView.CalendarViewDayItemStyle>
-        </CalendarView>        
+        </CalendarView>
     </Grid>
     <interactivity:Interaction.Behaviors>
         <core:EventTriggerBehavior EventName="Loaded">
-            <core:InvokeCommandAction Command="{Binding HandlePageLoadedCommand}"/>
+            <core:InvokeCommandAction Command="{Binding HandlePageLoadedCommand}" />
         </core:EventTriggerBehavior>
     </interactivity:Interaction.Behaviors>
 </Page>

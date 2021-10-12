@@ -9,10 +9,14 @@ namespace ApplicationServiceLibrary
     public interface IBackgroundTaskService
     {
         IBackgroundTaskRegistration FindRegistration<T>() where T : class;
+
         Task<BackgroundTaskRegistration> Register<T>(IBackgroundTrigger trigger, IEnumerable<IBackgroundCondition> conditions = null) where T : class;
+
         Task<bool> Unregister<T>() where T : class;
+
         Task<bool> UnregisterAll();
     }
+
     public class BackgroundTaskService : IBackgroundTaskService
     {
         public IBackgroundTaskRegistration FindRegistration<T>() where T : class
@@ -32,6 +36,7 @@ namespace ApplicationServiceLibrary
                 case BackgroundAccessStatus.AllowedSubjectToSystemPolicy:
                 case BackgroundAccessStatus.AlwaysAllowed:
                     break;
+
                 case BackgroundAccessStatus.Unspecified:
                 case BackgroundAccessStatus.DeniedBySystemPolicy:
                 case BackgroundAccessStatus.DeniedByUser:
@@ -67,6 +72,7 @@ namespace ApplicationServiceLibrary
                 case BackgroundAccessStatus.AllowedSubjectToSystemPolicy:
                 case BackgroundAccessStatus.AlwaysAllowed:
                     break;
+
                 case BackgroundAccessStatus.DeniedBySystemPolicy:
                 case BackgroundAccessStatus.DeniedByUser:
                     return false;
@@ -87,6 +93,7 @@ namespace ApplicationServiceLibrary
                 case BackgroundAccessStatus.AllowedSubjectToSystemPolicy:
                 case BackgroundAccessStatus.AlwaysAllowed:
                     break;
+
                 case BackgroundAccessStatus.DeniedBySystemPolicy:
                 case BackgroundAccessStatus.DeniedByUser:
                     return false;

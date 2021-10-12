@@ -3,10 +3,10 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"    
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Style="{StaticResource PageStyle}"
     xmlns:prismMvvm="using:Prism.Windows.Mvvm"
-    prismMvvm:ViewModelLocator.AutoWireViewModel="True" 
+    prismMvvm:ViewModelLocator.AutoWireViewModel="True"
     xmlns:helper="using:RoomInfo.Helpers"
     xmlns:xaml="using:Windows.UI.Xaml"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
@@ -16,25 +16,25 @@
     mc:Ignorable="d">
     <Page.Resources>
         <helper:EnumToBooleanConverter x:Key="EnumToBooleanConverter" EnumType="ElementTheme" />
-        <helper:LanguageEnumToBooleanConverter x:Key="LanguageEnumToBooleanConverter"/>
-        <helper:PropertyValueConverter x:Key="PropertyValueConverter"/>
+        <helper:LanguageEnumToBooleanConverter x:Key="LanguageEnumToBooleanConverter" />
+        <helper:PropertyValueConverter x:Key="PropertyValueConverter" />
         <Flyout x:Name="fileSelectionFlyout">
             <Flyout.FlyoutPresenterStyle>
                 <Style TargetType="FlyoutPresenter">
-                    <Setter Property="MaxWidth" Value="768"/>
+                    <Setter Property="MaxWidth" Value="768" />
                 </Style>
             </Flyout.FlyoutPresenterStyle>
             <Grid>
                 <ListView ItemsSource="{Binding FileItems}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Grid x:Name="flyoutGrid" >
+                            <Grid x:Name="flyoutGrid">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <RadioButton  IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Command="{Binding SelectCommand}" HorizontalAlignment="Left" Content="{Binding FileName}"/>
-                                <Image Grid.Column="1" Source="{Binding ImageSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="56" Height="56" Margin="12,0,0,0"/>
+                                <RadioButton  IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Command="{Binding SelectCommand}" HorizontalAlignment="Left" Content="{Binding FileName}" />
+                                <Image Grid.Column="1" Source="{Binding ImageSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="56" Height="56" Margin="12,0,0,0" />
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
@@ -44,32 +44,32 @@
         <Flyout x:Name="timespanFlyout"  x:Key="TimespanFlyout" Placement="Top" Helpers:FlyoutDependencyProperty.IsOpen="{Binding IsFlyoutOpen, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Helpers:FlyoutDependencyProperty.Parent="{Binding FlyoutParent}">
             <Flyout.FlyoutPresenterStyle>
                 <Style TargetType="FlyoutPresenter">
-                    <Setter Property="MaxWidth" Value="768"/>
+                    <Setter Property="MaxWidth" Value="768" />
                 </Style>
             </Flyout.FlyoutPresenterStyle>
-            <Grid x:Name="flyoutGrid" Loading="flyoutGrid_Loading" >
+            <Grid x:Name="flyoutGrid" Loading="flyoutGrid_Loading">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
-                <TextBlock Text="{Binding DayOfWeek}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding DayOfWeek}" HorizontalAlignment="Left" VerticalAlignment="Center" />
                 <Button x:Name="hideTimespanButton" HorizontalAlignment="Right" Background="{x:Null}" Margin="0,0,0,6" Command="{Binding HideTimespanItemCommand}" CommandParameter="{Binding ElementName=flyoutGrid}">
-                    <SymbolIcon Symbol="Cancel"/>
+                    <SymbolIcon Symbol="Cancel" />
                 </Button>
-                <TimePicker Grid.Row="1" Margin="0,6,0,6" Time="{Binding TimespanItem.Start, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ClockIdentifier="24HourClock" SelectedTime="{Binding TimespanItem.Start, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+                <TimePicker Grid.Row="1" Margin="0,6,0,6" Time="{Binding TimespanItem.Start, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ClockIdentifier="24HourClock" SelectedTime="{Binding TimespanItem.Start, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <interactivity:Interaction.Behaviors>
                         <core:EventTriggerBehavior EventName="SelectedTimeChanged">
-                            <core:InvokeCommandAction Command="{Binding ValidateTimeCommand}" CommandParameter="Start"/>
+                            <core:InvokeCommandAction Command="{Binding ValidateTimeCommand}" CommandParameter="Start" />
                         </core:EventTriggerBehavior>
                     </interactivity:Interaction.Behaviors>
                 </TimePicker>
                 <TimePicker Grid.Row="2" Margin="0,6,0,6" Time="{Binding TimespanItem.End, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ClockIdentifier="24HourClock" SelectedTime="{Binding TimespanItem.End, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <interactivity:Interaction.Behaviors>
                         <core:EventTriggerBehavior EventName="SelectedTimeChanged">
-                            <core:InvokeCommandAction Command="{Binding ValidateTimeCommand}" CommandParameter="End"/>
+                            <core:InvokeCommandAction Command="{Binding ValidateTimeCommand}" CommandParameter="End" />
                         </core:EventTriggerBehavior>
                     </interactivity:Interaction.Behaviors>
                 </TimePicker>
@@ -82,7 +82,7 @@
                     <ComboBoxItem x:Uid="Info_OccupancyLocked" />
                     <ComboBoxItem x:Uid="Info_OccupancyHome" />
                 </ComboBox>
-                <Button x:Name="saveTimespanItemButton" Grid.Row="4" HorizontalAlignment="Right" x:Uid="Schedule_SaveReservationButton" Command="{Binding AddOrUpdateTimespanItemCommand}" CommandParameter="{Binding ElementName=flyoutGrid}" IsEnabled="{Binding IsSaveButtonEnabled}"/>
+                <Button x:Name="saveTimespanItemButton" Grid.Row="4" HorizontalAlignment="Right" x:Uid="Schedule_SaveReservationButton" Command="{Binding AddOrUpdateTimespanItemCommand}" CommandParameter="{Binding ElementName=flyoutGrid}" IsEnabled="{Binding IsSaveButtonEnabled}" />
             </Grid>
         </Flyout>
         <DataTemplate x:Name="TimespanItem">
@@ -90,18 +90,18 @@
                 <FlyoutBase.AttachedFlyout>
                 <MenuFlyout x:Name="timespanItemFlyout">
                         <MenuFlyoutItem x:Uid="Schedule_AgendaItemFlyoutEdit" Command="{Binding UpdateTimespanItemCommand}" CommandParameter="{Binding ElementName=timespanItemFlyout}" ContextFlyout="{StaticResource TimespanFlyout}" />
-                    <MenuFlyoutItem x:Uid="Schedule_AgendaItemFlyoutDelete" Command="{Binding DeleteTimespanItemCommand}" CommandParameter="{Binding}"/>
+                    <MenuFlyoutItem x:Uid="Schedule_AgendaItemFlyoutDelete" Command="{Binding DeleteTimespanItemCommand}" CommandParameter="{Binding}" />
                 </MenuFlyout>
                 </FlyoutBase.AttachedFlyout>
                 <interactivity:Interaction.Behaviors>
                     <core:EventTriggerBehavior EventName="RightTapped">
-                        <core:InvokeCommandAction Command="{Binding RelayGotFocusCommand}" CommandParameter="{Binding ElementName=dataTemplateStackPanel}"/>
-                        <core:InvokeCommandAction Command="{Binding ShowAttachedFlyoutCommand}" CommandParameter="{Binding ElementName=dataTemplateStackPanel}"/>
-                    </core:EventTriggerBehavior>                    
+                        <core:InvokeCommandAction Command="{Binding RelayGotFocusCommand}" CommandParameter="{Binding ElementName=dataTemplateStackPanel}" />
+                        <core:InvokeCommandAction Command="{Binding ShowAttachedFlyoutCommand}" CommandParameter="{Binding ElementName=dataTemplateStackPanel}" />
+                    </core:EventTriggerBehavior>
                 </interactivity:Interaction.Behaviors>
-                <TextBlock Text="{Binding Start}"/>
-                <TextBlock Text="{Binding End}"/>
-                <TextBlock Text="{Binding Occupancy,Converter={StaticResource PropertyValueConverter}}"/>
+                <TextBlock Text="{Binding Start}" />
+                <TextBlock Text="{Binding End}" />
+                <TextBlock Text="{Binding Occupancy,Converter={StaticResource PropertyValueConverter}}" />
             </StackPanel>
         </DataTemplate>
     </Page.Resources>
@@ -120,17 +120,17 @@
                     Style="{StaticResource BodyTextStyle}" />
 
                     <StackPanel Margin="{StaticResource EightTopMargin}">
-                        <RadioButton 
-                        x:Uid="Settings_Theme_Light" 
-                        GroupName="AppTheme" 
+                        <RadioButton
+                        x:Uid="Settings_Theme_Light"
+                        GroupName="AppTheme"
                         IsChecked="{Binding ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Light, Mode=OneWay}"
                         Command="{x:Bind ViewModel.SwitchThemeCommand}">
                             <RadioButton.CommandParameter>
                                 <xaml:ElementTheme>Light</xaml:ElementTheme>
                             </RadioButton.CommandParameter>
                         </RadioButton>
-                        <RadioButton 
-                        x:Uid="Settings_Theme_Dark" 
+                        <RadioButton
+                        x:Uid="Settings_Theme_Dark"
                         GroupName="AppTheme"
                         IsChecked="{Binding ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark, Mode=OneWay}"
                         Command="{x:Bind ViewModel.SwitchThemeCommand}">
@@ -138,7 +138,7 @@
                                 <xaml:ElementTheme>Dark</xaml:ElementTheme>
                             </RadioButton.CommandParameter>
                         </RadioButton>
-                        <RadioButton 
+                        <RadioButton
                         x:Uid="Settings_Theme_Default"
                         GroupName="AppTheme"
                         IsChecked="{Binding ElementTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Default, Mode=OneWay}"
@@ -151,23 +151,23 @@
                 </StackPanel>
                 <StackPanel Margin="{StaticResource SettingsSubheaderMargin}">
                     <TextBlock x:Uid="Settings_Language" Style="{StaticResource SubtitleTextBlockStyle}" />
-                    <RadioButton x:Uid="Settings_Language_English" GroupName="Language" Command="{x:Bind ViewModel.SwitchLanguageCommand}" CommandParameter="en-US" IsChecked="{Binding Language, Converter={StaticResource LanguageEnumToBooleanConverter}, ConverterParameter=en_US, Mode=OneWay}"/>
-                    <RadioButton x:Uid="Settings_Language_German" GroupName="Language" Command="{x:Bind ViewModel.SwitchLanguageCommand}" CommandParameter="de-DE" IsChecked="{Binding Language, Converter={StaticResource LanguageEnumToBooleanConverter}, ConverterParameter=de_DE, Mode=OneWay}"/>
+                    <RadioButton x:Uid="Settings_Language_English" GroupName="Language" Command="{x:Bind ViewModel.SwitchLanguageCommand}" CommandParameter="en-US" IsChecked="{Binding Language, Converter={StaticResource LanguageEnumToBooleanConverter}, ConverterParameter=en_US, Mode=OneWay}" />
+                    <RadioButton x:Uid="Settings_Language_German" GroupName="Language" Command="{x:Bind ViewModel.SwitchLanguageCommand}" CommandParameter="de-DE" IsChecked="{Binding Language, Converter={StaticResource LanguageEnumToBooleanConverter}, ConverterParameter=de_DE, Mode=OneWay}" />
                 </StackPanel>
                 <StackPanel Margin="{StaticResource SettingsSubheaderMargin}">
                     <TextBlock x:Uid="Settings_Ports" Style="{StaticResource SubtitleTextBlockStyle}" />
-                    <TextBlock x:Uid="Settings_TcpPort" Style="{StaticResource BodyTextStyle}"/>
+                    <TextBlock x:Uid="Settings_TcpPort" Style="{StaticResource BodyTextStyle}" />
                     <TextBox Text="{Binding TcpPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" KeyDown="{x:Bind ViewModel.KeyDown}" PlaceholderText="8273" InputScope="Digits" MaxLength="5" />
-                    <TextBlock x:Uid="Settings_UdpPort" Style="{StaticResource BodyTextStyle}"/>
+                    <TextBlock x:Uid="Settings_UdpPort" Style="{StaticResource BodyTextStyle}" />
                     <TextBox Text="{Binding UdpPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" KeyDown="{x:Bind ViewModel.KeyDown}" PlaceholderText="8274" InputScope="Digits" MaxLength="5" />
-                    <TextBlock x:Uid="Settings_PortInfo" Style="{StaticResource BodyTextStyle}"/>
+                    <TextBlock x:Uid="Settings_PortInfo" Style="{StaticResource BodyTextStyle}" />
                 </StackPanel>
                 <StackPanel Margin="{StaticResource SettingsSubheaderMargin}">
                     <TextBlock x:Name="standardOccupancyTextBlock" x:Uid="Settings_StandardOccupancy" Style="{StaticResource SubtitleTextBlockStyle}" HorizontalAlignment="Left" />
                     <ComboBox HorizontalAlignment="Left" VerticalAlignment="Center" SelectedIndex="{Binding SelectedComboBoxIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="129">
                         <interactivity:Interaction.Behaviors>
                             <core:EventTriggerBehavior EventName="SelectionChanged">
-                                <core:InvokeCommandAction Command="{x:Bind ViewModel.SetStandardOccupancyCommand}"/>
+                                <core:InvokeCommandAction Command="{x:Bind ViewModel.SetStandardOccupancyCommand}" />
                             </core:EventTriggerBehavior>
                         </interactivity:Interaction.Behaviors>
                         <ComboBoxItem x:Uid="Info_OccupancyFree" />
@@ -182,121 +182,121 @@
                     <TextBlock x:Name="standardWeekTextBlock" x:Uid="Settings_StandardWeek" Style="{StaticResource SubtitleTextBlockStyle}" HorizontalAlignment="Left" />
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
                         </Grid.RowDefinitions>
                         <TextBlock x:Uid="Settings_StandardWeek_Monday" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center" />
-                        <TextBlock Grid.Column="1" x:Uid="Settings_StandardWeek_Tuesday" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center"/>
-                        <TextBlock Grid.Column="2" x:Uid="Settings_StandardWeek_Wednesday" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center"/>
-                        <TextBlock Grid.Column="3" x:Uid="Settings_StandardWeek_Thursday" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center"/>
-                        <TextBlock Grid.Column="4" x:Uid="Settings_StandardWeek_Friday" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center"/>
-                        <TextBlock Grid.Column="5" x:Uid="Settings_StandardWeek_Saturday" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center"/>
-                        <TextBlock Grid.Column="6" x:Uid="Settings_StandardWeek_Sunday" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="1" x:Uid="Settings_StandardWeek_Tuesday" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center" />
+                        <TextBlock Grid.Column="2" x:Uid="Settings_StandardWeek_Wednesday" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center" />
+                        <TextBlock Grid.Column="3" x:Uid="Settings_StandardWeek_Thursday" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center" />
+                        <TextBlock Grid.Column="4" x:Uid="Settings_StandardWeek_Friday" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center" />
+                        <TextBlock Grid.Column="5" x:Uid="Settings_StandardWeek_Saturday" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center" />
+                        <TextBlock Grid.Column="6" x:Uid="Settings_StandardWeek_Sunday" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Center" />
                         <Button Grid.Row="1" HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.AddTimespanItemCommand}" CommandParameter="Monday" Flyout="{StaticResource TimespanFlyout}" Margin="4,0,8,0">
                             <Button.Content>
-                                <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center" />
                             </Button.Content>
                         </Button>
                         <Button Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.AddTimespanItemCommand}" CommandParameter="Tuesday" Flyout="{StaticResource TimespanFlyout}" Margin="8,0,8,0">
                             <Button.Content>
-                                <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center" />
                             </Button.Content>
                         </Button>
                         <Button Grid.Column="2" Grid.Row="1" HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.AddTimespanItemCommand}" CommandParameter="Wednesday" Flyout="{StaticResource TimespanFlyout}" Margin="8,0,8,0">
                             <Button.Content>
-                                <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center" />
                             </Button.Content>
                         </Button>
                         <Button Grid.Column="3" Grid.Row="1" HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.AddTimespanItemCommand}" CommandParameter="Thursday" Flyout="{StaticResource TimespanFlyout}" Margin="8,0,8,0">
                             <Button.Content>
-                                <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center" />
                             </Button.Content>
                         </Button>
                         <Button Grid.Column="4" Grid.Row="1" HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.AddTimespanItemCommand}" CommandParameter="Friday" Flyout="{StaticResource TimespanFlyout}" Margin="8,0,8,0">
                             <Button.Content>
-                                <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center" />
                             </Button.Content>
                         </Button>
                         <Button Grid.Column="5" Grid.Row="1" HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.AddTimespanItemCommand}" CommandParameter="Saturday" Flyout="{StaticResource TimespanFlyout}" Margin="8,0,8,0">
                             <Button.Content>
-                                <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center" />
                             </Button.Content>
                         </Button>
                         <Button Grid.Column="6" Grid.Row="1" HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.AddTimespanItemCommand}" CommandParameter="Sunday" Flyout="{StaticResource TimespanFlyout}" Margin="8,0,4,0">
                             <Button.Content>
-                                <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <SymbolIcon Symbol="Add" HorizontalAlignment="Center" VerticalAlignment="Center" />
                             </Button.Content>
                         </Button>
                         <ListView x:Name="monday" Grid.Row="2" ItemsSource="{Binding Monday}" ItemTemplate="{StaticResource TimespanItem}" LayoutUpdated="{x:Bind ViewModel.monday_LayoutUpdated}" Margin="4,0,8,0">
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="SizeChanged">
-                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.UpdateDataTemplateWidthCommand}" CommandParameter="{Binding ElementName=monday}"/>
+                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.UpdateDataTemplateWidthCommand}" CommandParameter="{Binding ElementName=monday}" />
                                 </core:EventTriggerBehavior>
                                 <core:EventTriggerBehavior EventName="Loaded">
-                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.UpdateDataTemplateWidthCommand}" CommandParameter="{Binding ElementName=monday}"/>
+                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.UpdateDataTemplateWidthCommand}" CommandParameter="{Binding ElementName=monday}" />
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ListView>
-                        <ListView Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Tuesday}" ItemTemplate="{StaticResource TimespanItem}" Margin="8,0,8,0"/>
-                        <ListView Grid.Column="2" Grid.Row="2" ItemsSource="{Binding Wednesday}" ItemTemplate="{StaticResource TimespanItem}" Margin="8,0,8,0"/>
-                        <ListView Grid.Column="3" Grid.Row="2" ItemsSource="{Binding Thursday}" ItemTemplate="{StaticResource TimespanItem}" Margin="8,0,8,0"/>
-                        <ListView Grid.Column="4" Grid.Row="2" ItemsSource="{Binding Friday}" ItemTemplate="{StaticResource TimespanItem}" Margin="8,0,8,0"/>
-                        <ListView Grid.Column="5" Grid.Row="2" ItemsSource="{Binding Saturday}" ItemTemplate="{StaticResource TimespanItem}" Margin="8,0,8,0"/>
-                        <ListView Grid.Column="6" Grid.Row="2" ItemsSource="{Binding Sunday}" ItemTemplate="{StaticResource TimespanItem}" Margin="8,0,4,0"/>
+                        <ListView Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Tuesday}" ItemTemplate="{StaticResource TimespanItem}" Margin="8,0,8,0" />
+                        <ListView Grid.Column="2" Grid.Row="2" ItemsSource="{Binding Wednesday}" ItemTemplate="{StaticResource TimespanItem}" Margin="8,0,8,0" />
+                        <ListView Grid.Column="3" Grid.Row="2" ItemsSource="{Binding Thursday}" ItemTemplate="{StaticResource TimespanItem}" Margin="8,0,8,0" />
+                        <ListView Grid.Column="4" Grid.Row="2" ItemsSource="{Binding Friday}" ItemTemplate="{StaticResource TimespanItem}" Margin="8,0,8,0" />
+                        <ListView Grid.Column="5" Grid.Row="2" ItemsSource="{Binding Saturday}" ItemTemplate="{StaticResource TimespanItem}" Margin="8,0,8,0" />
+                        <ListView Grid.Column="6" Grid.Row="2" ItemsSource="{Binding Sunday}" ItemTemplate="{StaticResource TimespanItem}" Margin="8,0,4,0" />
                     </Grid>
                 </StackPanel>
                 <StackPanel Margin="{StaticResource SettingsSubheaderMargin}">
                     <TextBlock x:Uid="Settings_RoomSettings" Style="{StaticResource SubtitleTextBlockStyle}" />
-                    <TextBlock x:Uid="Settings_RoomName" Style="{StaticResource BodyTextStyle}"/>
-                    <TextBox Grid.Column="1" x:Uid="Settings_RoomNamePlaceHolder" Text="{Binding RoomName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="{Binding Path=ActualWidth, ElementName=standardOccupancyTextBlock}" HorizontalAlignment="Left"/>
-                    <TextBlock Grid.Column="2" x:Uid="Settings_RoomNumber" Style="{StaticResource BodyTextStyle}"/>
-                    <TextBox Grid.Column="3" x:Uid="Settings_RoomNumberPlaceHolder" Text="{Binding RoomNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="{Binding Path=ActualWidth, ElementName=standardOccupancyTextBlock}" HorizontalAlignment="Left"/>
+                    <TextBlock x:Uid="Settings_RoomName" Style="{StaticResource BodyTextStyle}" />
+                    <TextBox Grid.Column="1" x:Uid="Settings_RoomNamePlaceHolder" Text="{Binding RoomName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="{Binding Path=ActualWidth, ElementName=standardOccupancyTextBlock}" HorizontalAlignment="Left" />
+                    <TextBlock Grid.Column="2" x:Uid="Settings_RoomNumber" Style="{StaticResource BodyTextStyle}" />
+                    <TextBox Grid.Column="3" x:Uid="Settings_RoomNumberPlaceHolder" Text="{Binding RoomNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="{Binding Path=ActualWidth, ElementName=standardOccupancyTextBlock}" HorizontalAlignment="Left" />
                 </StackPanel>
                 <StackPanel Margin="{StaticResource SettingsSubheaderMargin}">
                     <TextBlock x:Uid="Settings_CompanySettings" Style="{StaticResource SubtitleTextBlockStyle}" />
-                    <TextBlock x:Uid="Settings_CompanyName" Style="{StaticResource BodyTextStyle}"/>
-                    <TextBox Grid.Column="1" x:Uid="Settings_CompanyNamePlaceHolder" Text="{Binding CompanyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="{Binding Path=ActualWidth, ElementName=standardOccupancyTextBlock}" HorizontalAlignment="Left"/>
-                    <TextBlock Grid.Column="2" x:Uid="Settings_CompanyLogo" Style="{StaticResource BodyTextStyle}"/>
+                    <TextBlock x:Uid="Settings_CompanyName" Style="{StaticResource BodyTextStyle}" />
+                    <TextBox Grid.Column="1" x:Uid="Settings_CompanyNamePlaceHolder" Text="{Binding CompanyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="{Binding Path=ActualWidth, ElementName=standardOccupancyTextBlock}" HorizontalAlignment="Left" />
+                    <TextBlock Grid.Column="2" x:Uid="Settings_CompanyLogo" Style="{StaticResource BodyTextStyle}" />
                     <StackPanel HorizontalAlignment="Left">
                         <Image x:Name="CompanyLogo" Source="{Binding CompanyLogo}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MaxWidth="128" MaxHeight="128" />
                         <Grid HorizontalAlignment="Center" Margin="0,4,0,0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <Button x:Name="selectLogoButtonIoT" Grid.Column="0" x:Uid="Settings_SelectButton" Command="{Binding SelectLogoCommand}" CommandParameter="{Binding ElementName=fileSelectionFlyout}" Margin="0,0,2,0" Flyout="{StaticResource fileSelectionFlyout}" Visibility="{Binding SelectLogoButtonIoTVisibility}" />
-                            <Button x:Name="selectLogoButtonStd" Grid.Column="0" x:Uid="Settings_SelectButton" Command="{Binding SelectLogoCommand}" Margin="0,0,2,0" Visibility="{Binding SelectLogoButtonStdVisibility}"/>
+                            <Button x:Name="selectLogoButtonStd" Grid.Column="0" x:Uid="Settings_SelectButton" Command="{Binding SelectLogoCommand}" Margin="0,0,2,0" Visibility="{Binding SelectLogoButtonStdVisibility}" />
                             <Button Grid.Column="1" x:Uid="Settings_DeleteButton" Command="{x:Bind ViewModel.DeleteLogoCommand}" Margin="2,0,0,0" />
                         </Grid>
                     </StackPanel>
-                    <TextBlock x:Uid="Settings_CompanyLogoInfo" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Left"/>
+                    <TextBlock x:Uid="Settings_CompanyLogoInfo" Style="{StaticResource BodyTextStyle}" HorizontalAlignment="Left" />
                 </StackPanel>
                 <StackPanel Margin="{StaticResource SettingsSubheaderMargin}" Width="{Binding Path=ActualWidth, ElementName=standardOccupancyTextBlock}" HorizontalAlignment="Left">
-                    <Grid Width="Auto" >
+                    <Grid Width="Auto">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <TextBlock x:Uid="Settings_ExceptionLog" Style="{StaticResource SubtitleTextBlockStyle}" HorizontalAlignment="Left" />
                         <Button Grid.Column="1" Background="{x:Null}" Command="{x:Bind ViewModel.DeleteExeptionLogCommand}">
                             <Button.Content>
-                                <SymbolIcon Symbol="Delete" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <SymbolIcon Symbol="Delete" HorizontalAlignment="Center" VerticalAlignment="Center" />
                             </Button.Content>
                         </Button>
                         <Button Grid.Column="2" Background="{x:Null}" Command="{x:Bind ViewModel.SendExceptionLogCommand}">
                             <Button.Content>
-                                <SymbolIcon Symbol="Send" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <SymbolIcon Symbol="Send" HorizontalAlignment="Center" VerticalAlignment="Center" />
                             </Button.Content>
                         </Button>
                     </Grid>
@@ -304,10 +304,10 @@
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel>
-                                    <TextBlock Text="{Binding TimeStamp}" TextWrapping="Wrap"/>
-                                    <TextBlock Text="{Binding Message}" TextWrapping="Wrap"/>
-                                    <TextBlock Text="{Binding Source}" TextWrapping="Wrap"/>
-                                    <TextBlock Text="{Binding StackTrace}" TextWrapping="Wrap"/>
+                                    <TextBlock Text="{Binding TimeStamp}" TextWrapping="Wrap" />
+                                    <TextBlock Text="{Binding Message}" TextWrapping="Wrap" />
+                                    <TextBlock Text="{Binding Source}" TextWrapping="Wrap" />
+                                    <TextBlock Text="{Binding StackTrace}" TextWrapping="Wrap" />
                                 </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
@@ -315,38 +315,38 @@
                 </StackPanel>
                 <StackPanel Margin="{StaticResource SettingsSubheaderMargin}" BorderThickness="3" HorizontalAlignment="Left" BorderBrush="#7FFF0000" Visibility="{Binding IotPanelVisibility}">
                     <Border HorizontalAlignment="Left" BorderBrush="#7FFF0000" BorderThickness="0,0,3,3">
-                        <TextBlock Text="IoT" Foreground="#7FFF0000" Style="{StaticResource SubtitleTextBlockStyle}" Padding="3,0,0,0"/>
+                        <TextBlock Text="IoT" Foreground="#7FFF0000" Style="{StaticResource SubtitleTextBlockStyle}" Padding="3,0,0,0" />
                     </Border>
-                    <Button x:Name="WiFiConfigButton" x:Uid="Settings_IoT_WiFiButton" Style="{StaticResource RedTransparentButtonStyle}" Content="Config Wi-Fi" Margin="2,2,2,0" HorizontalAlignment="Left" >
+                    <Button x:Name="WiFiConfigButton" x:Uid="Settings_IoT_WiFiButton" Style="{StaticResource RedTransparentButtonStyle}" Content="Config Wi-Fi" Margin="2,2,2,0" HorizontalAlignment="Left">
                         <Button.Flyout>
                             <Flyout Closing="{x:Bind ViewModel.Flyout_Closing}">
                                 <userControl:WiFiUserControl />
                             </Flyout>
                         </Button.Flyout>
                     </Button>
-                    <Button x:Name="DeviceRestartButton" x:Uid="Settings_IoT_RestartButton" Style="{StaticResource RedTransparentButtonStyle}" Content="Device Restart" Width="{Binding ElementName=WiFiConfigButton, Path=ActualWidth}" Command="{x:Bind ViewModel.RestartCommand}" Margin="2,0,2,0"/>
-                    <Button x:Name="DeviceShutdownButton" x:Uid="Settings_IoT_ShutdownButton" Style="{StaticResource RedTransparentButtonStyle}" Content="Device Shutdown" Width="{Binding ElementName=WiFiConfigButton, Path=ActualWidth}" Command="{x:Bind ViewModel.ShutdownCommand}" Margin="2,0,2,2"/>
+                    <Button x:Name="DeviceRestartButton" x:Uid="Settings_IoT_RestartButton" Style="{StaticResource RedTransparentButtonStyle}" Content="Device Restart" Width="{Binding ElementName=WiFiConfigButton, Path=ActualWidth}" Command="{x:Bind ViewModel.RestartCommand}" Margin="2,0,2,0" />
+                    <Button x:Name="DeviceShutdownButton" x:Uid="Settings_IoT_ShutdownButton" Style="{StaticResource RedTransparentButtonStyle}" Content="Device Shutdown" Width="{Binding ElementName=WiFiConfigButton, Path=ActualWidth}" Command="{x:Bind ViewModel.ShutdownCommand}" Margin="2,0,2,2" />
                 </StackPanel>
-                <TextBlock x:Uid="Settings_About" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                <TextBlock x:Uid="Settings_About" Style="{StaticResource SubtitleTextBlockStyle}" />
                 <StackPanel Margin="{StaticResource EightTopMargin}">
                     <TextBlock
                     Text="{x:Bind ViewModel.VersionDescription, Mode=OneWay}" />
-                    <Image Source="/Assets/C0D3M.png" Width="{Binding ElementName=marcusRunge,Path=ActualWidth}" HorizontalAlignment="Left"/>
+                    <Image Source="/Assets/C0D3M.png" Width="{Binding ElementName=marcusRunge,Path=ActualWidth}" HorizontalAlignment="Left" />
                     <!--<TextBlock
                     x:Uid="Settings_AboutDescription"
                     Margin="{StaticResource EightTopMargin}" />-->
 
                     <HyperlinkButton
-                    x:Uid="Settings_SupportLink" 
+                    x:Uid="Settings_SupportLink"
                     Margin="{StaticResource EightTopMargin}" />
 
                     <HyperlinkButton
-                    x:Uid="Settings_PrivacyTermsLink" 
+                    x:Uid="Settings_PrivacyTermsLink"
                     Margin="{StaticResource EightTopMargin}" />
 
                     <StackPanel HorizontalAlignment="Left" Margin="{StaticResource EightTopMargin}">
                         <Image Width="{Binding ElementName=SoftwareengineeringTextBlock, Path=ActualWidth}" Source="/Assets/MR.png" HorizontalAlignment="Center" />
-                        <TextBlock x:Name="SoftwareengineeringTextBlock" x:Uid="Settings_Softwareengineering" FontFamily="Segoe UI Light" FontSize="16" Foreground="#FF606165"/>
+                        <TextBlock x:Name="SoftwareengineeringTextBlock" x:Uid="Settings_Softwareengineering" FontFamily="Segoe UI Light" FontSize="16" Foreground="#FF606165" />
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
@@ -354,7 +354,7 @@
     </Grid>
     <interactivity:Interaction.Behaviors>
         <core:EventTriggerBehavior EventName="Loaded">
-            <core:InvokeCommandAction Command="{Binding HandlePageLoadedCommand}"/>
+            <core:InvokeCommandAction Command="{Binding HandlePageLoadedCommand}" />
         </core:EventTriggerBehavior>
     </interactivity:Interaction.Behaviors>
 </Page>

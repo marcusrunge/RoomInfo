@@ -12,18 +12,23 @@ namespace ApplicationServiceLibrary
     public interface ILiveTileUpdateService
     {
         Task<AgendaItem> GetActiveAgendaItem();
+
         TileContent CreateTile(AgendaItem agendaItem);
+
         void UpdateTile(TileContent tileContent);
     }
+
     public class LiveTileUpdateService : ILiveTileUpdateService
     {
-        IDatabaseService _databaseService;
-        IApplicationDataService _applicationDataService;
+        private IDatabaseService _databaseService;
+        private IApplicationDataService _applicationDataService;
+
         public LiveTileUpdateService(IDatabaseService databaseService, IApplicationDataService applicationDataService)
         {
             _databaseService = databaseService;
             _applicationDataService = applicationDataService;
         }
+
         public async Task<AgendaItem> GetActiveAgendaItem()
         {
             AgendaItem agendaItem = new AgendaItem()
@@ -57,30 +62,37 @@ namespace ApplicationServiceLibrary
                         occupancyIcon = "✓";
                         occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockFree/Text");
                         break;
+
                     case 1:
                         occupancyIcon = "★";
                         occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockPresent/Text");
                         break;
+
                     case 2:
                         occupancyIcon = "➔";
                         occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockAbsent/Text");
                         break;
+
                     case 3:
                         occupancyIcon = "⧖";
                         occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockBusy/Text");
                         break;
+
                     case 4:
                         occupancyIcon = "⛛";
                         occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockOccupied/Text");
                         break;
+
                     case 5:
                         occupancyIcon = "🗙";
                         occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockLocked/Text");
                         break;
+
                     case 6:
                         occupancyIcon = "⌂";
                         occupancyText = resourceLoader.GetString("Info_OccupancyTextBlockHome/Text");
                         break;
+
                     default:
                         break;
                 }

@@ -18,6 +18,7 @@ namespace ModelLibrary
     public class AgendaItemContext : DbContext
     {
         public DbSet<AgendaItem> AgendaItems { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Data Source=RoomInfo.db");
@@ -26,9 +27,10 @@ namespace ModelLibrary
 
     public class AgendaItem : BindableBase, IComparable
     {
-        CoreDispatcher _coreDispatcher;
+        private CoreDispatcher _coreDispatcher;
 
-        IEventAggregator _eventAggregator = default;
+        private IEventAggregator _eventAggregator = default;
+
         [JsonIgnore]
         [NotMapped]
         public IEventAggregator EventAggregator
@@ -41,57 +43,63 @@ namespace ModelLibrary
             }
         }
 
-        int _id = default;
+        private int _id = default;
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get => _id; set { SetProperty(ref _id, value); } }
 
-        string _title = default;
+        private string _title = default;
         public string Title { get => _title; set { SetProperty(ref _title, value); } }
 
-        DateTimeOffset _start = default;
+        private DateTimeOffset _start = default;
         public DateTimeOffset Start { get => _start; set { SetProperty(ref _start, value); } }
 
-        DateTimeOffset _end = default;
+        private DateTimeOffset _end = default;
         public DateTimeOffset End { get => _end; set { SetProperty(ref _end, value); } }
 
-        bool _isAllDayEvent = default;
+        private bool _isAllDayEvent = default;
         public bool IsAllDayEvent { get => _isAllDayEvent; set { SetProperty(ref _isAllDayEvent, value); } }
 
-        bool _isOverridden = default;
+        private bool _isOverridden = default;
         public bool IsOverridden { get => _isOverridden; set { SetProperty(ref _isOverridden, value); } }
 
-        string _description = default;
+        private string _description = default;
         public string Description { get => _description; set { SetProperty(ref _description, value); } }
 
-        int _occupancy = default;
+        private int _occupancy = default;
         public int Occupancy { get => _occupancy; set { SetProperty(ref _occupancy, value); } }
 
         public long TimeStamp { get; set; }
 
         public bool IsDeleted { get; set; }
 
-        double _width = default;
+        private double _width = default;
+
         [JsonIgnore]
         [NotMapped]
         public double Width { get => _width; set { SetProperty(ref _width, value); } }
 
-        double _mediumFontSize = default;
+        private double _mediumFontSize = default;
+
         [JsonIgnore]
         [NotMapped]
         public double MediumFontSize { get => _mediumFontSize; set { SetProperty(ref _mediumFontSize, value); } }
 
-        double _largeFontSize = default;
+        private double _largeFontSize = default;
+
         [JsonIgnore]
         [NotMapped]
         public double LargeFontSize { get => _largeFontSize; set { SetProperty(ref _largeFontSize, value); } }
 
-        Visibility _dueTimeVisibility = default;
+        private Visibility _dueTimeVisibility = default;
+
         [JsonIgnore]
         [NotMapped]
         public Visibility DueTimeVisibility { get => _dueTimeVisibility; set { SetProperty(ref _dueTimeVisibility, value); } }
 
-        string _dueTime = default;
+        private string _dueTime = default;
+
         [JsonIgnore]
         [NotMapped]
         public string DueTime { get => _dueTime; set { SetProperty(ref _dueTime, value); } }
@@ -104,6 +112,7 @@ namespace ModelLibrary
         }
 
         private ICommand _updateReservationCommand;
+
         [JsonIgnore]
         [NotMapped]
         public ICommand UpdateReservationCommand => _updateReservationCommand ?? (_updateReservationCommand = new DelegateCommand<object>((param) =>
@@ -112,6 +121,7 @@ namespace ModelLibrary
         }));
 
         private ICommand _deleteReservationCommand;
+
         [JsonIgnore]
         [NotMapped]
         public ICommand DeleteReservationCommand => _deleteReservationCommand ?? (_deleteReservationCommand = new DelegateCommand<object>((param) =>
@@ -120,6 +130,7 @@ namespace ModelLibrary
         }));
 
         private ICommand _showAttachedFlyoutCommand;
+
         [JsonIgnore]
         [NotMapped]
         public ICommand ShowAttachedFlyoutCommand => _showAttachedFlyoutCommand ?? (_showAttachedFlyoutCommand = new DelegateCommand<object>((param) =>

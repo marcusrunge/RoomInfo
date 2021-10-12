@@ -6,9 +6,10 @@ namespace BackgroundComponent
 {
     public sealed class LiveTileUpdateBackgroundTask : IBackgroundTask
     {
-        BackgroundTaskDeferral _deferral;
-        ILiveTileUpdateService _liveTileUpdateService;
-        IUnityContainer _unityContainer;
+        private BackgroundTaskDeferral _deferral;
+        private ILiveTileUpdateService _liveTileUpdateService;
+        private IUnityContainer _unityContainer;
+
         public async void Run(IBackgroundTaskInstance taskInstance)
         {
             _deferral = taskInstance.GetDeferral();

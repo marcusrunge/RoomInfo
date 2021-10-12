@@ -19,7 +19,7 @@ namespace RoomInfo.Services
     {
         AgendaItemContext _agendaItemContext;
         public DatabaseService()
-        {            
+        {
             _agendaItemContext = new AgendaItemContext();
             //_agendaItemContext.Database.ExecuteSqlCommand("DROP TABLE AgendaItems");
             _agendaItemContext.Database.ExecuteSqlCommand("CREATE TABLE IF NOT EXISTS AgendaItems (Id INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, Start NUMERIC , End NUMERIC , Description TEXT, IsAllDayEvent INTEGER, IsOverridden INTEGER, Occupancy INTEGER)");
@@ -45,7 +45,7 @@ namespace RoomInfo.Services
                 .Select((x) => x)
                 .Take(3)
                 .ToListAsync();
-        }        
+        }
 
         public async Task RemoveAgendaItemAsync(AgendaItem agendaItem)
         {

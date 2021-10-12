@@ -9,28 +9,28 @@
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     x:Class="RoomInfo.Views.InfoPage"
     Style="{StaticResource PageStyle}"
-    prismMvvm:ViewModelLocator.AutoWireViewModel="True" 
+    prismMvvm:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
     <Page.Resources>
         <Helpers:DateTimeFormatConverter x:Key="DateTimeFormatConverter" />
         <Helpers:TimeFormatConverter x:Key="TimeFormatConverter" />
-        <Helpers:OccupancyIntToStringConverter x:Key="OccupancyIntToStringConverter"/>
+        <Helpers:OccupancyIntToStringConverter x:Key="OccupancyIntToStringConverter" />
     </Page.Resources>
     <interactivity:Interaction.Behaviors>
-        <Helpers:VisualStateDependencyProperty VisualStateProperty="{Binding Occupancy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>        
+        <Helpers:VisualStateDependencyProperty VisualStateProperty="{Binding Occupancy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
     </interactivity:Interaction.Behaviors>
 
-    <Grid x:Name="ContentArea">        
+    <Grid x:Name="ContentArea">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="OccupancyVisualStateGroup">
                 <VisualState x:Name="FreeVisualState">
                     <VisualState.Setters>
                         <Setter Target="StatusBar.(Panel.Background)">
                             <Setter.Value>
-                                <SolidColorBrush Color="#FF00F200"/>
+                                <SolidColorBrush Color="#FF00F200" />
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="🗸"/>
+                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="🗸" />
                         <Setter Target="occupancyTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FF007900</Color>
@@ -51,7 +51,7 @@
                                 <Color>#FF007900</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="✓"/>
+                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="✓" />
                         <Setter Target="occupancySymbolTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FF007900</Color>
@@ -88,10 +88,10 @@
                                 <Color>#FF007900</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="occupancyTextBlock.(UIElement.Visibility)" Value="Visible"/>
+                        <Setter Target="occupancyTextBlock.(UIElement.Visibility)" Value="Visible" />
                         <Setter Target="grid.(Panel.Background)">
                             <Setter.Value>
-                                <SolidColorBrush Color="#7F00F200"/>
+                                <SolidColorBrush Color="#7F00F200" />
                             </Setter.Value>
                         </Setter>
                     </VisualState.Setters>
@@ -100,7 +100,7 @@
                     <VisualState.Setters>
                         <Setter Target="StatusBar.(Panel.Background)">
                             <Setter.Value>
-                                <SolidColorBrush Color="#FFF2F200"/>
+                                <SolidColorBrush Color="#FFF2F200" />
                             </Setter.Value>
                         </Setter>
                         <Setter Target="busyOccupancyTextBlock.(TextBlock.Foreground).(SolidColorBrush.Color)">
@@ -113,7 +113,7 @@
                                 <Color>#FF797900</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="⧖"/>
+                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="⧖" />
                         <Setter Target="occupancySymbolTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FF797900</Color>
@@ -144,7 +144,7 @@
                                 <Color>#FF797900</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="busyOccupancyTextBlock.(UIElement.Visibility)" Value="Visible"/>
+                        <Setter Target="busyOccupancyTextBlock.(UIElement.Visibility)" Value="Visible" />
                         <Setter Target="grid.(Panel.Background).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#7FF2F200</Color>
@@ -169,7 +169,7 @@
                                 <Color>#FF660066</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="⛛"/>
+                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="⛛" />
                         <Setter Target="occupancySymbolTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FF660066</Color>
@@ -210,7 +210,7 @@
                                 <Color>#FF660066</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="occupiedOccupancyTextBlock.(UIElement.Visibility)" Value="Visible"/>
+                        <Setter Target="occupiedOccupancyTextBlock.(UIElement.Visibility)" Value="Visible" />
                         <Setter Target="grid.(Panel.Background).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#7FCC00CC</Color>
@@ -235,7 +235,7 @@
                                 <Color>#FF3D3D3D</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="➔"/>
+                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="➔" />
                         <Setter Target="occupancySymbolTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FF3D3D3D</Color>
@@ -266,7 +266,7 @@
                                 <Color>#FF3D3D3D</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="absentOccupancyTextBlock.(UIElement.Visibility)" Value="Visible"/>
+                        <Setter Target="absentOccupancyTextBlock.(UIElement.Visibility)" Value="Visible" />
                         <Setter Target="grid.(Panel.Background).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#7F797979</Color>
@@ -291,7 +291,7 @@
                                 <Color>#006dad</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="presentOccupancyTextBlock.(UIElement.Visibility)" Value="Visible"/>
+                        <Setter Target="presentOccupancyTextBlock.(UIElement.Visibility)" Value="Visible" />
                         <Setter Target="occupancySymbolTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#006dad</Color>
@@ -302,7 +302,7 @@
                                 <Color>#006dad</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="★"/>
+                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="★" />
                         <Setter Target="grid.(Panel.Background).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#7F01A9F4</Color>
@@ -352,7 +352,7 @@
                                 <Color>#FF790000</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="lockedOccupancyTextBlock.(UIElement.Visibility)" Value="Visible"/>
+                        <Setter Target="lockedOccupancyTextBlock.(UIElement.Visibility)" Value="Visible" />
                         <Setter Target="StatusBar.(Panel.Background).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FFF20000</Color>
@@ -363,7 +363,7 @@
                                 <Color>#7FF20000</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="🗙"/>
+                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="🗙" />
                         <Setter Target="roomNameTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FF790000</Color>
@@ -408,7 +408,7 @@
                                 <Color>#FF00796b</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="homeOccupancyTextBlock.(UIElement.Visibility)" Value="Visible"/>
+                        <Setter Target="homeOccupancyTextBlock.(UIElement.Visibility)" Value="Visible" />
                         <Setter Target="StatusBar.(Panel.Background).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FF00bfa5</Color>
@@ -419,7 +419,7 @@
                                 <Color>#7F00bfa5</Color>
                             </Setter.Value>
                         </Setter>
-                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="⌂"/>
+                        <Setter Target="occupancySymbolTextBlock.(TextBlock.Text)" Value="⌂" />
                         <Setter Target="roomNameTextBlock.(FrameworkElement.FocusVisualPrimaryBrush).(SolidColorBrush.Color)">
                             <Setter.Value>
                                 <Color>#FF00796b</Color>
@@ -444,178 +444,177 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-        <Grid x:Name="grid" Background="#00000000" Padding="{StaticResource MediumLeftRightBottomMargin}"   >
+        <Grid x:Name="grid" Background="#00000000" Padding="{StaticResource MediumLeftRightBottomMargin}">
             <interactivity:Interaction.Behaviors>
                 <core:EventTriggerBehavior EventName="SizeChanged">
-                    <core:InvokeCommandAction Command="{x:Bind ViewModel.UpdateFontSizeCommand}" CommandParameter="{Binding ElementName=grid}"/>
+                    <core:InvokeCommandAction Command="{x:Bind ViewModel.UpdateFontSizeCommand}" CommandParameter="{Binding ElementName=grid}" />
                 </core:EventTriggerBehavior>
                 <core:EventTriggerBehavior EventName="Loaded">
-                    <core:InvokeCommandAction Command="{x:Bind ViewModel.UpdateFontSizeCommand}" CommandParameter="{Binding ElementName=grid}"/>
+                    <core:InvokeCommandAction Command="{x:Bind ViewModel.UpdateFontSizeCommand}" CommandParameter="{Binding ElementName=grid}" />
                 </core:EventTriggerBehavior>
             </interactivity:Interaction.Behaviors>
             <Grid.RowDefinitions>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="3*"/>
-                <RowDefinition Height="2*"/>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="2*" />
             </Grid.RowDefinitions>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <Image x:Name="CompanyLogo" Source="{Binding CompanyLogo}" HorizontalAlignment="Left" Margin="12,12,12,12"/>
-                <TextBlock x:Name="CompanyName" Grid.Column="1" Text="{x:Bind ViewModel.CompanyName, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="{Binding ExtraLargeFontSize}"/>
+                <Image x:Name="CompanyLogo" Source="{Binding CompanyLogo}" HorizontalAlignment="Left" Margin="12,12,12,12" />
+                <TextBlock x:Name="CompanyName" Grid.Column="1" Text="{x:Bind ViewModel.CompanyName, Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="{Binding ExtraLargeFontSize}" />
                 <StackPanel Grid.Column="2">
                     <TextBlock x:Name="Clock" Text="{Binding Clock, UpdateSourceTrigger=PropertyChanged}" FontSize="{Binding ExtraLargeFontSize}" HorizontalAlignment="Right" />
-                    <TextBlock x:Name="Date" Text="{Binding Date, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" FontSize="{Binding MediumFontSize}"/>
+                    <TextBlock x:Name="Date" Text="{Binding Date, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" FontSize="{Binding MediumFontSize}" />
                 </StackPanel>
-
             </Grid>
             <Grid x:Name="StatusBar" Grid.Row="1" Background="#00000000" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition/>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <Grid HorizontalAlignment="Center">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <TextBlock x:Name="roomNameTextBlock"  Text="{x:Bind ViewModel.RoomName, Mode=OneWay}" FontSize="{Binding ExtraLargeFontSize}" FocusVisualPrimaryBrush="#00000000" Foreground="#00000000" />
-                    <TextBlock x:Name="roomNumberTextBlock" Grid.Column="1" Text="{x:Bind ViewModel.RoomNumber, Mode=OneWay}" FontSize="{Binding ExtraLargeFontSize}" FocusVisualPrimaryBrush="#00000000" Foreground="#00000000" Margin="36,0,0,0"/>
+                    <TextBlock x:Name="roomNumberTextBlock" Grid.Column="1" Text="{x:Bind ViewModel.RoomNumber, Mode=OneWay}" FontSize="{Binding ExtraLargeFontSize}" FocusVisualPrimaryBrush="#00000000" Foreground="#00000000" Margin="36,0,0,0" />
                 </Grid>
-                <TextBlock Grid.Row="1" x:Name="occupancyTextBlock" x:Uid="Info_OccupancyTextBlockFree" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
-                <TextBlock Grid.Row="1" x:Name="presentOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockPresent" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
-                <TextBlock Grid.Row="1" x:Name="absentOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockAbsent" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
-                <TextBlock Grid.Row="1" x:Name="occupiedOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockOccupied" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
-                <TextBlock Grid.Row="1" x:Name="busyOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockBusy" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
-                <TextBlock Grid.Row="1" x:Name="lockedOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockLocked" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
-                <TextBlock Grid.Row="1" x:Name="homeOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockHome" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed"/>
+                <TextBlock Grid.Row="1" x:Name="occupancyTextBlock" x:Uid="Info_OccupancyTextBlockFree" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed" />
+                <TextBlock Grid.Row="1" x:Name="presentOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockPresent" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed" />
+                <TextBlock Grid.Row="1" x:Name="absentOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockAbsent" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed" />
+                <TextBlock Grid.Row="1" x:Name="occupiedOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockOccupied" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed" />
+                <TextBlock Grid.Row="1" x:Name="busyOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockBusy" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed" />
+                <TextBlock Grid.Row="1" x:Name="lockedOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockLocked" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed" />
+                <TextBlock Grid.Row="1" x:Name="homeOccupancyTextBlock" x:Uid="Info_OccupancyTextBlockHome" FontSize="{Binding LargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" Visibility="Collapsed" />
                 <TextBlock Grid.Row="1" x:Name="occupancySymbolTextBlock" FontSize="{Binding SuperLargeFontSize}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="#00000000" FocusVisualPrimaryBrush="#00000000" />
             </Grid>
             <Grid Grid.Row="2" Margin="0,12,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="4*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="4*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <TextBlock x:Name="infoScheduleTextBlock" x:Uid="Info_Schedule" FontSize="{Binding MediumToLargeFontSize}" VerticalAlignment="Top"/>
-                <Button VerticalAlignment="Bottom" Content="RESET" FontSize="{Binding MediumToLargeFontSize}" HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.ResetOccupancyCommand}" Visibility="{x:Bind ViewModel.ResetButtonVisibility, Mode=OneWay}"/>
-                <ListView x:Name="Agenda" Grid.Column="1" ItemsSource="{Binding AgendaItems}" LayoutUpdated="{x:Bind ViewModel.Agenda_LayoutUpdated}" >
+                <TextBlock x:Name="infoScheduleTextBlock" x:Uid="Info_Schedule" FontSize="{Binding MediumToLargeFontSize}" VerticalAlignment="Top" />
+                <Button VerticalAlignment="Bottom" Content="RESET" FontSize="{Binding MediumToLargeFontSize}" HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.ResetOccupancyCommand}" Visibility="{x:Bind ViewModel.ResetButtonVisibility, Mode=OneWay}" />
+                <ListView x:Name="Agenda" Grid.Column="1" ItemsSource="{Binding AgendaItems}" LayoutUpdated="{x:Bind ViewModel.Agenda_LayoutUpdated}">
                     <interactivity:Interaction.Behaviors>
                         <core:EventTriggerBehavior EventName="SizeChanged">
-                            <core:InvokeCommandAction Command="{x:Bind ViewModel.UpdateDataTemplateWidthCommand}" CommandParameter="{Binding ElementName=Agenda}"/>
+                            <core:InvokeCommandAction Command="{x:Bind ViewModel.UpdateDataTemplateWidthCommand}" CommandParameter="{Binding ElementName=Agenda}" />
                         </core:EventTriggerBehavior>
                         <core:EventTriggerBehavior EventName="Loaded">
-                            <core:InvokeCommandAction Command="{x:Bind ViewModel.UpdateDataTemplateWidthCommand}" CommandParameter="{Binding ElementName=Agenda}"/>
+                            <core:InvokeCommandAction Command="{x:Bind ViewModel.UpdateDataTemplateWidthCommand}" CommandParameter="{Binding ElementName=Agenda}" />
                         </core:EventTriggerBehavior>
                     </interactivity:Interaction.Behaviors>
                     <ListView.ItemTemplate>
-                        <DataTemplate >
+                        <DataTemplate>
                             <StackPanel x:Name="agendaItemStackPanel"  BorderThickness="0,0,0,1" Width="{Binding Width}" BorderBrush="{ThemeResource SystemControlForegroundBaseMediumBrush}">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding Title}" FontSize="{Binding LargeFontSize}"/>
-                                    <Border Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="{Binding ElementName=dueTimeTextBlock, Path=Foreground}" Visibility="{Binding DueTimeVisibility}" >
-                                        <TextBlock x:Name="dueTimeTextBlock" Text="{Binding DueTime}" FontSize="{Binding MediumFontSize}" />  
-                                    </Border>                                    
-                                </Grid>                                
+                                    <TextBlock Text="{Binding Title}" FontSize="{Binding LargeFontSize}" />
+                                    <Border Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="{Binding ElementName=dueTimeTextBlock, Path=Foreground}" Visibility="{Binding DueTimeVisibility}">
+                                        <TextBlock x:Name="dueTimeTextBlock" Text="{Binding DueTime}" FontSize="{Binding MediumFontSize}" />
+                                    </Border>
+                                </Grid>
                                 <Grid HorizontalAlignment="Left">
-                                    <Grid.ColumnDefinitions>                                        
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="Auto"/>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding Start, Converter={StaticResource DateTimeFormatConverter}}" FontSize="{Binding MediumFontSize}"/>
-                                    <TextBlock Grid.Column="1" Text="–" FontSize="{Binding MediumFontSize}" HorizontalAlignment="Center" Margin="6,0,6,0"/>
-                                    <TextBlock Grid.Column="2" Text="{Binding End.TimeOfDay, Converter={StaticResource TimeFormatConverter}}" FontSize="{Binding MediumFontSize}"/>
-                                    <TextBlock Grid.Column="3" Text="{Binding Occupancy, Converter={StaticResource OccupancyIntToStringConverter}}" FontSize="{Binding MediumFontSize}" Margin="12,0,0,0"/>
-                                </Grid>   
+                                    <TextBlock Text="{Binding Start, Converter={StaticResource DateTimeFormatConverter}}" FontSize="{Binding MediumFontSize}" />
+                                    <TextBlock Grid.Column="1" Text="–" FontSize="{Binding MediumFontSize}" HorizontalAlignment="Center" Margin="6,0,6,0" />
+                                    <TextBlock Grid.Column="2" Text="{Binding End.TimeOfDay, Converter={StaticResource TimeFormatConverter}}" FontSize="{Binding MediumFontSize}" />
+                                    <TextBlock Grid.Column="3" Text="{Binding Occupancy, Converter={StaticResource OccupancyIntToStringConverter}}" FontSize="{Binding MediumFontSize}" Margin="12,0,0,0" />
+                                </Grid>
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
                 <Grid Grid.Column="2">
                     <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
+                        <RowDefinition />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
                     <ComboBox Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Top" FontSize="{Binding MediumFontSize}" SelectedIndex="{x:Bind ViewModel.SelectedComboBoxIndex, Mode=TwoWay}">
                         <!--<interactivity:Interaction.Behaviors>
                             <core:EventTriggerBehavior EventName="Loaded">
-                                <core:InvokeCommandAction Command="{Binding HandleComboBoxLoadedCommand}"/>
+                                <core:InvokeCommandAction Command="{Binding HandleComboBoxLoadedCommand}" />
                             </core:EventTriggerBehavior>
                         </interactivity:Interaction.Behaviors>-->
                         <ComboBoxItem x:Uid="Info_OccupancyFree" FontSize="{Binding MediumFontSize}">
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
-                                    <core:GoToStateAction StateName="FreeVisualState"/>
-                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.OverrideOccupancyCommand}"/>
+                                    <core:GoToStateAction StateName="FreeVisualState" />
+                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.OverrideOccupancyCommand}" />
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
-                        <ComboBoxItem x:Uid="Info_OccupancyPresent" FontSize="{Binding MediumFontSize}" >
+                        <ComboBoxItem x:Uid="Info_OccupancyPresent" FontSize="{Binding MediumFontSize}">
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
-                                    <core:GoToStateAction StateName="PresentVisualState"/>
-                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.OverrideOccupancyCommand}"/>
+                                    <core:GoToStateAction StateName="PresentVisualState" />
+                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.OverrideOccupancyCommand}" />
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
                         <ComboBoxItem x:Uid="Info_OccupancyAbsent" FontSize="{Binding MediumFontSize}">
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
-                                    <core:GoToStateAction StateName="AbsentVisualState"/>
-                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.OverrideOccupancyCommand}"/>
+                                    <core:GoToStateAction StateName="AbsentVisualState" />
+                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.OverrideOccupancyCommand}" />
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
                         <ComboBoxItem x:Uid="Info_OccupancyBusy" FontSize="{Binding MediumFontSize}">
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
-                                    <core:GoToStateAction StateName="BusyVisualState"/>
-                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.OverrideOccupancyCommand}"/>
+                                    <core:GoToStateAction StateName="BusyVisualState" />
+                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.OverrideOccupancyCommand}" />
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
                         <ComboBoxItem x:Uid="Info_OccupancyOccupied" FontSize="{Binding MediumFontSize}">
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
-                                    <core:GoToStateAction StateName="OccupiedVisualState"/>
-                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.OverrideOccupancyCommand}"/>
+                                    <core:GoToStateAction StateName="OccupiedVisualState" />
+                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.OverrideOccupancyCommand}" />
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
-                        <ComboBoxItem x:Uid="Info_OccupancyLocked" FontSize="{Binding MediumFontSize}" >
+                        <ComboBoxItem x:Uid="Info_OccupancyLocked" FontSize="{Binding MediumFontSize}">
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
-                                    <core:GoToStateAction StateName="LockedVisualState"/>
-                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.OverrideOccupancyCommand}"/>
+                                    <core:GoToStateAction StateName="LockedVisualState" />
+                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.OverrideOccupancyCommand}" />
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
-                        <ComboBoxItem x:Uid="Info_OccupancyHome" FontSize="{Binding MediumFontSize}" >
+                        <ComboBoxItem x:Uid="Info_OccupancyHome" FontSize="{Binding MediumFontSize}">
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Tapped">
-                                    <core:GoToStateAction StateName="HomeVisualState"/>
-                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.OverrideOccupancyCommand}"/>
+                                    <core:GoToStateAction StateName="HomeVisualState" />
+                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.OverrideOccupancyCommand}" />
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </ComboBoxItem>
                     </ComboBox>
-                    <Grid Grid.Row="1" VerticalAlignment="Bottom" >
+                    <Grid Grid.Row="1" VerticalAlignment="Bottom">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <Button HorizontalAlignment="Stretch" Grid.Column="1" x:Name="dimButton" Content="☾" FontSize="{Binding MediumToLargeFontSize}" Command="{Binding DimCommand}" Margin="6,0,6,0" Visibility="{Binding BrightnessAdjustmentVisibility}"/>
-                        <Button HorizontalAlignment="Stretch"  x:Name="brightButton" Content="☼"  FontSize="{Binding MediumToLargeFontSize}" Command="{Binding BrightCommand}" Margin="6,0,6,0" Visibility="{Binding BrightnessAdjustmentVisibility}"/>
-                    </Grid>                    
+                        <Button HorizontalAlignment="Stretch" Grid.Column="1" x:Name="dimButton" Content="☾" FontSize="{Binding MediumToLargeFontSize}" Command="{Binding DimCommand}" Margin="6,0,6,0" Visibility="{Binding BrightnessAdjustmentVisibility}" />
+                        <Button HorizontalAlignment="Stretch"  x:Name="brightButton" Content="☼"  FontSize="{Binding MediumToLargeFontSize}" Command="{Binding BrightCommand}" Margin="6,0,6,0" Visibility="{Binding BrightnessAdjustmentVisibility}" />
+                    </Grid>
                 </Grid>
             </Grid>
         </Grid>

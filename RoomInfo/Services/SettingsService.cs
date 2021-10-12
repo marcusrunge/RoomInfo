@@ -4,29 +4,33 @@ using Windows.Storage;
 namespace RoomInfo.Services
 {
     public enum SettingStrategy { Local, Roaming }
+
     public interface ISettingsService
     {
         T GetSetting<T>(string key, SettingStrategy settingStrategy);
+
         void SaveSetting(string key, object value, SettingStrategy settingStrategy);
+
         void RemoveSetting(string key, SettingStrategy settingStrategy);
     }
 
     public class SettingsService : ISettingsService
     {
-        ApplicationDataContainer _localSettings;
-        ApplicationDataContainer _roamingSettings;
+        private ApplicationDataContainer _localSettings;
+        private ApplicationDataContainer _roamingSettings;
 
         public SettingsService()
         {
             _localSettings = ApplicationData.Current.LocalSettings;
             _roamingSettings = ApplicationData.Current.RoamingSettings;
         }
-        /// <summary>    
+
+        /// <summary>
         /// Retrieves application settings of types bool, float, int, long, ICollection<string> and string
-        /// </summary>   
+        /// </summary>
         /// <param name="key">Setting Key</param>
         /// <param name="settingStrategy">Setting Strategy</param>
-        /// <returns>Application Settings of types bool, float, int, long, ICollection<string> or string</returns> 
+        /// <returns>Application Settings of types bool, float, int, long, ICollection<string> or string</returns>
         public T GetSetting<T>(string key, SettingStrategy settingStrategy)
         {
             switch (settingStrategy)
@@ -50,10 +54,10 @@ namespace RoomInfo.Services
             }
         }
 
-        /// <summary>    
-        /// Saves application settings of types bool, float, int, long, ICollection<string> and string 
-        /// </summary>   
-        /// <param name="key">Settings Key</param>  
+        /// <summary>
+        /// Saves application settings of types bool, float, int, long, ICollection<string> and string
+        /// </summary>
+        /// <param name="key">Settings Key</param>
         /// <param name="value">Settings Value</param>
         /// <param name="settingStrategy">Setting Strategy</param>
         public void SaveSetting(string key, object value, SettingStrategy settingStrategy)
@@ -63,18 +67,20 @@ namespace RoomInfo.Services
                 case SettingStrategy.Local:
                     _localSettings.Values[key] = value;
                     break;
+
                 case SettingStrategy.Roaming:
                     _roamingSettings.Values[key] = value;
                     break;
+
                 default:
                     break;
             }
         }
 
-        /// <summary>    
+        /// <summary>
         /// Removes application settings
-        /// </summary>   
-        /// <param name="key">Settings Key</param>  
+        /// </summary>
+        /// <param name="key">Settings Key</param>
         /// <param name="settingStrategy">Setting Strategy</param>
         public void RemoveSetting(string key, SettingStrategy settingStrategy)
         {
@@ -83,9 +89,11 @@ namespace RoomInfo.Services
                 case SettingStrategy.Local:
                     _localSettings.Values.Remove(key);
                     break;
+
                 case SettingStrategy.Roaming:
                     _roamingSettings.Values.Remove(key);
                     break;
+
                 default:
                     break;
             }

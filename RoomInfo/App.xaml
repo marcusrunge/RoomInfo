@@ -7,14 +7,14 @@
     <prismUnity:PrismUnityApplication.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls"/>
-                <ResourceDictionary Source="/Styles/_Colors.xaml"/>
-                <ResourceDictionary Source="/Styles/_FontSizes.xaml"/>
-                <ResourceDictionary Source="/Styles/_Thickness.xaml"/>
+                <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+                <ResourceDictionary Source="/Styles/_Colors.xaml" />
+                <ResourceDictionary Source="/Styles/_FontSizes.xaml" />
+                <ResourceDictionary Source="/Styles/_Thickness.xaml" />
 
-                <ResourceDictionary Source="/Styles/TextBlock.xaml"/>
-                <ResourceDictionary Source="/Styles/Page.xaml"/>
-                <ResourceDictionary Source="/Styles/RedTransparentButtonStyle.xaml"/>
+                <ResourceDictionary Source="/Styles/TextBlock.xaml" />
+                <ResourceDictionary Source="/Styles/Page.xaml" />
+                <ResourceDictionary Source="/Styles/RedTransparentButtonStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </prismUnity:PrismUnityApplication.Resources>

@@ -26,11 +26,11 @@ namespace RoomInfo
     [Windows.UI.Xaml.Data.Bindable]
     public sealed partial class App : PrismUnityApplication
     {
-        IApplicationDataService _applicationDataService;
-        IUserDatagramService _userDatagramService;
-        ITransmissionControlService _transmissionControlService;
-        IDatabaseService _databaseService;
-        List<ExceptionLogItem> _exceptionLogItems;
+        private IApplicationDataService _applicationDataService;
+        private IUserDatagramService _userDatagramService;
+        private ITransmissionControlService _transmissionControlService;
+        private IDatabaseService _databaseService;
+        private List<ExceptionLogItem> _exceptionLogItems;
 
         public App()
         {

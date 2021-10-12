@@ -10,18 +10,18 @@ namespace ModelLibrary
 {
     public class FileItem : BindableBase
     {
-        IEventAggregator _eventAggregator;
+        private IEventAggregator _eventAggregator;
 
-        string _fileName = default;
+        private string _fileName = default;
         public string FileName { get => _fileName; set { SetProperty(ref _fileName, value); } }
 
-        bool _isSelected = default;
+        private bool _isSelected = default;
         public bool IsSelected { get => _isSelected; set { SetProperty(ref _isSelected, value); } }
 
-        Uri _imageUri = default;
+        private Uri _imageUri = default;
         public Uri ImageUri { get => _imageUri; set { SetProperty(ref _imageUri, value); } }
 
-        ImageSource _imageSource = default;
+        private ImageSource _imageSource = default;
         public ImageSource ImageSource { get => _imageSource; set { SetProperty(ref _imageSource, value); } }
 
         public int Id { get; set; }
@@ -33,6 +33,7 @@ namespace ModelLibrary
         }
 
         private ICommand _selectCommand;
+
         public ICommand SelectCommand => _selectCommand ?? (_selectCommand = new DelegateCommand<object>((param) =>
         {
             _eventAggregator.GetEvent<FileItemSelectionChangedUpdatedEvent>().Publish(Id);

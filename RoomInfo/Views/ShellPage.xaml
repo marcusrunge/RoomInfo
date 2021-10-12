@@ -23,9 +23,9 @@
             IsSettingsVisible="True"
             PaneDisplayMode="Top"
             Background="{ThemeResource SystemControlBackgroundAltHighBrush}">
-            <winui:NavigationView.MenuItems>                
-                <winui:NavigationViewItem x:Uid="Shell_Info" helpers:NavHelper.NavigateTo="Info" FontSize="22"/>
-                <winui:NavigationViewItem x:Uid="Shell_Schedule" helpers:NavHelper.NavigateTo="Schedule" FontSize="22"/>
+            <winui:NavigationView.MenuItems>
+                <winui:NavigationViewItem x:Uid="Shell_Info" helpers:NavHelper.NavigateTo="Info" FontSize="22" />
+                <winui:NavigationViewItem x:Uid="Shell_Schedule" helpers:NavHelper.NavigateTo="Schedule" FontSize="22" />
             </winui:NavigationView.MenuItems>
             <i:Interaction.Behaviors>
                 <ic:EventTriggerBehavior EventName="ItemInvoked">

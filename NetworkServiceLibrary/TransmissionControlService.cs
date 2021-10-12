@@ -16,19 +16,23 @@ namespace NetworkServiceLibrary
     public interface ITransmissionControlService
     {
         Task StartListenerAsync();
+
         Task TransferOwnership();
+
         Task SendStringData(HostName hostName, string port, string data);
+
         Task SendStringData(StreamSocket streamSocket, string data);
     }
+
     public class TransmissionControlService : ITransmissionControlService
     {
-        IEventAggregator _eventAggregator;
-        IApplicationDataService _applicationDataService;
-        IBackgroundTaskService _backgroundTaskService;
-        IDatabaseService _databaseService;
-        IIotService _iotService;
-        StreamSocketListener _streamSocketListener;
-        BackgroundTaskRegistration _backgroundTaskRegistration;
+        private IEventAggregator _eventAggregator;
+        private IApplicationDataService _applicationDataService;
+        private IBackgroundTaskService _backgroundTaskService;
+        private IDatabaseService _databaseService;
+        private IIotService _iotService;
+        private StreamSocketListener _streamSocketListener;
+        private BackgroundTaskRegistration _backgroundTaskRegistration;
 
         public TransmissionControlService(IApplicationDataService applicationDataService, IBackgroundTaskService backgroundTaskService, IEventAggregator eventAggregator, IDatabaseService databaseService, IIotService iotService)
         {
@@ -111,7 +115,6 @@ namespace NetworkServiceLibrary
             });
         }
 
-
         public async Task TransferOwnership()
         {
             if (_streamSocketListener != null)
@@ -137,12 +140,14 @@ namespace NetworkServiceLibrary
                             _eventAggregator.GetEvent<RemoteOccupancyOverrideEvent>().Publish((int)Convert.ChangeType(package.Payload, typeof(int)));
                             streamSocket.Dispose();
                             break;
+
                         case PayloadType.Schedule:
                             agendaItems = JsonConvert.DeserializeObject<List<AgendaItem>>(package.Payload.ToString());
                             await _databaseService.UpdateAgendaItemsAsync(agendaItems, true);
                             _eventAggregator.GetEvent<RemoteAgendaItemsUpdatedEvent>().Publish();
                             streamSocket.Dispose();
                             break;
+
                         case PayloadType.RequestOccupancy:
                             int actualOccupancy = _applicationDataService.GetSetting<int>("ActualOccupancy");
                             package.PayloadType = (int)PayloadType.Occupancy;
@@ -150,6 +155,7 @@ namespace NetworkServiceLibrary
                             json = JsonConvert.SerializeObject(package);
                             await SendStringData(streamSocket, json);
                             break;
+
                         case PayloadType.RequestSchedule:
                             agendaItems = await _databaseService.GetAgendaItemsAsync();
                             package.PayloadType = (int)PayloadType.Schedule;
@@ -157,16 +163,19 @@ namespace NetworkServiceLibrary
                             json = JsonConvert.SerializeObject(package);
                             await SendStringData(streamSocket, json);
                             break;
+
                         case PayloadType.IotDim:
                             await _iotService.Dim((bool)package.Payload);
                             streamSocket.Dispose();
                             break;
+
                         case PayloadType.StandardWeek:
                             timeSpanItems = JsonConvert.DeserializeObject<List<TimeSpanItem>>(package.Payload.ToString());
                             await _databaseService.UpdateTimeSpanItemsAsync(timeSpanItems, true);
                             _eventAggregator.GetEvent<StandardWeekUpdatedEvent>().Publish((int)DateTime.Now.DayOfWeek);
                             streamSocket.Dispose();
                             break;
+
                         case PayloadType.RequestStandardWeek:
                             timeSpanItems = await _databaseService.GetTimeSpanItemsAsync();
                             package.PayloadType = (int)PayloadType.StandardWeek;
@@ -174,6 +183,7 @@ namespace NetworkServiceLibrary
                             json = JsonConvert.SerializeObject(package);
                             await SendStringData(streamSocket, json);
                             break;
+
                         case PayloadType.AgendaItem:
                             var agendaItem = JsonConvert.DeserializeObject<AgendaItem>(package.Payload.ToString());
                             if (!agendaItem.IsDeleted && agendaItem.Id < 1)
@@ -199,6 +209,7 @@ namespace NetworkServiceLibrary
                             }
                             else streamSocket.Dispose();
                             break;
+
                         case PayloadType.TimeSpanItem:
                             var timeSpanItem = JsonConvert.DeserializeObject<TimeSpanItem>(package.Payload.ToString());
                             if (!timeSpanItem.IsDeleted && timeSpanItem.Id < 1)
@@ -224,8 +235,10 @@ namespace NetworkServiceLibrary
                             }
                             else streamSocket.Dispose();
                             break;
+
                         case PayloadType.TimeSpanItemId:
                             break;
+
                         default:
                             streamSocket.Dispose();
                             break;

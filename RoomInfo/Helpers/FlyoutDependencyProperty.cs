@@ -12,6 +12,7 @@ namespace RoomInfo.Helpers
             OpenActions = new ActionCollection();
             CloseActions = new ActionCollection();
         }
+
         public DependencyObject AssociatedObject { get; private set; }
 
         public void Attach(DependencyObject associatedObject)
@@ -52,6 +53,7 @@ namespace RoomInfo.Helpers
             get { return GetValue(OpenActionsProperty) as ActionCollection; }
             set { SetValue(OpenActionsProperty, value); }
         }
+
         public ActionCollection CloseActions
         {
             get { return GetValue(CloseActionsProperty) as ActionCollection; }

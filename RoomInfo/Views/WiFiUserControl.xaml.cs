@@ -17,8 +17,8 @@ namespace RoomInfo.Views
 {
     public sealed partial class WiFiUserControl : UserControl, INotifyPropertyChanged
     {
-        WiFiAdapter _wiFiAdapter;
-        ObservableCollection<WiFiNetwork> _wiFiNetworks = default;
+        private WiFiAdapter _wiFiAdapter;
+        private ObservableCollection<WiFiNetwork> _wiFiNetworks = default;
         public ObservableCollection<WiFiNetwork> WiFiNetworks { get => _wiFiNetworks; set { SetProperty(ref _wiFiNetworks, value); } }
 
         public WiFiUserControl()
@@ -55,7 +55,9 @@ namespace RoomInfo.Views
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
 #pragma warning disable CS0628 // Neues geschütztes Element deklariert in versiegelter Klasse
+
         protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
 #pragma warning restore CS0628 // Neues geschütztes Element deklariert in versiegelter Klasse
         {
@@ -64,7 +66,9 @@ namespace RoomInfo.Views
             RaisePropertyChanged(propertyName);
             return true;
         }
+
 #pragma warning disable CS0628 // Neues geschütztes Element deklariert in versiegelter Klasse
+
         protected bool SetProperty<T>(ref T storage, T value, Action onChanged, [CallerMemberName] string propertyName = null)
 #pragma warning restore CS0628 // Neues geschütztes Element deklariert in versiegelter Klasse
         {
@@ -74,8 +78,10 @@ namespace RoomInfo.Views
             RaisePropertyChanged(propertyName);
             return true;
         }
-        void RaisePropertyChanged([CallerMemberName] string propertyName = null) => OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
-        void OnPropertyChanged(PropertyChangedEventArgs args) => PropertyChanged?.Invoke(this, args);
+
+        private void RaisePropertyChanged([CallerMemberName] string propertyName = null) => OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+
+        private void OnPropertyChanged(PropertyChangedEventArgs args) => PropertyChanged?.Invoke(this, args);
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs routedEventArgs)
         {

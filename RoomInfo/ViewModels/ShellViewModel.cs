@@ -25,11 +25,11 @@ namespace RoomInfo.ViewModels
         private WinUI.NavigationView _navigationView;
         private bool _isBackEnabled;
         private WinUI.NavigationViewItem _selected;
-        IApplicationDataService _applicationDataService;
-        IBackgroundTaskService _backgroundTaskService;
-        ILiveTileUpdateService _liveTileUpdateService;
-        IUserDatagramService _userDatagramService;
-        ITransmissionControlService _transmissionControlService;
+        private IApplicationDataService _applicationDataService;
+        private IBackgroundTaskService _backgroundTaskService;
+        private ILiveTileUpdateService _liveTileUpdateService;
+        private IUserDatagramService _userDatagramService;
+        private ITransmissionControlService _transmissionControlService;
 
         public ICommand ItemInvokedCommand { get; }
 

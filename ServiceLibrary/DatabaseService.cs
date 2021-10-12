@@ -13,27 +13,44 @@ namespace ApplicationServiceLibrary
     public interface IDatabaseService
     {
         Task<int> AddAgendaItemAsync(AgendaItem agendaItem);
+
         Task RemoveAgendaItemAsync(AgendaItem agendaItem);
+
         Task RemoveAgendaItemAsync(int id);
+
         Task UpdateAgendaItemAsync(AgendaItem agendaItem, bool remote = false);
+
         Task UpdateAgendaItemsAsync(List<AgendaItem> agendaItems, bool remote = false);
+
         Task<List<AgendaItem>> GetAgendaItemsAsync();
+
         Task<List<AgendaItem>> GetAgendaItemsAsync(DateTime dateTime);
+
         Task<List<ExceptionLogItem>> GetExceptionLogItemsAsync();
+
         Task<int> AddExceptionLogItem(ExceptionLogItem exceptionLogItem);
+
         Task RemoveExceptionLogItemsAsync();
+
         Task<int> AddTimeSpanItemAsync(TimeSpanItem timeSpanItem);
+
         Task RemoveTimeSpanItemAsync(TimeSpanItem timeSpanItem);
+
         Task RemoveTimeSpanItemAsync(int id);
+
         Task UpdateTimeSpanItemAsync(TimeSpanItem timeSpanItem, bool remote = false);
+
         Task UpdateTimeSpanItemsAsync(List<TimeSpanItem> timeSpanItems, bool remote = false);
+
         Task<List<TimeSpanItem>> GetTimeSpanItemsAsync();
     }
+
     public class DatabaseService : IDatabaseService
     {
-        readonly ExceptionLogItemContext _exceptionLogItemContext;
-        readonly TimeSpanItemContext _timespanItemContext;
-        ManualResetEvent _manualResetEvent;
+        private readonly ExceptionLogItemContext _exceptionLogItemContext;
+        private readonly TimeSpanItemContext _timespanItemContext;
+        private ManualResetEvent _manualResetEvent;
+
         public DatabaseService()
         {
             try
@@ -241,7 +258,6 @@ namespace ApplicationServiceLibrary
                             var entry = ex.Entries.Single();
                             entry.OriginalValues.SetValues(entry.GetDatabaseValues());
                         }
-
                     } while (saveFailed);
                 }
                 catch (Exception e)
@@ -312,7 +328,6 @@ namespace ApplicationServiceLibrary
                         var entry = ex.Entries.Single();
                         entry.OriginalValues.SetValues(entry.GetDatabaseValues());
                     }
-
                 } while (saveFailed);
             }
             catch (Exception e)
